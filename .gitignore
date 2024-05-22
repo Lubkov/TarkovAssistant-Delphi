@@ -70,3 +70,6 @@ modules/
 
 # project files
 Bin/
+# temp
+Ico/
+Maps/
