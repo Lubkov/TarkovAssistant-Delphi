@@ -8,7 +8,6 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   FilesMonitor in 'Source\Service\FilesMonitor.pas',
-  LocalMap in 'Source\Entity\LocalMap.pas',
   MapWrapper in 'Source\GUI\MapWrapper.pas',
   uMainForm in 'Source\GUI\Form\uMainForm.pas' {MainForm},
   eduSettings in 'Source\GUI\Dialog\eduSettings.pas' {edSettings},
@@ -18,7 +17,8 @@ uses
   GraphicButton in 'Source\GUI\Base\GraphicButton.pas',
   MapTagButton in 'Source\GUI\Base\MapTagButton.pas',
   QuestTagButton in 'Source\GUI\Base\QuestTagButton.pas',
-  ResUIWrapper in 'Source\GUI\ResUIWrapper.pas';
+  ResUIWrapper in 'Source\GUI\ResUIWrapper.pas',
+  LocalMap in 'Source\Domain\LocalMap.pas';
 
 {$R *.res}
 

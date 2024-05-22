@@ -111,7 +111,6 @@
         </DelphiCompile>
         <DCCReference Include="Source\App.Constants.pas"/>
         <DCCReference Include="Source\Service\FilesMonitor.pas"/>
-        <DCCReference Include="Source\Entity\LocalMap.pas"/>
         <DCCReference Include="Source\GUI\MapWrapper.pas"/>
         <DCCReference Include="Source\GUI\Form\uMainForm.pas">
             <Form>MainForm</Form>
@@ -136,6 +135,7 @@
         <DCCReference Include="Source\GUI\Base\MapTagButton.pas"/>
         <DCCReference Include="Source\GUI\Base\QuestTagButton.pas"/>
         <DCCReference Include="Source\GUI\ResUIWrapper.pas"/>
+        <DCCReference Include="Source\Domain\LocalMap.pas"/>
         <RcItem Include="Ico\MapTags\quest_tag_32.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>QuestTagIco32</ResourceId>
@@ -167,6 +167,12 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="Bin\Tarkov.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Tarkov.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Bin\Tarkov.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Tarkov.exe</RemoteName>
@@ -176,12 +182,6 @@
                 <DeployFile LocalName="Ico\MapTags\quest_tag_32.png" Configuration="Release" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Bin\Tarkov.exe" Configuration="Release" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>Tarkov.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
