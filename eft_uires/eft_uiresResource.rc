@@ -1,0 +1,4 @@
+quest_map_tag_32 RCDATA "Data\\ico\\quest_map_tag_32.png"
+pmc_extraction_map_tag_32 RCDATA "Data\\ico\\pmc_extraction_map_tag_32.png"
+scav_extraction_map_tag_32 RCDATA "Data\\ico\\scav_extraction_map_tag_32.png"
+shared_extraction_map_tag_32 RCDATA "Data\\ico\\shared_extraction_map_tag_32.png"
