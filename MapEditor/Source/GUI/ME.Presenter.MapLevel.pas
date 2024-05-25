@@ -34,6 +34,7 @@ begin
   inherited;
 
   MapLevelService.Save(Instance);
+  MapLevelService.SavePicture(Instance);
 end;
 
 procedure TEditMapLevelPresenter.Cancel;

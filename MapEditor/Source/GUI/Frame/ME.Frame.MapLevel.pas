@@ -161,6 +161,7 @@ begin
   Grid.BeginUpdate;
   try
     InternalMapLevelEdit(MapLevel);
+    imMapPicture.Bitmap.Assign(MapLevel.Picture);
   finally
     Grid.EndUpdate;
   end;

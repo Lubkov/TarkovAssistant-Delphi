@@ -65,17 +65,8 @@ begin
 end;
 
 procedure TMapLevel.SetPicture(const Value: TBitmap);
-var
-  Stream: TMemoryStream;
 begin
-  Stream := TMemoryStream.Create;
-  try
-    Value.SaveToStream(Stream);
-    Stream.Position := 0;
-    FPicture.LoadFromStream(Stream);
-  finally
-    Stream.Free;
-  end;
+  FPicture.Assign(Value);
 end;
 
 procedure TMapLevel.Assign(const Source: TEntity);
@@ -120,7 +111,10 @@ begin
   try
     TBlobField(Field).SaveToStream(Stream);
     Stream.Position := 0;
-    Picture.LoadFromStream(Stream);
+    if Stream.Size > 0 then
+      Picture.LoadFromStream(Stream)
+    else
+      Picture.Assign(nil);
   finally
     Stream.Free;
   end;
