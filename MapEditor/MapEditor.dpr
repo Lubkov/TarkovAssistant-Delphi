@@ -29,7 +29,9 @@ uses
   ME.Presenter.MapLevel in 'Source\GUI\ME.Presenter.MapLevel.pas',
   ME.Edit.Form in '..\Source\Common\ME.Edit.Form.pas' {EditForm},
   ME.Edit.LocalMap in 'Source\GUI\Dialog\ME.Edit.LocalMap.pas' {edLocalMap},
-  ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel};
+  ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel},
+  App.Constants in '..\Source\App.Constants.pas',
+  ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame};
 
 {$R *.res}
 

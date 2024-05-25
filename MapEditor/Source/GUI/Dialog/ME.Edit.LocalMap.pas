@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions,
   FMX.Controls.Presentation, FMX.ActnList,
-  ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter;
+  ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter, FMX.Objects,
+  System.ImageList, FMX.ImgList;
 
 type
   TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
@@ -16,6 +17,18 @@ type
     edTop: TNumberBox;
     edBottom: TNumberBox;
     edRight: TNumberBox;
+    OpenDialog: TOpenDialog;
+    ActionList2: TActionList;
+    acOpenMapPicture: TAction;
+    acDeleteMapPicture: TAction;
+    ImageList1: TImageList;
+    paPicture: TPanel;
+    edPicture: TImage;
+    paTopPanel: TPanel;
+    edAddMap: TSpeedButton;
+    edDeleteMap: TSpeedButton;
+    procedure acOpenMapPictureExecute(Sender: TObject);
+    procedure acDeleteMapPictureExecute(Sender: TObject);
   private
     FLocalMap: TLocalMap;
 
@@ -29,6 +42,8 @@ type
     procedure SetMapRight(const Value: Integer);
     function GetMapBottom: Integer;
     procedure SetMapBottom(const Value: Integer);
+    function GetPicture: TBitmap;
+    procedure SetPicture(const Value: TBitmap);
   public
     procedure SetInstance(const Value: TLocalMap);
     procedure PostValues(const Value: TLocalMap);
@@ -38,6 +53,7 @@ type
     property MapTop: Integer read GetMapTop write SetMapTop;
     property MapRight: Integer read GetMapRight write SetMapRight;
     property MapBottom: Integer read GetMapBottom write SetMapBottom;
+    property Picture: TBitmap read GetPicture write SetPicture;
   end;
 
 implementation
@@ -94,6 +110,16 @@ begin
   edBottom.Value := Value;
 end;
 
+function TedLocalMap.GetPicture: TBitmap;
+begin
+  Result := edPicture.Bitmap;
+end;
+
+procedure TedLocalMap.SetPicture(const Value: TBitmap);
+begin
+  edPicture.Bitmap.Assign(Value);
+end;
+
 procedure TedLocalMap.SetInstance(const Value: TLocalMap);
 begin
   FLocalMap := Value;
@@ -108,6 +134,7 @@ begin
   MapTop := FLocalMap.Left.Y;
   MapRight := FLocalMap.Right.X;
   MapBottom := FLocalMap.Right.Y;
+  Picture := FLocalMap.Picture;
 end;
 
 procedure TedLocalMap.PostValues(const Value: TLocalMap);
@@ -115,6 +142,18 @@ begin
   Value.Name := MapName;
   FLocalMap.Left.SetBounds(MapLeft, MapTop);
   FLocalMap.Right.SetBounds(MapRight, MapBottom);
+  Value.Picture := Picture;
+end;
+
+procedure TedLocalMap.acOpenMapPictureExecute(Sender: TObject);
+begin
+  if OpenDialog.Execute then
+    Picture.LoadFromFile(OpenDialog.FileName);
+end;
+
+procedure TedLocalMap.acDeleteMapPictureExecute(Sender: TObject);
+begin
+  Picture.Assign(nil);
 end;
 
 end.
