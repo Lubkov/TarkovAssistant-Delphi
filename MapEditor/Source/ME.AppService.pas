@@ -13,6 +13,7 @@ type
 
     function GetConnected: Boolean;
     procedure SetConnected(const Value: Boolean);
+    function GetDatabase: string;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -22,6 +23,7 @@ type
 
     property Connected: Boolean read GetConnected write SetConnected;
     property Connection: TMEConnection read FConnection;
+    property Database: string read GetDatabase;
   end;
 
 var
@@ -63,6 +65,11 @@ end;
 procedure TMEService.SetConnected(const Value: Boolean);
 begin
   FConnection.Connected := Value;
+end;
+
+function TMEService.GetDatabase: string;
+begin
+  Result := FConnection.Connection.Database;
 end;
 
 procedure TMEService.Connect;
