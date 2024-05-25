@@ -5,8 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
-  FMX.Objects, FMX.Edit, FMX.EditBox, FMX.NumberBox,
+  ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation, FMX.Objects,
+  FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ImgList, System.ImageList,
   ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter;
 
 type
@@ -15,6 +15,16 @@ type
     edLevelName: TEdit;
     paPicture: TPanel;
     edPicture: TImage;
+    ImageList1: TImageList;
+    ActionList2: TActionList;
+    acOpenMapPicture: TAction;
+    acDeleteMapPicture: TAction;
+    paTopPanel: TPanel;
+    edAddMap: TSpeedButton;
+    edDeleteMap: TSpeedButton;
+    OpenDialog: TOpenDialog;
+    procedure acOpenMapPictureExecute(Sender: TObject);
+    procedure acDeleteMapPictureExecute(Sender: TObject);
   private
     FMapLevel: TMapLevel;
 
@@ -86,6 +96,17 @@ begin
   Value.Level := Level;
   Value.Name := LevelName;
   Value.Picture := Picture;
+end;
+
+procedure TedMapLevel.acOpenMapPictureExecute(Sender: TObject);
+begin
+  if OpenDialog.Execute then
+    Picture.LoadFromFile(OpenDialog.FileName);
+end;
+
+procedure TedMapLevel.acDeleteMapPictureExecute(Sender: TObject);
+begin
+  Picture.Assign(nil);
 end;
 
 end.

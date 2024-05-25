@@ -3,8 +3,8 @@ unit ME.MapLevelDAO;
 interface
 
 uses
-  System.SysUtils, System.Classes, ME.DB.Entity, ME.DB.DAO, ME.MapLevel,
-  Data.DB, MemDS, DBAccess, Uni;
+  System.SysUtils, System.Classes, System.Variants, Data.DB, MemDS, DBAccess, Uni,
+  ME.DB.Entity, ME.DB.DAO, ME.MapLevel;
 
 type
   TMapLevelDAO = class(TDAOCommon)
@@ -136,13 +136,17 @@ begin
     Query.SQL.Text := 'UPDATE MapLevel SET Picture = :Picture WHERE ID = :ID';
     Query.ParamByName('ID').Value := MapLevel.ID;
 
-    Stream := TMemoryStream.Create;
-    try
-      MapLevel.Picture.SaveToStream(Stream);
-      Stream.Position := 0;
-      Query.ParamByName('Picture').LoadFromStream(Stream, ftBlob);
-    finally
-      Stream.Free;
+    if MapLevel.Picture.IsEmpty then
+      Query.ParamByName('Picture').Value := Null
+    else begin
+      Stream := TMemoryStream.Create;
+      try
+        MapLevel.Picture.SaveToStream(Stream);
+        Stream.Position := 0;
+        Query.ParamByName('Picture').LoadFromStream(Stream, ftBlob);
+      finally
+        Stream.Free;
+      end;
     end;
     Query.Execute;
   finally
