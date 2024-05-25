@@ -3,28 +3,19 @@ unit ME.Edit.LocalMap;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, System.Actions,
-  FMX.ActnList, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Edit, FMX.EditBox,
-  FMX.NumberBox, ME.Dialog.Presenter, ME.Edit.Form.Presenter, ME.LocalMap;
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions,
+  FMX.Controls.Presentation, FMX.ActnList,
+  ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter;
 
 type
-  TedLocalMap = class(TForm, IEditDialog<TLocalMap>)
-    Panel1: TPanel;
-    buSuccess: TButton;
-    buCancel: TButton;
-    ActionList1: TActionList;
-    acSuccess: TAction;
-    acCancel: TAction;
+  TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
     edMapName: TEdit;
     edLeft: TNumberBox;
     edTop: TNumberBox;
-    edRight: TNumberBox;
     edBottom: TNumberBox;
-
-    procedure acSuccessExecute(Sender: TObject);
-    procedure acCancelExecute(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    edRight: TNumberBox;
   private
     FLocalMap: TLocalMap;
 
@@ -39,12 +30,6 @@ type
     function GetMapBottom: Integer;
     procedure SetMapBottom(const Value: Integer);
   public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-
-    function GetModalResult: TModalResult;
-    procedure SetModalResult(Value: TModalResult);
-
     procedure SetInstance(const Value: TLocalMap);
     procedure PostValues(const Value: TLocalMap);
 
@@ -55,49 +40,9 @@ type
     property MapBottom: Integer read GetMapBottom write SetMapBottom;
   end;
 
-var
-  edLocalMap: TedLocalMap;
-
 implementation
 
 {$R *.fmx}
-
-constructor TedLocalMap.Create(AOwner: TComponent);
-begin
-  inherited;
-
-end;
-
-destructor TedLocalMap.Destroy;
-begin
-
-  inherited;
-end;
-
-procedure TedLocalMap.FormShow(Sender: TObject);
-begin
-//  FMapLevelPanel.Init();
-end;
-
-procedure TedLocalMap.acSuccessExecute(Sender: TObject);
-begin
-// For action enabled
-end;
-
-procedure TedLocalMap.acCancelExecute(Sender: TObject);
-begin
-  Close;
-end;
-
-function TedLocalMap.GetModalResult: TModalResult;
-begin
-  Result := ModalResult;
-end;
-
-procedure TedLocalMap.SetModalResult(Value: TModalResult);
-begin
-  ModalResult := Value;
-end;
 
 function TedLocalMap.GetMapName: string;
 begin

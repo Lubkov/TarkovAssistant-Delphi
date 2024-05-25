@@ -3,27 +3,18 @@ unit ME.Edit.MapLevel;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter, FMX.StdCtrls,
-  FMX.Controls.Presentation, System.Actions, FMX.ActnList, FMX.Edit,
-  FMX.EditBox, FMX.NumberBox, FMX.Objects;
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
+  FMX.Objects, FMX.Edit, FMX.EditBox, FMX.NumberBox,
+  ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter;
 
 type
-  TedMapLevel = class(TForm, IEditDialog<TMapLevel>)
-    ActionList1: TActionList;
-    acSuccess: TAction;
-    acCancel: TAction;
-    Panel1: TPanel;
-    buSuccess: TButton;
-    buCancel: TButton;
+  TedMapLevel = class(TEditForm, IEditDialog<TMapLevel>)
     edLevel: TNumberBox;
     edLevelName: TEdit;
-    edPicture: TImage;
     paPicture: TPanel;
-
-    procedure acSuccessExecute(Sender: TObject);
-    procedure acCancelExecute(Sender: TObject);
+    edPicture: TImage;
   private
     FMapLevel: TMapLevel;
 
@@ -34,9 +25,6 @@ type
     function GetPicture: TBitmap;
     procedure SetPicture(const Value: TBitmap);
   public
-    function GetModalResult: TModalResult;
-    procedure SetModalResult(Value: TModalResult);
-
     procedure SetInstance(const Value: TMapLevel);
     procedure PostValues(const Value: TMapLevel);
 
@@ -48,28 +36,6 @@ type
 implementation
 
 {$R *.fmx}
-
-{ TedMapLevel }
-
-function TedMapLevel.GetModalResult: TModalResult;
-begin
-  Result := ModalResult;
-end;
-
-procedure TedMapLevel.SetModalResult(Value: TModalResult);
-begin
-  ModalResult := Value;
-end;
-
-procedure TedMapLevel.acSuccessExecute(Sender: TObject);
-begin
-  //
-end;
-
-procedure TedMapLevel.acCancelExecute(Sender: TObject);
-begin
-  Close;
-end;
 
 function TedMapLevel.GetLevel: Integer;
 begin
