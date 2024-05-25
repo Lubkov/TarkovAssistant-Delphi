@@ -25,8 +25,6 @@ type
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
-    procedure AssignPicture(const Field: TField);
-    procedure AssignPictureTo(const Field: TField);
 
     class function EntityName: string; override;
     class function FieldList: string; override;
@@ -88,50 +86,7 @@ begin
   FName := DataSet.FieldByName('Name').AsString;
 
   if DataSet.FindField('Picture') <> nil then
-    AssignPicture(DataSet.FieldByName('Picture'));
-end;
-
-procedure TMapLevel.AssignPicture(const Field: TField);
-var
-  Stream: TMemoryStream;
-  EmptyPicture: TBitmap;
-begin
-  if Field.IsNull then begin
-    EmptyPicture := TBitmap.Create;
-    try
-      Picture. Assign(EmptyPicture);
-    finally
-      EmptyPicture.Free;
-    end;
-
-    Exit;
-  end;
-
-  Stream := TMemoryStream.Create;
-  try
-    TBlobField(Field).SaveToStream(Stream);
-    Stream.Position := 0;
-    if Stream.Size > 0 then
-      Picture.LoadFromStream(Stream)
-    else
-      Picture.Assign(nil);
-  finally
-    Stream.Free;
-  end;
-end;
-
-procedure TMapLevel.AssignPictureTo(const Field: TField);
-var
-  Stream: TMemoryStream;
-begin
-  Stream := TMemoryStream.Create;
-  try
-    Picture.SaveToStream(Stream);
-    Stream.Position := 0;
-    TBlobField(Field).LoadFromStream(Stream);
-  finally
-    Stream.Free;
-  end;
+    AssignPicture(DataSet.FieldByName('Picture'), Picture);
 end;
 
 class function TMapLevel.EntityName: string;
