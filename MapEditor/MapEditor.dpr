@@ -23,12 +23,13 @@ uses
   ME.MapLevelService in '..\Source\Service\ME.MapLevelService.pas',
   ME.PointService in '..\Source\Service\ME.PointService.pas',
   ME.Frame.LocalMap in 'Source\GUI\Frame\ME.Frame.LocalMap.pas' {frLocalMap: TFrame},
-  ME.Edit.LocalMap in 'Source\GUI\Dialog\ME.Edit.LocalMap.pas' {edLocalMap},
   ME.Presenter.LocalMap in 'Source\GUI\ME.Presenter.LocalMap.pas',
   ME.Dialog.Message in 'Source\GUI\Dialog\ME.Dialog.Message.pas' {edMessage},
   ME.Frame.MapLevel in 'Source\GUI\Frame\ME.Frame.MapLevel.pas' {frMapLevel: TFrame},
-  ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel},
-  ME.Presenter.MapLevel in 'Source\GUI\ME.Presenter.MapLevel.pas';
+  ME.Presenter.MapLevel in 'Source\GUI\ME.Presenter.MapLevel.pas',
+  ME.Edit.Form in '..\Source\Common\ME.Edit.Form.pas' {EditForm},
+  ME.Edit.LocalMap in 'Source\GUI\Dialog\ME.Edit.LocalMap.pas' {edLocalMap},
+  ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel};
 
 {$R *.res}
 
