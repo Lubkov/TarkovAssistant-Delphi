@@ -11,7 +11,7 @@ type
 
   ICLDialog = interface
     ['{06620A0C-459E-4811-A144-A0ADF2CCA6EE}']
-    function ShowModal: Integer;
+    function ShowModal: TModalResult;
     function GetModalResult: TModalResult;
     procedure SetModalResult(Value: TModalResult);
   end;

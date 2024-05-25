@@ -24,7 +24,7 @@ type
     procedure Cancel; virtual; abstract;
     function Validate(var vMessage: string): Boolean; virtual;
   public
-    constructor Create(Dialog: IEditDialog<T>; Instance: T); overload; virtual;
+    constructor Create(Dialog: IEditDialog<T>; Instance: T); reintroduce; overload; virtual;
 
     function Edit: Boolean;
 
