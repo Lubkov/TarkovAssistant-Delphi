@@ -28,6 +28,9 @@ type
 
 implementation
 
+uses
+  App.Constants;
+
 { TConnection }
 
 constructor TMEConnection.Create(AOwner: TComponent);
@@ -62,7 +65,7 @@ begin
   FConnection.Close;
   FConnection.ProviderName := 'SQLite';
   FConnection.SpecificOptions.Values['Direct'] := 'True';
-  FConnection.Database := 'data.db';
+  FConnection.Database := AppParams.Path + 'data.db';
 end;
 
 procedure TMEConnection.Connect;

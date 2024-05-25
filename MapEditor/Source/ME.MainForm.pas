@@ -36,6 +36,7 @@ uses
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   AppService.Connect;
+  Self.Caption := '[Maps Editor] Database = "' + AppService.Database + '"';
 
   FLocalMapPanel := TfrLocalMap.Create(Self);
   FLocalMapPanel.Parent := paLocalMap;

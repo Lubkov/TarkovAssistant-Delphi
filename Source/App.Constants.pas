@@ -3,7 +3,7 @@ unit App.Constants;
 interface
 
 uses
-  System.SysUtils, System.IniFiles, System.IOUtils, Vcl.Forms;
+  System.SysUtils, System.IniFiles, System.IOUtils;
 
 type
   TAppParams = record
@@ -42,7 +42,7 @@ begin
 end;
 
 initialization
-  AppParams.Path := IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName));
+  AppParams.Path := IncludeTrailingPathDelimiter(System.SysUtils.GetCurrentDir);
   AppParams.MapsPath := TPath.Combine(AppParams.Path, MapsFolder);
 
 end.
