@@ -3,8 +3,8 @@ unit ME.Del.Form.Presenter;
 interface
 
 uses
-  System.SysUtils, System.Variants, System.Classes, FMX.Controls, FMX.Forms,
-  ME.Dialog.Presenter;
+  System.SysUtils, System.Variants, System.Classes, System.UITypes, FMX.Controls,
+  FMX.Forms, ME.Dialog.Presenter;
 
 type
   TDelFormPresenter<T> = class(TDialogPresenter)
@@ -15,7 +15,7 @@ type
     procedure InternalDelete; virtual; abstract;
     function GetDelMessage: string; virtual; abstract;
   public
-    constructor Create(Dialog: IMessageDialog; Instance: T); overload; virtual;
+    constructor Create(Dialog: IMessageDialog; Instance: T); reintroduce; overload; virtual;
 
     function Delete: Boolean;
 
