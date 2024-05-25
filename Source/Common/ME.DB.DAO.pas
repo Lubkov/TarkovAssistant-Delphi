@@ -3,8 +3,8 @@ unit ME.DB.DAO;
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Variants, Data.DB, MemDS, DBAccess, Uni,
-  ME.DB.Entity;
+  System.Classes, System.SysUtils, System.Variants, Generics.Collections,
+  Data.DB, MemDS, DBAccess, Uni, ME.DB.Entity;
 
 type
   TDAOClass = class of TDAOCommon;
@@ -21,6 +21,7 @@ type
 
     function GetNewInstance: TEntity; virtual; //CreateInstance
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual; abstract;
+    procedure GetAll(const Items: TList<TEntity>); virtual; abstract;
     procedure Insert(const Entity: TEntity); virtual; abstract;
     procedure Update(const Entity: TEntity); virtual; abstract;
     procedure Remove(const ID: Variant);

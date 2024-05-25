@@ -3,8 +3,8 @@ unit ME.DB.Service;
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Variants, Data.DB, MemDS, DBAccess, Uni,
-  ME.DB.Entity, ME.DB.DAO;
+  System.Classes, System.SysUtils, System.Variants, Generics.Collections, Data.DB,
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO;
 
 type
   TServiceCommon = class(TObject)
@@ -20,6 +20,7 @@ type
     destructor Destroy; override;
 
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual;
+    procedure GetAll(const Items: TList<TEntity>); virtual;
     procedure Insert(const Entity: TEntity); virtual;
     procedure Update(const Entity: TEntity); virtual;
     procedure Save(const Entity: TEntity); virtual;
@@ -68,6 +69,11 @@ end;
 function TServiceCommon.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 begin
   Result := FDAO.GetAt(ID, Entity);
+end;
+
+procedure TServiceCommon.GetAll(const Items: TList<TEntity>);
+begin
+  FDAO.GetAll(Items);
 end;
 
 procedure TServiceCommon.Insert(const Entity: TEntity);
