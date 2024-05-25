@@ -1,0 +1,104 @@
+object edMapLevel: TedMapLevel
+  Left = 0
+  Top = 0
+  BorderStyle = ToolWindow
+  Caption = 'Form1'
+  ClientHeight = 306
+  ClientWidth = 459
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Bottom
+    Position.Y = 260.000000000000000000
+    Size.Width = 459.000000000000000000
+    Size.Height = 46.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object buSuccess: TButton
+      Action = acSuccess
+      Enabled = True
+      StyledSettings = [Size, Style, FontColor]
+      ImageIndex = -1
+      ModalResult = 1
+      Position.X = 64.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 110.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      TextSettings.Font.Family = 'Tahoma'
+    end
+    object buCancel: TButton
+      Action = acCancel
+      Enabled = True
+      StyledSettings = [Size, Style, FontColor]
+      ImageIndex = -1
+      ModalResult = 2
+      Position.X = 184.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 110.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      TextSettings.Font.Family = 'Tahoma'
+    end
+  end
+  object edLevel: TNumberBox
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 5
+    Cursor = crIBeam
+    DecimalDigits = 0
+    Min = -9999.000000000000000000
+    Max = 9999.000000000000000000
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.HorzAlign = Trailing
+    Position.X = 24.000000000000000000
+    Position.Y = 24.000000000000000000
+    HorzIncrement = 0.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Size, Style, FontColor]
+  end
+  object edLevelName: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 8
+    Position.X = 24.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object paPicture: TPanel
+    Position.X = 184.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 265.000000000000000000
+    Size.Height = 217.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    object edPicture: TImage
+      MultiResBitmap = <
+        item
+        end>
+      Align = Client
+      Size.Width = 265.000000000000000000
+      Size.Height = 217.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object ActionList1: TActionList
+    Left = 264
+    Top = 32
+    object acSuccess: TAction
+      Text = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      OnExecute = acSuccessExecute
+    end
+    object acCancel: TAction
+      Text = #1054#1090#1084#1077#1085#1072
+      OnExecute = acCancelExecute
+    end
+  end
+end

@@ -1,11 +1,29 @@
 object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'Form1'
-  ClientHeight = 561
-  ClientWidth = 912
+  Caption = '[Escape from Tarkov Map Editor]'
+  ClientHeight = 360
+  ClientWidth = 640
+  Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
   DesignerMasterStyle = 0
+  object paLocalMap: TPanel
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 176.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+  end
+  object paMapLevel: TPanel
+    Align = Bottom
+    Position.Y = 176.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 184.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+  end
 end
