@@ -35,6 +35,7 @@ type
     procedure acAddMapLevelExecute(Sender: TObject);
     procedure acEditMapLevelExecute(Sender: TObject);
     procedure acDeleteMapLevelExecute(Sender: TObject);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FLocalMap: TLocalMap;
     FFocusedIndex: Integer;
@@ -266,6 +267,11 @@ begin
     if Res then
       MapLevel.Free;
   end;
+end;
+
+procedure TfrMapLevel.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  MapLevelEdit(Row);
 end;
 
 end.
