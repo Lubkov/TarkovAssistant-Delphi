@@ -209,6 +209,8 @@ begin
   Res := False;
   MapLevel := TMapLevel.Create;
   try
+    MapLevel.MapID := FLocalMap.ID;
+
     Res := InternalMapLevelEdit(MapLevel);
     if Res then begin
       FLocalMap.Levels.Add(MapLevel);

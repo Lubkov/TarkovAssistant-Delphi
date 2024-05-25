@@ -3,7 +3,7 @@ unit ME.LocalMapDAO;
 interface
 
 uses
-  System.SysUtils, System.Classes, Generics.Collections, Data.DB,
+  System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
   MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.LocalMap, ME.MapLevel;
 
 type
@@ -28,6 +28,7 @@ const
     ' SELECT ' +
     '     m.ID as ID, ' +
     '     m.Name as Name, ' +
+    '     m.Picture as Picture, ' +
     '     m.LeftID as LeftID, ' +
     '     p1.X as X1, ' +
     '     p1.Y as Y1, ' +
@@ -95,6 +96,7 @@ procedure TLocalMapDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
   LocalMap: TLocalMap;
+  Param: TParam;
 begin
   LocalMap := TLocalMap(Entity);
 
@@ -102,11 +104,14 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO LocalMap (Name, LeftID, RightID) ' +
-      ' VALUES (:Name, :LeftID, :RightID) ';
+      ' INSERT INTO LocalMap (Name, LeftID, RightID, Picture) ' +
+      ' VALUES (:Name, :LeftID, :RightID, :Picture) ';
     Query.ParamByName('Name').AsString := LocalMap.Name;
     Query.ParamByName('LeftID').AsInteger := LocalMap.Left.ID;
     Query.ParamByName('RightID').AsInteger := LocalMap.Right.ID;
+    Param := Query.ParamByName('Picture');
+    LocalMap.AssignPictureTo(LocalMap.Picture, Param);
+
     Query.Execute;
     LocalMap.ID := Query.LastInsertId;
   finally
@@ -129,12 +134,14 @@ begin
       ' SET ' +
       '   Name = :Name, ' +
       '   LeftID = :LeftID, ' +
-      '   RightID = :RightID ' +
+      '   RightID = :RightID, ' +
+      '   Picture = :Picture ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := LocalMap.ID;
     Query.ParamByName('Name').AsString := LocalMap.Name;
     Query.ParamByName('LeftID').AsInteger := LocalMap.Left.ID;
     Query.ParamByName('RightID').AsInteger := LocalMap.Right.ID;
+    LocalMap.AssignPictureTo(LocalMap.Picture, Query.ParamByName('Picture'));
     Query.Execute;
   finally
     Query.Free;
