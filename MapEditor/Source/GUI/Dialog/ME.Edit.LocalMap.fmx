@@ -1,11 +1,11 @@
 inherited edLocalMap: TedLocalMap
   Caption = 'EditForm1'
   ClientHeight = 328
-  ClientWidth = 567
+  ClientWidth = 568
   DesignerMasterStyle = 0
   inherited paBottom: TPanel
     Position.Y = 282.000000000000000000
-    Size.Width = 567.000000000000000000
+    Size.Width = 568.000000000000000000
   end
   object edMapName: TEdit [1]
     Touch.InteractiveGestures = [LongTap, DoubleTap]

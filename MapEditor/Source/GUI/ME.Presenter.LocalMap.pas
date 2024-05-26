@@ -46,7 +46,7 @@ end;
 
 function TDelMapPresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить карту "' + Instance.Name + '"?';
+  Result := 'РЈРґР°Р»РёС‚СЊ РєР°СЂС‚Сѓ "' + Instance.Name + '"?';
 end;
 
 procedure TDelMapPresenter.InternalDelete;

@@ -47,7 +47,7 @@ end;
 
 function TDelMapLevelPresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить уровень карты?';
+  Result := 'РЈРґР°Р»РёС‚СЊ СѓСЂРѕРІРµРЅСЊ РєР°СЂС‚С‹?';
 end;
 
 procedure TDelMapLevelPresenter.InternalDelete;

@@ -61,7 +61,7 @@ begin
   FPicturePanel := TfrPicture.Create(Self);
   FPicturePanel.Parent := paPicture;
   FPicturePanel.Align := TAlignLayout.Client;
-  FPicturePanel.Title := 'Изображение карты ' + #13#10 + '(для меню)';
+  FPicturePanel.Title := 'РР·РѕР±СЂР°Р¶РµРЅРё РєР°СЂС‚С‹ ' + #13#10 + '(РґР»СЏ РјРµРЅСЋ)';
 end;
 
 function TedLocalMap.GetMapName: string;
@@ -129,9 +129,9 @@ begin
   FLocalMap := Value;
 
   if FLocalMap.IsNewInstance then
-    Caption := 'Создание новой карты'
+    Caption := 'РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ РєР°СЂС‚С‹'
   else
-    Caption := '#' + VarToStr(FLocalMap.ID) + '  Редактирование карты "' + FLocalMap.Name + '"';
+    Caption := '#' + VarToStr(FLocalMap.ID) + '  Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РєР°СЂС‚С‹ "' + FLocalMap.Name + '"';
 
   MapName := FLocalMap.Name;
   MapLeft := FLocalMap.Left.X;
