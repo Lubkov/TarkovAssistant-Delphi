@@ -33,7 +33,8 @@ uses
   App.Constants in '..\Source\App.Constants.pas',
   ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame},
   ME.MapTag in '..\Source\Entity\ME.MapTag.pas',
-  ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas';
+  ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas',
+  ME.MapTagService in '..\Source\Service\ME.MapTagService.pas';
 
 {$R *.res}
 
