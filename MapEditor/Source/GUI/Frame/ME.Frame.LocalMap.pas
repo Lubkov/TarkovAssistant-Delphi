@@ -23,7 +23,6 @@ type
     Grid: TGrid;
     Column1: TColumn;
     Column2: TColumn;
-    Column3: TColumn;
     Column4: TColumn;
     Column5: TColumn;
     Column6: TColumn;
@@ -31,6 +30,9 @@ type
     acAddMap: TAction;
     acEditMap: TAction;
     acDeleteMap: TAction;
+    ImageList2: TImageList;
+    ImageColumn1: TImageColumn;
+    IntegerColumn1: TIntegerColumn;
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
     procedure acAddMapExecute(Sender: TObject);
@@ -139,6 +141,7 @@ const
   ColumnTopIdx = 3;
   ColumnRightIdx = 4;
   ColumnBottomIdx = 5;
+  ColumnImageIdx = 6;
 begin
   if FItems.Count <= ARow then
     Exit;
@@ -156,6 +159,8 @@ begin
       Value := Items[ARow].Right.X;
     ColumnBottomIdx:
       Value := Items[ARow].Right.Y;
+    ColumnImageIdx:
+      Value := Items[ARow].Picture;
   end;
 end;
 

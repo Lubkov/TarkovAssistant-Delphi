@@ -5,10 +5,9 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions,
-  FMX.Controls.Presentation, FMX.ActnList,
-  ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter, FMX.Objects,
-  System.ImageList, FMX.ImgList;
+  ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
+  FMX.Controls.Presentation, ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
+  ME.Frame.Picture;
 
 type
   TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
@@ -17,20 +16,13 @@ type
     edTop: TNumberBox;
     edBottom: TNumberBox;
     edRight: TNumberBox;
-    OpenDialog: TOpenDialog;
-    ActionList2: TActionList;
-    acOpenMapPicture: TAction;
-    acDeleteMapPicture: TAction;
-    ImageList1: TImageList;
     paPicture: TPanel;
-    edPicture: TImage;
-    paTopPanel: TPanel;
-    edAddMap: TSpeedButton;
-    edDeleteMap: TSpeedButton;
-    procedure acOpenMapPictureExecute(Sender: TObject);
-    procedure acDeleteMapPictureExecute(Sender: TObject);
+    laMapName: TLabel;
+    laTopPoint: TLabel;
+    laBottomPoint: TLabel;
   private
     FLocalMap: TLocalMap;
+    FPicturePanel: TfrPicture;
 
     function GetMapName: string;
     procedure SetMapName(const Value: string);
@@ -45,6 +37,8 @@ type
     function GetPicture: TBitmap;
     procedure SetPicture(const Value: TBitmap);
   public
+    constructor Create(AOwner: TComponent); override;
+
     procedure SetInstance(const Value: TLocalMap);
     procedure PostValues(const Value: TLocalMap);
 
@@ -59,6 +53,16 @@ type
 implementation
 
 {$R *.fmx}
+
+constructor TedLocalMap.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  FPicturePanel := TfrPicture.Create(Self);
+  FPicturePanel.Parent := paPicture;
+  FPicturePanel.Align := TAlignLayout.Client;
+  FPicturePanel.Title := 'Изображение карты ' + #13#10 + '(для меню)';
+end;
 
 function TedLocalMap.GetMapName: string;
 begin
@@ -112,12 +116,12 @@ end;
 
 function TedLocalMap.GetPicture: TBitmap;
 begin
-  Result := edPicture.Bitmap;
+  Result := FPicturePanel.Picture;
 end;
 
 procedure TedLocalMap.SetPicture(const Value: TBitmap);
 begin
-  edPicture.Bitmap.Assign(Value);
+  FPicturePanel.Picture := Value;
 end;
 
 procedure TedLocalMap.SetInstance(const Value: TLocalMap);
@@ -143,17 +147,6 @@ begin
   FLocalMap.Left.SetBounds(MapLeft, MapTop);
   FLocalMap.Right.SetBounds(MapRight, MapBottom);
   Value.Picture := Picture;
-end;
-
-procedure TedLocalMap.acOpenMapPictureExecute(Sender: TObject);
-begin
-  if OpenDialog.Execute then
-    Picture.LoadFromFile(OpenDialog.FileName);
-end;
-
-procedure TedLocalMap.acDeleteMapPictureExecute(Sender: TObject);
-begin
-  Picture.Assign(nil);
 end;
 
 end.

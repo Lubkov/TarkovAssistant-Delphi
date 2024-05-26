@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Objects, FMX.Controls.Presentation, System.Actions, FMX.ActnList,
-  System.ImageList, FMX.ImgList;
+  System.ImageList, FMX.ImgList, FMX.Menus;
 
 type
   TfrPicture = class(TFrame)
@@ -15,19 +15,28 @@ type
     acOpenPicture: TAction;
     acDeletePicture: TAction;
     OpenDialog: TOpenDialog;
-    paMain: TPanel;
     edPicture: TImage;
     paToolbar: TPanel;
     edAddMap: TSpeedButton;
     edDeleteMap: TSpeedButton;
+    ImageMenu: TPopupMenu;
+    miOpenPicture: TMenuItem;
+    miDeletePicture: TMenuItem;
+    laTitle: TLabel;
+
     procedure acOpenPictureExecute(Sender: TObject);
     procedure acDeletePictureExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
   private
     function GetPicture: TBitmap;
     procedure SetPicture(const Value: TBitmap);
+    function GetTitle: string;
+    procedure SetTitle(const Value: string);
   public
+    constructor Create(AOwner: TComponent); override;
+
     property Picture: TBitmap read GetPicture write SetPicture;
+    property Title: string read GetTitle write SetTitle;
   end;
 
 implementation
@@ -35,6 +44,14 @@ implementation
 {$R *.fmx}
 
 { TfrPicture }
+
+constructor TfrPicture.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  Title := '';
+  Picture := nil;
+end;
 
 function TfrPicture.GetPicture: TBitmap;
 begin
@@ -44,6 +61,16 @@ end;
 procedure TfrPicture.SetPicture(const Value: TBitmap);
 begin
   edPicture.Bitmap.Assign(Value);
+end;
+
+function TfrPicture.GetTitle: string;
+begin
+  Result := laTitle.Text;
+end;
+
+procedure TfrPicture.SetTitle(const Value: string);
+begin
+  laTitle.Text := Value;
 end;
 
 procedure TfrPicture.acOpenPictureExecute(Sender: TObject);

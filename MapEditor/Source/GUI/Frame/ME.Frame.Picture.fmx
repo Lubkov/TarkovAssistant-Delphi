@@ -7,60 +7,73 @@ object frPicture: TfrPicture
     Left = 152
     Top = 136
   end
-  object paMain: TPanel
-    Align = Client
+  object paToolbar: TPanel
+    Align = Top
     Size.Width = 320.000000000000000000
-    Size.Height = 240.000000000000000000
+    Size.Height = 40.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 10
-    object edPicture: TImage
-      MultiResBitmap = <
-        item
-        end>
+    object edAddMap: TSpeedButton
+      Action = acOpenPicture
+      Align = Left
+      Enabled = True
+      Images = ImageList1
+      ImageIndex = 0
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 2.000000000000000000
+      Size.Width = 36.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'actiontoolbutton'
+    end
+    object edDeleteMap: TSpeedButton
+      Action = acDeletePicture
+      Align = Left
+      Enabled = True
+      Images = ImageList1
+      ImageIndex = 2
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Position.X = 40.000000000000000000
+      Position.Y = 2.000000000000000000
+      Size.Width = 36.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'actiontoolbutton'
+    end
+    object laTitle: TLabel
       Align = Client
-      Size.Width = 320.000000000000000000
-      Size.Height = 200.000000000000000000
+      StyledSettings = [Size, Style, FontColor]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Right = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 240.000000000000000000
+      Size.Height = 36.000000000000000000
       Size.PlatformDefault = False
-    end
-    object paToolbar: TPanel
-      Align = Top
-      Size.Width = 320.000000000000000000
-      Size.Height = 40.000000000000000000
-      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Tahoma'
+      TextSettings.HorzAlign = Center
+      Text = 'laTitle'
       TabOrder = 0
-      object edAddMap: TSpeedButton
-        Action = acOpenPicture
-        Align = Left
-        Enabled = True
-        Images = ImageList1
-        ImageIndex = 0
-        Margins.Left = 2.000000000000000000
-        Margins.Top = 2.000000000000000000
-        Margins.Bottom = 2.000000000000000000
-        Position.X = 2.000000000000000000
-        Position.Y = 2.000000000000000000
-        Size.Width = 36.000000000000000000
-        Size.Height = 36.000000000000000000
-        Size.PlatformDefault = False
-        StyleLookup = 'actiontoolbutton'
-      end
-      object edDeleteMap: TSpeedButton
-        Action = acDeletePicture
-        Align = Left
-        Enabled = True
-        Images = ImageList1
-        ImageIndex = 2
-        Margins.Left = 2.000000000000000000
-        Margins.Top = 2.000000000000000000
-        Margins.Bottom = 2.000000000000000000
-        Position.X = 40.000000000000000000
-        Position.Y = 2.000000000000000000
-        Size.Width = 36.000000000000000000
-        Size.Height = 36.000000000000000000
-        Size.PlatformDefault = False
-        StyleLookup = 'actiontoolbutton'
-      end
     end
+  end
+  object edPicture: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Client
+    Margins.Left = 5.000000000000000000
+    Margins.Top = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Margins.Bottom = 5.000000000000000000
+    PopupMenu = ImageMenu
+    Size.Width = 310.000000000000000000
+    Size.Height = 190.000000000000000000
+    Size.PlatformDefault = False
   end
   object ImageList1: TImageList
     Source = <
@@ -333,6 +346,21 @@ object frPicture: TfrPicture
       Text = #1059#1076#1072#1083#1080#1090#1100' '#1080#1079#1086#1073#1088#1072#1078#1077#1085#1080#1077' '#1082#1072#1088#1090#1099
       ImageIndex = 2
       OnExecute = acDeletePictureExecute
+      ImageIndex = 2
+    end
+  end
+  object ImageMenu: TPopupMenu
+    Images = ImageList1
+    Left = 240
+    Top = 112
+    object miOpenPicture: TMenuItem
+      Action = acOpenPicture
+      Enabled = True
+      ImageIndex = 0
+    end
+    object miDeletePicture: TMenuItem
+      Action = acDeletePicture
+      Enabled = True
       ImageIndex = 2
     end
   end
