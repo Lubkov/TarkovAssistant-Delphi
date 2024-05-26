@@ -34,7 +34,9 @@ uses
   ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame},
   ME.MapTag in '..\Source\Entity\ME.MapTag.pas',
   ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas',
-  ME.MapTagService in '..\Source\Service\ME.MapTagService.pas';
+  ME.MapTagService in '..\Source\Service\ME.MapTagService.pas',
+  ME.Frame.Extraction in 'Source\GUI\Frame\ME.Frame.Extraction.pas' {frExtraction: TFrame},
+  ME.Edit.MapTag in 'Source\GUI\Dialog\ME.Edit.MapTag.pas' {edMapTag};
 
 {$R *.res}
 

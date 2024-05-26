@@ -12,7 +12,7 @@ inherited edLocalMap: TedLocalMap
     Size.Width = 568.000000000000000000
     Size.Height = 282.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 6
     TabPosition = PlatformDefault
     Sizes = (
@@ -27,13 +27,15 @@ inherited edLocalMap: TedLocalMap
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = False
+      IsSelected = True
       Size.Width = 61.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
       Text = 'General'
+      ExplicitSize.cx = 61.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object paPicture: TPanel
         Position.X = 5.000000000000000000
         Position.Y = 5.000000000000000000
@@ -164,19 +166,23 @@ inherited edLocalMap: TedLocalMap
       StyleLookup = ''
       TabOrder = 0
       Text = 'Levels'
+      ExplicitSize.cx = 52.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
     end
     object tabExtractions: TTabItem
       CustomIcon = <
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = True
+      IsSelected = False
       Size.Width = 78.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
       Text = 'Extractions'
+      ExplicitSize.cx = 78.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
     end
   end
 end
