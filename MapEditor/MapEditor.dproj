@@ -248,6 +248,8 @@
             <Form>frPicture</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="..\Source\Entity\ME.MapTag.pas"/>
+        <DCCReference Include="..\Source\DAO\ME.MapTagDAO.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -290,7 +292,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Bin\MapEditor.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\Bin\MapEditor.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>MapEditor.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>
