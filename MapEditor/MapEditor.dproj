@@ -250,6 +250,7 @@
         </DCCReference>
         <DCCReference Include="..\Source\Entity\ME.MapTag.pas"/>
         <DCCReference Include="..\Source\DAO\ME.MapTagDAO.pas"/>
+        <DCCReference Include="..\Source\Service\ME.MapTagService.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

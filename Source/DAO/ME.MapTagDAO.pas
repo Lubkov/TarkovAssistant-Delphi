@@ -89,7 +89,6 @@ procedure TMapTagDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
   MapTag: TMapTag;
-  Param: TParam;
 begin
   MapTag := TMapTag(Entity);
 
