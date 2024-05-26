@@ -1,11 +1,11 @@
 inherited edMapLevel: TedMapLevel
   Caption = 'EditForm1'
-  ClientHeight = 321
-  ClientWidth = 487
+  ClientHeight = 320
+  ClientWidth = 488
   DesignerMasterStyle = 0
   inherited paBottom: TPanel
-    Position.Y = 275.000000000000000000
-    Size.Width = 487.000000000000000000
+    Position.Y = 274.000000000000000000
+    Size.Width = 488.000000000000000000
   end
   object edLevel: TNumberBox [1]
     Touch.InteractiveGestures = [LongTap, DoubleTap]

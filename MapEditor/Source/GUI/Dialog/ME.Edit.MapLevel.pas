@@ -83,9 +83,9 @@ begin
   FMapLevel := Value;
 
   if FMapLevel.IsNewInstance then
-    Caption := 'Добавление нового уровня карты'
+    Caption := 'Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ СѓСЂРѕРІРЅСЏ РєР°СЂС‚С‹'
   else
-    Caption := '#' + VarToStr(FMapLevel.ID) + '  Редактирование уровня карты';
+    Caption := '#' + VarToStr(FMapLevel.ID) + ' Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СѓСЂРѕРІРЅСЏ РєР°СЂС‚С‹';
 
   Level := FMapLevel.Level;
   LevelName := FMapLevel.Name;
