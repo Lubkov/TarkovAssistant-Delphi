@@ -31,7 +31,9 @@ uses
   ME.Edit.LocalMap in 'Source\GUI\Dialog\ME.Edit.LocalMap.pas' {edLocalMap},
   ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel},
   App.Constants in '..\Source\App.Constants.pas',
-  ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame};
+  ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame},
+  ME.MapTag in '..\Source\Entity\ME.MapTag.pas',
+  ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas';
 
 {$R *.res}
 
