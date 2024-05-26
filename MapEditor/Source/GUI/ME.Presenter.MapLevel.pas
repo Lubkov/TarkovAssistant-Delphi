@@ -33,8 +33,10 @@ procedure TEditMapLevelPresenter.InternalSave;
 begin
   inherited;
 
-  MapLevelService.Save(Instance);
-  MapLevelService.SavePicture(Instance);
+  if not IsNullID(Instance.MapID) then begin
+    MapLevelService.Save(Instance);
+    MapLevelService.SavePicture(Instance);
+  end;
 end;
 
 procedure TEditMapLevelPresenter.Cancel;

@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
-  ME.Frame.Picture;
+  ME.Frame.Picture, ME.Frame.MapLevel, FMX.TabControl;
 
 type
   TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
@@ -20,9 +20,14 @@ type
     laMapName: TLabel;
     laTopPoint: TLabel;
     laBottomPoint: TLabel;
+    MainContainer: TTabControl;
+    tabGeneral: TTabItem;
+    tabMapLevel: TTabItem;
+    tabExtractions: TTabItem;
   private
     FLocalMap: TLocalMap;
     FPicturePanel: TfrPicture;
+    FMapLevelPanel: TfrMapLevel;
 
     function GetMapName: string;
     procedure SetMapName(const Value: string);
@@ -58,10 +63,16 @@ constructor TedLocalMap.Create(AOwner: TComponent);
 begin
   inherited;
 
+  MainContainer.TabIndex := tabGeneral.Index;
+
   FPicturePanel := TfrPicture.Create(Self);
   FPicturePanel.Parent := paPicture;
   FPicturePanel.Align := TAlignLayout.Client;
   FPicturePanel.Title := 'Изображени карты ' + #13#10 + '(для меню)';
+
+  FMapLevelPanel := TfrMapLevel.Create(Self);
+  FMapLevelPanel.Parent := tabMapLevel;
+  FMapLevelPanel.Align := TAlignLayout.Client;
 end;
 
 function TedLocalMap.GetMapName: string;
@@ -139,6 +150,8 @@ begin
   MapRight := FLocalMap.Right.X;
   MapBottom := FLocalMap.Right.Y;
   Picture := FLocalMap.Picture;
+
+  FMapLevelPanel.Init(FLocalMap);
 end;
 
 procedure TedLocalMap.PostValues(const Value: TLocalMap);

@@ -39,8 +39,8 @@ begin
 end;
 
 function TDelFormPresenter<T>.Delete: Boolean;
-var
-  ErrorText: string;
+//var
+//  ErrorText: string;
 begin
   IMessageDialog(FEditDialog).SetMessage(GetDelMessage);
   Result := FEditDialog.ShowModal = mrOK;
