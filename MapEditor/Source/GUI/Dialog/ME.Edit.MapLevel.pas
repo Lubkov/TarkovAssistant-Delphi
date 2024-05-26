@@ -7,26 +7,16 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation, FMX.Objects,
   FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ImgList, System.ImageList,
-  ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter;
+  ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter, ME.Frame.Picture;
 
 type
   TedMapLevel = class(TEditForm, IEditDialog<TMapLevel>)
     edLevel: TNumberBox;
     edLevelName: TEdit;
     paPicture: TPanel;
-    edPicture: TImage;
-    ImageList1: TImageList;
-    ActionList2: TActionList;
-    acOpenMapPicture: TAction;
-    acDeleteMapPicture: TAction;
-    paTopPanel: TPanel;
-    edAddMap: TSpeedButton;
-    edDeleteMap: TSpeedButton;
-    OpenDialog: TOpenDialog;
-    procedure acOpenMapPictureExecute(Sender: TObject);
-    procedure acDeleteMapPictureExecute(Sender: TObject);
   private
     FMapLevel: TMapLevel;
+    FPicturePanel: TfrPicture;
 
     function GetLevel: Integer;
     procedure SetLevel(const Value: Integer);
@@ -35,6 +25,8 @@ type
     function GetPicture: TBitmap;
     procedure SetPicture(const Value: TBitmap);
   public
+    constructor Create(AOwner: TComponent); override;
+
     procedure SetInstance(const Value: TMapLevel);
     procedure PostValues(const Value: TMapLevel);
 
@@ -46,6 +38,15 @@ type
 implementation
 
 {$R *.fmx}
+
+constructor TedMapLevel.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  FPicturePanel := TfrPicture.Create(Self);
+  FPicturePanel.Parent := paPicture;
+  FPicturePanel.Align := TAlignLayout.Client;
+end;
 
 function TedMapLevel.GetLevel: Integer;
 begin
@@ -69,12 +70,12 @@ end;
 
 function TedMapLevel.GetPicture: TBitmap;
 begin
-  Result := edPicture.Bitmap;
+  Result := FPicturePanel.Picture;
 end;
 
 procedure TedMapLevel.SetPicture(const Value: TBitmap);
 begin
-  edPicture.Bitmap.Assign(Value);
+  FPicturePanel.Picture := Value;
 end;
 
 procedure TedMapLevel.SetInstance(const Value: TMapLevel);
@@ -96,17 +97,6 @@ begin
   Value.Level := Level;
   Value.Name := LevelName;
   Value.Picture := Picture;
-end;
-
-procedure TedMapLevel.acOpenMapPictureExecute(Sender: TObject);
-begin
-  if OpenDialog.Execute then
-    Picture.LoadFromFile(OpenDialog.FileName);
-end;
-
-procedure TedMapLevel.acDeleteMapPictureExecute(Sender: TObject);
-begin
-  Picture.Assign(nil);
 end;
 
 end.

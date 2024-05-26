@@ -33,6 +33,8 @@ uses
 
 {$R *.fmx}
 
+// id, icon, name, выходы чвк(кол-во), выходы дикого(кол-во), выходы совместные(кол-во), квесты (кол-во)
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   AppService.Connect;
