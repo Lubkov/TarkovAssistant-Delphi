@@ -1,4 +1,4 @@
-unit ME.Edit.LocalMap;
+﻿unit ME.Edit.LocalMap;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
-  ME.Frame.Picture, ME.Frame.MapLevel, FMX.TabControl;
+  ME.Frame.Picture, ME.Frame.MapLevel, FMX.TabControl, ME.Frame.Extraction;
 
 type
   TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
@@ -28,6 +28,7 @@ type
     FLocalMap: TLocalMap;
     FPicturePanel: TfrPicture;
     FMapLevelPanel: TfrMapLevel;
+    FExtractionPanel: TfrExtraction;
 
     function GetMapName: string;
     procedure SetMapName(const Value: string);
@@ -73,6 +74,10 @@ begin
   FMapLevelPanel := TfrMapLevel.Create(Self);
   FMapLevelPanel.Parent := tabMapLevel;
   FMapLevelPanel.Align := TAlignLayout.Client;
+
+  FExtractionPanel := TfrExtraction.Create(Self);
+  FExtractionPanel.Parent := tabExtractions;
+  FExtractionPanel.Align := TAlignLayout.Client;
 end;
 
 function TedLocalMap.GetMapName: string;

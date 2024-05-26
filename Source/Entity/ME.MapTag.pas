@@ -23,6 +23,7 @@ type
 
     class function EntityName: string; override;
     class function FieldList: string; override;
+    class function KindToStr(Value: TTagKind): string;
 
     property Name: string read FName write FName;
     property Kind: TTagKind read FKind write FKind;
@@ -71,6 +72,20 @@ end;
 class function TMapTag.FieldList: string;
 begin
   Result := 'ID, Name, Kind, Position';
+end;
+
+class function TMapTag.KindToStr(Value: TTagKind): string;
+begin
+  case Value of
+    tkPMCExtraction:
+      Result := 'Выход ЧВК';
+    tkScavExtraction:
+      Result := 'Выход дикого';
+    tkCoopExtraction:
+      Result := 'Совм. выход';
+  else
+    Result := '';
+  end;
 end;
 
 end.

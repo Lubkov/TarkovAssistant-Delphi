@@ -1,0 +1,66 @@
+inherited edMapTag: TedMapTag
+  Caption = 'EditForm1'
+  DesignerMasterStyle = 0
+  object edTagName: TEdit [1]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 6
+    Position.X = 27.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edPositionX: TNumberBox [2]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 7
+    Cursor = crIBeam
+    DecimalDigits = 0
+    Min = -9999.000000000000000000
+    Max = 9999.000000000000000000
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.HorzAlign = Trailing
+    Position.X = 27.000000000000000000
+    Position.Y = 151.000000000000000000
+    HorzIncrement = 0.000000000000000000
+    Size.Width = 90.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Size, Style, FontColor]
+  end
+  object edPositionY: TNumberBox [3]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 3
+    Cursor = crIBeam
+    DecimalDigits = 0
+    Min = -9999.000000000000000000
+    Max = 9999.000000000000000000
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.HorzAlign = Trailing
+    Position.X = 125.000000000000000000
+    Position.Y = 151.000000000000000000
+    HorzIncrement = 0.000000000000000000
+    Size.Width = 90.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Size, Style, FontColor]
+  end
+  object laTopPoint: TLabel [4]
+    StyledSettings = [Size, Style, FontColor]
+    Position.X = 27.000000000000000000
+    Position.Y = 126.000000000000000000
+    Size.Width = 110.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    Text = #1050#1086#1086#1088#1076#1080#1085#1072#1090#1072' (x, y):'
+    TabOrder = 11
+  end
+  object edKindName: TComboBox [5]
+    Position.X = 27.000000000000000000
+    Position.Y = 80.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 12
+  end
+end

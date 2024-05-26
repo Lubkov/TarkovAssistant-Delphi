@@ -251,6 +251,15 @@
         <DCCReference Include="..\Source\Entity\ME.MapTag.pas"/>
         <DCCReference Include="..\Source\DAO\ME.MapTagDAO.pas"/>
         <DCCReference Include="..\Source\Service\ME.MapTagService.pas"/>
+        <DCCReference Include="Source\GUI\Frame\ME.Frame.Extraction.pas">
+            <Form>frExtraction</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Source\GUI\Dialog\ME.Edit.MapTag.pas">
+            <Form>edMapTag</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

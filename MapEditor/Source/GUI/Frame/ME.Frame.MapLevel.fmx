@@ -60,7 +60,7 @@ object frMapLevel: TfrMapLevel
       Align = Center
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
-      Size.Width = 191.200012207031300000
+      Size.Width = 192.000000000000000000
       Size.Height = 15.200000762939450000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
@@ -99,8 +99,8 @@ object frMapLevel: TfrMapLevel
     OnSelChanged = GridSelChanged
     OnGetValue = GridGetValue
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 335.000000000000000000
-    Viewport.Height = 227.000000000000000000
+    Viewport.Width = 355.000000000000000000
+    Viewport.Height = 252.000000000000000000
     object Column1: TColumn
       Header = '#'
       HeaderSettings.TextSettings.WordWrap = False
