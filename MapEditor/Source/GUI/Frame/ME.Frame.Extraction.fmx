@@ -9,6 +9,7 @@ object frExtraction: TfrExtraction
     Size.PlatformDefault = False
     TabOrder = 0
     object edAddMap: TSpeedButton
+      Action = acAddExtraction
       Align = Left
       Images = ImageList1
       ImageIndex = 0
@@ -24,6 +25,7 @@ object frExtraction: TfrExtraction
       TextSettings.Trimming = None
     end
     object edEditMap: TSpeedButton
+      Action = acEditExtraction
       Align = Left
       Images = ImageList1
       ImageIndex = 1
@@ -39,6 +41,7 @@ object frExtraction: TfrExtraction
       TextSettings.Trimming = None
     end
     object edDeleteMap: TSpeedButton
+      Action = acDeleteExtraction
       Align = Left
       Images = ImageList1
       ImageIndex = 2
@@ -57,7 +60,7 @@ object frExtraction: TfrExtraction
       Align = Center
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
-      Size.Width = 141.600006103515600000
+      Size.Width = 142.399993896484400000
       Size.Height = 15.200000762939450000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
@@ -109,6 +112,7 @@ object frExtraction: TfrExtraction
     object acAddExtraction: TAction
       Text = #1044#1086#1073#1072#1074#1080#1090#1100' '#1074#1099#1093#1086#1076
       ImageIndex = 0
+      OnExecute = acAddExtractionExecute
       ImageIndex = 0
     end
     object acEditExtraction: TAction

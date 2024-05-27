@@ -340,10 +340,11 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Source\GUI\Dialog\ME.Edit.MapTag.pas">
-            <Form>edMapTag</Form>
+        <DCCReference Include="Source\GUI\Dialog\ME.Edit.Extraction.pas">
+            <Form>edExtraction</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Source\GUI\ME.Presenter.Extraction.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
