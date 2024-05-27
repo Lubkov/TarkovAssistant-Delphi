@@ -36,7 +36,8 @@ uses
   ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas',
   ME.MapTagService in '..\Source\Service\ME.MapTagService.pas',
   ME.Frame.Extraction in 'Source\GUI\Frame\ME.Frame.Extraction.pas' {frExtraction: TFrame},
-  ME.Edit.MapTag in 'Source\GUI\Dialog\ME.Edit.MapTag.pas' {edMapTag};
+  ME.Edit.Extraction in 'Source\GUI\Dialog\ME.Edit.Extraction.pas' {edExtraction},
+  ME.Presenter.Extraction in 'Source\GUI\ME.Presenter.Extraction.pas';
 
 {$R *.res}
 

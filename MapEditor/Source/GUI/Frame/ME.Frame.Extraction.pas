@@ -27,12 +27,15 @@ type
     IntegerColumn1: TIntegerColumn;
     StringColumn2: TStringColumn;
     IntegerColumn2: TIntegerColumn;
+
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
+    procedure acAddExtractionExecute(Sender: TObject);
   private
     FItems: TList<TEntity>;
 
     function GetCount: Integer;
     function GetItem(Index: Integer): TMapTag;
+    function InternalExtractionEdit(const MapTag: TMapTag): Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -47,7 +50,7 @@ type
 implementation
 
 uses
-  ME.MapTagService;
+  ME.MapTagService, ME.Presenter.Extraction, ME.Edit.Extraction;
 
 {$R *.fmx}
 
@@ -75,6 +78,24 @@ end;
 function TfrExtraction.GetItem(Index: Integer): TMapTag;
 begin
   Result := TMapTag(FItems[Index]);
+end;
+
+function TfrExtraction.InternalExtractionEdit(const MapTag: TMapTag): Boolean;
+var
+  Presenter: TEditExtractionPresenter;
+  Dialog: TedExtraction;
+begin
+  Dialog := TedExtraction.Create(Self);
+  try
+    Presenter := TEditExtractionPresenter.Create(Dialog, MapTag);
+    try
+      Result := Presenter.Edit;
+    finally
+      Presenter.Free;
+    end;
+  finally
+    Dialog.Free;
+  end;
 end;
 
 procedure TfrExtraction.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
@@ -125,6 +146,31 @@ begin
     Item.Free;
 
   FItems.Clear;
+end;
+
+procedure TfrExtraction.acAddExtractionExecute(Sender: TObject);
+var
+  MapTag: TMapTag;
+  Res: Boolean;
+begin
+  Res := False;
+  MapTag := TMapTag.Create;
+  try
+    Res := InternalExtractionEdit(MapTag);
+    if Res then begin
+      FItems.Add(MapTag);
+
+      Grid.BeginUpdate;
+      try
+        Grid.RowCount := Count;
+      finally
+        Grid.EndUpdate;
+      end;
+    end;
+  finally
+    if not Res then
+      MapTag.Free;
+  end;
 end;
 
 end.
