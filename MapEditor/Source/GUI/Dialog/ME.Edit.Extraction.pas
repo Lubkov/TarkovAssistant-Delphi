@@ -1,4 +1,4 @@
-unit ME.Edit.MapTag;
+﻿unit ME.Edit.Extraction;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   ME.Edit.Form.Presenter;
 
 type
-  TedMapTag = class(TEditForm, IEditDialog<TMapTag>)
+  TedExtraction = class(TEditForm, IEditDialog<TMapTag>)
     edTagName: TEdit;
     edPositionX: TNumberBox;
     edPositionY: TNumberBox;
@@ -38,7 +38,7 @@ implementation
 
 { TedMapTag }
 
-constructor TedMapTag.Create(AOwner: TComponent);
+constructor TedExtraction.Create(AOwner: TComponent);
 var
   Kind: TTagKind;
 begin
@@ -49,17 +49,17 @@ begin
     edKindName.Items.Add(TMapTag.KindToStr(Kind));
 end;
 
-function TedMapTag.GetTagName: string;
+function TedExtraction.GetTagName: string;
 begin
   Result := edTagName.Text;
 end;
 
-procedure TedMapTag.SetTagName(const Value: string);
+procedure TedExtraction.SetTagName(const Value: string);
 begin
   edTagName.Text := Value;
 end;
 
-procedure TedMapTag.SetInstance(const Value: TMapTag);
+procedure TedExtraction.SetInstance(const Value: TMapTag);
 begin
   FMapTag := Value;
 
@@ -71,7 +71,7 @@ begin
   TagName := FMapTag.Name;
 end;
 
-procedure TedMapTag.PostValues(const Value: TMapTag);
+procedure TedExtraction.PostValues(const Value: TMapTag);
 begin
   Value.Name := TagName;
 end;
