@@ -1,4 +1,4 @@
-inherited edMapTag: TedMapTag
+inherited edExtraction: TedExtraction
   Caption = 'EditForm1'
   DesignerMasterStyle = 0
   object edTagName: TEdit [1]
