@@ -1,4 +1,4 @@
-unit ME.Presenter.Extraction;
+﻿unit ME.Presenter.Extraction;
 
 interface
 
@@ -25,7 +25,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils;
+  ME.DB.Utils, ME.PointService;
 
 { TEditExtractionPresenter }
 
@@ -33,6 +33,7 @@ procedure TEditExtractionPresenter.InternalSave;
 begin
   inherited;
 
+  PointService.Save(Instance.Position);
   MapTagService.Save(Instance);
 end;
 
