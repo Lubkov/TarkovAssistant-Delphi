@@ -1,4 +1,4 @@
-unit ME.MapTag;
+﻿unit ME.MapTag;
 
 interface
 
@@ -11,6 +11,7 @@ type
 
   TMapTag = class(TEntity)
   private
+    FMapID: Variant;
     FName: string;
     FKind: TTagKind;
     FPosition: TPoint;
@@ -25,6 +26,7 @@ type
     class function FieldList: string; override;
     class function KindToStr(Value: TTagKind): string;
 
+    property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
     property Kind: TTagKind read FKind write FKind;
     property Position: TPoint read FPosition write FPosition;
@@ -38,6 +40,7 @@ constructor TMapTag.Create;
 begin
   inherited;
 
+  FMapID := Null;
   FName := '';
   FKind := tkPMCExtraction;
   FPosition := TPoint.Create;
@@ -52,6 +55,7 @@ end;
 
 procedure TMapTag.Assign(const Source: TEntity);
 begin
+  FMapID := TMapTag(Source).MapID;
   FName := TMapTag(Source).Name;
   FKind := TMapTag(Source).Kind;
   FPosition.Assign(TMapTag(Source).Position);
@@ -59,6 +63,7 @@ end;
 
 procedure TMapTag.Assign(const DataSet: TDataSet);
 begin
+  FMapID := DataSet.FieldByName('MapID').Value;
   FName := DataSet.FieldByName('Name').AsString;
   FKind := TTagKind(DataSet.FieldByName('Kind').AsInteger);
   FPosition.Assign(DataSet);
@@ -71,7 +76,7 @@ end;
 
 class function TMapTag.FieldList: string;
 begin
-  Result := 'ID, Name, Kind, Position';
+  Result := 'ID, MapID, Name, Kind, Position';
 end;
 
 class function TMapTag.KindToStr(Value: TTagKind): string;

@@ -24,6 +24,7 @@ const
   SqlSelectCommandText =
     ' SELECT ' +
     '     t.ID as ID, ' +
+    '     t.MapID as MapID, ' +
     '     t.Name as Name, ' +
     '     t.Kind as Kind, ' +
     '     p.ID as Position, ' +
@@ -96,8 +97,9 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO MapTag (Name, Kind, Position) ' +
+      ' INSERT INTO MapTag (MapID, Name, Kind, Position) ' +
       ' VALUES (:Name, :Kind, :Position) ';
+    Query.ParamByName('MapID').Value := MapTag.MapID;
     Query.ParamByName('Name').AsString := MapTag.Name;
     Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
     Query.ParamByName('Position').AsInteger := MapTag.Position.ID;
@@ -121,11 +123,13 @@ begin
     Query.SQL.Text :=
       ' UPDATE MapTag ' +
       ' SET ' +
+      '   MapID = :MapID, ' +
       '   Name = :Name, ' +
       '   Kind = :Kind, ' +
       '   Position = :Position ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := MapTag.ID;
+    Query.ParamByName('MapID').Value := MapTag.MapID;
     Query.ParamByName('Name').AsString := MapTag.Name;
     Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
     Query.ParamByName('Position').AsInteger := MapTag.Position.ID;
