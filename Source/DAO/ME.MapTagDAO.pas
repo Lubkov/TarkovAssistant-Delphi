@@ -14,6 +14,7 @@ type
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
     procedure GetAll(const Items: TList<TEntity>); override;
+    procedure GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -61,6 +62,8 @@ begin
 end;
 
 procedure TMapTagDAO.GetAll(const Items: TList<TEntity>);
+const
+  Filter = '';
 var
   Query: TUniQuery;
   Entity: TEntity;
@@ -68,7 +71,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := Format(SqlSelectCommandText, ['']);
+    Query.SQL.Text := Format(SqlSelectCommandText, [Filter]);
     Query.Open;
 
     while not Query.Eof do begin
@@ -86,6 +89,34 @@ begin
   end;
 end;
 
+procedure TMapTagDAO.GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
+const
+  Filter = ' AND (t.MapID = :MapID) ';
+var
+  Query: TUniQuery;
+  Entity: TMapTag;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := Format(SqlSelectCommandText, [Filter]);
+    Query.ParamByName('MapID').Value := MapID;
+    Query.Open;
+
+    while not Query.Eof do begin
+      Entity := TMapTag.Create;
+      try
+        Entity.Assign(Query);
+      finally
+        Items.Add(Entity);
+      end;
+
+      Query.Next;
+    end;
+  finally
+    Query.Free;
+  end;
+end;
 procedure TMapTagDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;

@@ -33,8 +33,10 @@ procedure TEditExtractionPresenter.InternalSave;
 begin
   inherited;
 
-  PointService.Save(Instance.Position);
-  MapTagService.Save(Instance);
+  if not IsNullID(Instance.MapID) then begin
+    PointService.Save(Instance.Position);
+    MapTagService.Save(Instance);
+  end;
 end;
 
 procedure TEditExtractionPresenter.Cancel;

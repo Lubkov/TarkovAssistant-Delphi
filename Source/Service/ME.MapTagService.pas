@@ -3,8 +3,8 @@ unit ME.MapTagService;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.MapTag, ME.MapTagDAO;
+  System.SysUtils, System.Classes, System.Variants, Generics.Collections,
+  Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service, ME.MapTag, ME.MapTagDAO;
 
 type
   TMapTagService = class(TServiceCommon)
@@ -13,6 +13,7 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
+    procedure GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
 
@@ -37,6 +38,11 @@ end;
 function TMapTagService.GetDAOClass: TDAOClass;
 begin
   Result := TMapTagDAO;
+end;
+
+procedure TMapTagService.GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
+begin
+  MapTagDAO.GetMapTags(MapID, Items);
 end;
 
 procedure TMapTagService.Insert(const Entity: TEntity);

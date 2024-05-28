@@ -3,8 +3,8 @@ unit ME.LocalMap;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, FMX.Graphics,
-  Data.DB, ME.DB.Entity, ME.Point, ME.MapLevel, Generics.Collections;
+  System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
+  Data.DB, ME.DB.Entity, ME.Point, ME.MapLevel, ME.MapTag;
 
 type
   TLocalMap = class(TEntity)
@@ -14,6 +14,7 @@ type
     FRight: TPoint;
     FPicture: TBitmap;
     FLevels: TList<TMapLevel>;
+    FTags: TList<TMapTag>;
 
     procedure SetPicture(const Value: TBitmap);
   public
@@ -27,12 +28,14 @@ type
     class function FieldList: string; override;
 
     procedure ClearLevelList;
+    procedure ClearTagList;
 
     property Name: string read FName write FName;
     property Left: TPoint read FLeft write FLeft;
     property Right: TPoint read FRight write FRight;
     property Picture: TBitmap read FPicture write SetPicture;
     property Levels: TList<TMapLevel> read FLevels;
+    property Tags: TList<TMapTag> read FTags;
   end;
 
 implementation
@@ -48,6 +51,7 @@ begin
   FRight := TPoint.Create;
   FPicture := TBitmap.Create;
   FLevels := TList<TMapLevel>.Create;
+  FTags := TList<TMapTag>.Create;
 end;
 
 destructor TLocalMap.Destroy;
@@ -58,6 +62,9 @@ begin
 
   ClearLevelList;
   FLevels.Free;
+
+  ClearTagList;
+  FTags.Free;
 
   inherited;
 end;
@@ -111,6 +118,16 @@ begin
     FLevels[i].Free;
 
   FLevels.Clear;
+end;
+
+procedure TLocalMap.ClearTagList;
+var
+  i: Integer;
+begin
+  for i := 0 to FTags.Count - 1 do
+    FTags[i].Free;
+
+  FTags.Clear;
 end;
 
 end.

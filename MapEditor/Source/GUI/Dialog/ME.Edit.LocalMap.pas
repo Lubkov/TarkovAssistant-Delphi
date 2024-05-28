@@ -157,6 +157,7 @@ begin
   Picture := FLocalMap.Picture;
 
   FMapLevelPanel.Init(FLocalMap);
+  FExtractionPanel.Init(FLocalMap);
 end;
 
 procedure TedLocalMap.PostValues(const Value: TLocalMap);
