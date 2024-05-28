@@ -4,12 +4,14 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.LocalMap, ME.MapLevel, ME.LocalMapDAO;
+  ME.LocalMap, ME.MapLevel, ME.MapTag, ME.LocalMapDAO;
 
 type
   TLocalMapService = class(TServiceCommon)
   private
     function GetLocalMapDAO: TLocalMapDAO;
+
+    procedure InternalSave(const Entity: TEntity);
   protected
     function GetDAOClass: TDAOClass; override;
   public
@@ -19,6 +21,7 @@ type
     procedure Remove(const ID: Variant); override;
 
     procedure LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
+    procedure LoadMapTags(const Entity: TEntity);
 
     property LocalMapDAO: TLocalMapDAO read GetLocalMapDAO;
   end;
@@ -29,7 +32,7 @@ var
 implementation
 
 uses
-  ME.PointService, ME.MapLevelService;
+  ME.DB.Utils, ME.PointService, ME.MapLevelService, ME.MapTagService;
 
 { TLocalMapService }
 
@@ -43,29 +46,32 @@ begin
   Result := TLocalMapDAO;
 end;
 
-function TLocalMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
-begin
-  Result := inherited GetAt(ID, Entity);
-  if Result then
-    LoadMapLevels(Entity, False);
-end;
-
-procedure TLocalMapService.Insert(const Entity: TEntity);
+procedure TLocalMapService.InternalSave(const Entity: TEntity);
 var
   LocalMap: TLocalMap;
   Level: TMapLevel;
+  Tag: TMapTag;
 begin
   LocalMap := TLocalMap(Entity);
 
   StartTransaction;
   try
-    PointService.Insert(LocalMap.Left);
-    PointService.Insert(LocalMap.Right);
-    DAO.Insert(LocalMap);
+    PointService.Save(LocalMap.Left);
+    PointService.Save(LocalMap.Right);
+
+    if LocalMap.IsNewInstance then
+      DAO.Insert(LocalMap)
+    else
+      DAO.Update(LocalMap);
 
     for Level in LocalMap.Levels do begin
       Level.MapID := LocalMap.ID;
-      MapLevelService.Insert(Level);
+      MapLevelService.Save(Level);
+    end;
+
+    for Tag in LocalMap.Tags do begin
+      Tag.MapID := LocalMap.ID;
+      MapTagService.Save(Tag);
     end;
 
     CommitTransaction;
@@ -75,27 +81,21 @@ begin
   end;
 end;
 
-procedure TLocalMapService.Update(const Entity: TEntity);
-var
-  LocalMap: TLocalMap;
-  Level: TMapLevel;
+function TLocalMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 begin
-  LocalMap := TLocalMap(Entity);
+  Result := inherited GetAt(ID, Entity);
+  if Result then
+    LoadMapLevels(Entity, False);
+end;
 
-  StartTransaction;
-  try
-    PointService.Update(LocalMap.Left);
-    PointService.Update(LocalMap.Right);
-    DAO.Update(LocalMap);
+procedure TLocalMapService.Insert(const Entity: TEntity);
+begin
+  InternalSave(Entity);
+end;
 
-    for Level in LocalMap.Levels do
-      MapLevelService.Update(Level);
-
-    CommitTransaction;
-  except
-    RollbackTransaction;
-    raise;
-  end;
+procedure TLocalMapService.Update(const Entity: TEntity);
+begin
+  InternalSave(Entity);
 end;
 
 procedure TLocalMapService.Remove(const ID: Variant);
@@ -115,6 +115,15 @@ end;
 procedure TLocalMapService.LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
 begin
   LocalMapDAO.LoadMapLevels(Entity, LoadPicture);
+end;
+
+procedure TLocalMapService.LoadMapTags(const Entity: TEntity);
+var
+  LocalMap: TLocalMap;
+begin
+  LocalMap := TLocalMap(Entity);
+
+  MapTagService.GetMapTags(Entity.ID, LocalMap.Tags);
 end;
 
 end.

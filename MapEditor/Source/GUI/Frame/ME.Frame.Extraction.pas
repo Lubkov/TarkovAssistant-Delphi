@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
-  FMX.ScrollBox, ME.DB.Entity, ME.MapTag;
+  FMX.ScrollBox, ME.DB.Entity, ME.LocalMap, ME.MapTag;
 
 type
   TfrExtraction = class(TFrame)
@@ -31,7 +31,7 @@ type
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
     procedure acAddExtractionExecute(Sender: TObject);
   private
-    FItems: TList<TEntity>;
+    FLocalMap: TLocalMap;
 
     function GetCount: Integer;
     function GetItem(Index: Integer): TMapTag;
@@ -40,8 +40,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init;
-    procedure Clear;
+    procedure Init(const LocalMap: TLocalMap);
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TMapTag read GetItem;
@@ -58,26 +57,23 @@ constructor TfrExtraction.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FItems := TList<TEntity>.Create;
   Grid.RowCount := 0;
 end;
 
 destructor TfrExtraction.Destroy;
 begin
-  Clear;
-  FItems.Free;
 
   inherited;
 end;
 
 function TfrExtraction.GetCount: Integer;
 begin
-  Result := FItems.Count;
+  Result := FLocalMap.Tags.Count;
 end;
 
 function TfrExtraction.GetItem(Index: Integer): TMapTag;
 begin
-  Result := TMapTag(FItems[Index]);
+  Result := FLocalMap.Tags[Index];
 end;
 
 function TfrExtraction.InternalExtractionEdit(const MapTag: TMapTag): Boolean;
@@ -123,9 +119,9 @@ begin
   end;
 end;
 
-procedure TfrExtraction.Init;
+procedure TfrExtraction.Init(const LocalMap: TLocalMap);
 begin
-  MapTagService.GetAll(FItems);
+  FLocalMap := LocalMap;
 
   Grid.BeginUpdate;
   try
@@ -138,16 +134,6 @@ begin
     Grid.Selected := 0;
 end;
 
-procedure TfrExtraction.Clear;
-var
-  Item: TEntity;
-begin
-  for Item in FItems do
-    Item.Free;
-
-  FItems.Clear;
-end;
-
 procedure TfrExtraction.acAddExtractionExecute(Sender: TObject);
 var
   MapTag: TMapTag;
@@ -156,9 +142,11 @@ begin
   Res := False;
   MapTag := TMapTag.Create;
   try
+    MapTag.MapID := FLocalMap.ID;
+
     Res := InternalExtractionEdit(MapTag);
     if Res then begin
-      FItems.Add(MapTag);
+      FLocalMap.Tags.Add(MapTag);
 
       Grid.BeginUpdate;
       try

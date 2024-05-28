@@ -4,8 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
-  ME.LocalMap, ME.MapLevel, ME.LocalMapService, ME.MapLevelService;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.LocalMap;
 
 type
   TEditMapPresenter = class(TEditFormPresenter<TLocalMap>)
@@ -25,20 +24,15 @@ type
 implementation
 
 uses
-  ME.DB.Utils;
+  ME.DB.Utils, ME.LocalMapService;
 
 { TEditMapPresenter }
 
 procedure TEditMapPresenter.InternalSave;
-var
-  MapLevel: TMapLevel;
 begin
   inherited;
 
   LocalMapService.Save(Instance);
-  for MapLevel in Instance.Levels do
-    if IsNullID(MapLevel.ID) then
-      MapLevelService.Save(MapLevel);
 end;
 
 procedure TEditMapPresenter.Cancel;
