@@ -10,8 +10,6 @@ type
   TLocalMapService = class(TServiceCommon)
   private
     function GetLocalMapDAO: TLocalMapDAO;
-
-    procedure InternalSave(const Entity: TEntity);
   protected
     function GetDAOClass: TDAOClass; override;
   public
@@ -46,7 +44,14 @@ begin
   Result := TLocalMapDAO;
 end;
 
-procedure TLocalMapService.InternalSave(const Entity: TEntity);
+function TLocalMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+begin
+  Result := inherited GetAt(ID, Entity);
+  if Result then
+    LoadMapLevels(Entity, False);
+end;
+
+procedure TLocalMapService.Insert(const Entity: TEntity);
 var
   LocalMap: TLocalMap;
   Level: TMapLevel;
@@ -56,22 +61,18 @@ begin
 
   StartTransaction;
   try
-    PointService.Save(LocalMap.Left);
-    PointService.Save(LocalMap.Right);
-
-    if LocalMap.IsNewInstance then
-      DAO.Insert(LocalMap)
-    else
-      DAO.Update(LocalMap);
+    PointService.Insert(LocalMap.Left);
+    PointService.Insert(LocalMap.Right);
+    DAO.Insert(LocalMap);
 
     for Level in LocalMap.Levels do begin
       Level.MapID := LocalMap.ID;
-      MapLevelService.Save(Level);
+      MapLevelService.Insert(Level);
     end;
 
     for Tag in LocalMap.Tags do begin
       Tag.MapID := LocalMap.ID;
-      MapTagService.Save(Tag);
+      MapTagService.Insert(Tag);
     end;
 
     CommitTransaction;
@@ -81,21 +82,23 @@ begin
   end;
 end;
 
-function TLocalMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
-begin
-  Result := inherited GetAt(ID, Entity);
-  if Result then
-    LoadMapLevels(Entity, False);
-end;
-
-procedure TLocalMapService.Insert(const Entity: TEntity);
-begin
-  InternalSave(Entity);
-end;
-
 procedure TLocalMapService.Update(const Entity: TEntity);
+var
+  LocalMap: TLocalMap;
 begin
-  InternalSave(Entity);
+  LocalMap := TLocalMap(Entity);
+
+  StartTransaction;
+  try
+    PointService.Update(LocalMap.Left);
+    PointService.Update(LocalMap.Right);
+    DAO.Update(LocalMap);
+
+    CommitTransaction;
+  except
+    RollbackTransaction;
+    raise;
+  end;
 end;
 
 procedure TLocalMapService.Remove(const ID: Variant);

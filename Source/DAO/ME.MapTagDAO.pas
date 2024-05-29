@@ -29,8 +29,8 @@ const
     '     t.Name as Name, ' +
     '     t.Kind as Kind, ' +
     '     p.ID as Position, ' +
-    '     p.X as X1, ' +
-    '     p.Y as Y1 ' +
+    '     p.X as X, ' +
+    '     p.Y as Y ' +
     ' FROM MapTag t ' +
     '   INNER JOIN Point p ON (p.ID = t.Position) ' +
     '             %s ';
@@ -129,7 +129,7 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text :=
       ' INSERT INTO MapTag (MapID, Name, Kind, Position) ' +
-      ' VALUES (:Name, :Kind, :Position) ';
+      ' VALUES (:MapID, :Name, :Kind, :Position) ';
     Query.ParamByName('MapID').Value := MapTag.MapID;
     Query.ParamByName('Name').AsString := MapTag.Name;
     Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
