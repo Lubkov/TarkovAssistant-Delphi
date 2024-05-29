@@ -55,6 +55,8 @@ end;
 
 procedure TMapTag.Assign(const Source: TEntity);
 begin
+  inherited;
+
   FMapID := TMapTag(Source).MapID;
   FName := TMapTag(Source).Name;
   FKind := TMapTag(Source).Kind;
@@ -63,6 +65,8 @@ end;
 
 procedure TMapTag.Assign(const DataSet: TDataSet);
 begin
+  inherited;
+
   FMapID := DataSet.FieldByName('MapID').Value;
   FName := DataSet.FieldByName('Name').AsString;
   FKind := TTagKind(DataSet.FieldByName('Kind').AsInteger);

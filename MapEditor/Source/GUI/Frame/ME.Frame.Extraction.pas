@@ -30,12 +30,14 @@ type
 
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
     procedure acAddExtractionExecute(Sender: TObject);
+    procedure acEditExtractionExecute(Sender: TObject);
   private
     FLocalMap: TLocalMap;
 
     function GetCount: Integer;
     function GetItem(Index: Integer): TMapTag;
     function InternalExtractionEdit(const MapTag: TMapTag): Boolean;
+    procedure ExtractionEdit(const Index: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -91,6 +93,22 @@ begin
     end;
   finally
     Dialog.Free;
+  end;
+end;
+
+procedure TfrExtraction.ExtractionEdit(const Index: Integer);
+var
+  MapTag: TMapTag;
+begin
+  if (Index < 0) or (Index >= Count) then
+    Exit;
+
+  MapTag := Items[Index];
+  Grid.BeginUpdate;
+  try
+    InternalExtractionEdit(MapTag);
+  finally
+    Grid.EndUpdate;
   end;
 end;
 
@@ -159,6 +177,11 @@ begin
     if not Res then
       MapTag.Free;
   end;
+end;
+
+procedure TfrExtraction.acEditExtractionExecute(Sender: TObject);
+begin
+  ExtractionEdit(Grid.Selected);
 end;
 
 end.

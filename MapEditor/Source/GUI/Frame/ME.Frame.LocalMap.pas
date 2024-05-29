@@ -63,7 +63,7 @@ implementation
 
 uses
   ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.LocalMap, ME.Edit.LocalMap,
-  ME.LocalMapService, ME.Dialog.Message;
+  ME.LocalMapService, ME.Dialog.Message, ME.MapTagService;
 
 {$R *.fmx}
 
@@ -102,7 +102,10 @@ var
   Presenter: TEditMapPresenter;
   Dialog: TedLocalMap;
 begin
-  LocalMapService.LoadMapLevels(LocalMap, True);
+  if not LocalMap.IsNewInstance then begin  
+    LocalMapService.LoadMapLevels(LocalMap, True);
+    MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
+  end;
 
   Dialog := TedLocalMap.Create(Self);
   try
