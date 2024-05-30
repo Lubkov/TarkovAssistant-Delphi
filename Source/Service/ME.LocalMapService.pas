@@ -59,8 +59,6 @@ begin
 
   StartTransaction;
   try
-    PointService.Insert(LocalMap.Left);
-    PointService.Insert(LocalMap.Right);
     DAO.Insert(LocalMap);
 
     for Level in LocalMap.Levels do begin
@@ -88,8 +86,6 @@ begin
 
   StartTransaction;
   try
-    PointService.Update(LocalMap.Left);
-    PointService.Update(LocalMap.Right);
     DAO.Update(LocalMap);
 
     CommitTransaction;

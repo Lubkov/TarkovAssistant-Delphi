@@ -4,14 +4,16 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.Point, ME.MapLevel, ME.MapTag;
+  Data.DB, ME.DB.Entity, ME.MapLevel, ME.MapTag;
 
 type
   TLocalMap = class(TEntity)
   private
     FName: string;
-    FLeft: TPoint;
-    FRight: TPoint;
+    FLeft: Integer;
+    FTop: Integer;
+    FRight: Integer;
+    FBottom: Integer;
     FPicture: TBitmap;
     FLevels: TList<TMapLevel>;
     FTags: TList<TMapTag>;
@@ -31,8 +33,10 @@ type
     procedure ClearTagList;
 
     property Name: string read FName write FName;
-    property Left: TPoint read FLeft write FLeft;
-    property Right: TPoint read FRight write FRight;
+    property Left: Integer read FLeft write FLeft;
+    property Top: Integer read FTop write FTop;
+    property Right: Integer read FRight write FRight;
+    property Bottom: Integer read FBottom write FBottom;
     property Picture: TBitmap read FPicture write SetPicture;
     property Levels: TList<TMapLevel> read FLevels;
     property Tags: TList<TMapTag> read FTags;
@@ -47,8 +51,10 @@ begin
   inherited;
 
   FName := '';
-  FLeft := TPoint.Create;
-  FRight := TPoint.Create;
+  FLeft := 0;
+  FTop := 0;
+  FRight := 0;
+  FBottom := 0;
   FPicture := TBitmap.Create;
   FLevels := TList<TMapLevel>.Create;
   FTags := TList<TMapTag>.Create;
@@ -56,8 +62,6 @@ end;
 
 destructor TLocalMap.Destroy;
 begin
-  FLeft.Free;
-  FRight.Free;
   FPicture.Free;
 
   ClearLevelList;
@@ -75,12 +79,17 @@ begin
 end;
 
 procedure TLocalMap.Assign(const Source: TEntity);
+var
+  LocalMap: TLocalMap;
 begin
   inherited;
 
-  FName := TLocalMap(Source).Name;
-  FLeft.Assign(TLocalMap(Source).Left);
-  FRight.Assign(TLocalMap(Source).Right);
+  LocalMap := TLocalMap(Source);
+  FName := LocalMap.Name;
+  FLeft := LocalMap.Left;
+  FTop := LocalMap.Top;
+  FRight := LocalMap.Right;
+  FBottom := LocalMap.Bottom;
   Picture := TLocalMap(Source).Picture;
 end;
 
@@ -89,12 +98,10 @@ begin
   inherited;
 
   FName := DataSet.FieldByName('Name').AsString;
-  FLeft.ID := DataSet.FieldByName('LeftID').Value;
-  FLeft.X := DataSet.FieldByName('X1').AsInteger;
-  FLeft.Y := DataSet.FieldByName('Y1').AsInteger;
-  FRight.ID := DataSet.FieldByName('RightID').Value;
-  FRight.X := DataSet.FieldByName('X2').AsInteger;
-  FRight.Y := DataSet.FieldByName('Y2').AsInteger;
+  FLeft := DataSet.FieldByName('Left').AsInteger;
+  FTop := DataSet.FieldByName('Top').AsInteger;
+  FRight := DataSet.FieldByName('Right').AsInteger;
+  FBottom := DataSet.FieldByName('Bottom').AsInteger;
 
   if DataSet.FindField('Picture') <> nil then
     AssignPicture(DataSet.FieldByName('Picture'), Picture);
@@ -107,7 +114,7 @@ end;
 
 class function TLocalMap.FieldList: string;
 begin
-  Result := 'ID, Name, LeftID, RightID';
+  Result := 'ID, Name, "Left", "Top", "Right", "Bottom"';
 end;
 
 procedure TLocalMap.ClearLevelList;
