@@ -48,7 +48,7 @@ end;
 
 function TDelQuestPresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить координату "' + Instance.Name + '"?';
+  Result := 'РЈРґР°Р»РёС‚СЊ РєРІРµСЃС‚ "' + Instance.Name + '"?';
 end;
 
 procedure TDelQuestPresenter.InternalDelete;

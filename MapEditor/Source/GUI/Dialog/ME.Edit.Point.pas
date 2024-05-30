@@ -75,9 +75,9 @@ begin
   FPoint := Value;
 
   if FPoint.IsNewInstance then
-    Caption := 'Добавление новой координаты'
+    Caption := 'Р”РѕР±Р°РІР»РµРЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹'
   else
-    Caption := '#' + VarToStr(FPoint.ID) + ' Редактирование координаты';
+    Caption := '#' + VarToStr(FPoint.ID) + ' Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹';
 
   PositionX := FPoint.X;
   PositionY := FPoint.Y;

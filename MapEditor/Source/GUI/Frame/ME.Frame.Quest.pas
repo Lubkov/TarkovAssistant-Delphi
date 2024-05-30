@@ -30,6 +30,8 @@ type
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);
     procedure acDeleteQuestExecute(Sender: TObject);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
+    procedure GridSelChanged(Sender: TObject);
   private
     FMap: TMap;
     FFocusedIndex: Integer;
@@ -39,6 +41,7 @@ type
     function GetFocusedIndex: Integer;
     procedure SetFocusedIndex(const Value: Integer);
     function InternalQuestEdit(const Quest: TQuest): Boolean;
+    procedure QuestEdit(const Index: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -55,7 +58,7 @@ implementation
 {$R *.fmx}
 
 uses
-  ME.Presenter.Quest, ME.Edit.Quest;
+  ME.Presenter.Quest, ME.Edit.Quest, ME.Dialog.Message;
 
 { TfrQuest }
 
@@ -114,6 +117,22 @@ begin
   end;
 end;
 
+procedure TfrQuest.QuestEdit(const Index: Integer);
+var
+  Quest: TQuest;
+begin
+  if (Index < 0) or (Index >= Count) then
+    Exit;
+
+  Quest := Items[Index];
+  Grid.BeginUpdate;
+  try
+    InternalQuestEdit(Quest);
+  finally
+    Grid.EndUpdate;
+  end;
+end;
+
 procedure TfrQuest.Init(const Map: TMap);
 begin
   FMap := Map;
@@ -143,6 +162,11 @@ begin
     ColumnNameIdx:
       Value := VarToStr(Items[ARow].Name);
   end;
+end;
+
+procedure TfrQuest.GridSelChanged(Sender: TObject);
+begin
+  FocusedIndex := Grid.Selected;
 end;
 
 procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -181,12 +205,51 @@ end;
 
 procedure TfrQuest.acEditQuestExecute(Sender: TObject);
 begin
-//
+  QuestEdit(Grid.Selected);
 end;
 
 procedure TfrQuest.acDeleteQuestExecute(Sender: TObject);
+var
+  Quest: TQuest;
+  Presenter: TDelQuestPresenter;
+  Dialog: TedMessage;
+  Res: Boolean;
 begin
-//
+  if (Grid.Selected < 0) or (Grid.Selected >= Count) then
+    Exit;
+
+  Res := False;
+  Quest := Items[Grid.Selected];
+  try
+    Dialog := TedMessage.Create(Self);
+    try
+      Presenter := TDelQuestPresenter.Create(Dialog, Quest);
+      try
+        Res := Presenter.Delete;
+        if Res then begin
+          Grid.BeginUpdate;
+          try
+            FMap.Quests.Delete(Grid.Selected);
+            Grid.RowCount := Count;
+          finally
+            Grid.EndUpdate;
+          end;
+        end;
+      finally
+        Presenter.Free;
+      end;
+    finally
+      Dialog.Free;
+    end;
+  finally
+    if Res then
+      Quest.Free;
+  end;
+end;
+
+procedure TfrQuest.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  QuestEdit(Row);
 end;
 
 end.
