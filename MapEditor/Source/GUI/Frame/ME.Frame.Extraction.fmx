@@ -85,23 +85,27 @@ object frExtraction: TfrExtraction
     Options = [AlternatingRowBackground, ColumnResize, ColLines, RowLines, RowSelect, AlwaysShowSelection, Header, AutoDisplacement]
     OnGetValue = GridGetValue
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 524.000000000000000000
-    Viewport.Height = 312.000000000000000000
+    Viewport.Width = 520.000000000000000000
+    Viewport.Height = 287.000000000000000000
     object Column1: TColumn
       Header = '#'
       Size.Width = 50.000000000000000000
     end
     object StringColumn1: TStringColumn
       Header = 'Name'
+      Size.Width = 200.000000000000000000
     end
     object StringColumn2: TStringColumn
       Header = 'Kind'
+      Size.Width = 120.000000000000000000
     end
     object IntegerColumn1: TIntegerColumn
       Header = 'X'
+      Size.Width = 60.000000000000000000
     end
     object IntegerColumn2: TIntegerColumn
       Header = 'Y'
+      Size.Width = 60.000000000000000000
     end
   end
   object ActionList1: TActionList

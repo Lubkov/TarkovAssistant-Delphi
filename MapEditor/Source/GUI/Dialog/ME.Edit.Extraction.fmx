@@ -1,18 +1,21 @@
 inherited edExtraction: TedExtraction
   Caption = 'EditForm1'
   DesignerMasterStyle = 0
+  inherited paBottom: TPanel
+    TabOrder = 5
+  end
   object edTagName: TEdit [1]
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 6
+    TabOrder = 0
     Position.X = 27.000000000000000000
     Position.Y = 32.000000000000000000
-    Size.Width = 145.000000000000000000
+    Size.Width = 294.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
   end
   object edPositionX: TNumberBox [2]
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 7
+    TabOrder = 3
     Cursor = crIBeam
     DecimalDigits = 0
     Min = -9999.000000000000000000
@@ -30,7 +33,7 @@ inherited edExtraction: TedExtraction
   end
   object edPositionY: TNumberBox [3]
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
+    TabOrder = 4
     Cursor = crIBeam
     DecimalDigits = 0
     Min = -9999.000000000000000000
@@ -55,7 +58,7 @@ inherited edExtraction: TedExtraction
     Size.PlatformDefault = False
     TextSettings.Font.Family = 'Tahoma'
     Text = #1050#1086#1086#1088#1076#1080#1085#1072#1090#1072' (x, y):'
-    TabOrder = 11
+    TabOrder = 2
   end
   object edKindName: TComboBox [5]
     Position.X = 27.000000000000000000
@@ -63,6 +66,6 @@ inherited edExtraction: TedExtraction
     Size.Width = 145.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 12
+    TabOrder = 1
   end
 end
