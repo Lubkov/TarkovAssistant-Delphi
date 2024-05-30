@@ -1,10 +1,10 @@
-unit ME.PointService;
+unit ME.Service.Point;
 
 interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.Point, ME.PointDAO;
+  ME.DB.Point, ME.DAO.Point;
 
 type
   TPointService = class(TServiceCommon)

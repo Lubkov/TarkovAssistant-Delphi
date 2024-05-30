@@ -1,9 +1,9 @@
-unit ME.PointDAO;
+unit ME.DAO.Point;
 
 interface
 
 uses
-  System.SysUtils, System.Classes, ME.DB.Entity, ME.DB.DAO, ME.Point,
+  System.SysUtils, System.Classes, ME.DB.Entity, ME.DB.DAO, ME.DB.Point,
   Data.DB, MemDS, DBAccess, Uni;
 
 type

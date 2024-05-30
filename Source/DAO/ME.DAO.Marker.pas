@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
-  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.DB.Marker;
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.DB.Marker;
 
 type
   TMarkerDAO = class(TDAOCommon)

@@ -23,9 +23,6 @@ var
 
 implementation
 
-uses
-  ME.PointService;
-
 { TMarkerService }
 
 function TMarkerService.GetMarkerDAO: TMarkerDAO;

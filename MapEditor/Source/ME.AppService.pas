@@ -32,7 +32,7 @@ var
 implementation
 
 uses
-  ME.PointService, ME.Service.Map, ME.Service.Layer, ME.Service.Marker;
+  ME.Service.Point, ME.Service.Map, ME.Service.Layer, ME.Service.Marker;
 
 { TMEService }
 
