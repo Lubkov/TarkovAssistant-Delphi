@@ -1,4 +1,4 @@
-unit ME.Frame.MapLevel;
+unit ME.Frame.Layer;
 
 interface
 
@@ -7,20 +7,20 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.Actions, FMX.ActnList, FMX.Controls.Presentation, System.ImageList,
   FMX.ImgList, FMX.Objects, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
-  ME.DB.Entity, ME.DB.Map, ME.MapLevel;
+  ME.DB.Entity, ME.DB.Map, ME.DB.Layer;
 
 type
-  TfrMapLevel = class(TFrame)
+  TfrLayerList = class(TFrame)
     ImageList1: TImageList;
     paTopPanel: TPanel;
-    edAddMap: TSpeedButton;
-    edEditMap: TSpeedButton;
-    edDeleteMap: TSpeedButton;
+    edAddLayer: TSpeedButton;
+    edEditLayer: TSpeedButton;
+    edDeleteLayer: TSpeedButton;
     laTitle: TLabel;
     ActionList1: TActionList;
-    acAddMapLevel: TAction;
-    acEditMapLevel: TAction;
-    acDeleteMapLevel: TAction;
+    acAddLayer: TAction;
+    acEditLayer: TAction;
+    acDeleteLayer: TAction;
     paPicture: TPanel;
     imMapPicture: TImage;
     Grid: TGrid;
@@ -32,20 +32,20 @@ type
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
     procedure GridSelChanged(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
-    procedure acAddMapLevelExecute(Sender: TObject);
-    procedure acEditMapLevelExecute(Sender: TObject);
-    procedure acDeleteMapLevelExecute(Sender: TObject);
+    procedure acAddLayerExecute(Sender: TObject);
+    procedure acEditLayerExecute(Sender: TObject);
+    procedure acDeleteLayerExecute(Sender: TObject);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FMap: TMap;
     FFocusedIndex: Integer;
 
     function GetCount: Integer;
-    function GetItem(Index: Integer): TMapLevel;
+    function GetItem(Index: Integer): TLayer;
     function GetFocusedIndex: Integer;
     procedure SetFocusedIndex(const Value: Integer);
-    function InternalMapLevelEdit(const MapLevel: TMapLevel): Boolean;
-    procedure MapLevelEdit(const Index: Integer);
+    function InternalLayerEdit(const Layer: TLayer): Boolean;
+    procedure LayerEdit(const Index: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -53,7 +53,7 @@ type
     procedure Init(const Map: TMap);
 
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TMapLevel read GetItem;
+    property Items[Index: Integer]: TLayer read GetItem;
     property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
   end;
 
@@ -62,25 +62,25 @@ implementation
 {$R *.fmx}
 
 uses
-  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.MapLevel, ME.Edit.MapLevel,
+  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.Layer, ME.Edit.Layer,
   ME.Dialog.Message;
 
-{ TfrMapLevel }
+{ TfrLayerList }
 
-constructor TfrMapLevel.Create(AOwner: TComponent);
+constructor TfrLayerList.Create(AOwner: TComponent);
 begin
   inherited;
 
   Grid.RowCount := 0;
 end;
 
-destructor TfrMapLevel.Destroy;
+destructor TfrLayerList.Destroy;
 begin
 
   inherited;
 end;
 
-procedure TfrMapLevel.Init(const Map: TMap);
+procedure TfrLayerList.Init(const Map: TMap);
 begin
   FMap := Map;
 
@@ -99,20 +99,20 @@ begin
     imMapPicture.Bitmap.Assign(nil);
 end;
 
-function TfrMapLevel.GetCount: Integer;
+function TfrLayerList.GetCount: Integer;
 begin
   if FMap <> nil then
-    Result := FMap.Levels.Count
+    Result := FMap.Layers.Count
   else
     Result := 0;
 end;
 
-function TfrMapLevel.GetItem(Index: Integer): TMapLevel;
+function TfrLayerList.GetItem(Index: Integer): TLayer;
 begin
-  Result := FMap.Levels[Index];
+  Result := FMap.Layers[Index];
 end;
 
-function TfrMapLevel.GetFocusedIndex: Integer;
+function TfrLayerList.GetFocusedIndex: Integer;
 begin
   if (FMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
     Result := -1
@@ -120,7 +120,7 @@ begin
     Result := Grid.Selected;
 end;
 
-procedure TfrMapLevel.SetFocusedIndex(const Value: Integer);
+procedure TfrLayerList.SetFocusedIndex(const Value: Integer);
 begin
   if FFocusedIndex = Value then
     Exit;
@@ -132,14 +132,14 @@ begin
     imMapPicture.Bitmap.Assign(nil);
 end;
 
-function TfrMapLevel.InternalMapLevelEdit(const MapLevel: TMapLevel): Boolean;
+function TfrLayerList.InternalLayerEdit(const Layer: TLayer): Boolean;
 var
-  Presenter: TEditMapLevelPresenter;
-  Dialog: TedMapLevel;
+  Presenter: TEditLayerPresenter;
+  Dialog: TedLayer;
 begin
-  Dialog := TedMapLevel.Create(Self);
+  Dialog := TedLayer.Create(Self);
   try
-    Presenter := TEditMapLevelPresenter.Create(Dialog, MapLevel);
+    Presenter := TEditLayerPresenter.Create(Dialog, Layer);
     try
       Result := Presenter.Edit;
     finally
@@ -150,24 +150,24 @@ begin
   end;
 end;
 
-procedure TfrMapLevel.MapLevelEdit(const Index: Integer);
+procedure TfrLayerList.LayerEdit(const Index: Integer);
 var
-  MapLevel: TMapLevel;
+  Layer: TLayer;
 begin
   if (Index < 0) or (Index >= Count) then
     Exit;
 
-  MapLevel := Items[Index];
+  Layer := Items[Index];
   Grid.BeginUpdate;
   try
-    InternalMapLevelEdit(MapLevel);
-    imMapPicture.Bitmap.Assign(MapLevel.Picture);
+    InternalLayerEdit(Layer);
+    imMapPicture.Bitmap.Assign(Layer.Picture);
   finally
     Grid.EndUpdate;
   end;
 end;
 
-procedure TfrMapLevel.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
+procedure TfrLayerList.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
 const
   ColumnKeyIdx = 0;
   ColumnMapIDIdx = 1;
@@ -189,31 +189,31 @@ begin
   end;
 end;
 
-procedure TfrMapLevel.GridSelChanged(Sender: TObject);
+procedure TfrLayerList.GridSelChanged(Sender: TObject);
 begin
   FocusedIndex := Grid.Selected;
 end;
 
-procedure TfrMapLevel.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TfrLayerList.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acAddMapLevel.Enabled := FMap <> nil;
-  acEditMapLevel.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
-  acDeleteMapLevel.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
+  acAddLayer.Enabled := FMap <> nil;
+  acEditLayer.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
+  acDeleteLayer.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
 end;
 
-procedure TfrMapLevel.acAddMapLevelExecute(Sender: TObject);
+procedure TfrLayerList.acAddLayerExecute(Sender: TObject);
 var
-  MapLevel: TMapLevel;
+  Layer: TLayer;
   Res: Boolean;
 begin
   Res := False;
-  MapLevel := TMapLevel.Create;
+  Layer := TLayer.Create;
   try
-    MapLevel.MapID := FMap.ID;
+    Layer.MapID := FMap.ID;
 
-    Res := InternalMapLevelEdit(MapLevel);
+    Res := InternalLayerEdit(Layer);
     if Res then begin
-      FMap.Levels.Add(MapLevel);
+      FMap.Layers.Add(Layer);
 
       Grid.BeginUpdate;
       try
@@ -224,19 +224,19 @@ begin
     end;
   finally
     if not Res then
-      MapLevel.Free;
+      Layer.Free;
   end;
 end;
 
-procedure TfrMapLevel.acEditMapLevelExecute(Sender: TObject);
+procedure TfrLayerList.acEditLayerExecute(Sender: TObject);
 begin
-  MapLevelEdit(Grid.Selected);
+  LayerEdit(Grid.Selected);
 end;
 
-procedure TfrMapLevel.acDeleteMapLevelExecute(Sender: TObject);
+procedure TfrLayerList.acDeleteLayerExecute(Sender: TObject);
 var
-  MapLevel: TMapLevel;
-  Presenter: TDelMapLevelPresenter;
+  Layer: TLayer;
+  Presenter: TDelLayerPresenter;
   Dialog: TedMessage;
   Res: Boolean;
 begin
@@ -244,17 +244,17 @@ begin
     Exit;
 
   Res := False;
-  MapLevel := Items[Grid.Selected];
+  Layer := Items[Grid.Selected];
   try
     Dialog := TedMessage.Create(Self);
     try
-      Presenter := TDelMapLevelPresenter.Create(Dialog, MapLevel);
+      Presenter := TDelLayerPresenter.Create(Dialog, Layer);
       try
         Res := Presenter.Delete;
         if Res then begin
           Grid.BeginUpdate;
           try
-            FMap.Levels.Delete(Grid.Selected);
+            FMap.Layers.Delete(Grid.Selected);
             Grid.RowCount := Count;
           finally
             Grid.EndUpdate;
@@ -268,13 +268,13 @@ begin
     end;
   finally
     if Res then
-      MapLevel.Free;
+      Layer.Free;
   end;
 end;
 
-procedure TfrMapLevel.GridCellDblClick(const Column: TColumn; const Row: Integer);
+procedure TfrLayerList.GridCellDblClick(const Column: TColumn; const Row: Integer);
 begin
-  MapLevelEdit(Row);
+  LayerEdit(Row);
 end;
 
 end.

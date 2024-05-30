@@ -32,7 +32,7 @@ var
 implementation
 
 uses
-  ME.PointService, ME.Service.Map, ME.MapLevelService, ME.Service.Marker;
+  ME.PointService, ME.Service.Map, ME.Service.Layer, ME.Service.Marker;
 
 { TMEService }
 
@@ -43,7 +43,7 @@ begin
   FConnection := TMEConnection.Create(Self);
   PointService := TPointService.Create(FConnection.Connection);
   MapService := TMapService.Create(FConnection.Connection);
-  MapLevelService := TMapLevelService.Create(FConnection.Connection);
+  LayerService := TLayerService.Create(FConnection.Connection);
   MarkerService := TMarkerService.Create(FConnection.Connection);
 end;
 
@@ -51,7 +51,7 @@ destructor TMEService.Destroy;
 begin
   FreeAndNil(MapService);
   FreeAndNil(PointService);
-  FreeAndNil(MapLevelService);
+  FreeAndNil(LayerService);
   FreeAndNil(MarkerService);
 
   FreeAndNil(FConnection);

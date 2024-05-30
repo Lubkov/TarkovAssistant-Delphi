@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.MapLevel, ME.DB.Marker;
+  Data.DB, ME.DB.Entity, ME.DB.Layer, ME.DB.Marker;
 
 type
   TMap = class(TEntity)
@@ -15,7 +15,7 @@ type
     FRight: Integer;
     FBottom: Integer;
     FPicture: TBitmap;
-    FLevels: TList<TMapLevel>;
+    FLayers: TList<TLayer>;
     FTags: TList<TMarker>;
 
     procedure SetPicture(const Value: TBitmap);
@@ -38,7 +38,7 @@ type
     property Right: Integer read FRight write FRight;
     property Bottom: Integer read FBottom write FBottom;
     property Picture: TBitmap read FPicture write SetPicture;
-    property Levels: TList<TMapLevel> read FLevels;
+    property Layers: TList<TLayer> read FLayers;
     property Tags: TList<TMarker> read FTags;
   end;
 
@@ -56,7 +56,7 @@ begin
   FRight := 0;
   FBottom := 0;
   FPicture := TBitmap.Create;
-  FLevels := TList<TMapLevel>.Create;
+  FLayers := TList<TLayer>.Create;
   FTags := TList<TMarker>.Create;
 end;
 
@@ -65,7 +65,7 @@ begin
   FPicture.Free;
 
   ClearLevelList;
-  FLevels.Free;
+  FLayers.Free;
 
   ClearTagList;
   FTags.Free;
@@ -121,10 +121,10 @@ procedure TMap.ClearLevelList;
 var
   i: Integer;
 begin
-  for i := 0 to FLevels.Count - 1 do
-    FLevels[i].Free;
+  for i := 0 to FLayers.Count - 1 do
+    FLayers[i].Free;
 
-  FLevels.Clear;
+  FLayers.Clear;
 end;
 
 procedure TMap.ClearTagList;

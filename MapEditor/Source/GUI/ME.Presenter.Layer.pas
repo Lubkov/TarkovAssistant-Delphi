@@ -1,14 +1,14 @@
-unit ME.Presenter.MapLevel;
+﻿unit ME.Presenter.Layer;
 
 interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
   ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
-  ME.MapLevel, ME.MapLevelService;
+  ME.DB.Layer, ME.Service.Layer;
 
 type
-  TEditMapLevelPresenter = class(TEditFormPresenter<TMapLevel>)
+  TEditLayerPresenter = class(TEditFormPresenter<TLayer>)
   private
   protected
     procedure InternalSave; override;
@@ -16,7 +16,7 @@ type
   public
   end;
 
-  TDelMapLevelPresenter = class(TDelFormPresenter<TMapLevel>)
+  TDelLayerPresenter = class(TDelFormPresenter<TLayer>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -27,34 +27,34 @@ implementation
 uses
   ME.DB.Utils;
 
-{ TEditMapLevelPresenter }
+{ TEditLayerPresenter }
 
-procedure TEditMapLevelPresenter.InternalSave;
+procedure TEditLayerPresenter.InternalSave;
 begin
   inherited;
 
   if not IsNullID(Instance.MapID) then begin
-    MapLevelService.Save(Instance);
-    MapLevelService.SavePicture(Instance);
+    LayerService.Save(Instance);
+    LayerService.SavePicture(Instance);
   end;
 end;
 
-procedure TEditMapLevelPresenter.Cancel;
+procedure TEditLayerPresenter.Cancel;
 begin
   inherited;
 
 end;
 
-{ TDelMapLevelPresenter }
+{ TDelLayerPresenter }
 
-function TDelMapLevelPresenter.GetDelMessage: string;
+function TDelLayerPresenter.GetDelMessage: string;
 begin
   Result := 'Удалить уровень карты?';
 end;
 
-procedure TDelMapLevelPresenter.InternalDelete;
+procedure TDelLayerPresenter.InternalDelete;
 begin
-  MapLevelService.Remove(Instance);
+  LayerService.Remove(Instance);
 end;
 
 end.

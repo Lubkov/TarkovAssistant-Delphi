@@ -123,8 +123,8 @@ begin
     Exit;
 
   Map := Items[Index];
-  if (Map.Levels.Count = 0) and (Map.Tags.Count = 0) then begin
-    MapService.LoadMapLevels(Map, True);
+  if (Map.Layers.Count = 0) and (Map.Tags.Count = 0) then begin
+    MapService.LoadLayers(Map, True);
     MarkerService.LoadMarkers(Map.ID, Map.Tags);
   end;
 

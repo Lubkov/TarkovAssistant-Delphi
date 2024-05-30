@@ -1,4 +1,4 @@
-inherited edMapLevel: TedMapLevel
+inherited edLayer: TedLayer
   Caption = 'EditForm1'
   ClientHeight = 320
   ClientWidth = 488
