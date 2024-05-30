@@ -1,4 +1,4 @@
-﻿unit ME.MapTag;
+﻿unit ME.Marker;
 
 interface
 
@@ -6,13 +6,14 @@ uses
   System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
 
 type
-  TTagKind = (tkPMCExtraction, tkScavExtraction, tkCoopExtraction);
+  TMarkerKind = (tkPMCExtraction, tkScavExtraction, tkCoopExtraction);
 
-  TMapTag = class(TEntity)
+  TMarker = class(TEntity)
   private
     FMapID: Variant;
+//    FQuestID: Variant;
     FName: string;
-    FKind: TTagKind;
+    FKind: TMarkerKind;
     FLeft: Integer;
     FTop: Integer;
   public
@@ -24,20 +25,20 @@ type
 
     class function EntityName: string; override;
     class function FieldList: string; override;
-    class function KindToStr(Value: TTagKind): string;
+    class function KindToStr(Value: TMarkerKind): string;
 
     property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
-    property Kind: TTagKind read FKind write FKind;
+    property Kind: TMarkerKind read FKind write FKind;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
   end;
 
 implementation
 
-{ TMapTag }
+{ TMarker }
 
-constructor TMapTag.Create;
+constructor TMarker.Create;
 begin
   inherited;
 
@@ -48,45 +49,45 @@ begin
   FTop := 0;
 end;
 
-destructor TMapTag.Destroy;
+destructor TMarker.Destroy;
 begin
 
   inherited;
 end;
 
-procedure TMapTag.Assign(const Source: TEntity);
+procedure TMarker.Assign(const Source: TEntity);
 begin
   inherited;
 
-  MapID := TMapTag(Source).MapID;
-  Name := TMapTag(Source).Name;
-  Kind := TMapTag(Source).Kind;
-  Left := TMapTag(Source).Left;
-  Top := TMapTag(Source).Top;
+  MapID := TMarker(Source).MapID;
+  Name := TMarker(Source).Name;
+  Kind := TMarker(Source).Kind;
+  Left := TMarker(Source).Left;
+  Top := TMarker(Source).Top;
 end;
 
-procedure TMapTag.Assign(const DataSet: TDataSet);
+procedure TMarker.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
   MapID := DataSet.FieldByName('MapID').Value;
   Name := DataSet.FieldByName('Name').AsString;
-  Kind := TTagKind(DataSet.FieldByName('Kind').AsInteger);
+  Kind := TMarkerKind(DataSet.FieldByName('Kind').AsInteger);
   Left := DataSet.FieldByName('Left').AsInteger;
   Top := DataSet.FieldByName('Top').AsInteger;
 end;
 
-class function TMapTag.EntityName: string;
+class function TMarker.EntityName: string;
 begin
-  Result := 'MapTag';
+  Result := 'Marker';
 end;
 
-class function TMapTag.FieldList: string;
+class function TMarker.FieldList: string;
 begin
   Result := 'ID, "MapID", "Name", "Kind", "Left", "Top"';
 end;
 
-class function TMapTag.KindToStr(Value: TTagKind): string;
+class function TMarker.KindToStr(Value: TMarkerKind): string;
 begin
   case Value of
     tkPMCExtraction:

@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.LocalMap, ME.MapLevel, ME.MapTag, ME.LocalMapDAO;
+  ME.LocalMap, ME.MapLevel, ME.Marker, ME.LocalMapDAO;
 
 type
   TLocalMapService = class(TServiceCommon)
@@ -19,7 +19,7 @@ type
     procedure Remove(const ID: Variant); override;
 
     procedure LoadMapLevels(const LocalMap: TLocalMap; LoadPicture: Boolean);
-    procedure LoadMapTags(const LocalMap: TLocalMap);
+    procedure LoadMarkers(const LocalMap: TLocalMap);
 
     property LocalMapDAO: TLocalMapDAO read GetLocalMapDAO;
   end;
@@ -30,7 +30,7 @@ var
 implementation
 
 uses
-  ME.DB.Utils, ME.PointService, ME.MapLevelService, ME.MapTagService;
+  ME.DB.Utils, ME.PointService, ME.MapLevelService, ME.Service.Marker;
 
 { TLocalMapService }
 
@@ -53,7 +53,7 @@ procedure TLocalMapService.Insert(const Entity: TEntity);
 var
   LocalMap: TLocalMap;
   Level: TMapLevel;
-  Tag: TMapTag;
+  Marker: TMarker;
 begin
   LocalMap := TLocalMap(Entity);
 
@@ -66,9 +66,9 @@ begin
       MapLevelService.Insert(Level);
     end;
 
-    for Tag in LocalMap.Tags do begin
-      Tag.MapID := LocalMap.ID;
-      MapTagService.Insert(Tag);
+    for Marker in LocalMap.Tags do begin
+      Marker.MapID := LocalMap.ID;
+      MarkerService.Insert(Marker);
     end;
 
     CommitTransaction;
@@ -114,9 +114,9 @@ begin
   LocalMapDAO.LoadMapLevels(LocalMap, LoadPicture);
 end;
 
-procedure TLocalMapService.LoadMapTags(const LocalMap: TLocalMap);
+procedure TLocalMapService.LoadMarkers(const LocalMap: TLocalMap);
 begin
-  MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
+  MarkerService.LoadMarkers(LocalMap.ID, LocalMap.Tags);
 end;
 
 end.

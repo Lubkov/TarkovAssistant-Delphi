@@ -4,7 +4,7 @@ inherited edExtraction: TedExtraction
   inherited paBottom: TPanel
     TabOrder = 5
   end
-  object edTagName: TEdit [1]
+  object edMarkerName: TEdit [1]
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 0
     Position.X = 27.000000000000000000

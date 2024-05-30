@@ -32,7 +32,7 @@ uses
   ME.Edit.MapLevel in 'Source\GUI\Dialog\ME.Edit.MapLevel.pas' {edMapLevel},
   App.Constants in '..\Source\App.Constants.pas',
   ME.Frame.Picture in 'Source\GUI\Frame\ME.Frame.Picture.pas' {frPicture: TFrame},
-  ME.MapTag in '..\Source\Entity\ME.MapTag.pas',
+  ME.Marker in '..\Source\Entity\ME.Marker.pas',
   ME.MapTagDAO in '..\Source\DAO\ME.MapTagDAO.pas',
   ME.MapTagService in '..\Source\Service\ME.MapTagService.pas',
   ME.Frame.Extraction in 'Source\GUI\Frame\ME.Frame.Extraction.pas' {frExtraction: TFrame},

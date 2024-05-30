@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.MapLevel, ME.MapTag;
+  Data.DB, ME.DB.Entity, ME.MapLevel, ME.Marker;
 
 type
   TLocalMap = class(TEntity)
@@ -16,7 +16,7 @@ type
     FBottom: Integer;
     FPicture: TBitmap;
     FLevels: TList<TMapLevel>;
-    FTags: TList<TMapTag>;
+    FTags: TList<TMarker>;
 
     procedure SetPicture(const Value: TBitmap);
   public
@@ -39,7 +39,7 @@ type
     property Bottom: Integer read FBottom write FBottom;
     property Picture: TBitmap read FPicture write SetPicture;
     property Levels: TList<TMapLevel> read FLevels;
-    property Tags: TList<TMapTag> read FTags;
+    property Tags: TList<TMarker> read FTags;
   end;
 
 implementation
@@ -57,7 +57,7 @@ begin
   FBottom := 0;
   FPicture := TBitmap.Create;
   FLevels := TList<TMapLevel>.Create;
-  FTags := TList<TMapTag>.Create;
+  FTags := TList<TMarker>.Create;
 end;
 
 destructor TLocalMap.Destroy;

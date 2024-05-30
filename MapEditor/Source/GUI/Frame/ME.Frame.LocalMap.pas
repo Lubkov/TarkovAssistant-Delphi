@@ -63,7 +63,7 @@ implementation
 
 uses
   ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.LocalMap, ME.Edit.LocalMap,
-  ME.LocalMapService, ME.Dialog.Message, ME.MapTagService;
+  ME.LocalMapService, ME.Dialog.Message, ME.Service.Marker;
 
 {$R *.fmx}
 
@@ -125,7 +125,7 @@ begin
   LocalMap := Items[Index];
   if (LocalMap.Levels.Count = 0) and (LocalMap.Tags.Count = 0) then begin
     LocalMapService.LoadMapLevels(LocalMap, True);
-    MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
+    MarkerService.LoadMarkers(LocalMap.ID, LocalMap.Tags);
   end;
 
   Grid.BeginUpdate;

@@ -5,10 +5,10 @@ interface
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
   ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
-  ME.MapTag, ME.MapTagService;
+  ME.Marker, ME.Service.Marker;
 
 type
-  TEditExtractionPresenter = class(TEditFormPresenter<TMapTag>)
+  TEditExtractionPresenter = class(TEditFormPresenter<TMarker>)
   private
   protected
     procedure InternalSave; override;
@@ -16,7 +16,7 @@ type
   public
   end;
 
-  TDelExtractionPresenter = class(TDelFormPresenter<TMapTag>)
+  TDelExtractionPresenter = class(TDelFormPresenter<TMarker>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -34,7 +34,7 @@ begin
   inherited;
 
   if not IsNullID(Instance.MapID) then begin
-    MapTagService.Save(Instance);
+    MarkerService.Save(Instance);
   end;
 end;
 
@@ -53,7 +53,7 @@ end;
 
 procedure TDelExtractionPresenter.InternalDelete;
 begin
-  MapTagService.Remove(Instance);
+  MarkerService.Remove(Instance);
 end;
 
 end.
