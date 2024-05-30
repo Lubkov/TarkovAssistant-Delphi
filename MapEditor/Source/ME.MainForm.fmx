@@ -14,15 +14,7 @@ object MainForm: TMainForm
   object paLocalMap: TPanel
     Align = Client
     Size.Width = 640.000000000000000000
-    Size.Height = 176.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 1
-  end
-  object paMapLevel: TPanel
-    Align = Bottom
-    Position.Y = 176.000000000000000000
-    Size.Width = 640.000000000000000000
-    Size.Height = 184.000000000000000000
+    Size.Height = 360.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
   end

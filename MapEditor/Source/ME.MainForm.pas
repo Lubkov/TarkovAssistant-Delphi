@@ -12,12 +12,10 @@ uses
 type
   TMainForm = class(TForm)
     paLocalMap: TPanel;
-    paMapLevel: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     FLocalMapPanel: TfrLocalMap;
-    FMapLevelPanel: TfrMapLevel;
 
     procedure OnMapChanged(const LocalMap: TLocalMap);
   public
@@ -44,10 +42,6 @@ begin
   FLocalMapPanel.Parent := paLocalMap;
   FLocalMapPanel.Align := TAlignLayout.Client;
   FLocalMapPanel.OnChange := OnMapChanged;
-
-  FMapLevelPanel := TfrMapLevel.Create(Self);
-  FMapLevelPanel.Parent := paMapLevel;
-  FMapLevelPanel.Align := TAlignLayout.Client;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -57,10 +51,7 @@ end;
 
 procedure TMainForm.OnMapChanged(const LocalMap: TLocalMap);
 begin
-  if LocalMap <> nil then
-    LocalMapService.LoadMapLevels(LocalMap, True);
 
-  FMapLevelPanel.Init(LocalMap);
 end;
 
 end.

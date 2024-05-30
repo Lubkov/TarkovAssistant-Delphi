@@ -102,11 +102,6 @@ var
   Presenter: TEditMapPresenter;
   Dialog: TedLocalMap;
 begin
-  if not LocalMap.IsNewInstance then begin  
-    LocalMapService.LoadMapLevels(LocalMap, True);
-    MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
-  end;
-
   Dialog := TedLocalMap.Create(Self);
   try
     Presenter := TEditMapPresenter.Create(Dialog, LocalMap);
@@ -128,6 +123,11 @@ begin
     Exit;
 
   LocalMap := Items[Index];
+  if (LocalMap.Levels.Count = 0) and (LocalMap.Tags.Count = 0) then begin
+    LocalMapService.LoadMapLevels(LocalMap, True);
+    MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
+  end;
+
   Grid.BeginUpdate;
   try
     InternalMapEdit(LocalMap);

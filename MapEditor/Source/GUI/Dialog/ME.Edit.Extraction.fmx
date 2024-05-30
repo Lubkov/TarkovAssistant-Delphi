@@ -22,6 +22,7 @@ inherited edExtraction: TedExtraction
     Position.X = 27.000000000000000000
     Position.Y = 151.000000000000000000
     HorzIncrement = 0.000000000000000000
+    VertIncrement = 0.000000000000000000
     Size.Width = 90.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
@@ -39,6 +40,7 @@ inherited edExtraction: TedExtraction
     Position.X = 125.000000000000000000
     Position.Y = 151.000000000000000000
     HorzIncrement = 0.000000000000000000
+    VertIncrement = 0.000000000000000000
     Size.Width = 90.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False

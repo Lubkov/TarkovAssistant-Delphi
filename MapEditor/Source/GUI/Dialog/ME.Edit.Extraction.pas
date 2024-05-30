@@ -18,14 +18,15 @@ type
     edKindName: TComboBox;
   private
     FMapTag: TMapTag;
-    FPosition: TPoint;
 
     function GetTagName: string;
     procedure SetTagName(const Value: string);
     function GetTagKind: TTagKind;
     procedure SetTagKind(const Value: TTagKind);
-    function GetPosition: TPoint;
-    procedure SetPosition(const Value: TPoint);
+    function GetPositionX: Integer;
+    procedure SetPositionX(const Value: Integer);
+    function GetPositionY: Integer;
+    procedure SetPositionY(const Value: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -35,7 +36,8 @@ type
 
     property TagName: string read GetTagName write SetTagName;
     property TagKind: TTagKind read GetTagKind write SetTagKind;
-    property Position: TPoint read GetPosition write SetPosition;
+    property PositionX: Integer read GetPositionX write SetPositionX;
+    property PositionY: Integer read GetPositionY write SetPositionY;
   end;
 
 implementation
@@ -50,7 +52,6 @@ var
 begin
   inherited;
 
-  FPosition := TPoint.Create;
   edKindName.Clear;
   for Kind := tkPMCExtraction to tkCoopExtraction do
     edKindName.Items.Add(TMapTag.KindToStr(Kind));
@@ -58,7 +59,6 @@ end;
 
 destructor TedExtraction.Destroy;
 begin
-  FPosition.Free;
 
   inherited;
 end;
@@ -83,14 +83,24 @@ begin
   edKindName.ItemIndex := Ord(Value);
 end;
 
-function TedExtraction.GetPosition: TPoint;
+function TedExtraction.GetPositionX: Integer;
 begin
-  Result := FPosition;
+  Result := Trunc(edPositionX.Value);
 end;
 
-procedure TedExtraction.SetPosition(const Value: TPoint);
+procedure TedExtraction.SetPositionX(const Value: Integer);
 begin
-  FPosition.Assign(Value);
+  edPositionX.Value := Value
+end;
+
+function TedExtraction.GetPositionY: Integer;
+begin
+  Result := Trunc(edPositionY.Value);
+end;
+
+procedure TedExtraction.SetPositionY(const Value: Integer);
+begin
+  edPositionY.Value := Value
 end;
 
 procedure TedExtraction.SetInstance(const Value: TMapTag);
@@ -98,20 +108,21 @@ begin
   FMapTag := Value;
 
   if FMapTag.IsNewInstance then
-    Caption := 'Добавление нового уровня карты'
+    Caption := 'Добавление нового выхода с карты'
   else
-    Caption := '#' + VarToStr(FMapTag.ID) + ' Редактирование уровня карты';
+    Caption := '#' + VarToStr(FMapTag.ID) + ' Редактирование выхода с карты';
 
   TagName := FMapTag.Name;
   TagKind := FMapTag.Kind;
-  Position := FMapTag.Position;
+  PositionX := FMapTag.Position.X;
+  PositionY := FMapTag.Position.Y;
 end;
 
 procedure TedExtraction.PostValues(const Value: TMapTag);
 begin
   Value.Name := TagName;
   Value.Kind := TagKind;
-  Value.Position := Position;
+  Value.Position.SetBounds(PositionX, PositionY);
 end;
 
 end.
