@@ -28,12 +28,10 @@ const
     '     t.MapID as MapID, ' +
     '     t.Name as Name, ' +
     '     t.Kind as Kind, ' +
-    '     p.ID as Position, ' +
-    '     p.X as X, ' +
-    '     p.Y as Y ' +
+    '     t.Left as Left, ' +
+    '     t.Top as Top ' +
     ' FROM MapTag t ' +
-    '   INNER JOIN Point p ON (p.ID = t.Position) ' +
-    '             %s ';
+    ' %s ';
 
 { TMapTagDAO }
 
@@ -49,7 +47,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := Format(SqlSelectCommandText, [' AND (t.ID = :ID) ']);
+    Query.SQL.Text := Format(SqlSelectCommandText, [' WHERE (t.ID = :ID) ']);
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -91,7 +89,7 @@ end;
 
 procedure TMapTagDAO.GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
 const
-  Filter = ' AND (t.MapID = :MapID) ';
+  Filter = ' WHERE (t.MapID = :MapID) ';
 var
   Query: TUniQuery;
   Entity: TMapTag;
@@ -128,12 +126,13 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO MapTag (MapID, Name, Kind, Position) ' +
-      ' VALUES (:MapID, :Name, :Kind, :Position) ';
+      ' INSERT INTO MapTag (MapID, Name, Kind, Left, Top) ' +
+      ' VALUES (:MapID, :Name, :Kind, :Left, :Top) ';
     Query.ParamByName('MapID').Value := MapTag.MapID;
     Query.ParamByName('Name').AsString := MapTag.Name;
     Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
-    Query.ParamByName('Position').AsInteger := MapTag.Position.ID;
+    Query.ParamByName('Left').AsInteger := MapTag.Left;
+    Query.ParamByName('Top').AsInteger := MapTag.Top;
     Query.Execute;
     MapTag.ID := Query.LastInsertId;
   finally
@@ -157,13 +156,15 @@ begin
       '   MapID = :MapID, ' +
       '   Name = :Name, ' +
       '   Kind = :Kind, ' +
-      '   Position = :Position ' +
+      '   Left = :Left, ' +
+      '   Top = :Top ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := MapTag.ID;
     Query.ParamByName('MapID').Value := MapTag.MapID;
     Query.ParamByName('Name').AsString := MapTag.Name;
     Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
-    Query.ParamByName('Position').AsInteger := MapTag.Position.ID;
+    Query.ParamByName('Left').AsInteger := MapTag.Left;
+    Query.ParamByName('Top').AsInteger := MapTag.Top;
     Query.Execute;
   finally
     Query.Free;
