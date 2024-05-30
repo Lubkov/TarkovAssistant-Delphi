@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
-  FMX.ScrollBox, ME.DB.Entity, ME.LocalMap, ME.MapTag;
+  FMX.ScrollBox, ME.DB.Entity, ME.LocalMap, ME.Marker;
 
 type
   TfrExtraction = class(TFrame)
@@ -39,8 +39,8 @@ type
     FFocusedIndex: Integer;
 
     function GetCount: Integer;
-    function GetItem(Index: Integer): TMapTag;
-    function InternalExtractionEdit(const MapTag: TMapTag): Boolean;
+    function GetItem(Index: Integer): TMarker;
+    function InternalExtractionEdit(const Marker: TMarker): Boolean;
     procedure ExtractionEdit(const Index: Integer);
     function GetFocusedIndex: Integer;
     procedure SetFocusedIndex(const Value: Integer);
@@ -51,14 +51,14 @@ type
     procedure Init(const LocalMap: TLocalMap);
 
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TMapTag read GetItem;
+    property Items[Index: Integer]: TMarker read GetItem;
     property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
   end;
 
 implementation
 
 uses
-  ME.MapTagService, ME.Presenter.Extraction, ME.Edit.Extraction, ME.Dialog.Message;
+  ME.Service.Marker, ME.Presenter.Extraction, ME.Edit.Extraction, ME.Dialog.Message;
 
 {$R *.fmx}
 
@@ -80,19 +80,19 @@ begin
   Result := FLocalMap.Tags.Count;
 end;
 
-function TfrExtraction.GetItem(Index: Integer): TMapTag;
+function TfrExtraction.GetItem(Index: Integer): TMarker;
 begin
   Result := FLocalMap.Tags[Index];
 end;
 
-function TfrExtraction.InternalExtractionEdit(const MapTag: TMapTag): Boolean;
+function TfrExtraction.InternalExtractionEdit(const Marker: TMarker): Boolean;
 var
   Presenter: TEditExtractionPresenter;
   Dialog: TedExtraction;
 begin
   Dialog := TedExtraction.Create(Self);
   try
-    Presenter := TEditExtractionPresenter.Create(Dialog, MapTag);
+    Presenter := TEditExtractionPresenter.Create(Dialog, Marker);
     try
       Result := Presenter.Edit;
     finally
@@ -105,15 +105,15 @@ end;
 
 procedure TfrExtraction.ExtractionEdit(const Index: Integer);
 var
-  MapTag: TMapTag;
+  Marker: TMarker;
 begin
   if (Index < 0) or (Index >= Count) then
     Exit;
 
-  MapTag := Items[Index];
+  Marker := Items[Index];
   Grid.BeginUpdate;
   try
-    InternalExtractionEdit(MapTag);
+    InternalExtractionEdit(Marker);
   finally
     Grid.EndUpdate;
   end;
@@ -150,7 +150,7 @@ begin
     ColumnNameIdx:
       Value := VarToStr(Items[ARow].Name);
     ColumnKindIdx:
-      Value := TMapTag.KindToStr(Items[ARow].Kind);
+      Value := TMarker.KindToStr(Items[ARow].Kind);
     ColumnLeftIdx:
       Value := Items[ARow].Left;
     ColumnTopIdx:
@@ -175,17 +175,17 @@ end;
 
 procedure TfrExtraction.acAddExtractionExecute(Sender: TObject);
 var
-  MapTag: TMapTag;
+  Marker: TMarker;
   Res: Boolean;
 begin
   Res := False;
-  MapTag := TMapTag.Create;
+  Marker := TMarker.Create;
   try
-    MapTag.MapID := FLocalMap.ID;
+    Marker.MapID := FLocalMap.ID;
 
-    Res := InternalExtractionEdit(MapTag);
+    Res := InternalExtractionEdit(Marker);
     if Res then begin
-      FLocalMap.Tags.Add(MapTag);
+      FLocalMap.Tags.Add(Marker);
 
       Grid.BeginUpdate;
       try
@@ -196,7 +196,7 @@ begin
     end;
   finally
     if not Res then
-      MapTag.Free;
+      Marker.Free;
   end;
 end;
 
@@ -207,7 +207,7 @@ end;
 
 procedure TfrExtraction.acDeleteExtractionExecute(Sender: TObject);
 var
-  MapTag: TMapTag;
+  Marker: TMarker;
   Presenter: TDelExtractionPresenter;
   Dialog: TedMessage;
   Res: Boolean;
@@ -216,11 +216,11 @@ begin
     Exit;
 
   Res := False;
-  MapTag := Items[Grid.Selected];
+  Marker := Items[Grid.Selected];
   try
     Dialog := TedMessage.Create(Self);
     try
-      Presenter := TDelExtractionPresenter.Create(Dialog, MapTag);
+      Presenter := TDelExtractionPresenter.Create(Dialog, Marker);
       try
         Res := Presenter.Delete;
         if Res then begin
@@ -240,7 +240,7 @@ begin
     end;
   finally
     if Res then
-      MapTag.Free;
+      Marker.Free;
   end;
 end;
 

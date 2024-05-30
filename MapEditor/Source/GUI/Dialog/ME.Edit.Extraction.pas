@@ -6,23 +6,23 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
-  ME.MapTag, FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox,
+  ME.Marker, FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox,
   ME.Edit.Form.Presenter, ME.Point;
 
 type
-  TedExtraction = class(TEditForm, IEditDialog<TMapTag>)
-    edTagName: TEdit;
+  TedExtraction = class(TEditForm, IEditDialog<TMarker>)
+    edMarkerName: TEdit;
     edPositionX: TNumberBox;
     edPositionY: TNumberBox;
     laTopPoint: TLabel;
     edKindName: TComboBox;
   private
-    FMapTag: TMapTag;
+    FMarker: TMarker;
 
-    function GetTagName: string;
-    procedure SetTagName(const Value: string);
-    function GetTagKind: TTagKind;
-    procedure SetTagKind(const Value: TTagKind);
+    function GetMarkerName: string;
+    procedure SetMarkerName(const Value: string);
+    function GetMarkerKind: TMarkerKind;
+    procedure SetMarkerKind(const Value: TMarkerKind);
     function GetPositionX: Integer;
     procedure SetPositionX(const Value: Integer);
     function GetPositionY: Integer;
@@ -31,11 +31,11 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure SetInstance(const Value: TMapTag);
-    procedure PostValues(const Value: TMapTag);
+    procedure SetInstance(const Value: TMarker);
+    procedure PostValues(const Value: TMarker);
 
-    property TagName: string read GetTagName write SetTagName;
-    property TagKind: TTagKind read GetTagKind write SetTagKind;
+    property MarkerName: string read GetMarkerName write SetMarkerName;
+    property MarkerKind: TMarkerKind read GetMarkerKind write SetMarkerKind;
     property PositionX: Integer read GetPositionX write SetPositionX;
     property PositionY: Integer read GetPositionY write SetPositionY;
   end;
@@ -44,17 +44,17 @@ implementation
 
 {$R *.fmx}
 
-{ TedMapTag }
+{ TedExtraction }
 
 constructor TedExtraction.Create(AOwner: TComponent);
 var
-  Kind: TTagKind;
+  Kind: TMarkerKind;
 begin
   inherited;
 
   edKindName.Clear;
   for Kind := tkPMCExtraction to tkCoopExtraction do
-    edKindName.Items.Add(TMapTag.KindToStr(Kind));
+    edKindName.Items.Add(TMarker.KindToStr(Kind));
 end;
 
 destructor TedExtraction.Destroy;
@@ -63,22 +63,22 @@ begin
   inherited;
 end;
 
-function TedExtraction.GetTagName: string;
+function TedExtraction.GetMarkerName: string;
 begin
-  Result := edTagName.Text;
+  Result := edMarkerName.Text;
 end;
 
-procedure TedExtraction.SetTagName(const Value: string);
+procedure TedExtraction.SetMarkerName(const Value: string);
 begin
-  edTagName.Text := Value;
+  edMarkerName.Text := Value;
 end;
 
-function TedExtraction.GetTagKind: TTagKind;
+function TedExtraction.GetMarkerKind: TMarkerKind;
 begin
-  Result := TTagKind(edKindName.ItemIndex);
+  Result := TMarkerKind(edKindName.ItemIndex);
 end;
 
-procedure TedExtraction.SetTagKind(const Value: TTagKind);
+procedure TedExtraction.SetMarkerKind(const Value: TMarkerKind);
 begin
   edKindName.ItemIndex := Ord(Value);
 end;
@@ -103,25 +103,25 @@ begin
   edPositionY.Value := Value
 end;
 
-procedure TedExtraction.SetInstance(const Value: TMapTag);
+procedure TedExtraction.SetInstance(const Value: TMarker);
 begin
-  FMapTag := Value;
+  FMarker := Value;
 
-  if FMapTag.IsNewInstance then
+  if FMarker.IsNewInstance then
     Caption := 'Добавление нового выхода с карты'
   else
-    Caption := '#' + VarToStr(FMapTag.ID) + ' Редактирование выхода с карты';
+    Caption := '#' + VarToStr(FMarker.ID) + ' Редактирование выхода с карты';
 
-  TagName := FMapTag.Name;
-  TagKind := FMapTag.Kind;
-  PositionX := FMapTag.Left;
-  PositionY := FMapTag.Top;
+  MarkerName := FMarker.Name;
+  MarkerKind := FMarker.Kind;
+  PositionX := FMarker.Left;
+  PositionY := FMarker.Top;
 end;
 
-procedure TedExtraction.PostValues(const Value: TMapTag);
+procedure TedExtraction.PostValues(const Value: TMarker);
 begin
-  Value.Name := TagName;
-  Value.Kind := TagKind;
+  Value.Name := MarkerName;
+  Value.Kind := MarkerKind;
   Value.Left := PositionX;
   Value.Top := PositionY;
 end;

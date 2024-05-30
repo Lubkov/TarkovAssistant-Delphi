@@ -1,20 +1,20 @@
-unit ME.MapTagDAO;
+unit ME.DAO.Marker;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
-  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.MapTag;
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.Marker;
 
 type
-  TMapTagDAO = class(TDAOCommon)
+  TMarkerDAO = class(TDAOCommon)
   private
   protected
     function EntityClass: TEntityClass; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
     procedure GetAll(const Items: TList<TEntity>); override;
-    procedure GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
+    procedure LoadMarkers(const MapID: Variant; const Items: TList<TMarker>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -30,17 +30,17 @@ const
     '     t.Kind as Kind, ' +
     '     t.Left as Left, ' +
     '     t.Top as Top ' +
-    ' FROM MapTag t ' +
+    ' FROM Marker t ' +
     ' %s ';
 
-{ TMapTagDAO }
+{ TMarkerDAO }
 
-function TMapTagDAO.EntityClass: TEntityClass;
+function TMarkerDAO.EntityClass: TEntityClass;
 begin
-  Result := TMapTag;
+  Result := TMarker;
 end;
 
-function TMapTagDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TMarkerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -59,7 +59,7 @@ begin
   end;
 end;
 
-procedure TMapTagDAO.GetAll(const Items: TList<TEntity>);
+procedure TMarkerDAO.GetAll(const Items: TList<TEntity>);
 const
   Filter = '';
 var
@@ -87,12 +87,12 @@ begin
   end;
 end;
 
-procedure TMapTagDAO.GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
+procedure TMarkerDAO.LoadMarkers(const MapID: Variant; const Items: TList<TMarker>);
 const
   Filter = ' WHERE (t.MapID = :MapID) ';
 var
   Query: TUniQuery;
-  Entity: TMapTag;
+  Entity: TMarker;
 begin
   Query := TUniQuery.Create(nil);
   try
@@ -102,7 +102,7 @@ begin
     Query.Open;
 
     while not Query.Eof do begin
-      Entity := TMapTag.Create;
+      Entity := TMarker.Create;
       try
         Entity.Assign(Query);
       finally
@@ -115,43 +115,43 @@ begin
     Query.Free;
   end;
 end;
-procedure TMapTagDAO.Insert(const Entity: TEntity);
+procedure TMarkerDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapTag: TMapTag;
+  Marker: TMarker;
 begin
-  MapTag := TMapTag(Entity);
+  Marker := TMarker(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO MapTag (MapID, Name, Kind, Left, Top) ' +
+      ' INSERT INTO Marker (MapID, Name, Kind, Left, Top) ' +
       ' VALUES (:MapID, :Name, :Kind, :Left, :Top) ';
-    Query.ParamByName('MapID').Value := MapTag.MapID;
-    Query.ParamByName('Name').AsString := MapTag.Name;
-    Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
-    Query.ParamByName('Left').AsInteger := MapTag.Left;
-    Query.ParamByName('Top').AsInteger := MapTag.Top;
+    Query.ParamByName('MapID').Value := Marker.MapID;
+    Query.ParamByName('Name').AsString := Marker.Name;
+    Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
+    Query.ParamByName('Left').AsInteger := Marker.Left;
+    Query.ParamByName('Top').AsInteger := Marker.Top;
     Query.Execute;
-    MapTag.ID := Query.LastInsertId;
+    Marker.ID := Query.LastInsertId;
   finally
     Query.Free;
   end;
 end;
 
-procedure TMapTagDAO.Update(const Entity: TEntity);
+procedure TMarkerDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapTag: TMapTag;
+  Marker: TMarker;
 begin
-  MapTag := TMapTag(Entity);
+  Marker := TMarker(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' UPDATE MapTag ' +
+      ' UPDATE Marker ' +
       ' SET ' +
       '   MapID = :MapID, ' +
       '   Name = :Name, ' +
@@ -159,12 +159,12 @@ begin
       '   Left = :Left, ' +
       '   Top = :Top ' +
       ' WHERE ID = :ID ';
-    Query.ParamByName('ID').Value := MapTag.ID;
-    Query.ParamByName('MapID').Value := MapTag.MapID;
-    Query.ParamByName('Name').AsString := MapTag.Name;
-    Query.ParamByName('Kind').AsInteger := Ord(MapTag.Kind);
-    Query.ParamByName('Left').AsInteger := MapTag.Left;
-    Query.ParamByName('Top').AsInteger := MapTag.Top;
+    Query.ParamByName('ID').Value := Marker.ID;
+    Query.ParamByName('MapID').Value := Marker.MapID;
+    Query.ParamByName('Name').AsString := Marker.Name;
+    Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
+    Query.ParamByName('Left').AsInteger := Marker.Left;
+    Query.ParamByName('Top').AsInteger := Marker.Top;
     Query.Execute;
   finally
     Query.Free;
