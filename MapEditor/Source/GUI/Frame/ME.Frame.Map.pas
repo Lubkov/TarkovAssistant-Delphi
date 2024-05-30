@@ -1,4 +1,4 @@
-unit ME.Frame.LocalMap;
+unit ME.Frame.Map;
 
 interface
 
@@ -8,12 +8,12 @@ uses
   FMX.StdCtrls, System.ImageList, FMX.ImgList, FMX.Controls.Presentation, FMX.Styles.Objects,
   FMX.Objects, FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
   FMX.ListView, FMX.Layouts, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
-  ME.DB.Entity, ME.LocalMap, System.Actions, FMX.ActnList;
+  ME.DB.Entity, ME.DB.Map, System.Actions, FMX.ActnList;
 
 type
-  TOnChangeEvent = procedure (const LocalMap: TLocalMap) of object;
+  TOnChangeEvent = procedure (const Map: TMap) of object;
 
-  TfrLocalMap = class(TFrame)
+  TfrMap = class(TFrame)
     paTopPanel: TPanel;
     edAddMap: TSpeedButton;
     ImageList1: TImageList;
@@ -44,8 +44,8 @@ type
     FOnChange: TOnChangeEvent;
 
     function GetCount: Integer;
-    function GetItem(Index: Integer): TLocalMap;
-    function InternalMapEdit(const LocalMap: TLocalMap): Boolean;
+    function GetItem(Index: Integer): TMap;
+    function InternalMapEdit(const Map: TMap): Boolean;
     procedure MapEdit(const Index: Integer);
   public
     constructor Create(AOwner: TComponent); override;
@@ -55,21 +55,21 @@ type
     procedure Clear;
 
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TLocalMap read GetItem;
+    property Items[Index: Integer]: TMap read GetItem;
     property OnChange: TOnChangeEvent read FOnChange write FOnChange;
   end;
 
 implementation
 
 uses
-  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.LocalMap, ME.Edit.LocalMap,
-  ME.LocalMapService, ME.Dialog.Message, ME.Service.Marker;
+  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.Map, ME.Edit.Map,
+  ME.Service.Map, ME.Dialog.Message, ME.Service.Marker;
 
 {$R *.fmx}
 
-{ TfrLocalMap }
+{ TfrMap }
 
-constructor TfrLocalMap.Create(AOwner: TComponent);
+constructor TfrMap.Create(AOwner: TComponent);
 begin
   inherited;
 
@@ -78,7 +78,7 @@ begin
   FOnChange := nil;
 end;
 
-destructor TfrLocalMap.Destroy;
+destructor TfrMap.Destroy;
 begin
   FOnChange := nil;
   Clear;
@@ -87,24 +87,24 @@ begin
   inherited;
 end;
 
-function TfrLocalMap.GetCount: Integer;
+function TfrMap.GetCount: Integer;
 begin
   Result := FItems.Count;
 end;
 
-function TfrLocalMap.GetItem(Index: Integer): TLocalMap;
+function TfrMap.GetItem(Index: Integer): TMap;
 begin
-  Result := TLocalMap(FItems[Index]);
+  Result := TMap(FItems[Index]);
 end;
 
-function TfrLocalMap.InternalMapEdit(const LocalMap: TLocalMap): Boolean;
+function TfrMap.InternalMapEdit(const Map: TMap): Boolean;
 var
   Presenter: TEditMapPresenter;
-  Dialog: TedLocalMap;
+  Dialog: TedMap;
 begin
-  Dialog := TedLocalMap.Create(Self);
+  Dialog := TedMap.Create(Self);
   try
-    Presenter := TEditMapPresenter.Create(Dialog, LocalMap);
+    Presenter := TEditMapPresenter.Create(Dialog, Map);
     try
       Result := Presenter.Edit;
     finally
@@ -115,28 +115,28 @@ begin
   end;
 end;
 
-procedure TfrLocalMap.MapEdit(const Index: Integer);
+procedure TfrMap.MapEdit(const Index: Integer);
 var
-  LocalMap: TLocalMap;
+  Map: TMap;
 begin
   if (Index < 0) or (Index >= Count) then
     Exit;
 
-  LocalMap := Items[Index];
-  if (LocalMap.Levels.Count = 0) and (LocalMap.Tags.Count = 0) then begin
-    LocalMapService.LoadMapLevels(LocalMap, True);
-    MarkerService.LoadMarkers(LocalMap.ID, LocalMap.Tags);
+  Map := Items[Index];
+  if (Map.Levels.Count = 0) and (Map.Tags.Count = 0) then begin
+    MapService.LoadMapLevels(Map, True);
+    MarkerService.LoadMarkers(Map.ID, Map.Tags);
   end;
 
   Grid.BeginUpdate;
   try
-    InternalMapEdit(LocalMap);
+    InternalMapEdit(Map);
   finally
     Grid.EndUpdate;
   end;
 end;
 
-procedure TfrLocalMap.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
+procedure TfrMap.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
 const
   ColumnKeyIdx = 0;
   ColumnNameIdx = 1;
@@ -167,9 +167,9 @@ begin
   end;
 end;
 
-procedure TfrLocalMap.GridSelChanged(Sender: TObject);
+procedure TfrMap.GridSelChanged(Sender: TObject);
 var
-  Item: TLocalMap;
+  Item: TMap;
 begin
   if not Assigned(FOnChange) then
     Exit;
@@ -182,14 +182,14 @@ begin
   FOnChange(Item);
 end;
 
-procedure TfrLocalMap.GridCellDblClick(const Column: TColumn; const Row: Integer);
+procedure TfrMap.GridCellDblClick(const Column: TColumn; const Row: Integer);
 begin
   MapEdit(Row);
 end;
 
-procedure TfrLocalMap.Init;
+procedure TfrMap.Init;
 begin
-  LocalMapService.GetAll(FItems);
+  MapService.GetAll(FItems);
 
   Grid.BeginUpdate;
   try
@@ -202,7 +202,7 @@ begin
     Grid.Selected := 0;
 end;
 
-procedure TfrLocalMap.Clear;
+procedure TfrMap.Clear;
 var
   Item: TEntity;
 begin
@@ -212,17 +212,17 @@ begin
   FItems.Clear;
 end;
 
-procedure TfrLocalMap.acAddMapExecute(Sender: TObject);
+procedure TfrMap.acAddMapExecute(Sender: TObject);
 var
-  LocalMap: TLocalMap;
+  Map: TMap;
   Res: Boolean;
 begin
   Res := False;
-  LocalMap := TLocalMap.Create;
+  Map := TMap.Create;
   try
-    Res := InternalMapEdit(LocalMap);
+    Res := InternalMapEdit(Map);
     if Res then begin
-      FItems.Add(LocalMap);
+      FItems.Add(Map);
 
       Grid.BeginUpdate;
       try
@@ -233,18 +233,18 @@ begin
     end;
   finally
     if not Res then
-      LocalMap.Free;
+      Map.Free;
   end;
 end;
 
-procedure TfrLocalMap.acEditMapExecute(Sender: TObject);
+procedure TfrMap.acEditMapExecute(Sender: TObject);
 begin
   MapEdit(Grid.Selected);
 end;
 
-procedure TfrLocalMap.acDeleteMapExecute(Sender: TObject);
+procedure TfrMap.acDeleteMapExecute(Sender: TObject);
 var
-  LocalMap: TLocalMap;
+  Map: TMap;
   Presenter: TDelMapPresenter;
   Dialog: TedMessage;
   Res: Boolean;
@@ -253,11 +253,11 @@ begin
     Exit;
 
   Res := False;
-  LocalMap := Items[Grid.Selected];
+  Map := Items[Grid.Selected];
   try
     Dialog := TedMessage.Create(Self);
     try
-      Presenter := TDelMapPresenter.Create(Dialog, LocalMap);
+      Presenter := TDelMapPresenter.Create(Dialog, Map);
       try
         Res := Presenter.Delete;
         if Res then begin
@@ -277,7 +277,7 @@ begin
     end;
   finally
     if Res then
-      LocalMap.Free;
+      Map.Free;
   end;
 end;
 

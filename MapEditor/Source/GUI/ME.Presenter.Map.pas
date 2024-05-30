@@ -1,13 +1,13 @@
-﻿unit ME.Presenter.LocalMap;
+﻿unit ME.Presenter.Map;
 
 interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.LocalMap;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Map;
 
 type
-  TEditMapPresenter = class(TEditFormPresenter<TLocalMap>)
+  TEditMapPresenter = class(TEditFormPresenter<TMap>)
   private
   protected
     procedure InternalSave; override;
@@ -15,7 +15,7 @@ type
   public
   end;
 
-  TDelMapPresenter = class(TDelFormPresenter<TLocalMap>)
+  TDelMapPresenter = class(TDelFormPresenter<TMap>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils, ME.LocalMapService;
+  ME.DB.Utils, ME.Service.Map;
 
 { TEditMapPresenter }
 
@@ -32,7 +32,7 @@ procedure TEditMapPresenter.InternalSave;
 begin
   inherited;
 
-  LocalMapService.Save(Instance);
+  MapService.Save(Instance);
 end;
 
 procedure TEditMapPresenter.Cancel;
@@ -50,7 +50,7 @@ end;
 
 procedure TDelMapPresenter.InternalDelete;
 begin
-  LocalMapService.Remove(Instance);
+  MapService.Remove(Instance);
 end;
 
 end.

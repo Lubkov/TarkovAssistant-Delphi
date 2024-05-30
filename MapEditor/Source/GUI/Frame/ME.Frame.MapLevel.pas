@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.Actions, FMX.ActnList, FMX.Controls.Presentation, System.ImageList,
   FMX.ImgList, FMX.Objects, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
-  ME.DB.Entity, ME.LocalMap, ME.MapLevel;
+  ME.DB.Entity, ME.DB.Map, ME.MapLevel;
 
 type
   TfrMapLevel = class(TFrame)
@@ -37,7 +37,7 @@ type
     procedure acDeleteMapLevelExecute(Sender: TObject);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
-    FLocalMap: TLocalMap;
+    FMap: TMap;
     FFocusedIndex: Integer;
 
     function GetCount: Integer;
@@ -50,7 +50,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const LocalMap: TLocalMap);
+    procedure Init(const Map: TMap);
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TMapLevel read GetItem;
@@ -80,9 +80,9 @@ begin
   inherited;
 end;
 
-procedure TfrMapLevel.Init(const LocalMap: TLocalMap);
+procedure TfrMapLevel.Init(const Map: TMap);
 begin
-  FLocalMap := LocalMap;
+  FMap := Map;
 
   Grid.BeginUpdate;
   try
@@ -101,20 +101,20 @@ end;
 
 function TfrMapLevel.GetCount: Integer;
 begin
-  if FLocalMap <> nil then
-    Result := FLocalMap.Levels.Count
+  if FMap <> nil then
+    Result := FMap.Levels.Count
   else
     Result := 0;
 end;
 
 function TfrMapLevel.GetItem(Index: Integer): TMapLevel;
 begin
-  Result := FLocalMap.Levels[Index];
+  Result := FMap.Levels[Index];
 end;
 
 function TfrMapLevel.GetFocusedIndex: Integer;
 begin
-  if (FLocalMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
+  if (FMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
     Result := -1
   else
     Result := Grid.Selected;
@@ -196,9 +196,9 @@ end;
 
 procedure TfrMapLevel.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acAddMapLevel.Enabled := FLocalMap <> nil;
-  acEditMapLevel.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
-  acDeleteMapLevel.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
+  acAddMapLevel.Enabled := FMap <> nil;
+  acEditMapLevel.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
+  acDeleteMapLevel.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
 end;
 
 procedure TfrMapLevel.acAddMapLevelExecute(Sender: TObject);
@@ -209,11 +209,11 @@ begin
   Res := False;
   MapLevel := TMapLevel.Create;
   try
-    MapLevel.MapID := FLocalMap.ID;
+    MapLevel.MapID := FMap.ID;
 
     Res := InternalMapLevelEdit(MapLevel);
     if Res then begin
-      FLocalMap.Levels.Add(MapLevel);
+      FMap.Levels.Add(MapLevel);
 
       Grid.BeginUpdate;
       try
@@ -254,7 +254,7 @@ begin
         if Res then begin
           Grid.BeginUpdate;
           try
-            FLocalMap.Levels.Delete(Grid.Selected);
+            FMap.Levels.Delete(Grid.Selected);
             Grid.RowCount := Count;
           finally
             Grid.EndUpdate;

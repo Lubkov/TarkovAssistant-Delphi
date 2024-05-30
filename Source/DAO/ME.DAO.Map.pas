@@ -1,13 +1,13 @@
-unit ME.LocalMapDAO;
+unit ME.DAO.Map;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
-  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.LocalMap, ME.MapLevel;
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.DB.Map, ME.MapLevel;
 
 type
-  TLocalMapDAO = class(TDAOCommon)
+  TMapDAO = class(TDAOCommon)
   private
   protected
     function EntityClass: TEntityClass; override;
@@ -33,17 +33,17 @@ const
     '     m.Right as Right, ' +
     '     m.Bottom as Bottom, ' +
     '     m.Picture as Picture ' +
-    ' FROM LocalMap m ' +
+    ' FROM Map m ' +
     ' %s ';
 
-{ TLocalMapDAO }
+{ TMapDAO }
 
-function TLocalMapDAO.EntityClass: TEntityClass;
+function TMapDAO.EntityClass: TEntityClass;
 begin
-  Result := TLocalMap;
+  Result := TMap;
 end;
 
-function TLocalMapDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TMapDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -62,7 +62,7 @@ begin
   end;
 end;
 
-procedure TLocalMapDAO.GetAll(const Items: TList<TEntity>);
+procedure TMapDAO.GetAll(const Items: TList<TEntity>);
 var
   Query: TUniQuery;
   Entity: TEntity;
@@ -88,47 +88,48 @@ begin
   end;
 end;
 
-procedure TLocalMapDAO.Insert(const Entity: TEntity);
+procedure TMapDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  LocalMap: TLocalMap;
+  Map: TMap;
   Param: TParam;
 begin
-  LocalMap := TLocalMap(Entity);
+  Map := TMap(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO LocalMap (Name, Left, Top, Right, Bottom, Picture) ' +
+      ' INSERT INTO ' + TMapLevel.EntityName +
+      '   (Name, Left, Top, Right, Bottom, Picture) ' +
       ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
-    Query.ParamByName('Name').AsString := LocalMap.Name;
-    Query.ParamByName('Left').AsInteger := LocalMap.Left;
-    Query.ParamByName('Top').AsInteger := LocalMap.Top;
-    Query.ParamByName('Right').AsInteger := LocalMap.Right;
-    Query.ParamByName('Bottom').AsInteger := LocalMap.Bottom;
+    Query.ParamByName('Name').AsString := Map.Name;
+    Query.ParamByName('Left').AsInteger := Map.Left;
+    Query.ParamByName('Top').AsInteger := Map.Top;
+    Query.ParamByName('Right').AsInteger := Map.Right;
+    Query.ParamByName('Bottom').AsInteger := Map.Bottom;
     Param := Query.ParamByName('Picture');
-    LocalMap.AssignPictureTo(LocalMap.Picture, Param);
+    Map.AssignPictureTo(Map.Picture, Param);
 
     Query.Execute;
-    LocalMap.ID := Query.LastInsertId;
+    Map.ID := Query.LastInsertId;
   finally
     Query.Free;
   end;
 end;
 
-procedure TLocalMapDAO.Update(const Entity: TEntity);
+procedure TMapDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  LocalMap: TLocalMap;
+  Map: TMap;
 begin
-  LocalMap := TLocalMap(Entity);
+  Map := TMap(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' UPDATE LocalMap ' +
+      ' UPDATE ' + TMapLevel.EntityName +
       ' SET ' +
       '   Name = :Name, ' +
       '   Left = :Left, ' +
@@ -137,29 +138,29 @@ begin
       '   Bottom = :Bottom, ' +
       '   Picture = :Picture ' +
       ' WHERE ID = :ID ';
-    Query.ParamByName('ID').Value := LocalMap.ID;
-    Query.ParamByName('Name').AsString := LocalMap.Name;
-    Query.ParamByName('Left').AsInteger := LocalMap.Left;
-    Query.ParamByName('Top').AsInteger := LocalMap.Top;
-    Query.ParamByName('Right').AsInteger := LocalMap.Right;
-    Query.ParamByName('Bottom').AsInteger := LocalMap.Bottom;
-    LocalMap.AssignPictureTo(LocalMap.Picture, Query.ParamByName('Picture'));
+    Query.ParamByName('ID').Value := Map.ID;
+    Query.ParamByName('Name').AsString := Map.Name;
+    Query.ParamByName('Left').AsInteger := Map.Left;
+    Query.ParamByName('Top').AsInteger := Map.Top;
+    Query.ParamByName('Right').AsInteger := Map.Right;
+    Query.ParamByName('Bottom').AsInteger := Map.Bottom;
+    Map.AssignPictureTo(Map.Picture, Query.ParamByName('Picture'));
     Query.Execute;
   finally
     Query.Free;
   end;
 end;
 
-procedure TLocalMapDAO.LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
+procedure TMapDAO.LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
 const
   PictureFileName = 'Picture';
 var
   Query: TUniQuery;
-  LocalMap: TLocalMap;
+  Map: TMap;
   Level: TMapLevel;
   FieldNames: string;
 begin
-  LocalMap := TLocalMap(Entity);
+  Map := TMap(Entity);
   FieldNames := TMapLevel.FieldList;
   if LoadPicture then
     FieldNames := FieldNames + ', ' + PictureFileName;
@@ -167,17 +168,17 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM MapLevel WHERE MapID = :MapID';
+    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM ' + TMapLevel.EntityName + ' WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := Entity.ID;
     Query.Open;
 
-    LocalMap.ClearLevelList;
+    Map.ClearLevelList;
     while not Query.Eof do begin
       Level := TMapLevel.Create;
       try
         Level.Assign(Query);
       finally
-        LocalMap.Levels.Add(Level);
+        Map.Levels.Add(Level);
       end;
 
       Query.Next;
@@ -187,7 +188,7 @@ begin
   end;
 end;
 
-procedure TLocalMapDAO.RemoveMapLevels(const MapID: Variant);
+procedure TMapDAO.RemoveMapLevels(const MapID: Variant);
 var
   Query: TUniQuery;
 begin

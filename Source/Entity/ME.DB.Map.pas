@@ -1,13 +1,13 @@
-unit ME.LocalMap;
+unit ME.DB.Map;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.MapLevel, ME.Marker;
+  Data.DB, ME.DB.Entity, ME.MapLevel, ME.DB.Marker;
 
 type
-  TLocalMap = class(TEntity)
+  TMap = class(TEntity)
   private
     FName: string;
     FLeft: Integer;
@@ -44,9 +44,9 @@ type
 
 implementation
 
-{ TLocalMap }
+{ TMap }
 
-constructor TLocalMap.Create;
+constructor TMap.Create;
 begin
   inherited;
 
@@ -60,7 +60,7 @@ begin
   FTags := TList<TMarker>.Create;
 end;
 
-destructor TLocalMap.Destroy;
+destructor TMap.Destroy;
 begin
   FPicture.Free;
 
@@ -73,27 +73,27 @@ begin
   inherited;
 end;
 
-procedure TLocalMap.SetPicture(const Value: TBitmap);
+procedure TMap.SetPicture(const Value: TBitmap);
 begin
   FPicture.Assign(Value);
 end;
 
-procedure TLocalMap.Assign(const Source: TEntity);
+procedure TMap.Assign(const Source: TEntity);
 var
-  LocalMap: TLocalMap;
+  Map: TMap;
 begin
   inherited;
 
-  LocalMap := TLocalMap(Source);
-  FName := LocalMap.Name;
-  FLeft := LocalMap.Left;
-  FTop := LocalMap.Top;
-  FRight := LocalMap.Right;
-  FBottom := LocalMap.Bottom;
-  Picture := TLocalMap(Source).Picture;
+  Map := TMap(Source);
+  FName := Map.Name;
+  FLeft := Map.Left;
+  FTop := Map.Top;
+  FRight := Map.Right;
+  FBottom := Map.Bottom;
+  Picture := TMap(Source).Picture;
 end;
 
-procedure TLocalMap.Assign(const DataSet: TDataSet);
+procedure TMap.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
@@ -107,17 +107,17 @@ begin
     AssignPicture(DataSet.FieldByName('Picture'), Picture);
 end;
 
-class function TLocalMap.EntityName: string;
+class function TMap.EntityName: string;
 begin
-  Result := 'LocalMap';
+  Result := 'Map';
 end;
 
-class function TLocalMap.FieldList: string;
+class function TMap.FieldList: string;
 begin
-  Result := 'ID, Name, "Left", "Top", "Right", "Bottom"';
+  Result := 'ID, "Name", "Left", "Top", "Right", "Bottom"';
 end;
 
-procedure TLocalMap.ClearLevelList;
+procedure TMap.ClearLevelList;
 var
   i: Integer;
 begin
@@ -127,7 +127,7 @@ begin
   FLevels.Clear;
 end;
 
-procedure TLocalMap.ClearTagList;
+procedure TMap.ClearTagList;
 var
   i: Integer;
 begin

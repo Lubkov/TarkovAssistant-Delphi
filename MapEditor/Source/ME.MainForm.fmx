@@ -11,11 +11,4 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnShow = FormShow
   DesignerMasterStyle = 0
-  object paLocalMap: TPanel
-    Align = Client
-    Size.Width = 640.000000000000000000
-    Size.Height = 360.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 0
-  end
 end

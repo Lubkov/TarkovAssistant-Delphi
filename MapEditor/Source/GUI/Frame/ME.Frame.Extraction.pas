@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
-  FMX.ScrollBox, ME.DB.Entity, ME.LocalMap, ME.Marker;
+  FMX.ScrollBox, ME.DB.Entity, ME.DB.Map, ME.DB.Marker;
 
 type
   TfrExtraction = class(TFrame)
@@ -35,7 +35,7 @@ type
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acDeleteExtractionExecute(Sender: TObject);
   private
-    FLocalMap: TLocalMap;
+    FMap: TMap;
     FFocusedIndex: Integer;
 
     function GetCount: Integer;
@@ -48,7 +48,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const LocalMap: TLocalMap);
+    procedure Init(const Map: TMap);
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TMarker read GetItem;
@@ -77,12 +77,12 @@ end;
 
 function TfrExtraction.GetCount: Integer;
 begin
-  Result := FLocalMap.Tags.Count;
+  Result := FMap.Tags.Count;
 end;
 
 function TfrExtraction.GetItem(Index: Integer): TMarker;
 begin
-  Result := FLocalMap.Tags[Index];
+  Result := FMap.Tags[Index];
 end;
 
 function TfrExtraction.InternalExtractionEdit(const Marker: TMarker): Boolean;
@@ -121,7 +121,7 @@ end;
 
 function TfrExtraction.GetFocusedIndex: Integer;
 begin
-  if (FLocalMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
+  if (FMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
     Result := -1
   else
     Result := Grid.Selected;
@@ -158,9 +158,9 @@ begin
   end;
 end;
 
-procedure TfrExtraction.Init(const LocalMap: TLocalMap);
+procedure TfrExtraction.Init(const Map: TMap);
 begin
-  FLocalMap := LocalMap;
+  FMap := Map;
 
   Grid.BeginUpdate;
   try
@@ -181,11 +181,11 @@ begin
   Res := False;
   Marker := TMarker.Create;
   try
-    Marker.MapID := FLocalMap.ID;
+    Marker.MapID := FMap.ID;
 
     Res := InternalExtractionEdit(Marker);
     if Res then begin
-      FLocalMap.Tags.Add(Marker);
+      FMap.Tags.Add(Marker);
 
       Grid.BeginUpdate;
       try
@@ -226,7 +226,7 @@ begin
         if Res then begin
           Grid.BeginUpdate;
           try
-            FLocalMap.Tags.Delete(Grid.Selected);
+            FMap.Tags.Delete(Grid.Selected);
             Grid.RowCount := Count;
           finally
             Grid.EndUpdate;
@@ -251,9 +251,9 @@ end;
 
 procedure TfrExtraction.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acAddExtraction.Enabled := FLocalMap <> nil;
-  acEditExtraction.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
-  acDeleteExtraction.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
+  acAddExtraction.Enabled := FMap <> nil;
+  acEditExtraction.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
+  acDeleteExtraction.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
 end;
 
 end.
