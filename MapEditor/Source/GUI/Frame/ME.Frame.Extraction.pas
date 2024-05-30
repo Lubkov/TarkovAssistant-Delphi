@@ -31,13 +31,19 @@ type
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
     procedure acAddExtractionExecute(Sender: TObject);
     procedure acEditExtractionExecute(Sender: TObject);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
+    procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+    procedure acDeleteExtractionExecute(Sender: TObject);
   private
     FLocalMap: TLocalMap;
+    FFocusedIndex: Integer;
 
     function GetCount: Integer;
     function GetItem(Index: Integer): TMapTag;
     function InternalExtractionEdit(const MapTag: TMapTag): Boolean;
     procedure ExtractionEdit(const Index: Integer);
+    function GetFocusedIndex: Integer;
+    procedure SetFocusedIndex(const Value: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -46,12 +52,13 @@ type
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TMapTag read GetItem;
+    property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
   end;
 
 implementation
 
 uses
-  ME.MapTagService, ME.Presenter.Extraction, ME.Edit.Extraction;
+  ME.MapTagService, ME.Presenter.Extraction, ME.Edit.Extraction, ME.Dialog.Message;
 
 {$R *.fmx}
 
@@ -110,6 +117,20 @@ begin
   finally
     Grid.EndUpdate;
   end;
+end;
+
+function TfrExtraction.GetFocusedIndex: Integer;
+begin
+  if (FLocalMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
+    Result := -1
+  else
+    Result := Grid.Selected;
+end;
+
+procedure TfrExtraction.SetFocusedIndex(const Value: Integer);
+begin
+  if FFocusedIndex <> Value then
+    FFocusedIndex := Value;
 end;
 
 procedure TfrExtraction.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
@@ -182,6 +203,57 @@ end;
 procedure TfrExtraction.acEditExtractionExecute(Sender: TObject);
 begin
   ExtractionEdit(Grid.Selected);
+end;
+
+procedure TfrExtraction.acDeleteExtractionExecute(Sender: TObject);
+var
+  MapTag: TMapTag;
+  Presenter: TDelExtractionPresenter;
+  Dialog: TedMessage;
+  Res: Boolean;
+begin
+  if (Grid.Selected < 0) or (Grid.Selected >= Count) then
+    Exit;
+
+  Res := False;
+  MapTag := Items[Grid.Selected];
+  try
+    Dialog := TedMessage.Create(Self);
+    try
+      Presenter := TDelExtractionPresenter.Create(Dialog, MapTag);
+      try
+        Res := Presenter.Delete;
+        if Res then begin
+          Grid.BeginUpdate;
+          try
+            FLocalMap.Tags.Delete(Grid.Selected);
+            Grid.RowCount := Count;
+          finally
+            Grid.EndUpdate;
+          end;
+        end;
+      finally
+        Presenter.Free;
+      end;
+    finally
+      Dialog.Free;
+    end;
+  finally
+    if Res then
+      MapTag.Free;
+  end;
+end;
+
+procedure TfrExtraction.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  ExtractionEdit(Row);
+end;
+
+procedure TfrExtraction.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+begin
+  acAddExtraction.Enabled := FLocalMap <> nil;
+  acEditExtraction.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
+  acDeleteExtraction.Enabled := (FLocalMap <> nil) and (FocusedIndex >= 0);
 end;
 
 end.

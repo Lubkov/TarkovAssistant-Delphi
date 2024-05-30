@@ -18,8 +18,8 @@ type
     procedure Update(const Entity: TEntity); override;
     procedure Remove(const ID: Variant); override;
 
-    procedure LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
-    procedure LoadMapTags(const Entity: TEntity);
+    procedure LoadMapLevels(const LocalMap: TLocalMap; LoadPicture: Boolean);
+    procedure LoadMapTags(const LocalMap: TLocalMap);
 
     property LocalMapDAO: TLocalMapDAO read GetLocalMapDAO;
   end;
@@ -47,8 +47,6 @@ end;
 function TLocalMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 begin
   Result := inherited GetAt(ID, Entity);
-  if Result then
-    LoadMapLevels(Entity, False);
 end;
 
 procedure TLocalMapService.Insert(const Entity: TEntity);
@@ -115,18 +113,14 @@ begin
   end;
 end;
 
-procedure TLocalMapService.LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
+procedure TLocalMapService.LoadMapLevels(const LocalMap: TLocalMap; LoadPicture: Boolean);
 begin
-  LocalMapDAO.LoadMapLevels(Entity, LoadPicture);
+  LocalMapDAO.LoadMapLevels(LocalMap, LoadPicture);
 end;
 
-procedure TLocalMapService.LoadMapTags(const Entity: TEntity);
-var
-  LocalMap: TLocalMap;
+procedure TLocalMapService.LoadMapTags(const LocalMap: TLocalMap);
 begin
-  LocalMap := TLocalMap(Entity);
-
-  MapTagService.GetMapTags(Entity.ID, LocalMap.Tags);
+  MapTagService.GetMapTags(LocalMap.ID, LocalMap.Tags);
 end;
 
 end.

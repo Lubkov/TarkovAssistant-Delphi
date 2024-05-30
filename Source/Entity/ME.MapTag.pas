@@ -15,6 +15,8 @@ type
     FName: string;
     FKind: TTagKind;
     FPosition: TPoint;
+
+    procedure SetPosition(const Value: TPoint);
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -29,7 +31,7 @@ type
     property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
     property Kind: TTagKind read FKind write FKind;
-    property Position: TPoint read FPosition write FPosition;
+    property Position: TPoint read FPosition write SetPosition;
   end;
 
 implementation
@@ -53,14 +55,19 @@ begin
   inherited;
 end;
 
+procedure TMapTag.SetPosition(const Value: TPoint);
+begin
+  FPosition.Assign(Value);
+end;
+
 procedure TMapTag.Assign(const Source: TEntity);
 begin
   inherited;
 
-  FMapID := TMapTag(Source).MapID;
-  FName := TMapTag(Source).Name;
-  FKind := TMapTag(Source).Kind;
-  FPosition.Assign(TMapTag(Source).Position);
+  MapID := TMapTag(Source).MapID;
+  Name := TMapTag(Source).Name;
+  Kind := TMapTag(Source).Kind;
+  Position := TMapTag(Source).Position;
 end;
 
 procedure TMapTag.Assign(const DataSet: TDataSet);
@@ -71,6 +78,7 @@ begin
   FName := DataSet.FieldByName('Name').AsString;
   FKind := TTagKind(DataSet.FieldByName('Kind').AsInteger);
   FPosition.Assign(DataSet);
+  FPosition.ID := DataSet.FieldByName('Position').Value;
 end;
 
 class function TMapTag.EntityName: string;
