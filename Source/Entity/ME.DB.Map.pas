@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.Layer, ME.DB.Marker;
+  Data.DB, ME.DB.Entity, ME.DB.Layer, ME.DB.Marker, ME.DB.Quest;
 
 type
   TMap = class(TEntity)
@@ -17,6 +17,7 @@ type
     FPicture: TBitmap;
     FLayers: TList<TLayer>;
     FTags: TList<TMarker>;
+    FQuests: TList<TQuest>;
 
     procedure SetPicture(const Value: TBitmap);
   public
@@ -31,6 +32,7 @@ type
 
     procedure ClearLevelList;
     procedure ClearTagList;
+    procedure ClearQuestList;
 
     property Name: string read FName write FName;
     property Left: Integer read FLeft write FLeft;
@@ -40,6 +42,7 @@ type
     property Picture: TBitmap read FPicture write SetPicture;
     property Layers: TList<TLayer> read FLayers;
     property Tags: TList<TMarker> read FTags;
+    property Quests: TList<TQuest> read FQuests;
   end;
 
 implementation
@@ -58,6 +61,7 @@ begin
   FPicture := TBitmap.Create;
   FLayers := TList<TLayer>.Create;
   FTags := TList<TMarker>.Create;
+  FQuests := TList<TQuest>.Create;
 end;
 
 destructor TMap.Destroy;
@@ -69,6 +73,9 @@ begin
 
   ClearTagList;
   FTags.Free;
+
+  ClearQuestList;
+  FQuests.Free;
 
   inherited;
 end;
@@ -135,6 +142,16 @@ begin
     FTags[i].Free;
 
   FTags.Clear;
+end;
+
+procedure TMap.ClearQuestList;
+var
+  i: Integer;
+begin
+  for i := 0 to FQuests.Count - 1 do
+    FQuests[i].Free;
+
+  FQuests.Clear;
 end;
 
 end.

@@ -63,7 +63,7 @@ implementation
 
 uses
   ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.Map, ME.Edit.Map,
-  ME.Service.Map, ME.Dialog.Message, ME.Service.Marker;
+  ME.Service.Map, ME.Dialog.Message, ME.Service.Marker, ME.Service.Quest;
 
 {$R *.fmx}
 
@@ -123,9 +123,10 @@ begin
     Exit;
 
   Map := Items[Index];
-  if (Map.Layers.Count = 0) and (Map.Tags.Count = 0) then begin
+  if (Map.Layers.Count = 0) and (Map.Tags.Count = 0) and (Map.Quests.Count = 0) then begin
     MapService.LoadLayers(Map, True);
     MarkerService.LoadMarkers(Map.ID, Map.Tags);
+    QuestService.LoadQuests(Map.ID, Map.Quests);
   end;
 
   Grid.BeginUpdate;

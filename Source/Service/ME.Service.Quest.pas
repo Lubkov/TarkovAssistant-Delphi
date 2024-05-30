@@ -32,7 +32,7 @@ end;
 
 procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
 begin
-
+  TQuestDAO(DAO).LoadQuests(MapID, Items);
 end;
 
 procedure TQuestService.LoadParts(const QuestID: Variant; const Items: TList<TPoint>);

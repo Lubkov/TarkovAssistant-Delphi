@@ -201,6 +201,8 @@ inherited edMap: TedMap
       StyleLookup = ''
       TabOrder = 0
       Text = 'Quests'
+      ExplicitSize.cx = 57.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
     end
   end
 end

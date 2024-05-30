@@ -17,9 +17,9 @@ type
     acDeleteExtraction: TAction;
     ImageList1: TImageList;
     paTopPanel: TPanel;
-    edAddMap: TSpeedButton;
-    edEditMap: TSpeedButton;
-    edDeleteMap: TSpeedButton;
+    edAddExtraction: TSpeedButton;
+    edEditExtraction: TSpeedButton;
+    edDeleteExtraction: TSpeedButton;
     laTitle: TLabel;
     Grid: TGrid;
     Column1: TColumn;
