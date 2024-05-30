@@ -14,8 +14,6 @@ type
     function GetDAOClass: TDAOClass; override;
   public
     procedure GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
 
     property MapTagDAO: TMapTagDAO read GetMapTagDAO;
   end;
@@ -43,42 +41,6 @@ end;
 procedure TMapTagService.GetMapTags(const MapID: Variant; const Items: TList<TMapTag>);
 begin
   MapTagDAO.GetMapTags(MapID, Items);
-end;
-
-procedure TMapTagService.Insert(const Entity: TEntity);
-var
-  MapTag: TMapTag;
-begin
-  MapTag := TMapTag(Entity);
-
-  StartTransaction;
-  try
-    PointService.Insert(MapTag.Position);
-    DAO.Insert(MapTag);
-
-    CommitTransaction;
-  except
-    RollbackTransaction;
-    raise;
-  end;
-end;
-
-procedure TMapTagService.Update(const Entity: TEntity);
-var
-  MapTag: TMapTag;
-begin
-  MapTag := TMapTag(Entity);
-
-  StartTransaction;
-  try
-    PointService.Update(MapTag.Position);
-    DAO.Update(MapTag);
-
-    CommitTransaction;
-  except
-    RollbackTransaction;
-    raise;
-  end;
 end;
 
 end.

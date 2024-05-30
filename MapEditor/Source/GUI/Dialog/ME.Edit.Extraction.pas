@@ -114,15 +114,16 @@ begin
 
   TagName := FMapTag.Name;
   TagKind := FMapTag.Kind;
-  PositionX := FMapTag.Position.X;
-  PositionY := FMapTag.Position.Y;
+  PositionX := FMapTag.Left;
+  PositionY := FMapTag.Top;
 end;
 
 procedure TedExtraction.PostValues(const Value: TMapTag);
 begin
   Value.Name := TagName;
   Value.Kind := TagKind;
-  Value.Position.SetBounds(PositionX, PositionY);
+  Value.Left := PositionX;
+  Value.Top := PositionY;
 end;
 
 end.

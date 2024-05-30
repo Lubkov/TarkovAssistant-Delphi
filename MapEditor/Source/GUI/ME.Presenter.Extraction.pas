@@ -34,7 +34,6 @@ begin
   inherited;
 
   if not IsNullID(Instance.MapID) then begin
-    PointService.Save(Instance.Position);
     MapTagService.Save(Instance);
   end;
 end;

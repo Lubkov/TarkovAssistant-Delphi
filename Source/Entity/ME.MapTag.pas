@@ -3,8 +3,7 @@
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity,
-  ME.Point;
+  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
 
 type
   TTagKind = (tkPMCExtraction, tkScavExtraction, tkCoopExtraction);
@@ -14,9 +13,8 @@ type
     FMapID: Variant;
     FName: string;
     FKind: TTagKind;
-    FPosition: TPoint;
-
-    procedure SetPosition(const Value: TPoint);
+    FLeft: Integer;
+    FTop: Integer;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -31,7 +29,8 @@ type
     property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
     property Kind: TTagKind read FKind write FKind;
-    property Position: TPoint read FPosition write SetPosition;
+    property Left: Integer read FLeft write FLeft;
+    property Top: Integer read FTop write FTop;
   end;
 
 implementation
@@ -45,19 +44,14 @@ begin
   FMapID := Null;
   FName := '';
   FKind := tkPMCExtraction;
-  FPosition := TPoint.Create;
+  FLeft := 0;
+  FTop := 0;
 end;
 
 destructor TMapTag.Destroy;
 begin
-  FPosition.Free;
 
   inherited;
-end;
-
-procedure TMapTag.SetPosition(const Value: TPoint);
-begin
-  FPosition.Assign(Value);
 end;
 
 procedure TMapTag.Assign(const Source: TEntity);
@@ -67,18 +61,19 @@ begin
   MapID := TMapTag(Source).MapID;
   Name := TMapTag(Source).Name;
   Kind := TMapTag(Source).Kind;
-  Position := TMapTag(Source).Position;
+  Left := TMapTag(Source).Left;
+  Top := TMapTag(Source).Top;
 end;
 
 procedure TMapTag.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
-  FMapID := DataSet.FieldByName('MapID').Value;
-  FName := DataSet.FieldByName('Name').AsString;
-  FKind := TTagKind(DataSet.FieldByName('Kind').AsInteger);
-  FPosition.Assign(DataSet);
-  FPosition.ID := DataSet.FieldByName('Position').Value;
+  MapID := DataSet.FieldByName('MapID').Value;
+  Name := DataSet.FieldByName('Name').AsString;
+  Kind := TTagKind(DataSet.FieldByName('Kind').AsInteger);
+  Left := DataSet.FieldByName('Left').AsInteger;
+  Top := DataSet.FieldByName('Top').AsInteger;
 end;
 
 class function TMapTag.EntityName: string;
@@ -88,7 +83,7 @@ end;
 
 class function TMapTag.FieldList: string;
 begin
-  Result := 'ID, MapID, Name, Kind, Position';
+  Result := 'ID, "MapID", "Name", "Kind", "Left", "Top"';
 end;
 
 class function TMapTag.KindToStr(Value: TTagKind): string;

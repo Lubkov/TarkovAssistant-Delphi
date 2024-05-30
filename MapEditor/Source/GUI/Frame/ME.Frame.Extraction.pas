@@ -138,8 +138,8 @@ const
   ColumnKeyIdx = 0;
   ColumnNameIdx = 1;
   ColumnKindIdx = 2;
-  ColumnPositionXIdx = 3;
-  ColumnPositionYIdx = 4;
+  ColumnLeftIdx = 3;
+  ColumnTopIdx = 4;
 begin
   if Count <= ARow then
     Exit;
@@ -151,10 +151,10 @@ begin
       Value := VarToStr(Items[ARow].Name);
     ColumnKindIdx:
       Value := TMapTag.KindToStr(Items[ARow].Kind);
-    ColumnPositionXIdx:
-      Value := Items[ARow].Position.X;
-    ColumnPositionYIdx:
-      Value := Items[ARow].Position.Y;
+    ColumnLeftIdx:
+      Value := Items[ARow].Left;
+    ColumnTopIdx:
+      Value := Items[ARow].Top;
   end;
 end;
 
