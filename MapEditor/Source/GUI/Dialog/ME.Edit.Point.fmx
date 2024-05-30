@@ -1,11 +1,11 @@
 inherited edPoint: TedPoint
   Caption = 'EditForm1'
-  ClientHeight = 154
-  ClientWidth = 257
+  ClientHeight = 156
+  ClientWidth = 256
   DesignerMasterStyle = 0
   inherited paBottom: TPanel
-    Position.Y = 108.000000000000000000
-    Size.Width = 257.000000000000000000
+    Position.Y = 110.000000000000000000
+    Size.Width = 256.000000000000000000
     TabOrder = 4
   end
   object laTopPoint: TLabel [1]

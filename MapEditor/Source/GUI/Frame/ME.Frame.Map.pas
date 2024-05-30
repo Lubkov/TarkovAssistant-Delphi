@@ -62,7 +62,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.Map, ME.Edit.Map,
+  ME.DB.Utils, ME.Dialog.Presenter, ME.Presenter.Map, ME.Edit.Map, ME.DB.Quest,
   ME.Service.Map, ME.Dialog.Message, ME.Service.Marker, ME.Service.Quest;
 
 {$R *.fmx}
@@ -118,6 +118,7 @@ end;
 procedure TfrMap.MapEdit(const Index: Integer);
 var
   Map: TMap;
+  Quest: TQuest;
 begin
   if (Index < 0) or (Index >= Count) then
     Exit;
@@ -127,6 +128,9 @@ begin
     MapService.LoadLayers(Map, True);
     MarkerService.LoadMarkers(Map.ID, Map.Tags);
     QuestService.LoadQuests(Map.ID, Map.Quests);
+
+    for Quest in Map.Quests do
+      QuestService.LoadParts(Quest.ID, Quest.Parts);
   end;
 
   Grid.BeginUpdate;

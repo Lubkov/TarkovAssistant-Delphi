@@ -48,7 +48,7 @@ end;
 
 function TDelPointPresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить координату (' + IntToStr(Instance.X) + ', ' + IntToStr(Instance.Y) + ')"?';
+  Result := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (' + IntToStr(Instance.X) + ', ' + IntToStr(Instance.Y) + ')"?';
 end;
 
 procedure TDelPointPresenter.InternalDelete;

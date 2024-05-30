@@ -45,7 +45,8 @@ uses
   ME.Presenter.Point in 'Source\GUI\ME.Presenter.Point.pas',
   ME.Frame.Quest in 'Source\GUI\Frame\ME.Frame.Quest.pas' {frQuest: TFrame},
   ME.Edit.Quest in 'Source\GUI\Dialog\ME.Edit.Quest.pas' {edQuest},
-  ME.Presenter.Quest in 'Source\GUI\ME.Presenter.Quest.pas';
+  ME.Presenter.Quest in 'Source\GUI\ME.Presenter.Quest.pas',
+  ME.Frame.Point in 'Source\GUI\Frame\ME.Frame.Point.pas' {frPointList: TFrame};
 
 {$R *.res}
 
