@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, ME.DB.Map, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
-  ME.Frame.Picture, ME.Frame.Layer, FMX.TabControl, ME.Frame.Extraction;
+  ME.Frame.Picture, ME.Frame.Layer, FMX.TabControl, ME.Frame.Extraction,
+  ME.Frame.Quest;
 
 type
   TedMap = class(TEditForm, IEditDialog<TMap>)
@@ -29,7 +30,8 @@ type
     FMap: TMap;
     FPicturePanel: TfrPicture;
     FLayerList: TfrLayerList;
-    FExtractionPanel: TfrExtraction;
+    FExtractionList: TfrExtraction;
+    FQuestList: TfrQuest;
 
     function GetMapName: string;
     procedure SetMapName(const Value: string);
@@ -76,9 +78,13 @@ begin
   FLayerList.Parent := tabLayer;
   FLayerList.Align := TAlignLayout.Client;
 
-  FExtractionPanel := TfrExtraction.Create(Self);
-  FExtractionPanel.Parent := tabExtractions;
-  FExtractionPanel.Align := TAlignLayout.Client;
+  FExtractionList := TfrExtraction.Create(Self);
+  FExtractionList.Parent := tabExtractions;
+  FExtractionList.Align := TAlignLayout.Client;
+
+  FQuestList := TfrQuest.Create(Self);
+  FQuestList.Parent := tabQuests;
+  FQuestList.Align := TAlignLayout.Client;
 end;
 
 function TedMap.GetMapName: string;
@@ -158,7 +164,8 @@ begin
   Picture := FMap.Picture;
 
   FLayerList.Init(FMap);
-  FExtractionPanel.Init(FMap);
+  FExtractionList.Init(FMap);
+  FQuestList.Init(FMap);
 end;
 
 procedure TedMap.PostValues(const Value: TMap);

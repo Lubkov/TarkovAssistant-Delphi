@@ -1,0 +1,16 @@
+inherited edQuest: TedQuest
+  Caption = 'EditForm1'
+  DesignerMasterStyle = 0
+  inherited paBottom: TPanel
+    TabOrder = 1
+  end
+  object edQuestName: TEdit [1]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    Position.X = 27.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 294.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

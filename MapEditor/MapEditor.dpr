@@ -40,7 +40,12 @@ uses
   ME.Presenter.Extraction in 'Source\GUI\ME.Presenter.Extraction.pas',
   ME.DB.Quest in '..\Source\Entity\ME.DB.Quest.pas',
   ME.DAO.Quest in '..\Source\DAO\ME.DAO.Quest.pas',
-  ME.Service.Quest in '..\Source\Service\ME.Service.Quest.pas';
+  ME.Service.Quest in '..\Source\Service\ME.Service.Quest.pas',
+  ME.Edit.Point in 'Source\GUI\Dialog\ME.Edit.Point.pas' {edPoint},
+  ME.Presenter.Point in 'Source\GUI\ME.Presenter.Point.pas',
+  ME.Frame.Quest in 'Source\GUI\Frame\ME.Frame.Quest.pas' {frQuest: TFrame},
+  ME.Edit.Quest in 'Source\GUI\Dialog\ME.Edit.Quest.pas' {edQuest},
+  ME.Presenter.Quest in 'Source\GUI\ME.Presenter.Quest.pas';
 
 {$R *.res}
 

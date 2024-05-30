@@ -90,7 +90,7 @@ end;
 
 procedure TedExtraction.SetPositionX(const Value: Integer);
 begin
-  edPositionX.Value := Value
+  edPositionX.Value := Value;
 end;
 
 function TedExtraction.GetPositionY: Integer;
@@ -100,7 +100,7 @@ end;
 
 procedure TedExtraction.SetPositionY(const Value: Integer);
 begin
-  edPositionY.Value := Value
+  edPositionY.Value := Value;
 end;
 
 procedure TedExtraction.SetInstance(const Value: TMarker);

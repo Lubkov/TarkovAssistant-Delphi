@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.DB.Map, ME.DB.Layer, ME.DB.Marker, ME.DAO.Map;
+  ME.DB.Map, ME.DB.Layer, ME.DB.Marker, ME.DAO.Map, ME.DB.Quest;
 
 type
   TMapService = class(TServiceCommon)
@@ -30,7 +30,8 @@ var
 implementation
 
 uses
-  ME.DB.Utils, ME.Service.Point, ME.Service.Layer, ME.Service.Marker;
+  ME.DB.Utils, ME.Service.Point, ME.Service.Layer, ME.Service.Marker,
+  ME.Service.Quest;
 
 { TMapService }
 
@@ -54,6 +55,7 @@ var
   Map: TMap;
   Layer: TLayer;
   Marker: TMarker;
+  Quest: TQuest;
 begin
   Map := TMap(Entity);
 
@@ -69,6 +71,11 @@ begin
     for Marker in Map.Tags do begin
       Marker.MapID := Map.ID;
       MarkerService.Insert(Marker);
+    end;
+
+    for Quest in Map.Quests do begin
+      Quest.MapID := Map.ID;
+      QuestService.Insert(Quest);
     end;
 
     CommitTransaction;
