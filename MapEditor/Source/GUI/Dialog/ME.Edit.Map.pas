@@ -24,6 +24,7 @@ type
     tabGeneral: TTabItem;
     tabLayer: TTabItem;
     tabExtractions: TTabItem;
+    tabQuests: TTabItem;
   private
     FMap: TMap;
     FPicturePanel: TfrPicture;

@@ -21,6 +21,8 @@ inherited edMap: TedMap
       568s
       256s
       568s
+      256s
+      568s
       256s)
     object tabGeneral: TTabItem
       CustomIcon = <
@@ -187,6 +189,18 @@ inherited edMap: TedMap
       Text = 'Extractions'
       ExplicitSize.cx = 78.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
+    end
+    object tabQuests: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 57.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Quests'
     end
   end
 end

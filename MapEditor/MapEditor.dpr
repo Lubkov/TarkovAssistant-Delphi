@@ -37,7 +37,10 @@ uses
   ME.Service.Marker in '..\Source\Service\ME.Service.Marker.pas',
   ME.Frame.Extraction in 'Source\GUI\Frame\ME.Frame.Extraction.pas' {frExtraction: TFrame},
   ME.Edit.Extraction in 'Source\GUI\Dialog\ME.Edit.Extraction.pas' {edExtraction},
-  ME.Presenter.Extraction in 'Source\GUI\ME.Presenter.Extraction.pas';
+  ME.Presenter.Extraction in 'Source\GUI\ME.Presenter.Extraction.pas',
+  ME.DB.Quest in '..\Source\Entity\ME.DB.Quest.pas',
+  ME.DAO.Quest in '..\Source\DAO\ME.DAO.Quest.pas',
+  ME.Service.Quest in '..\Source\Service\ME.Service.Quest.pas';
 
 {$R *.res}
 
