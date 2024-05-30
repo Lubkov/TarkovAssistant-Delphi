@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.DB.Map, ME.MapLevel, ME.DB.Marker, ME.DAO.Map;
+  ME.DB.Map, ME.DB.Layer, ME.DB.Marker, ME.DAO.Map;
 
 type
   TMapService = class(TServiceCommon)
@@ -18,7 +18,7 @@ type
     procedure Update(const Entity: TEntity); override;
     procedure Remove(const ID: Variant); override;
 
-    procedure LoadMapLevels(const Map: TMap; LoadPicture: Boolean);
+    procedure LoadLayers(const Map: TMap; LoadPicture: Boolean);
     procedure LoadMarkers(const Map: TMap);
 
     property MapDAO: TMapDAO read GetMapDAO;
@@ -30,7 +30,7 @@ var
 implementation
 
 uses
-  ME.DB.Utils, ME.PointService, ME.MapLevelService, ME.Service.Marker;
+  ME.DB.Utils, ME.PointService, ME.Service.Layer, ME.Service.Marker;
 
 { TMapService }
 
@@ -52,7 +52,7 @@ end;
 procedure TMapService.Insert(const Entity: TEntity);
 var
   Map: TMap;
-  Level: TMapLevel;
+  Layer: TLayer;
   Marker: TMarker;
 begin
   Map := TMap(Entity);
@@ -61,9 +61,9 @@ begin
   try
     DAO.Insert(Map);
 
-    for Level in Map.Levels do begin
-      Level.MapID := Map.ID;
-      MapLevelService.Insert(Level);
+    for Layer in Map.Layers do begin
+      Layer.MapID := Map.ID;
+      LayerService.Insert(Layer);
     end;
 
     for Marker in Map.Tags do begin
@@ -99,7 +99,7 @@ procedure TMapService.Remove(const ID: Variant);
 begin
   StartTransaction;
   try
-    MapDAO.RemoveMapLevels(ID);
+    MapDAO.RemoveLayers(ID);
     DAO.Remove(ID);
 
     CommitTransaction;
@@ -109,9 +109,9 @@ begin
   end;
 end;
 
-procedure TMapService.LoadMapLevels(const Map: TMap; LoadPicture: Boolean);
+procedure TMapService.LoadLayers(const Map: TMap; LoadPicture: Boolean);
 begin
-  MapDAO.LoadMapLevels(Map, LoadPicture);
+  MapDAO.LoadLayers(Map, LoadPicture);
 end;
 
 procedure TMapService.LoadMarkers(const Map: TMap);

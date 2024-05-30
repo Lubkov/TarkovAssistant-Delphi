@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
-  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.DB.Map, ME.MapLevel;
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.DB.Map, ME.DB.Layer;
 
 type
   TMapDAO = class(TDAOCommon)
@@ -17,8 +17,8 @@ type
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
 
-    procedure LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
-    procedure RemoveMapLevels(const MapID: Variant);
+    procedure LoadLayers(const Entity: TEntity; LoadPicture: Boolean);
+    procedure RemoveLayers(const MapID: Variant);
   end;
 
 implementation
@@ -100,7 +100,7 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO ' + TMapLevel.EntityName +
+      ' INSERT INTO ' + TLayer.EntityName +
       '   (Name, Left, Top, Right, Bottom, Picture) ' +
       ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
     Query.ParamByName('Name').AsString := Map.Name;
@@ -129,7 +129,7 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' UPDATE ' + TMapLevel.EntityName +
+      ' UPDATE ' + TLayer.EntityName +
       ' SET ' +
       '   Name = :Name, ' +
       '   Left = :Left, ' +
@@ -151,34 +151,34 @@ begin
   end;
 end;
 
-procedure TMapDAO.LoadMapLevels(const Entity: TEntity; LoadPicture: Boolean);
+procedure TMapDAO.LoadLayers(const Entity: TEntity; LoadPicture: Boolean);
 const
   PictureFileName = 'Picture';
 var
   Query: TUniQuery;
   Map: TMap;
-  Level: TMapLevel;
+  Level: TLayer;
   FieldNames: string;
 begin
   Map := TMap(Entity);
-  FieldNames := TMapLevel.FieldList;
+  FieldNames := TLayer.FieldList;
   if LoadPicture then
     FieldNames := FieldNames + ', ' + PictureFileName;
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM ' + TMapLevel.EntityName + ' WHERE MapID = :MapID';
+    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM ' + TLayer.EntityName + ' WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := Entity.ID;
     Query.Open;
 
     Map.ClearLevelList;
     while not Query.Eof do begin
-      Level := TMapLevel.Create;
+      Level := TLayer.Create;
       try
         Level.Assign(Query);
       finally
-        Map.Levels.Add(Level);
+        Map.Layers.Add(Level);
       end;
 
       Query.Next;
@@ -188,14 +188,14 @@ begin
   end;
 end;
 
-procedure TMapDAO.RemoveMapLevels(const MapID: Variant);
+procedure TMapDAO.RemoveLayers(const MapID: Variant);
 var
   Query: TUniQuery;
 begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'DELETE FROM ' + TMapLevel.EntityName + ' WHERE MapID = :MapID';
+    Query.SQL.Text := 'DELETE FROM ' + TLayer.EntityName + ' WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := MapID;
     Query.Execute;
   finally

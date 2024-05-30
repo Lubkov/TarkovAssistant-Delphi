@@ -1,4 +1,4 @@
-﻿unit ME.Edit.MapLevel;
+﻿unit ME.Edit.Layer;
 
 interface
 
@@ -7,15 +7,15 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation, FMX.Objects,
   FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ImgList, System.ImageList,
-  ME.DB.Entity, ME.MapLevel, ME.Edit.Form.Presenter, ME.Frame.Picture;
+  ME.DB.Entity, ME.DB.Layer, ME.Edit.Form.Presenter, ME.Frame.Picture;
 
 type
-  TedMapLevel = class(TEditForm, IEditDialog<TMapLevel>)
+  TedLayer = class(TEditForm, IEditDialog<TLayer>)
     edLevel: TNumberBox;
     edLevelName: TEdit;
     paPicture: TPanel;
   private
-    FMapLevel: TMapLevel;
+    FLayer: TLayer;
     FPicturePanel: TfrPicture;
 
     function GetLevel: Integer;
@@ -27,8 +27,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
 
-    procedure SetInstance(const Value: TMapLevel);
-    procedure PostValues(const Value: TMapLevel);
+    procedure SetInstance(const Value: TLayer);
+    procedure PostValues(const Value: TLayer);
 
     property Level: Integer read GetLevel write SetLevel;
     property LevelName: string read GetLevelName write SetLevelName;
@@ -39,7 +39,7 @@ implementation
 
 {$R *.fmx}
 
-constructor TedMapLevel.Create(AOwner: TComponent);
+constructor TedLayer.Create(AOwner: TComponent);
 begin
   inherited;
 
@@ -48,51 +48,51 @@ begin
   FPicturePanel.Align := TAlignLayout.Client;
 end;
 
-function TedMapLevel.GetLevel: Integer;
+function TedLayer.GetLevel: Integer;
 begin
   Result := Trunc(edLevel.Value);
 end;
 
-procedure TedMapLevel.SetLevel(const Value: Integer);
+procedure TedLayer.SetLevel(const Value: Integer);
 begin
   edLevel.Value := Value;
 end;
 
-function TedMapLevel.GetLevelName: string;
+function TedLayer.GetLevelName: string;
 begin
   Result := edLevelName.Text;
 end;
 
-procedure TedMapLevel.SetLevelName(const Value: string);
+procedure TedLayer.SetLevelName(const Value: string);
 begin
   edLevelName.Text := Value;
 end;
 
-function TedMapLevel.GetPicture: TBitmap;
+function TedLayer.GetPicture: TBitmap;
 begin
   Result := FPicturePanel.Picture;
 end;
 
-procedure TedMapLevel.SetPicture(const Value: TBitmap);
+procedure TedLayer.SetPicture(const Value: TBitmap);
 begin
   FPicturePanel.Picture := Value;
 end;
 
-procedure TedMapLevel.SetInstance(const Value: TMapLevel);
+procedure TedLayer.SetInstance(const Value: TLayer);
 begin
-  FMapLevel := Value;
+  FLayer := Value;
 
-  if FMapLevel.IsNewInstance then
+  if FLayer.IsNewInstance then
     Caption := 'Добавление нового уровня карты'
   else
-    Caption := '#' + VarToStr(FMapLevel.ID) + ' Редактирование уровня карты';
+    Caption := '#' + VarToStr(FLayer.ID) + ' Редактирование уровня карты';
 
-  Level := FMapLevel.Level;
-  LevelName := FMapLevel.Name;
-  Picture := FMapLevel.Picture;
+  Level := FLayer.Level;
+  LevelName := FLayer.Name;
+  Picture := FLayer.Picture;
 end;
 
-procedure TedMapLevel.PostValues(const Value: TMapLevel);
+procedure TedLayer.PostValues(const Value: TLayer);
 begin
   Value.Level := Level;
   Value.Name := LevelName;

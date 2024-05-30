@@ -1,4 +1,4 @@
-unit ME.MapLevel;
+unit ME.DB.Layer;
 
 interface
 
@@ -7,10 +7,10 @@ uses
   Data.DB, ME.DB.Entity;
 
 const
-  MainMapLevelIndex = 0;
+  MainLayerIndex = 0;
 
 type
-  TMapLevel = class(TEntity)
+  TLayer = class(TEntity)
   private
     FMapID: Variant;
     FLevel: Integer;
@@ -38,9 +38,9 @@ type
 
 implementation
 
-{ TMapLevel }
+{ TLayer }
 
-constructor TMapLevel.Create;
+constructor TLayer.Create;
 begin
   inherited;
 
@@ -50,34 +50,34 @@ begin
   FPicture := TBitmap.Create;
 end;
 
-destructor TMapLevel.Destroy;
+destructor TLayer.Destroy;
 begin
   FreeAndNil(FPicture);
 
   inherited;
 end;
 
-function TMapLevel.GetIsMainLevel: Boolean;
+function TLayer.GetIsMainLevel: Boolean;
 begin
-  Result := Level = MainMapLevelIndex;
+  Result := Level = MainLayerIndex;
 end;
 
-procedure TMapLevel.SetPicture(const Value: TBitmap);
+procedure TLayer.SetPicture(const Value: TBitmap);
 begin
   FPicture.Assign(Value);
 end;
 
-procedure TMapLevel.Assign(const Source: TEntity);
+procedure TLayer.Assign(const Source: TEntity);
 begin
   inherited;
 
-  FMapID := TMapLevel(Source).MapID;
-  FLevel := TMapLevel(Source).Level;
-  FName := TMapLevel(Source).Name;
-  Picture := TMapLevel(Source).Picture;
+  FMapID := TLayer(Source).MapID;
+  FLevel := TLayer(Source).Level;
+  FName := TLayer(Source).Name;
+  Picture := TLayer(Source).Picture;
 end;
 
-procedure TMapLevel.Assign(const DataSet: TDataSet);
+procedure TLayer.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
@@ -89,12 +89,12 @@ begin
     AssignPicture(DataSet.FieldByName('Picture'), Picture);
 end;
 
-class function TMapLevel.EntityName: string;
+class function TLayer.EntityName: string;
 begin
-  Result := 'Map';
+  Result := 'Layer';
 end;
 
-class function TMapLevel.FieldList: string;
+class function TLayer.FieldList: string;
 begin
   Result := 'ID, MapID, Level, Name';
 end;

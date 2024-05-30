@@ -158,7 +158,7 @@ inherited edMap: TedMap
         TabOrder = 2
       end
     end
-    object tabMapLevel: TTabItem
+    object tabLayer: TTabItem
       CustomIcon = <
         item
         end>

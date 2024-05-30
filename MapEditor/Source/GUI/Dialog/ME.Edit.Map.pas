@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, ME.DB.Map, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
-  ME.Frame.Picture, ME.Frame.MapLevel, FMX.TabControl, ME.Frame.Extraction;
+  ME.Frame.Picture, ME.Frame.Layer, FMX.TabControl, ME.Frame.Extraction;
 
 type
   TedMap = class(TEditForm, IEditDialog<TMap>)
@@ -22,12 +22,12 @@ type
     laBottomPoint: TLabel;
     MainContainer: TTabControl;
     tabGeneral: TTabItem;
-    tabMapLevel: TTabItem;
+    tabLayer: TTabItem;
     tabExtractions: TTabItem;
   private
     FMap: TMap;
     FPicturePanel: TfrPicture;
-    FMapLevelPanel: TfrMapLevel;
+    FLayerList: TfrLayerList;
     FExtractionPanel: TfrExtraction;
 
     function GetMapName: string;
@@ -71,9 +71,9 @@ begin
   FPicturePanel.Align := TAlignLayout.Client;
   FPicturePanel.Title := 'Изображени карты ' + #13#10 + '(для меню)';
 
-  FMapLevelPanel := TfrMapLevel.Create(Self);
-  FMapLevelPanel.Parent := tabMapLevel;
-  FMapLevelPanel.Align := TAlignLayout.Client;
+  FLayerList := TfrLayerList.Create(Self);
+  FLayerList.Parent := tabLayer;
+  FLayerList.Align := TAlignLayout.Client;
 
   FExtractionPanel := TfrExtraction.Create(Self);
   FExtractionPanel.Parent := tabExtractions;
@@ -156,7 +156,7 @@ begin
   MapBottom := FMap.Bottom;
   Picture := FMap.Picture;
 
-  FMapLevelPanel.Init(FMap);
+  FLayerList.Init(FMap);
   FExtractionPanel.Init(FMap);
 end;
 

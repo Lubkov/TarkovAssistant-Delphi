@@ -212,13 +212,13 @@
         <DCCReference Include="Source\ME.Connection.pas"/>
         <DCCReference Include="Source\ME.AppService.pas"/>
         <DCCReference Include="..\Source\DAO\ME.DAO.Map.pas"/>
-        <DCCReference Include="..\Source\DAO\ME.MapLevelDAO.pas"/>
+        <DCCReference Include="..\Source\DAO\ME.DAO.Layer.pas"/>
         <DCCReference Include="..\Source\DAO\ME.PointDAO.pas"/>
         <DCCReference Include="..\Source\Entity\ME.DB.Map.pas"/>
-        <DCCReference Include="..\Source\Entity\ME.MapLevel.pas"/>
+        <DCCReference Include="..\Source\Entity\ME.DB.Layer.pas"/>
         <DCCReference Include="..\Source\Entity\ME.Point.pas"/>
         <DCCReference Include="..\Source\Service\ME.Service.Map.pas"/>
-        <DCCReference Include="..\Source\Service\ME.MapLevelService.pas"/>
+        <DCCReference Include="..\Source\Service\ME.Service.Layer.pas"/>
         <DCCReference Include="..\Source\Service\ME.PointService.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.Map.pas">
             <Form>frMap</Form>
@@ -230,8 +230,8 @@
             <Form>edMessage</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Source\GUI\Frame\ME.Frame.MapLevel.pas">
-            <Form>frMapLevel</Form>
+        <DCCReference Include="Source\GUI\Frame\ME.Frame.Layer.pas">
+            <Form>frLayerList</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -242,8 +242,8 @@
         <DCCReference Include="Source\GUI\Dialog\ME.Edit.Map.pas">
             <Form>edMap</Form>
         </DCCReference>
-        <DCCReference Include="Source\GUI\Dialog\ME.Edit.MapLevel.pas">
-            <Form>edMapLevel</Form>
+        <DCCReference Include="Source\GUI\Dialog\ME.Edit.Layer.pas">
+            <Form>edLayer</Form>
         </DCCReference>
         <DCCReference Include="..\Source\App.Constants.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.Picture.pas">

@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, System.ImageList, FMX.ImgList,
-  FMX.Objects, ME.Frame.Map, ME.Frame.MapLevel, ME.DB.Map;
+  FMX.Objects, ME.Frame.Map, ME.Frame.Layer, ME.DB.Map;
 
 type
   TMainForm = class(TForm)
@@ -25,7 +25,7 @@ var
 implementation
 
 uses
-  ME.AppService, ME.MapLevelService, ME.Service.Map;
+  ME.AppService, ME.Service.Layer, ME.Service.Map;
 
 {$R *.fmx}
 

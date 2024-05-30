@@ -1,13 +1,13 @@
-unit ME.MapLevelDAO;
+unit ME.DAO.Layer;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Data.DB, MemDS, DBAccess, Uni,
-  ME.DB.Entity, ME.DB.DAO, ME.MapLevel;
+  ME.DB.Entity, ME.DB.DAO, ME.DB.Layer;
 
 type
-  TMapLevelDAO = class(TDAOCommon)
+  TLayerDAO = class(TDAOCommon)
   private
   protected
     function EntityClass: TEntityClass; override;
@@ -21,21 +21,21 @@ type
 
 implementation
 
-{ TMapLevelDAO }
+{ TLayerDAO }
 
-function TMapLevelDAO.EntityClass: TEntityClass;
+function TLayerDAO.EntityClass: TEntityClass;
 begin
-  Result := TMapLevel;
+  Result := TLayer;
 end;
 
-function TMapLevelDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TLayerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
 var
   Query: TUniQuery;
 begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + TMapLevel.FieldList + ' FROM MapLevel WHERE ID = :ID';
+    Query.SQL.Text := 'SELECT ' + TLayer.FieldList + ' FROM Layer WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -47,73 +47,73 @@ begin
   end;
 end;
 
-procedure TMapLevelDAO.Insert(const Entity: TEntity);
+procedure TLayerDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapLevel: TMapLevel;
+  Layer: TLayer;
 begin
-  MapLevel := TMapLevel(Entity);
+  Layer := TLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO MapLevel (MapID, Level, Name) VALUES (:MapID, :Level, :Name)';
-    Query.ParamByName('MapID').Value := MapLevel.MapID;
-    Query.ParamByName('Level').AsInteger := MapLevel.Level;
-    Query.ParamByName('Name').AsString := MapLevel.Name;
+    Query.SQL.Text := 'INSERT INTO Layer (MapID, Level, Name) VALUES (:MapID, :Level, :Name)';
+    Query.ParamByName('MapID').Value := Layer.MapID;
+    Query.ParamByName('Level').AsInteger := Layer.Level;
+    Query.ParamByName('Name').AsString := Layer.Name;
     Query.Execute;
-    MapLevel.ID := Query.LastInsertId;
+    Layer.ID := Query.LastInsertId;
   finally
     Query.Free;
   end;
 end;
 
-procedure TMapLevelDAO.Update(const Entity: TEntity);
+procedure TLayerDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapLevel: TMapLevel;
+  Layer: TLayer;
 begin
-  MapLevel := TMapLevel(Entity);
+  Layer := TLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      'UPDATE MapLevel SET ' +
+      'UPDATE Layer SET ' +
       '    MapID = :MapID, ' +
       '    Level = :Level, ' +
       '    Name = :Name ' +
       'WHERE ID = :ID';
-    Query.ParamByName('ID').Value := MapLevel.ID;
-    Query.ParamByName('MapID').AsInteger := MapLevel.MapID;
-    Query.ParamByName('Level').AsInteger := MapLevel.Level;
-    Query.ParamByName('Name').AsString := MapLevel.Name;
+    Query.ParamByName('ID').Value := Layer.ID;
+    Query.ParamByName('MapID').AsInteger := Layer.MapID;
+    Query.ParamByName('Level').AsInteger := Layer.Level;
+    Query.ParamByName('Name').AsString := Layer.Name;
     Query.Execute;
   finally
     Query.Free;
   end;
 end;
 
-procedure TMapLevelDAO.LoadPicture(const Entity: TEntity);
+procedure TLayerDAO.LoadPicture(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapLevel: TMapLevel;
+  Layer: TLayer;
   Stream: TMemoryStream;
 begin
-  MapLevel := TMapLevel(Entity);
+  Layer := TLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ID, Picture FROM MapLevel WHERE ID = :ID';
-    Query.ParamByName('ID').Value := MapLevel.ID;
+    Query.SQL.Text := 'SELECT ID, Picture FROM Layer WHERE ID = :ID';
+    Query.ParamByName('ID').Value := Layer.ID;
     Query.Open;
 
     Stream := TMemoryStream.Create;
     try
       TBlobField(Query.FieldByName('Picture')).SaveToStream(Stream);
       Stream.Position := 0;
-      MapLevel.Picture.LoadFromStream(Stream);
+      Layer.Picture.LoadFromStream(Stream);
     finally
       Stream.Free;
     end;
@@ -122,26 +122,26 @@ begin
   end;
 end;
 
-procedure TMapLevelDAO.SavePicture(const Entity: TEntity);
+procedure TLayerDAO.SavePicture(const Entity: TEntity);
 var
   Query: TUniQuery;
-  MapLevel: TMapLevel;
+  Layer: TLayer;
   Stream: TMemoryStream;
 begin
-  MapLevel := TMapLevel(Entity);
+  Layer := TLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'UPDATE MapLevel SET Picture = :Picture WHERE ID = :ID';
-    Query.ParamByName('ID').Value := MapLevel.ID;
+    Query.SQL.Text := 'UPDATE Layer SET Picture = :Picture WHERE ID = :ID';
+    Query.ParamByName('ID').Value := Layer.ID;
 
-    if MapLevel.Picture.IsEmpty then
+    if Layer.Picture.IsEmpty then
       Query.ParamByName('Picture').Value := Null
     else begin
       Stream := TMemoryStream.Create;
       try
-        MapLevel.Picture.SaveToStream(Stream);
+        Layer.Picture.SaveToStream(Stream);
         Stream.Position := 0;
         Query.ParamByName('Picture').LoadFromStream(Stream, ftBlob);
       finally
