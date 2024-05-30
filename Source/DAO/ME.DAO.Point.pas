@@ -3,8 +3,8 @@ unit ME.DAO.Point;
 interface
 
 uses
-  System.SysUtils, System.Classes, ME.DB.Entity, ME.DB.DAO, ME.DB.Point,
-  Data.DB, MemDS, DBAccess, Uni;
+  System.SysUtils, System.Classes, Generics.Collections, Data.DB, MemDS, DBAccess, Uni,
+  ME.DB.Entity, ME.DB.DAO, ME.DB.Point;
 
 type
   TPointDAO = class(TDAOCommon)
@@ -15,6 +15,8 @@ type
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
+
+    procedure LoadQuestParts(const QuestID: Variant; const Items: TList<TPoint>);
   end;
 
 implementation
@@ -33,7 +35,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ID, X, Y FROM Point WHERE ID = :ID';
+    Query.SQL.Text := 'SELECT ID, QuestID, X, Y FROM Point WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -55,7 +57,8 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Point (X, Y) VALUES (:X, :Y)';
+    Query.SQL.Text := 'INSERT INTO Point (QuestID, X, Y) VALUES (:QuestID, :X, :Y)';
+    Query.ParamByName('QuestID').Value := Point.QuestID;
     Query.ParamByName('X').AsInteger := Point.X;
     Query.ParamByName('Y').AsInteger := Point.Y;
     Query.Execute;
@@ -75,11 +78,39 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'UPDATE Point SET X = :X, Y = :Y WHERE ID = :ID';
+    Query.SQL.Text := 'UPDATE Point SET QuestID = :QuestID, X = :X, Y = :Y WHERE ID = :ID';
     Query.ParamByName('ID').Value := Point.ID;
+    Query.ParamByName('QuestID').Value := Point.QuestID;
     Query.ParamByName('X').AsInteger := Point.X;
     Query.ParamByName('Y').AsInteger := Point.Y;
     Query.Execute;
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TPointDAO.LoadQuestParts(const QuestID: Variant; const Items: TList<TPoint>);
+var
+  Query: TUniQuery;
+  Point: TPoint;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'SELECT ID, QuestID, X, Y FROM Point WHERE QuestID = :QuestID';
+    Query.ParamByName('QuestID').Value := QuestID;
+    Query.Open;
+
+    while not Query.Eof do begin
+      Point := TPoint.Create;
+      try
+        Point.Assign(Query);
+      finally
+        Items.Add(Point);
+      end;
+
+      Query.Next;
+    end;
   finally
     Query.Free;
   end;

@@ -8,6 +8,7 @@ uses
 type
   TPoint = class(TEntity)
   private
+    FQuestID: Variant;
     FLeft: Integer;
     FTop: Integer;
   public
@@ -21,6 +22,7 @@ type
 
     procedure SetBounds(X, Y: Integer);
 
+    property QuestID: Variant read FQuestID write FQuestID;
     property X: Integer read FLeft write FLeft;
     property Y: Integer read FTop write FTop;
   end;
@@ -33,6 +35,7 @@ constructor TPoint.Create;
 begin
   inherited Create;
 
+  FQuestID := Null;
   FLeft := 0;
   FTop := 0;
 end;
@@ -41,6 +44,7 @@ procedure TPoint.Assign(const Source: TEntity);
 begin
   inherited;
 
+  FQuestID := TPoint(Source).QuestID;
   FLeft := TPoint(Source).X;
   FTop := TPoint(Source).Y;
 end;
@@ -49,6 +53,7 @@ procedure TPoint.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
+  FQuestID := DataSet.FieldByName('QuestID').Value;
   FLeft := DataSet.FieldByName('X').AsInteger;
   FTop := DataSet.FieldByName('Y').AsInteger;
 end;
@@ -60,7 +65,7 @@ end;
 
 class function TPoint.FieldList: string;
 begin
-  Result := 'ID, X, Y';
+  Result := 'ID, QuestID, X, Y';
 end;
 
 procedure TPoint.SetBounds(X, Y: Integer);
