@@ -155,13 +155,13 @@ begin
     ColumnNameIdx:
       Value := Items[ARow].Name;
     ColumnLeftIdx:
-      Value := Items[ARow].Left.X;
+      Value := Items[ARow].Left;
     ColumnTopIdx:
-      Value := Items[ARow].Left.Y;
+      Value := Items[ARow].Top;
     ColumnRightIdx:
-      Value := Items[ARow].Right.X;
+      Value := Items[ARow].Right;
     ColumnBottomIdx:
-      Value := Items[ARow].Right.Y;
+      Value := Items[ARow].Bottom;
     ColumnImageIdx:
       Value := Items[ARow].Picture;
   end;

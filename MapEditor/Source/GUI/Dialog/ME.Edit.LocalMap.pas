@@ -150,10 +150,10 @@ begin
     Caption := '#' + VarToStr(FLocalMap.ID) + '  Редактирование карты "' + FLocalMap.Name + '"';
 
   MapName := FLocalMap.Name;
-  MapLeft := FLocalMap.Left.X;
-  MapTop := FLocalMap.Left.Y;
-  MapRight := FLocalMap.Right.X;
-  MapBottom := FLocalMap.Right.Y;
+  MapLeft := FLocalMap.Left;
+  MapTop := FLocalMap.Top;
+  MapRight := FLocalMap.Right;
+  MapBottom := FLocalMap.Bottom;
   Picture := FLocalMap.Picture;
 
   FMapLevelPanel.Init(FLocalMap);
@@ -163,8 +163,10 @@ end;
 procedure TedLocalMap.PostValues(const Value: TLocalMap);
 begin
   Value.Name := MapName;
-  FLocalMap.Left.SetBounds(MapLeft, MapTop);
-  FLocalMap.Right.SetBounds(MapRight, MapBottom);
+  FLocalMap.Left := MapLeft;
+  FLocalMap.Top := MapTop;
+  FLocalMap.Right := MapRight;
+  FLocalMap.Bottom := MapBottom;
   Value.Picture := Picture;
 end;
 

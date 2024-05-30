@@ -28,17 +28,13 @@ const
     ' SELECT ' +
     '     m.ID as ID, ' +
     '     m.Name as Name, ' +
-    '     m.Picture as Picture, ' +
-    '     m.LeftID as LeftID, ' +
-    '     p1.X as X1, ' +
-    '     p1.Y as Y1, ' +
-    '     m.RightID as RightID, ' +
-    '     p2.X as X2, ' +
-    '     p2.Y as Y2 ' +
+    '     m.Left as Left, ' +
+    '     m.Top as Top, ' +
+    '     m.Right as Right, ' +
+    '     m.Bottom as Bottom, ' +
+    '     m.Picture as Picture ' +
     ' FROM LocalMap m ' +
-    '   INNER JOIN Point p1 ON (p1.ID = m.LeftID) ' +
-    '             %s ' +
-    '   INNER JOIN Point p2 ON p2.ID = m.RightID ';
+    ' %s ';
 
 { TLocalMapDAO }
 
@@ -54,7 +50,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := Format(SqlSelectCommandText, [' AND (m.ID = :ID) ']);
+    Query.SQL.Text := Format(SqlSelectCommandText, [' WHERE (m.ID = :ID) ']);
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -104,11 +100,13 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO LocalMap (Name, LeftID, RightID, Picture) ' +
-      ' VALUES (:Name, :LeftID, :RightID, :Picture) ';
+      ' INSERT INTO LocalMap (Name, Left, Top, Right, Bottom, Picture) ' +
+      ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
     Query.ParamByName('Name').AsString := LocalMap.Name;
-    Query.ParamByName('LeftID').AsInteger := LocalMap.Left.ID;
-    Query.ParamByName('RightID').AsInteger := LocalMap.Right.ID;
+    Query.ParamByName('Left').AsInteger := LocalMap.Left;
+    Query.ParamByName('Top').AsInteger := LocalMap.Top;
+    Query.ParamByName('Right').AsInteger := LocalMap.Right;
+    Query.ParamByName('Bottom').AsInteger := LocalMap.Bottom;
     Param := Query.ParamByName('Picture');
     LocalMap.AssignPictureTo(LocalMap.Picture, Param);
 
@@ -133,14 +131,18 @@ begin
       ' UPDATE LocalMap ' +
       ' SET ' +
       '   Name = :Name, ' +
-      '   LeftID = :LeftID, ' +
-      '   RightID = :RightID, ' +
+      '   Left = :Left, ' +
+      '   Top = :Top, ' +
+      '   Right = :Right, ' +
+      '   Bottom = :Bottom, ' +
       '   Picture = :Picture ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := LocalMap.ID;
     Query.ParamByName('Name').AsString := LocalMap.Name;
-    Query.ParamByName('LeftID').AsInteger := LocalMap.Left.ID;
-    Query.ParamByName('RightID').AsInteger := LocalMap.Right.ID;
+    Query.ParamByName('Left').AsInteger := LocalMap.Left;
+    Query.ParamByName('Top').AsInteger := LocalMap.Top;
+    Query.ParamByName('Right').AsInteger := LocalMap.Right;
+    Query.ParamByName('Bottom').AsInteger := LocalMap.Bottom;
     LocalMap.AssignPictureTo(LocalMap.Picture, Query.ParamByName('Picture'));
     Query.Execute;
   finally
