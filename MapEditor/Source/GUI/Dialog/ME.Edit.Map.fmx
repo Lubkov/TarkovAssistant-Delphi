@@ -1,4 +1,4 @@
-inherited edLocalMap: TedLocalMap
+inherited edMap: TedMap
   Caption = 'EditForm1'
   ClientHeight = 328
   ClientWidth = 568

@@ -1,4 +1,4 @@
-﻿unit ME.Edit.LocalMap;
+﻿unit ME.Edit.Map;
 
 interface
 
@@ -6,11 +6,11 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
-  FMX.Controls.Presentation, ME.LocalMap, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
+  FMX.Controls.Presentation, ME.DB.Map, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
   ME.Frame.Picture, ME.Frame.MapLevel, FMX.TabControl, ME.Frame.Extraction;
 
 type
-  TedLocalMap = class(TEditForm, IEditDialog<TLocalMap>)
+  TedMap = class(TEditForm, IEditDialog<TMap>)
     edMapName: TEdit;
     edLeft: TNumberBox;
     edTop: TNumberBox;
@@ -25,7 +25,7 @@ type
     tabMapLevel: TTabItem;
     tabExtractions: TTabItem;
   private
-    FLocalMap: TLocalMap;
+    FMap: TMap;
     FPicturePanel: TfrPicture;
     FMapLevelPanel: TfrMapLevel;
     FExtractionPanel: TfrExtraction;
@@ -45,8 +45,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
 
-    procedure SetInstance(const Value: TLocalMap);
-    procedure PostValues(const Value: TLocalMap);
+    procedure SetInstance(const Value: TMap);
+    procedure PostValues(const Value: TMap);
 
     property MapName: string read GetMapName write SetMapName;
     property MapLeft: Integer read GetMapLeft write SetMapLeft;
@@ -60,7 +60,7 @@ implementation
 
 {$R *.fmx}
 
-constructor TedLocalMap.Create(AOwner: TComponent);
+constructor TedMap.Create(AOwner: TComponent);
 begin
   inherited;
 
@@ -80,93 +80,93 @@ begin
   FExtractionPanel.Align := TAlignLayout.Client;
 end;
 
-function TedLocalMap.GetMapName: string;
+function TedMap.GetMapName: string;
 begin
   Result := edMapName.Text;
 end;
 
-procedure TedLocalMap.SetMapName(const Value: string);
+procedure TedMap.SetMapName(const Value: string);
 begin
   edMapName.Text := Value;
 end;
 
-function TedLocalMap.GetMapLeft: Integer;
+function TedMap.GetMapLeft: Integer;
 begin
   Result := Trunc(edLeft.Value);
 end;
 
-procedure TedLocalMap.SetMapLeft(const Value: Integer);
+procedure TedMap.SetMapLeft(const Value: Integer);
 begin
   edLeft.Value := Value;
 end;
 
-function TedLocalMap.GetMapTop: Integer;
+function TedMap.GetMapTop: Integer;
 begin
   Result := Trunc(edTop.Value);
 end;
 
-procedure TedLocalMap.SetMapTop(const Value: Integer);
+procedure TedMap.SetMapTop(const Value: Integer);
 begin
   edTop.Value := Value;
 end;
 
-function TedLocalMap.GetMapRight: Integer;
+function TedMap.GetMapRight: Integer;
 begin
   Result := Trunc(edRight.Value);
 end;
 
-procedure TedLocalMap.SetMapRight(const Value: Integer);
+procedure TedMap.SetMapRight(const Value: Integer);
 begin
   edRight.Value := Value;
 end;
 
-function TedLocalMap.GetMapBottom: Integer;
+function TedMap.GetMapBottom: Integer;
 begin
   Result := Trunc(edBottom.Value);
 end;
 
-procedure TedLocalMap.SetMapBottom(const Value: Integer);
+procedure TedMap.SetMapBottom(const Value: Integer);
 begin
   edBottom.Value := Value;
 end;
 
-function TedLocalMap.GetPicture: TBitmap;
+function TedMap.GetPicture: TBitmap;
 begin
   Result := FPicturePanel.Picture;
 end;
 
-procedure TedLocalMap.SetPicture(const Value: TBitmap);
+procedure TedMap.SetPicture(const Value: TBitmap);
 begin
   FPicturePanel.Picture := Value;
 end;
 
-procedure TedLocalMap.SetInstance(const Value: TLocalMap);
+procedure TedMap.SetInstance(const Value: TMap);
 begin
-  FLocalMap := Value;
+  FMap := Value;
 
-  if FLocalMap.IsNewInstance then
+  if FMap.IsNewInstance then
     Caption := 'Создание новой карты'
   else
-    Caption := '#' + VarToStr(FLocalMap.ID) + '  Редактирование карты "' + FLocalMap.Name + '"';
+    Caption := '#' + VarToStr(FMap.ID) + '  Редактирование карты "' + FMap.Name + '"';
 
-  MapName := FLocalMap.Name;
-  MapLeft := FLocalMap.Left;
-  MapTop := FLocalMap.Top;
-  MapRight := FLocalMap.Right;
-  MapBottom := FLocalMap.Bottom;
-  Picture := FLocalMap.Picture;
+  MapName := FMap.Name;
+  MapLeft := FMap.Left;
+  MapTop := FMap.Top;
+  MapRight := FMap.Right;
+  MapBottom := FMap.Bottom;
+  Picture := FMap.Picture;
 
-  FMapLevelPanel.Init(FLocalMap);
-  FExtractionPanel.Init(FLocalMap);
+  FMapLevelPanel.Init(FMap);
+  FExtractionPanel.Init(FMap);
 end;
 
-procedure TedLocalMap.PostValues(const Value: TLocalMap);
+procedure TedMap.PostValues(const Value: TMap);
 begin
   Value.Name := MapName;
-  FLocalMap.Left := MapLeft;
-  FLocalMap.Top := MapTop;
-  FLocalMap.Right := MapRight;
-  FLocalMap.Bottom := MapBottom;
+  FMap.Left := MapLeft;
+  FMap.Top := MapTop;
+  FMap.Right := MapRight;
+  FMap.Bottom := MapBottom;
   Value.Picture := Picture;
 end;
 

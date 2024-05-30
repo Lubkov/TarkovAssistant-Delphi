@@ -91,7 +91,7 @@ end;
 
 class function TMapLevel.EntityName: string;
 begin
-  Result := 'MapLevel';
+  Result := 'Map';
 end;
 
 class function TMapLevel.FieldList: string;

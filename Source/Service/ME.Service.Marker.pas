@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service, ME.Marker, ME.DAO.Marker;
+  Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service, ME.DB.Marker, ME.DAO.Marker;
 
 type
   TMarkerService = class(TServiceCommon)

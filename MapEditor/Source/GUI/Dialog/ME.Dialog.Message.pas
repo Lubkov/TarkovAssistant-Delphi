@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Objects, FMX.Controls.Presentation, ME.LocalMap, ME.Dialog.Presenter;
+  FMX.Objects, FMX.Controls.Presentation, ME.DB.Map, ME.Dialog.Presenter;
 
 type
   TedMessage = class(TForm, IMessageDialog)

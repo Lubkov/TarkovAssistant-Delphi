@@ -4,7 +4,7 @@ CREATE TABLE Point (
   Y INTEGER NOT NULL  
 );
 
-CREATE TABLE [LocalMap](
+CREATE TABLE [Map](
   [ID] INTEGER PRIMARY KEY, 
   [Name] CHAR(64) NOT NULL, 
   [Picture] BINARY, 
