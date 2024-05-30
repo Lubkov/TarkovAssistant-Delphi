@@ -25,7 +25,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils, ME.PointService;
+  ME.DB.Utils;
 
 { TEditExtractionPresenter }
 

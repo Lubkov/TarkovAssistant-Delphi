@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
   ME.DB.Marker, FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox,
-  ME.Edit.Form.Presenter, ME.Point;
+  ME.Edit.Form.Presenter;
 
 type
   TedExtraction = class(TEditForm, IEditDialog<TMarker>)

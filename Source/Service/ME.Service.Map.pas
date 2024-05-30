@@ -30,7 +30,7 @@ var
 implementation
 
 uses
-  ME.DB.Utils, ME.PointService, ME.Service.Layer, ME.Service.Marker;
+  ME.DB.Utils, ME.Service.Point, ME.Service.Layer, ME.Service.Marker;
 
 { TMapService }
 

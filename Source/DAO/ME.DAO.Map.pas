@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections, Data.DB,
-  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.Point, ME.DB.Map, ME.DB.Layer;
+  MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.DB.Map, ME.DB.Layer;
 
 type
   TMapDAO = class(TDAOCommon)
@@ -100,7 +100,7 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO ' + TLayer.EntityName +
+      ' INSERT INTO ' + TMap.EntityName +
       '   (Name, Left, Top, Right, Bottom, Picture) ' +
       ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
     Query.ParamByName('Name').AsString := Map.Name;
@@ -129,7 +129,7 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' UPDATE ' + TLayer.EntityName +
+      ' UPDATE ' + TMap.EntityName +
       ' SET ' +
       '   Name = :Name, ' +
       '   Left = :Left, ' +
