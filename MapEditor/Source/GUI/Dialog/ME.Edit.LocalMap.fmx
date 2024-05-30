@@ -56,6 +56,7 @@ inherited edLocalMap: TedLocalMap
         Position.X = 360.000000000000000000
         Position.Y = 138.000000000000000000
         HorzIncrement = 0.000000000000000000
+        VertIncrement = 0.000000000000000000
         Size.Width = 90.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
@@ -73,6 +74,7 @@ inherited edLocalMap: TedLocalMap
         Position.X = 256.000000000000000000
         Position.Y = 85.000000000000000000
         HorzIncrement = 0.000000000000000000
+        VertIncrement = 0.000000000000000000
         Size.Width = 90.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
@@ -101,6 +103,7 @@ inherited edLocalMap: TedLocalMap
         Position.X = 256.000000000000000000
         Position.Y = 138.000000000000000000
         HorzIncrement = 0.000000000000000000
+        VertIncrement = 0.000000000000000000
         Size.Width = 90.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False
@@ -118,6 +121,7 @@ inherited edLocalMap: TedLocalMap
         Position.X = 360.000000000000000000
         Position.Y = 85.000000000000000000
         HorzIncrement = 0.000000000000000000
+        VertIncrement = 0.000000000000000000
         Size.Width = 90.000000000000000000
         Size.Height = 22.000000000000000000
         Size.PlatformDefault = False

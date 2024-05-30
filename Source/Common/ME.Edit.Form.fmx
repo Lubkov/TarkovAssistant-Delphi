@@ -41,7 +41,7 @@ object EditForm: TEditForm
         Size.Width = 100.000000000000000000
         Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 0
+        TabOrder = 1
         TextSettings.Font.Family = 'Tahoma'
       end
       object buSuccess: TButton
@@ -59,7 +59,7 @@ object EditForm: TEditForm
         Size.Width = 100.000000000000000000
         Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 1
+        TabOrder = 0
         TextSettings.Font.Family = 'Tahoma'
       end
     end
