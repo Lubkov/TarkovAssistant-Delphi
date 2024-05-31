@@ -13,6 +13,7 @@ type
     FDAO: TDAOCommon;
 
     function GetConnection: TUniConnection;
+    function GetInTransaction: Boolean;
   protected
     function GetDAOClass: TDAOClass; virtual; abstract;
   public
@@ -37,6 +38,7 @@ type
 
     property Connection: TUniConnection read GetConnection;
     property DAO: TDAOCommon read FDAO;
+    property InTransaction: Boolean read GetInTransaction;
   end;
 
 implementation
@@ -64,6 +66,11 @@ end;
 function TServiceCommon.GetConnection: TUniConnection;
 begin
   Result := TUniConnection(FConnection);
+end;
+
+function TServiceCommon.GetInTransaction: Boolean;
+begin
+  Result := Connection.InTransaction;
 end;
 
 function TServiceCommon.GetAt(ID: Integer; const Entity: TEntity): Boolean;
