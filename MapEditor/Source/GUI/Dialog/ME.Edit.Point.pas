@@ -1,4 +1,4 @@
-unit ME.Edit.Point;
+﻿unit ME.Edit.Point;
 
 interface
 
