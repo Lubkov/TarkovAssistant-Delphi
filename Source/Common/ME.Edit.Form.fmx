@@ -9,6 +9,7 @@ object EditForm: TEditForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnKeyDown = FormKeyDown
   DesignerMasterStyle = 0
   object paBottom: TPanel
     Align = Bottom
