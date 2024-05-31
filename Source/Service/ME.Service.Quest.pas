@@ -11,6 +11,8 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
+    procedure Insert(const Entity: TEntity); override;
+
     procedure LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
     procedure LoadParts(const QuestID: Variant; const Items: TList<TPoint>);
   end;
@@ -28,6 +30,34 @@ uses
 function TQuestService.GetDAOClass: TDAOClass;
 begin
   Result := TQuestDAO;
+end;
+
+procedure TQuestService.Insert(const Entity: TEntity);
+var
+  Quest: TQuest;
+  Part: TPoint;
+  TranStarted: Boolean;
+begin
+  Quest := TQuest(Entity);
+  TranStarted := InTransaction;
+
+  if not TranStarted then
+    StartTransaction;
+  try
+    DAO.Insert(Quest);
+
+    for Part in Quest.Parts do begin
+      Part.QuestID := Quest.ID;
+      PointService.Insert(Part);
+    end;
+
+    if not TranStarted then
+      CommitTransaction;
+  except
+    if not TranStarted then
+      RollbackTransaction;
+    raise;
+  end;
 end;
 
 procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TQuest>);

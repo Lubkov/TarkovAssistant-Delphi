@@ -56,7 +56,6 @@ var
   Layer: TLayer;
   Marker: TMarker;
   Quest: TQuest;
-  Point: TPoint;
 begin
   Map := TMap(Entity);
 
@@ -77,11 +76,6 @@ begin
     for Quest in Map.Quests do begin
       Quest.MapID := Map.ID;
       QuestService.Insert(Quest);
-
-      for Point in Quest.Parts do begin
-        Point.QuestID := Quest.ID;
-        PointService.Insert(Point);
-      end;
     end;
 
     CommitTransaction;

@@ -17,7 +17,6 @@ type
     edDeletePoint: TSpeedButton;
     laTitle: TLabel;
     Grid: TGrid;
-    Column1: TColumn;
     ActionList1: TActionList;
     acAddPoint: TAction;
     acEditPoint: TAction;
@@ -25,6 +24,7 @@ type
     ImageList1: TImageList;
     IntegerColumn1: TIntegerColumn;
     IntegerColumn2: TIntegerColumn;
+    IDColumn: TIntegerColumn;
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer;
       var Value: TValue);
     procedure GridSelChanged(Sender: TObject);

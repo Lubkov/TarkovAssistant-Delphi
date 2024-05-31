@@ -18,12 +18,12 @@ type
     laTitle: TLabel;
     Grid: TGrid;
     Column1: TColumn;
-    StringColumn1: TStringColumn;
     ActionList1: TActionList;
     acAddQuest: TAction;
     acEditQuest: TAction;
     acDeleteQuest: TAction;
     ImageList1: TImageList;
+    StringColumn1: TStringColumn;
     procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer;
       var Value: TValue);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
