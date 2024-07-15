@@ -7,13 +7,17 @@ uses
   System.IOUtils, Generics.Collections, FMX.Types, FMX.Controls, FMX.Forms,
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
-  ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData;
+  ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
+  ME.Frame.ResourcesGrid;
 
 type
   TMainForm = class(TForm)
+    MainContainer: TTabControl;
+    GeneralTab: TTabItem;
+    QuestItemsTab: TTabItem;
+    TopLayout: TLayout;
     Panel1: TPanel;
     buExpot: TButton;
-    TopLayout: TLayout;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure buExpotClick(Sender: TObject);
@@ -22,6 +26,7 @@ type
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
+    FResourcesGrid: TDBResourcesGrid;
   public
   end;
 
@@ -59,13 +64,20 @@ begin
   FMapFilter.OnMapChanged := MapChanged;
 
   FMapData := TfrMapData.Create(Self);
-  FMapData.Parent := Self;
+  FMapData.Parent := GeneralTab;
   FMapData.Align := TAlignLayout.Client;
+
+  FResourcesGrid := TDBResourcesGrid.Create(Self);
+  FResourcesGrid.Parent := QuestItemsTab;
+  FResourcesGrid.Align := TAlignLayout.Client;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
+  AppService.ConnectToDB;
+
   FMapFilter.Init;
+  FResourcesGrid.Init;
 //  FMapPanel.Init;
 end;
 

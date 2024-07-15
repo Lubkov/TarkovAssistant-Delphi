@@ -68,6 +68,11 @@ end;
 procedure TfrPicture.SetPicture(const Value: TBitmap);
 begin
   edPicture.Bitmap.Assign(Value);
+  if (Value <> nil) and not Value.IsEmpty then
+    if (Value.Height < edPicture.Height) and (Value.Width < edPicture.Width) then
+      edPicture.WrapMode := TImageWrapMode.Center
+    else
+      edPicture.WrapMode := TImageWrapMode.Fit;
 end;
 
 function TfrPicture.GetTitle: string;

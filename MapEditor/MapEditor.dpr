@@ -56,7 +56,13 @@ uses
   ME.Frame.Resource in 'Source\GUI\Frame\ME.Frame.Resource.pas' {ResourcesGrid: TFrame},
   ME.Edit.Resource in 'Source\GUI\Dialog\ME.Edit.Resource.pas' {edResource},
   ME.Presenter.Resource in 'Source\GUI\ME.Presenter.Resource.pas',
-  ME.Frame.QuestItem in 'Source\GUI\Frame\ME.Frame.QuestItem.pas' {QuestItemsGrid: TFrame};
+  ME.Frame.QuestItem in 'Source\GUI\Frame\ME.Frame.QuestItem.pas' {QuestItemsGrid: TFrame},
+  ME.DB.Resource in '..\Source\Entity\ME.DB.Resource.pas',
+  ME.DAO.Resource in '..\Source\DAO\ME.DAO.Resource.pas',
+  ME.Service.Resource in '..\Source\Service\ME.Service.Resource.pas',
+  ME.Frame.ResourcesGrid in 'Source\GUI\Frame\ME.Frame.ResourcesGrid.pas' {DBResourcesGrid: TFrame},
+  ME.DB.Edit.Resource in 'Source\GUI\Dialog\ME.DB.Edit.Resource.pas' {edDBResource},
+  ME.DB.Presenter.Resource in 'Source\GUI\ME.DB.Presenter.Resource.pas';
 
 {$R *.res}
 

@@ -3,17 +3,22 @@ unit App.Service;
 interface
 
 uses
-  System.SysUtils, System.Variants, System.Classes, System.IOUtils;
+  System.SysUtils, System.Variants, System.Classes, System.IOUtils,
+  App.SQLite.Connection;
 
 type
   TAppService = class(TComponent)
   private
+    FDBConnection: TSQLiteConnection;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
     procedure LoadParams;
     procedure LoadDataFromJSON;
+    procedure ConnectToDB;
+
+    property DBConnection: TSQLiteConnection read FDBConnection;
   end;
 
 var
@@ -22,7 +27,7 @@ var
 implementation
 
 uses
-  App.Constants, Map.Data.Service;
+  App.Constants, Map.Data.Service, ME.Service.Resource;
 
 { TAppService }
 
@@ -31,11 +36,18 @@ begin
   inherited;
 
   DataService := TDataService.Create;
+
+  // DB layer
+  FDBConnection := TSQLiteConnection.Create(Self);
+  ResourceService := TResourceService.Create(DBConnection.Connection);
 end;
 
 destructor TAppService.Destroy;
 begin
   DataService.Free;
+
+  ResourceService.Free;
+  FDBConnection.Free;
 
   inherited;
 end;
@@ -51,6 +63,17 @@ var
 begin
   FileName := TPath.Combine(AppParams.DataPath, 'data.json');
   DataService.Load(FileName);
+end;
+
+procedure TAppService.ConnectToDB;
+const
+  Database = 'data.db';
+var
+  FileName: string;
+begin
+  FileName := TPath.Combine(AppParams.DataPath, Database);
+  FDBConnection.Database := FileName;
+  FDBConnection.Connect;
 end;
 
 end.
