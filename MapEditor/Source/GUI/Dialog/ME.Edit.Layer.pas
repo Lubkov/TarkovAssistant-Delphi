@@ -7,10 +7,10 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation, FMX.Objects,
   FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.ImgList, System.ImageList,
-  ME.Edit.Form.Presenter, ME.Frame.Picture, Map.Data.Types, FMX.Layouts;
+  ME.Edit.Form.Presenter, ME.Frame.Picture, ME.DB.Layer, FMX.Layouts;
 
 type
-  TedLayer = class(TEditForm, IEditDialog<TLayer>)
+  TedLayer = class(TEditForm, IEditDialog<TDBLayer>)
     paPicture: TPanel;
     Layout1: TLayout;
     edLevelName: TEdit;
@@ -18,7 +18,7 @@ type
     laLayerLevel: TLabel;
     laLayerName: TLabel;
   private
-    FLayer: TLayer;
+    FLayer: TDBLayer;
     FPicturePanel: TfrPicture;
 
     function GetLevel: Integer;
@@ -30,8 +30,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
 
-    procedure SetInstance(const Value: TLayer);
-    procedure PostValues(const Value: TLayer);
+    procedure SetInstance(const Value: TDBLayer);
+    procedure PostValues(const Value: TDBLayer);
 
     property Level: Integer read GetLevel write SetLevel;
     property LevelName: string read GetLevelName write SetLevelName;
@@ -41,9 +41,6 @@ type
 implementation
 
 {$R *.fmx}
-
-uses
-  Map.Data.Service;
 
 constructor TedLayer.Create(AOwner: TComponent);
 begin
@@ -84,7 +81,7 @@ begin
   FPicturePanel.Picture := Value;
 end;
 
-procedure TedLayer.SetInstance(const Value: TLayer);
+procedure TedLayer.SetInstance(const Value: TDBLayer);
 begin
   FLayer := Value;
 
@@ -94,18 +91,17 @@ begin
     Caption := 'Редактирование уровня карты';
 
   Level := FLayer.Level;
-  LevelName := FLayer.Caption;
-
-  DataService.LoadImage(FLayer, Picture);
+  LevelName := FLayer.Name;
+  Picture := FLayer.Picture;
 end;
 
-procedure TedLayer.PostValues(const Value: TLayer);
+procedure TedLayer.PostValues(const Value: TDBLayer);
 begin
   Value.Level := Level;
-  Value.Caption := LevelName;
+  Value.Name := LevelName;
 
   if FPicturePanel.Changed then
-    DataService.SaveImage(Value, Picture);
+    Value.Picture := Picture;
 end;
 
 end.

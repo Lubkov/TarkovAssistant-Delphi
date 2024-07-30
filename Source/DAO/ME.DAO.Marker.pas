@@ -14,7 +14,7 @@ type
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
     procedure GetAll(const Items: TList<TEntity>); override;
-    procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+    procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -30,7 +30,7 @@ const
     '     t.ID as ID, ' +
     '     t.MapID as MapID, ' +
     '     t.QuestID as QuestID, ' +
-    '     t.Name as Name, ' +
+    '     t.Caption as Caption, ' +
     '     t.Kind as Kind, ' +
     '     t.Left as Left, ' +
     '     t.Top as Top ' +
@@ -41,7 +41,7 @@ const
 
 function TMarkerDAO.EntityClass: TEntityClass;
 begin
-  Result := TMarker;
+  Result := TDBMarker;
 end;
 
 function TMarkerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
@@ -91,12 +91,12 @@ begin
   end;
 end;
 
-procedure TMarkerDAO.LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+procedure TMarkerDAO.LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
 //const
 //  Filter = ' WHERE (t.MapID = :MapID) ';
 var
   Query: TUniQuery;
-  Entity: TMarker;
+  Entity: TDBMarker;
   Filter: string;
 begin
   Filter := ' WHERE (t.MapID = :MapID) ';
@@ -117,7 +117,7 @@ begin
     Query.Open;
 
     while not Query.Eof do begin
-      Entity := TMarker.Create;
+      Entity := TDBMarker.Create;
       try
         Entity.Assign(Query);
       finally
@@ -133,19 +133,19 @@ end;
 procedure TMarkerDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Marker: TMarker;
+  Marker: TDBMarker;
 begin
-  Marker := TMarker(Entity);
+  Marker := TDBMarker(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO Marker (MapID, QuestID, Name, Kind, Left, Top) ' +
-      ' VALUES (:MapID, :QuestID, :Name, :Kind, :Left, :Top) ';
+      ' INSERT INTO Marker (MapID, QuestID, Caption, Kind, Left, Top) ' +
+      ' VALUES (:MapID, :QuestID, :Caption, :Kind, :Left, :Top) ';
     Query.ParamByName('MapID').Value := Marker.MapID;
     Query.ParamByName('QuestID').Value := Marker.QuestID;
-    Query.ParamByName('Name').AsString := Marker.Name;
+    Query.ParamByName('Caption').AsString := Marker.Caption;
     Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
     Query.ParamByName('Left').AsInteger := Marker.Left;
     Query.ParamByName('Top').AsInteger := Marker.Top;
@@ -159,9 +159,9 @@ end;
 procedure TMarkerDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Marker: TMarker;
+  Marker: TDBMarker;
 begin
-  Marker := TMarker(Entity);
+  Marker := TDBMarker(Entity);
 
   Query := TUniQuery.Create(nil);
   try
@@ -171,7 +171,7 @@ begin
       ' SET ' +
       '   MapID = :MapID, ' +
       '   QuestID = :QuestID, ' +
-      '   Name = :Name, ' +
+      '   Caption = :Caption, ' +
       '   Kind = :Kind, ' +
       '   Left = :Left, ' +
       '   Top = :Top ' +
@@ -179,7 +179,7 @@ begin
     Query.ParamByName('ID').Value := Marker.ID;
     Query.ParamByName('MapID').Value := Marker.MapID;
     Query.ParamByName('QuestID').Value := Marker.QuestID;
-    Query.ParamByName('Name').AsString := Marker.Name;
+    Query.ParamByName('Caption').AsString := Marker.Caption;
     Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
     Query.ParamByName('Left').AsInteger := Marker.Left;
     Query.ParamByName('Top').AsInteger := Marker.Top;

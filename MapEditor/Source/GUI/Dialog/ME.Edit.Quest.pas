@@ -6,18 +6,17 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   System.Actions, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.ActnList, FMX.Controls.Presentation, FMX.Edit, FMX.ListBox,
-  FMX.Layouts, ME.Edit.Form, ME.Edit.Form.Presenter, Map.Data.Types;
+  FMX.Layouts, ME.Edit.Form, ME.Edit.Form.Presenter, ME.DB.Quest;
 
 type
-  TedQuest = class(TEditForm, IEditDialog<TQuest>)
+  TedQuest = class(TEditForm, IEditDialog<TDBQuest>)
     MainLayout: TLayout;
     laQuestName: TLabel;
     edQuestName: TEdit;
     laTraderName: TLabel;
     edTraderName: TComboBox;
   private
-    FMap: TMap;
-    FQuest: TQuest;
+    FQuest: TDBQuest;
 
     function GetQuestName: string;
     procedure SetQuestName(const Value: string);
@@ -27,10 +26,9 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure SetInstance(const Value: TQuest);
-    procedure PostValues(const Value: TQuest);
+    procedure SetInstance(const Value: TDBQuest);
+    procedure PostValues(const Value: TDBQuest);
 
-    property Map: TMap read FMap write FMap;
     property QuestName: string read GetQuestName write SetQuestName;
     property TraderName: TTrader read GetTraderName write SetTraderName;
   end;
@@ -47,17 +45,15 @@ var
 begin
   inherited;
 
-  FMap := nil;
   FQuest := nil;
 
   edTraderName.Clear;
   for Trader := TTrader.Prapor to TTrader.Lightkeeper do
-    edTraderName.Items.Add(TQuest.TraderToStr(Trader));
+    edTraderName.Items.Add(TDBQuest.TraderToStr(Trader));
 end;
 
 destructor TedQuest.Destroy;
 begin
-  FMap := nil;
   FQuest := nil;
 
   inherited;
@@ -86,7 +82,7 @@ begin
   edTraderName.ItemIndex := Ord(Value) - 1;
 end;
 
-procedure TedQuest.SetInstance(const Value: TQuest);
+procedure TedQuest.SetInstance(const Value: TDBQuest);
 begin
   FQuest := Value;
 
@@ -95,13 +91,13 @@ begin
   else
     Caption := 'Редактирование квеста';
 
-  QuestName := FQuest.Caption;
+  QuestName := FQuest.Name;
   TraderName := FQuest.Trader;
 end;
 
-procedure TedQuest.PostValues(const Value: TQuest);
+procedure TedQuest.PostValues(const Value: TDBQuest);
 begin
-  Value.Caption := QuestName;
+  Value.Name := QuestName;
   Value.Trader := TraderName;
 end;
 

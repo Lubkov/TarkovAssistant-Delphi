@@ -128,17 +128,20 @@ end;
 
 procedure TServiceCommon.StartTransaction;
 begin
-  Connection.StartTransaction;
+  if not Connection.InTransaction then
+    Connection.StartTransaction;
 end;
 
 procedure TServiceCommon.CommitTransaction;
 begin
-  Connection.Commit;
+  if Connection.InTransaction then
+    Connection.Commit;
 end;
 
 procedure TServiceCommon.RollbackTransaction;
 begin
-  Connection.Rollback;
+  if Connection.InTransaction then
+    Connection.Rollback;
 end;
 
 end.

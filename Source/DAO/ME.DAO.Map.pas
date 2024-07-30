@@ -27,7 +27,7 @@ const
   SqlSelectCommandText =
     ' SELECT ' +
     '     m.ID as ID, ' +
-    '     m.Name as Name, ' +
+    '     m.Caption as Caption, ' +
     '     m.Left as Left, ' +
     '     m.Top as Top, ' +
     '     m.Right as Right, ' +
@@ -40,7 +40,7 @@ const
 
 function TMapDAO.EntityClass: TEntityClass;
 begin
-  Result := TMap;
+  Result := TDBMap;
 end;
 
 function TMapDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
@@ -91,19 +91,19 @@ end;
 procedure TMapDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Map: TMap;
+  Map: TDBMap;
   Param: TParam;
 begin
-  Map := TMap(Entity);
+  Map := TDBMap(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO ' + TMap.EntityName +
-      '   (Name, Left, Top, Right, Bottom, Picture) ' +
-      ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
-    Query.ParamByName('Name').AsString := Map.Name;
+      ' INSERT INTO ' + TDBMap.EntityName +
+      '   (Caption, Left, Top, Right, Bottom, Picture) ' +
+      ' VALUES (:Caption, :Left, :Top, :Right, :Bottom, :Picture) ';
+    Query.ParamByName('Caption').AsString := Map.Caption;
     Query.ParamByName('Left').AsInteger := Map.Left;
     Query.ParamByName('Top').AsInteger := Map.Top;
     Query.ParamByName('Right').AsInteger := Map.Right;
@@ -121,17 +121,17 @@ end;
 procedure TMapDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Map: TMap;
+  Map: TDBMap;
 begin
-  Map := TMap(Entity);
+  Map := TDBMap(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' UPDATE ' + TMap.EntityName +
+      ' UPDATE ' + TDBMap.EntityName +
       ' SET ' +
-      '   Name = :Name, ' +
+      '   Caption = :Caption, ' +
       '   Left = :Left, ' +
       '   Top = :Top, ' +
       '   Right = :Right, ' +
@@ -139,7 +139,7 @@ begin
       '   Picture = :Picture ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := Map.ID;
-    Query.ParamByName('Name').AsString := Map.Name;
+    Query.ParamByName('Caption').AsString := Map.Caption;
     Query.ParamByName('Left').AsInteger := Map.Left;
     Query.ParamByName('Top').AsInteger := Map.Top;
     Query.ParamByName('Right').AsInteger := Map.Right;
@@ -154,38 +154,38 @@ end;
 procedure TMapDAO.LoadLayers(const Entity: TEntity; LoadPicture: Boolean);
 const
   PictureFileName = 'Picture';
-var
-  Query: TUniQuery;
-  Map: TMap;
-  Level: TLayer;
-  FieldNames: string;
+//var
+//  Query: TUniQuery;
+//  Map: TDBMap;
+//  Level: TDBLayer;
+//  FieldNames: string;
 begin
-  Map := TMap(Entity);
-  FieldNames := TLayer.FieldList;
-  if LoadPicture then
-    FieldNames := FieldNames + ', ' + PictureFileName;
-
-  Query := TUniQuery.Create(nil);
-  try
-    Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM ' + TLayer.EntityName + ' WHERE MapID = :MapID';
-    Query.ParamByName('MapID').Value := Entity.ID;
-    Query.Open;
-
-    Map.ClearLevelList;
-    while not Query.Eof do begin
-      Level := TLayer.Create;
-      try
-        Level.Assign(Query);
-      finally
-        Map.Layers.Add(Level);
-      end;
-
-      Query.Next;
-    end;
-  finally
-    Query.Free;
-  end;
+//  Map := TDBMap(Entity);
+//  FieldNames := TDBLayer.FieldList;
+//  if LoadPicture then
+//    FieldNames := FieldNames + ', ' + PictureFileName;
+//
+//  Query := TUniQuery.Create(nil);
+//  try
+//    Query.Connection := Connection;
+//    Query.SQL.Text := 'SELECT ' + FieldNames + ' FROM ' + TDBLayer.EntityName + ' WHERE MapID = :MapID';
+//    Query.ParamByName('MapID').Value := Entity.ID;
+//    Query.Open;
+//
+//    Map.ClearLevelList;
+//    while not Query.Eof do begin
+//      Level := TDBLayer.Create;
+//      try
+//        Level.Assign(Query);
+//      finally
+//        Map.Layers.Add(Level);
+//      end;
+//
+//      Query.Next;
+//    end;
+//  finally
+//    Query.Free;
+//  end;
 end;
 
 procedure TMapDAO.RemoveLayers(const MapID: Variant);
@@ -195,7 +195,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'DELETE FROM ' + TLayer.EntityName + ' WHERE MapID = :MapID';
+    Query.SQL.Text := 'DELETE FROM ' + TDBLayer.EntityName + ' WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := MapID;
     Query.Execute;
   finally

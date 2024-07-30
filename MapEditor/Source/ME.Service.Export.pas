@@ -110,9 +110,9 @@ begin
         JSONObject.AddPair('right', Map.Right.ToString);
         JSONObject.AddPair('bottom', Map.Bottom.ToString);
 
-        ExportLayers(JSONObject, Map.Layers);
-        ExportMarkers(JSONObject, Map.Tags);
-        ExportQuests(JSONObject, Map.Quests);
+//        ExportLayers(JSONObject, Map.Layers);
+//        ExportMarkers(JSONObject, Map.Tags);
+//        ExportQuests(JSONObject, Map.Quests);
 
         Root.Add(JSONObject);
       end;

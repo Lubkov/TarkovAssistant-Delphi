@@ -365,7 +365,6 @@
         <DCCReference Include="..\Source\Common\App.DB.Connection.pas"/>
         <DCCReference Include="..\Source\Common\App.SQLite.Connection.pas"/>
         <DCCReference Include="..\Source\Common\App.Service.pas"/>
-        <DCCReference Include="Source\ME.Service.Export.pas"/>
         <DCCReference Include="..\Source\Data\Map.Data.Classes.pas"/>
         <DCCReference Include="..\Source\Data\Map.Data.Service.pas"/>
         <DCCReference Include="..\Source\Data\Map.Data.Types.pas"/>
@@ -398,7 +397,7 @@
         <DCCReference Include="..\Source\Entity\ME.DB.Resource.pas"/>
         <DCCReference Include="..\Source\DAO\ME.DAO.Resource.pas"/>
         <DCCReference Include="..\Source\Service\ME.Service.Resource.pas"/>
-        <DCCReference Include="Source\GUI\Frame\ME.Frame.ResourcesGrid.pas">
+        <DCCReference Include="Source\GUI\Frame\ME.Grid.Resources.pas">
             <Form>DBResourcesGrid</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
@@ -408,6 +407,14 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.DB.Presenter.Resource.pas"/>
+        <DCCReference Include="..\Source\Entity\ME.DB.QuestItem.pas"/>
+        <DCCReference Include="..\Source\DAO\ME.DAO.QuestItem.pas"/>
+        <DCCReference Include="..\Source\Service\ME.Service.QuestItem.pas"/>
+        <DCCReference Include="Source\GUI\Frame\ME.MemGrid.Resources.pas">
+            <Form>ResourcesMemGrid</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

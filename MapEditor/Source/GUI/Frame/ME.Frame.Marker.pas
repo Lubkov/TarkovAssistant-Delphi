@@ -7,7 +7,9 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
-  FMX.ScrollBox, Map.Data.Types;
+  FMX.ScrollBox, ME.DB.Marker, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope;
 
 type
   TfrMarkerGrid = class(TFrame)
@@ -20,44 +22,40 @@ type
     edEditExtraction: TSpeedButton;
     edDeleteExtraction: TSpeedButton;
     laTitle: TLabel;
-    Grid: TGrid;
-    StringColumn1: TStringColumn;
-    IntegerColumn1: TIntegerColumn;
-    StringColumn2: TStringColumn;
-    IntegerColumn2: TIntegerColumn;
     ImageList1: TImageList;
-
-    procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
+    F: TUniQuery;
+    FID: TIntegerField;
+    FCaption: TWideStringField;
+    FKind: TIntegerField;
+    FLeft: TIntegerField;
+    FTop: TIntegerField;
+    FKindName: TWideStringField;
+    BindSourceDB1: TBindSourceDB;
+    Grid: TStringGrid;
+    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
+    BindingsList1: TBindingsList;
     procedure acAddExtractionExecute(Sender: TObject);
     procedure acEditExtractionExecute(Sender: TObject);
-    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acDeleteExtractionExecute(Sender: TObject);
+    procedure FCalcFields(DataSet: TDataSet);
   private
-    FMap: TMap;
-    FFocusedIndex: Integer;
+    FMapID: Variant;
 
-    function GetCount: Integer;
-    function GetItem(Index: Integer): TMarker;
-    function InternalExtractionEdit(const Marker: TMarker): Boolean;
+    function InternalExtractionEdit(const Marker: TDBMarker): Boolean;
     procedure ExtractionEdit(const Index: Integer);
-    function GetFocusedIndex: Integer;
-    procedure SetFocusedIndex(const Value: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const Map: TMap);
-
-    property Count: Integer read GetCount;
-    property Items[Index: Integer]: TMarker read GetItem;
-    property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
+    procedure Init(const MapID: Variant);
   end;
 
 implementation
 
 uses
-  ME.Service.Marker, ME.Presenter.Marker, ME.Edit.Marker, ME.Dialog.Message;
+  App.Service, ME.DB.Utils, ME.Service.Marker, ME.Presenter.Marker, ME.Edit.Marker,
+  ME.Dialog.Message;
 
 {$R *.fmx}
 
@@ -65,7 +63,8 @@ constructor TfrMarkerGrid.Create(AOwner: TComponent);
 begin
   inherited;
 
-  Grid.RowCount := 0;
+  FMapID := Null;
+//  Grid.RowCount := 0;
 end;
 
 destructor TfrMarkerGrid.Destroy;
@@ -74,24 +73,33 @@ begin
   inherited;
 end;
 
-function TfrMarkerGrid.GetCount: Integer;
+procedure TfrMarkerGrid.Init(const MapID: Variant);
 begin
-  Result := FMap.Markers.Count;
+  FMapID := MapID;
+
+  F.Close;
+  F.Connection := AppService.DBConnection.Connection;
+  F.SQL.Text :=
+    ' SELECT ' + TDBMarker.FieldList +
+    ' FROM ' + TDBMarker.EntityName +
+    ' WHERE (MapID = :MapID)' +
+    '      AND (Kind in (0, 1, 2))';
+  F.ParamByName('MapID').Value := MapID;
+  F.Open;
 end;
 
-function TfrMarkerGrid.GetItem(Index: Integer): TMarker;
+procedure TfrMarkerGrid.FCalcFields(DataSet: TDataSet);
 begin
-  Result := FMap.Markers[Index];
+  FKindName.AsString := TDBMarker.KindToStr(TMarkerKind(FKind.AsInteger));
 end;
 
-function TfrMarkerGrid.InternalExtractionEdit(const Marker: TMarker): Boolean;
+function TfrMarkerGrid.InternalExtractionEdit(const Marker: TDBMarker): Boolean;
 var
   Presenter: TEditMarkerPresenter;
   Dialog: TedMarker;
 begin
   Dialog := TedMarker.Create(Self);
   try
-    Dialog.Map := FMap;
     Presenter := TEditMarkerPresenter.Create(Dialog, Marker);
     try
       Result := Presenter.Edit;
@@ -105,95 +113,46 @@ end;
 
 procedure TfrMarkerGrid.ExtractionEdit(const Index: Integer);
 var
-  Marker: TMarker;
+  Marker: TDBMarker;
 begin
-  if (Index < 0) or (Index >= Count) then
-    Exit;
-
-  Marker := Items[Index];
-  Grid.BeginUpdate;
+  Marker := TDBMarker.Create;
   try
-    InternalExtractionEdit(Marker);
+    if not MarkerService.GetAt(FID.Value, Marker) then
+      Exit;
+
+    if InternalExtractionEdit(Marker) then
+      F.RefreshRecord;
   finally
-    Grid.EndUpdate;
+    Marker.Free;
   end;
-end;
-
-function TfrMarkerGrid.GetFocusedIndex: Integer;
-begin
-  if (FMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
-    Result := -1
-  else
-    Result := Grid.Selected;
-end;
-
-procedure TfrMarkerGrid.SetFocusedIndex(const Value: Integer);
-begin
-  if FFocusedIndex <> Value then
-    FFocusedIndex := Value;
-end;
-
-procedure TfrMarkerGrid.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
-const
-  ColumnNameIdx = 0;
-  ColumnKindIdx = 1;
-  ColumnLeftIdx = 2;
-  ColumnTopIdx = 3;
-begin
-  if Count <= ARow then
-    Exit;
-
-  case ACol of
-    ColumnNameIdx:
-      Value := VarToStr(Items[ARow].Caption);
-    ColumnKindIdx:
-      Value := TMarker.KindToStr(Items[ARow].Kind);
-    ColumnLeftIdx:
-      Value := Items[ARow].Left;
-    ColumnTopIdx:
-      Value := Items[ARow].Top;
-  end;
-end;
-
-procedure TfrMarkerGrid.Init(const Map: TMap);
-begin
-  FMap := Map;
-
-  Grid.BeginUpdate;
-  try
-    Grid.RowCount := Count;
-  finally
-    Grid.EndUpdate;
-  end;
-
-  if Count > 0 then
-    Grid.Selected := 0;
 end;
 
 procedure TfrMarkerGrid.acAddExtractionExecute(Sender: TObject);
 var
-  Marker: TMarker;
+  Marker: TDBMarker;
   Res: Boolean;
 begin
-  Res := False;
-  Marker := TMarker.Create;
+  Marker := TDBMarker.Create;
   try
-//    Marker.MapID := FMap.ID;
+    Marker.MapID := FMapID;
 
+//    MarkerService.Insert(Marker);
     Res := InternalExtractionEdit(Marker);
-    if Res then begin
-      FMap.Markers.Add(Marker);
+    if not Res then
+      Exit;
 
-      Grid.BeginUpdate;
-      try
-        Grid.RowCount := Count;
-      finally
-        Grid.EndUpdate;
-      end;
+    F.DisableControls;
+    try
+      F.Refresh;
+      F.Last;
+    finally
+      F.EnableControls;
     end;
   finally
-    if not Res then
-      Marker.Free;
+//    if not Res then
+//      MarkerService.Remove(Marker.ID);
+
+    Marker.Free;
   end;
 end;
 
@@ -204,30 +163,32 @@ end;
 
 procedure TfrMarkerGrid.acDeleteExtractionExecute(Sender: TObject);
 var
-  Marker: TMarker;
+  Marker: TDBMarker;
   Presenter: TDelMarkerPresenter;
   Dialog: TedMessage;
-  Res: Boolean;
 begin
-  if (Grid.Selected < 0) or (Grid.Selected >= Count) then
+  if IsNullID(FID.Value) then
     Exit;
 
-  Res := False;
-  Marker := Items[Grid.Selected];
+  Marker := TDBMarker.Create;
   try
+    Marker.ID := FID.Value;
+    Marker.MapID := FMapID;
+    Marker.Caption := FCaption.AsString;
+    Marker.Kind := TMarkerKind(FKind.AsInteger);
+
     Dialog := TedMessage.Create(Self);
     try
       Presenter := TDelMarkerPresenter.Create(Dialog, Marker);
       try
-        Res := Presenter.Delete;
-        if Res then begin
-          Grid.BeginUpdate;
-          try
-            FMap.Markers.Delete(Grid.Selected);
-            Grid.RowCount := Count;
-          finally
-            Grid.EndUpdate;
-          end;
+        if not Presenter.Delete then
+          Exit;
+
+        F.DisableControls;
+        try
+          F.Refresh;
+        finally
+          F.EnableControls;
         end;
       finally
         Presenter.Free;
@@ -236,21 +197,15 @@ begin
       Dialog.Free;
     end;
   finally
-    if Res then
-      Marker.Free;
+    Marker.Free;
   end;
-end;
-
-procedure TfrMarkerGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
-begin
-  ExtractionEdit(Row);
 end;
 
 procedure TfrMarkerGrid.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acAddExtraction.Enabled := FMap <> nil;
-  acEditExtraction.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
-  acDeleteExtraction.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
+  acAddExtraction.Enabled := not IsNullID(FMapID);
+  acEditExtraction.Enabled := acAddExtraction.Enabled and not IsNullID(FID.Value);
+  acDeleteExtraction.Enabled := acAddExtraction.Enabled and not IsNullID(FID.Value);
 end;
 
 end.

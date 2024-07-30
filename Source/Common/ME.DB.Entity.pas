@@ -8,12 +8,14 @@ uses
 
 type
   TEntityClass = class of TEntity;
+//  TRecordState = (New, Managed, Removed);
 
   TEntity = class(TObject)
   private
     function GetIsNewInstance: Boolean;
   protected
     FID: Variant;
+//    FRecordState: TRecordState;
   public
     constructor Create; virtual;
     destructor Destroy; override;
@@ -28,6 +30,7 @@ type
     class function FieldList: string; virtual; abstract;
 
     property ID: Variant read FID write FID;
+//    property RecordState: TRecordState read FRecordState write FRecordState;
     property IsNewInstance: Boolean read GetIsNewInstance;
   end;
 
@@ -40,6 +43,7 @@ begin
   inherited;
 
   FID := Null;
+//  FRecordState := TRecordState.New;
 end;
 
 destructor TEntity.Destroy;

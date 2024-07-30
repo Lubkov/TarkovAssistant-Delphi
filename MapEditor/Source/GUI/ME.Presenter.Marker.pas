@@ -4,11 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
-  Map.Data.Types;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Marker, ME.DB.Resource;
 
 type
-  TEditMarkerPresenter = class(TEditFormPresenter<TMarker>)
+  TEditMarkerPresenter = class(TEditFormPresenter<TDBMarker>)
   private
   protected
     procedure InternalSave; override;
@@ -16,7 +15,7 @@ type
   public
   end;
 
-  TDelMarkerPresenter = class(TDelFormPresenter<TMarker>)
+  TDelMarkerPresenter = class(TDelFormPresenter<TDBMarker>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -25,15 +24,25 @@ type
 implementation
 
 uses
-  ME.DB.Utils;
+  ME.Service.Marker, ME.Service.Resource;
 
 { TEditMarkerPresenter }
 
 procedure TEditMarkerPresenter.InternalSave;
+var
+  IsNewInstance: Boolean;
+  Resource: TDBResource;
 begin
-//  if not IsNullID(Instance.MapID) then begin
-//    MarkerService.Save(Instance);
-//  end;
+  inherited;
+
+  IsNewInstance := Instance.IsNewInstance;
+  MarkerService.Save(Instance);
+
+  if IsNewInstance then
+    for Resource in Instance.Images do begin
+      Resource.MarkerID := Instance.ID;
+      ResourceService.Save(Resource);
+    end;
 end;
 
 procedure TEditMarkerPresenter.Cancel;
@@ -46,12 +55,12 @@ end;
 
 function TDelMarkerPresenter.GetDelMessage: string;
 begin
-//  Result := 'Удалить маркер "' + Instance.Name + '"?';
+  Result := 'Удалить маркер "' + Instance.Caption + '"?';
 end;
 
 procedure TDelMarkerPresenter.InternalDelete;
 begin
-//  MarkerService.Remove(Instance);
+  MarkerService.Remove(Instance.ID);
 end;
 
 end.

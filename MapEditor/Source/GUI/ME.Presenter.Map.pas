@@ -4,10 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, Map.Data.Types;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Map;
 
 type
-  TEditMapPresenter = class(TEditFormPresenter<TMap>)
+  TEditMapPresenter = class(TEditFormPresenter<TDBMap>)
   private
   protected
     procedure InternalSave; override;
@@ -15,7 +15,7 @@ type
   public
   end;
 
-  TDelMapPresenter = class(TDelFormPresenter<TMap>)
+  TDelMapPresenter = class(TDelFormPresenter<TDBMap>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -32,7 +32,7 @@ procedure TEditMapPresenter.InternalSave;
 begin
   inherited;
 
-//  MapService.Save(Instance);
+  MapService.Save(Instance);
 end;
 
 procedure TEditMapPresenter.Cancel;
@@ -45,12 +45,12 @@ end;
 
 function TDelMapPresenter.GetDelMessage: string;
 begin
-//  Result := 'Удалить карту "' + Instance.Name + '"?';
+  Result := 'Удалить карту "' + Instance.Caption + '"?';
 end;
 
 procedure TDelMapPresenter.InternalDelete;
 begin
-//  MapService.Remove(Instance);
+  MapService.Remove(Instance);
 end;
 
 end.

@@ -13,7 +13,7 @@ type
     function EntityClass: TEntityClass; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
+    procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -24,7 +24,7 @@ implementation
 
 function TQuestDAO.EntityClass: TEntityClass;
 begin
-  Result := TQuest;
+  Result := TDBQuest;
 end;
 
 function TQuestDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
@@ -34,7 +34,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ID, MapID, Name FROM Quest WHERE ID = :ID';
+    Query.SQL.Text := 'SELECT ID, MapID, Name, Trader FROM Quest WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -46,20 +46,20 @@ begin
   end;
 end;
 
-procedure TQuestDAO.LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
+procedure TQuestDAO.LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
 var
   Query: TUniQuery;
-  Quest: TQuest;
+  Quest: TDBQuest;
 begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ID, MapID, Name FROM Quest WHERE MapID = :MapID';
+    Query.SQL.Text := 'SELECT ID, MapID, Name, Trader FROM Quest WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := MapID;
     Query.Open;
 
     while not Query.Eof do begin
-      Quest := TQuest.Create;
+      Quest := TDBQuest.Create;
       try
         Quest.Assign(Query);
       finally
@@ -76,16 +76,17 @@ end;
 procedure TQuestDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Quest: TQuest;
+  Quest: TDBQuest;
 begin
-  Quest := TQuest(Entity);
+  Quest := TDBQuest(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Quest (MapID, Name) VALUES (:MapID, :Name)';
+    Query.SQL.Text := 'INSERT INTO Quest (MapID, Name, Trader) VALUES (:MapID, :Name, :Trader)';
     Query.ParamByName('MapID').Value := Quest.MapID;
     Query.ParamByName('Name').AsString := Quest.Name;
+    Query.ParamByName('Trader').AsInteger := Ord(Quest.Trader);
     Query.Execute;
     Quest.ID := Query.LastInsertId;
   finally
@@ -96,17 +97,18 @@ end;
 procedure TQuestDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Quest: TQuest;
+  Quest: TDBQuest;
 begin
-  Quest := TQuest(Entity);
+  Quest := TDBQuest(Entity);
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'UPDATE Quest SET MapID = :MapID, Name = :Name WHERE ID = :ID';
+    Query.SQL.Text := 'UPDATE Quest SET MapID = :MapID, Name = :Name, Trader = :Trader WHERE ID = :ID';
     Query.ParamByName('ID').Value := Quest.ID;
     Query.ParamByName('MapID').Value := Quest.MapID;
     Query.ParamByName('Name').AsString := Quest.Name;
+    Query.ParamByName('Trader').AsInteger := Ord(Quest.Trader);
     Query.Execute;
   finally
     Query.Free;

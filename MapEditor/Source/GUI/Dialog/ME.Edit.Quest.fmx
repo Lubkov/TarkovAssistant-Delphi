@@ -1,14 +1,14 @@
 inherited edQuest: TedQuest
   Caption = 'EditForm1'
-  ClientHeight = 189
+  ClientHeight = 188
   DesignerMasterStyle = 0
   inherited paBottom: TPanel
-    Position.Y = 143.000000000000000000
+    Position.Y = 142.000000000000000000
   end
   object MainLayout: TLayout [1]
     Align = Client
-    Size.Width = 345.000000000000000000
-    Size.Height = 143.000000000000000000
+    Size.Width = 344.000000000000000000
+    Size.Height = 142.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
     object laQuestName: TLabel
@@ -19,7 +19,7 @@ inherited edQuest: TedQuest
       Margins.Right = 20.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 20.000000000000000000
-      Size.Width = 305.000000000000000000
+      Size.Width = 304.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
@@ -35,7 +35,7 @@ inherited edQuest: TedQuest
       Margins.Left = 20.000000000000000000
       Margins.Top = 2.000000000000000000
       Margins.Right = 20.000000000000000000
-      Size.Width = 305.000000000000000000
+      Size.Width = 304.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
@@ -47,7 +47,7 @@ inherited edQuest: TedQuest
       Margins.Right = 20.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 81.000000000000000000
-      Size.Width = 305.000000000000000000
+      Size.Width = 304.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
@@ -61,7 +61,7 @@ inherited edQuest: TedQuest
       Margins.Right = 20.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 100.000000000000000000
-      Size.Width = 305.000000000000000000
+      Size.Width = 304.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1

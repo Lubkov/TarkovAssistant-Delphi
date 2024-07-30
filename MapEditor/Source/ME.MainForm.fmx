@@ -36,6 +36,8 @@ object MainForm: TMainForm
       StyleLookup = ''
       TabOrder = 0
       Text = 'General'
+      ExplicitSize.cx = 61.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object TopLayout: TLayout
         Align = Top
         Size.Width = 720.000000000000000000
@@ -61,10 +63,26 @@ object MainForm: TMainForm
           Size.Width = 80.000000000000000000
           Size.Height = 35.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 1
+          TabOrder = 2
           Text = 'Expot'
           TextSettings.Trimming = None
           OnClick = buExpotClick
+        end
+        object buExportToDB: TButton
+          Align = Left
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 105.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'JSON to DB'
+          TextSettings.Trimming = None
+          OnClick = buExportToDBClick
         end
       end
     end
@@ -80,6 +98,8 @@ object MainForm: TMainForm
       StyleLookup = ''
       TabOrder = 0
       Text = 'Quest Items'
+      ExplicitSize.cx = 84.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
     end
   end
 end

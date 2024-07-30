@@ -16,6 +16,7 @@ type
     function GetConnection: TUniConnection;
   protected
     function EntityClass: TEntityClass; virtual; abstract;
+    function GetSqlSelectCommandText: string; virtual; abstract;
   public
     constructor Create(const Connection: TCustomConnection);
 

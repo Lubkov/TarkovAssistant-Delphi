@@ -4,10 +4,11 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Edit, FMX.Controls.Presentation, FMX.ListBox,
-  Map.Data.Types, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
-  FMX.Layouts;
+  System.ImageList, System.Actions, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms,
+  FMX.Dialogs, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox, FMX.Layouts,
+  FMX.ImgList, FMX.ActnList, ME.DB.Map, Data.DB, MemDS, DBAccess, Uni,
+  System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope;
 
 type
   TMapFilter = class(TFrame)
@@ -23,30 +24,42 @@ type
     edEditMap: TSpeedButton;
     MapNameLayout: TLayout;
     ButtonLayout: TLayout;
-    procedure edMapNameChange(Sender: TObject);
+    F: TUniQuery;
+    FID: TIntegerField;
+    FCaption: TWideStringField;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkListControlToField1: TLinkListControlToField;
     procedure acEditMapExecute(Sender: TObject);
+    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
   private
-    FOnMapChanged: TMapChangedEvent;
+    FOnMapChanged: TDBMapChangedEvent;
 
-    function GetMap: TMap;
+    function GetMapID: Variant;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
     procedure Init;
 
-    property Map: TMap read GetMap;
-    property OnMapChanged: TMapChangedEvent read FOnMapChanged write FOnMapChanged;
+    property MapID: Variant read GetMapID;
+    property OnMapChanged: TDBMapChangedEvent read FOnMapChanged write FOnMapChanged;
   end;
 
 implementation
 
 uses
-  Map.Data.Service, ME.Presenter.Map, ME.Edit.Map;
+  App.Service, ME.Service.Map, ME.Presenter.Map, ME.Edit.Map;
 
 {$R *.fmx}
 
 { TMapFilter }
+
+procedure TMapFilter.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  if Assigned(FOnMapChanged) then
+    FOnMapChanged(FID.Value);
+end;
 
 constructor TMapFilter.Create(AOwner: TComponent);
 begin
@@ -62,45 +75,41 @@ begin
   inherited;
 end;
 
-function TMapFilter.GetMap: TMap;
+function TMapFilter.GetMapID: Variant;
 begin
-  if edMapName.ItemIndex >= 0 then
-    Result := DataService.Map[edMapName.ItemIndex]
-  else
-    Result := nil;
+  Result := FID.Value;
 end;
 
 procedure TMapFilter.Init;
-var
-  i: Integer;
 begin
-  edMapName.Clear;
-  for i := 0 to DataService.Count - 1 do
-    edMapName.Items.Add(DataService.Map[i].Caption);
-
-  if DataService.Count > 0 then
-    edMapName.ItemIndex := 0;
-end;
-
-procedure TMapFilter.edMapNameChange(Sender: TObject);
-begin
-  if Assigned(FOnMapChanged) then
-    FOnMapChanged(Map);
+  F.Close;
+  F.Connection := AppService.DBConnection.Connection;
+  F.SQL.Text := 'SELECT ID, Caption FROM Map';
+  F.Open;
 end;
 
 procedure TMapFilter.acEditMapExecute(Sender: TObject);
 var
   Presenter: TEditMapPresenter;
   Dialog: TedMap;
+  Map: TDBMap;
 begin
   Dialog := TedMap.Create(Self);
   try
-    Presenter := TEditMapPresenter.Create(Dialog, Map);
+    Map := TDBMap.Create;
     try
-      if Presenter.Edit then
-        edMapName.Items[edMapName.ItemIndex] := Map.Caption;
+      if not MapService.GetAt(FID.Value, Map) then
+        Exit;
+
+      Presenter := TEditMapPresenter.Create(Dialog, Map);
+      try
+        if Presenter.Edit then
+          F.RefreshRecord;
+      finally
+        Presenter.Free;
+      end;
     finally
-      Presenter.Free;
+      Map.Free;
     end;
   finally
     Dialog.Free;

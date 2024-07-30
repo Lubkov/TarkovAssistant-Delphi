@@ -27,7 +27,8 @@ var
 implementation
 
 uses
-  App.Constants, Map.Data.Service, ME.Service.Resource;
+  App.Constants, Map.Data.Service, ME.Service.Resource, ME.Service.Map,
+  ME.Service.Layer, ME.Service.Quest, ME.Service.Marker, ME.Service.QuestItem;
 
 { TAppService }
 
@@ -40,6 +41,11 @@ begin
   // DB layer
   FDBConnection := TSQLiteConnection.Create(Self);
   ResourceService := TResourceService.Create(DBConnection.Connection);
+  MapService := TMapService.Create(DBConnection.Connection);
+  LayerService := TLayerService.Create(DBConnection.Connection);
+  QuestService := TQuestService.Create(DBConnection.Connection);
+  MarkerService := TMarkerService.Create(DBConnection.Connection);
+  QuestItemService := TQuestItemService.Create(DBConnection.Connection);
 end;
 
 destructor TAppService.Destroy;
@@ -47,7 +53,12 @@ begin
   DataService.Free;
 
   ResourceService.Free;
+  MapService.Free;
   FDBConnection.Free;
+  LayerService.Free;
+  QuestService.Free;
+  MarkerService.Free;
+  QuestItemService.Free;
 
   inherited;
 end;

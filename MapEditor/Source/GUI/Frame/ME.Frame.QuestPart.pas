@@ -7,7 +7,9 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.Rtti, FMX.Grid.Style, System.ImageList, FMX.ImgList, System.Actions,
   FMX.ActnList, FMX.Grid, FMX.ScrollBox, FMX.Controls.Presentation,
-  Map.Data.Types;
+  ME.DB.Marker, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope;
 
 type
   TfrQuestPartGrid = class(TFrame)
@@ -16,42 +18,36 @@ type
     edEditMarker: TSpeedButton;
     edDeleteMarker: TSpeedButton;
     laTitle: TLabel;
-    Grid: TGrid;
     ActionList1: TActionList;
     acAddMarker: TAction;
     acEditMarker: TAction;
     acDeleteMarker: TAction;
     ImageList1: TImageList;
-    LeftColumn: TIntegerColumn;
-    RightColumn: TIntegerColumn;
-    DescriptionColumn: TStringColumn;
-    procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
-    procedure GridSelChanged(Sender: TObject);
+    F: TUniQuery;
+    FID: TIntegerField;
+    FCaption: TWideStringField;
+    FLeft: TIntegerField;
+    FTop: TIntegerField;
+    BindSourceDB1: TBindSourceDB;
+    Grid: TStringGrid;
+    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
+    BindingsList1: TBindingsList;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddMarkerExecute(Sender: TObject);
     procedure acEditMarkerExecute(Sender: TObject);
     procedure acDeleteMarkerExecute(Sender: TObject);
-    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
-    FMap: TMap;
-    FQuest: TQuest;
-    FFocusedIndex: Integer;
+    FMapID: Variant;
+    FQuestID: Variant;
+//    FFocusedIndex: Integer;
 
-    function GetCount: Integer;
-    function GetItem(Index: Integer): TMarker;
-    function GetFocusedIndex: Integer;
-    procedure SetFocusedIndex(const Value: Integer);
-    function InternalMarkerEdit(const Point: TMarker): Boolean;
+    function InternalMarkerEdit(const Point: TDBMarker): Boolean;
     procedure MarkerEdit(const Index: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const Map: TMap; const Quest: TQuest);
-
-    property Count: Integer read GetCount;
-    property Items[Index: Integer]: TMarker read GetItem;
-    property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
+    procedure Init(const MapID, QuestID: Variant);
   end;
 
 implementation
@@ -59,7 +55,8 @@ implementation
 {$R *.fmx}
 
 uses
-  ME.Edit.QuestPart, ME.Presenter.QuestPart, ME.Dialog.Message;
+  App.Service, ME.DB.Utils, ME.Service.Marker, ME.Edit.QuestPart, ME.Presenter.QuestPart,
+  ME.Dialog.Message;
 
 { frQuestPartGrid }
 
@@ -76,42 +73,29 @@ begin
   inherited;
 end;
 
-function TfrQuestPartGrid.GetCount: Integer;
+procedure TfrQuestPartGrid.Init(const MapID, QuestID: Variant);
 begin
-  if FQuest <> nil then
-    Result := FQuest.Markers.Count
-  else
-    Result := 0;
+  FMapID := MapID;
+  FQuestID := QuestID;
+
+  F.Close;
+  F.Connection := AppService.DBConnection.Connection;
+  F.SQL.Text :=
+    ' SELECT ' + TDBMarker.FieldList +
+    ' FROM ' + TDBMarker.EntityName +
+    ' WHERE (MapID = :MapID) AND (QuestID = :QuestID)';
+  F.ParamByName('MapID').Value := MapID;
+  F.ParamByName('QuestID').Value := QuestID;
+  F.Open;
 end;
 
-function TfrQuestPartGrid.GetItem(Index: Integer): TMarker;
-begin
-  Result := FQuest.Markers[Index];
-end;
-
-function TfrQuestPartGrid.GetFocusedIndex: Integer;
-begin
-  if (FQuest = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
-    Result := -1
-  else
-    Result := Grid.Selected;
-end;
-
-procedure TfrQuestPartGrid.SetFocusedIndex(const Value: Integer);
-begin
-  if FFocusedIndex <> Value then
-    FFocusedIndex := Value;
-end;
-
-function TfrQuestPartGrid.InternalMarkerEdit(const Point: TMarker): Boolean;
+function TfrQuestPartGrid.InternalMarkerEdit(const Point: TDBMarker): Boolean;
 var
   Presenter: TEditQuestPartPresenter;
   Dialog: TedQuestPart;
 begin
   Dialog := TedQuestPart.Create(Self);
   try
-    Dialog.Map := FMap;
-
     Presenter := TEditQuestPartPresenter.Create(Dialog, Point);
     try
       Result := Presenter.Edit;
@@ -125,127 +109,76 @@ end;
 
 procedure TfrQuestPartGrid.MarkerEdit(const Index: Integer);
 var
-  Marker: TMarker;
+  Marker: TDBMarker;
 begin
-  if (Index < 0) or (Index >= Count) then
-    Exit;
-
-  Marker := Items[Index];
-  Grid.BeginUpdate;
+  Marker := TDBMarker.Create;
   try
-    InternalMarkerEdit(Marker);
+    if not MarkerService.GetAt(FID.Value, Marker) then
+      Exit;
+
+    if InternalMarkerEdit(Marker) then
+      F.RefreshRecord;
   finally
-    Grid.EndUpdate;
+    Marker.Free;
   end;
-end;
-
-procedure TfrQuestPartGrid.Init(const Map: TMap; const Quest: TQuest);
-begin
-  FMap := Map;
-  FQuest := Quest;
-
-  Grid.BeginUpdate;
-  try
-    Grid.RowCount := Count;
-  finally
-    Grid.EndUpdate;
-  end;
-
-  if Count > 0 then begin
-    Grid.Selected := -1;
-    Grid.Selected := 0;
-  end;
-end;
-
-procedure TfrQuestPartGrid.GridGetValue(Sender: TObject; const ACol, ARow: Integer;  var Value: TValue);
-const
-  ColumnLeftIdx = 0;
-  ColumnTopIdx = 1;
-  ColumnDescriptionIdx = 2;
-begin
-  if Count <= ARow then
-    Exit;
-
-  case ACol of
-    ColumnLeftIdx:
-      Value := Items[ARow].Left;
-    ColumnTopIdx:
-      Value := Items[ARow].Top;
-    ColumnDescriptionIdx:
-      Value := Items[ARow].Caption;
-  end;
-end;
-
-procedure TfrQuestPartGrid.GridSelChanged(Sender: TObject);
-begin
-  FocusedIndex := Grid.Selected;
-end;
-
-procedure TfrQuestPartGrid.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
-begin
-  acAddMarker.Enabled := FQuest <> nil;
-  acEditMarker.Enabled := (FQuest <> nil) and (FocusedIndex >= 0);
-  acDeleteMarker.Enabled := (FQuest <> nil) and (FocusedIndex >= 0);
 end;
 
 procedure TfrQuestPartGrid.acAddMarkerExecute(Sender: TObject);
 var
-  Marker: TMarker;
-  Res: Boolean;
+  Marker: TDBMarker;
 begin
-  Res := False;
-  Marker := TMarker.Create;
+  Marker := TDBMarker.Create;
   try
-    Marker.Kind := TMarkerKind.Quest;
+    Marker.MapID := FMapID;
+    Marker.QuestID := FQuestID;
+    if not InternalMarkerEdit(Marker) then
+      Exit;
 
-    Res := InternalMarkerEdit(Marker);
-    if Res then begin
-      FQuest.Markers.Add(Marker);
-
-      Grid.BeginUpdate;
-      try
-        Grid.RowCount := Count;
-      finally
-        Grid.EndUpdate;
-      end;
+    F.DisableControls;
+    try
+      F.Refresh;
+      F.Last;
+    finally
+      F.EnableControls;
     end;
   finally
-    if not Res then
-      Marker.Free;
+    Marker.Free;
   end;
 end;
 
 procedure TfrQuestPartGrid.acEditMarkerExecute(Sender: TObject);
 begin
-  MarkerEdit(Grid.Selected);
+  MarkerEdit(FID.Value);
 end;
 
 procedure TfrQuestPartGrid.acDeleteMarkerExecute(Sender: TObject);
 var
-  Marker: TMarker;
+  Marker: TDBMarker;
   Presenter: TDelQuestPartPresenter;
   Dialog: TedMessage;
-  Res: Boolean;
+//  Res: Boolean;
 begin
-  if (Grid.Selected < 0) or (Grid.Selected >= Count) then
+  if IsNullID(FID.Value) then
     Exit;
 
-  Res := False;
-  Marker := Items[Grid.Selected];
+  Marker := TDBMarker.Create;
   try
+    Marker.ID := FID.Value;
+    Marker.MapID := FMapID;
+    Marker.Caption := FCaption.AsString;
+
     Dialog := TedMessage.Create(Self);
     try
       Presenter := TDelQuestPartPresenter.Create(Dialog, Marker);
       try
-        Res := Presenter.Delete;
-        if Res then begin
-          Grid.BeginUpdate;
-          try
-            FQuest.Markers.Delete(Grid.Selected);
-            Grid.RowCount := Count;
-          finally
-            Grid.EndUpdate;
-          end;
+        if not Presenter.Delete then
+          Exit;
+
+        F.DisableControls;
+        try
+          F.Refresh;
+        finally
+          F.EnableControls;
         end;
       finally
         Presenter.Free;
@@ -254,14 +187,15 @@ begin
       Dialog.Free;
     end;
   finally
-    if Res then
-      Marker.Free;
+    Marker.Free;
   end;
 end;
 
-procedure TfrQuestPartGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
+procedure TfrQuestPartGrid.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  MarkerEdit(Row);
+  acAddMarker.Enabled := not IsNullID(FQuestID);
+  acEditMarker.Enabled := acAddMarker.Enabled and not IsNullID(FID.Value);
+  acDeleteMarker.Enabled := acAddMarker.Enabled and not IsNullID(FID.Value);
 end;
 
 end.

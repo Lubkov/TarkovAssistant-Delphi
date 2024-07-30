@@ -7,10 +7,10 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, FMX.EditBox, FMX.NumberBox, FMX.Edit, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, ME.Dialog.Presenter, ME.Edit.Form.Presenter,
-  FMX.TabControl, ME.Frame.Picture, Map.Data.Types;
+  FMX.TabControl, ME.Frame.Picture, ME.DB.Map;
 
 type
-  TedMap = class(TEditForm, IEditDialog<TMap>)
+  TedMap = class(TEditForm, IEditDialog<TDBMap>)
     edLeft: TNumberBox;
     edTop: TNumberBox;
     edBottom: TNumberBox;
@@ -21,7 +21,7 @@ type
     edMapCaption: TEdit;
     laMapCaption: TLabel;
   private
-    FMap: TMap;
+    FMap: TDBMap;
     FPicturePanel: TfrPicture;
 
     function GetMapLeft: Integer;
@@ -39,8 +39,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
 
-    procedure SetInstance(const Value: TMap);
-    procedure PostValues(const Value: TMap);
+    procedure SetInstance(const Value: TDBMap);
+    procedure PostValues(const Value: TDBMap);
 
     property MapCaption: string read GetMapCaption write SetMapCaption;
     property MapLeft: Integer read GetMapLeft write SetMapLeft;
@@ -53,9 +53,6 @@ type
 implementation
 
 {$R *.fmx}
-
-uses
-  Map.Data.Service;
 
 constructor TedMap.Create(AOwner: TComponent);
 begin
@@ -127,7 +124,7 @@ begin
   edMapCaption.Text := Value;
 end;
 
-procedure TedMap.SetInstance(const Value: TMap);
+procedure TedMap.SetInstance(const Value: TDBMap);
 begin
   FMap := Value;
 
@@ -141,11 +138,10 @@ begin
   MapTop := FMap.Top;
   MapRight := FMap.Right;
   MapBottom := FMap.Bottom;
-
-  DataService.LoadImage(FMap, Picture);
+  Picture := FMap.Picture;
 end;
 
-procedure TedMap.PostValues(const Value: TMap);
+procedure TedMap.PostValues(const Value: TDBMap);
 begin
   FMap.Caption := MapCaption;
   FMap.Left := MapLeft;
@@ -154,7 +150,7 @@ begin
   FMap.Bottom := MapBottom;
 
   if FPicturePanel.Changed then
-    DataService.SaveImage(FMap, Picture);
+    Value.Picture := Picture;
 end;
 
 end.

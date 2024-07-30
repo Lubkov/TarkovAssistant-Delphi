@@ -14,20 +14,20 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
 
-    procedure LoadLayerFromJSON(const Value: TJSONValue; const Items: TList<TLayer>);
-    procedure LoadMarkersFromJSON(const Value: TJSONValue; const Items: TList<TMarker>);
-    procedure LoadQuestsFromJSON(const Value: TJSONValue; const Items: TList<TQuest>);
+    procedure LoadLayerFromJSON(const Value: TJSONValue; const Items: TList<TDBLayer>);
+    procedure LoadMarkersFromJSON(const Value: TJSONValue; const Items: TList<TDBMarker>);
+    procedure LoadQuestsFromJSON(const Value: TJSONValue; const Items: TList<TDBQuest>);
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
     procedure Remove(const ID: Variant); override;
 
-    procedure LoadLayers(const Map: TMap; LoadPicture: Boolean);
-    procedure LoadMarkers(const Map: TMap);
-    procedure LoadQuests(const Map: TMap);
+    procedure LoadLayers(const Map: TDBMap; LoadPicture: Boolean);
+    procedure LoadMarkers(const Map: TDBMap);
+    procedure LoadQuests(const Map: TDBMap);
 
-    procedure LoadFromJSON(const Data: string; const Items: TList<TMap>);
+    procedure LoadFromJSON(const Data: string; const Items: TList<TDBMap>);
 
     property MapDAO: TMapDAO read GetMapDAO;
   end;
@@ -60,32 +60,32 @@ end;
 
 procedure TMapService.Insert(const Entity: TEntity);
 var
-  Map: TMap;
-  Layer: TLayer;
-  Marker: TMarker;
-  Quest: TQuest;
+  Map: TDBMap;
+//  Layer: TDBLayer;
+//  Marker: TDBMarker;
+//  Quest: TDBQuest;
 begin
-  Map := TMap(Entity);
+  Map := TDBMap(Entity);
 
   StartTransaction;
   try
     DAO.Insert(Map);
 
-    for Layer in Map.Layers do begin
-      Layer.MapID := Map.ID;
-      LayerService.Insert(Layer);
-      LayerService.SavePicture(Layer)
-    end;
-
-    for Marker in Map.Tags do begin
-      Marker.MapID := Map.ID;
-      MarkerService.Insert(Marker);
-    end;
-
-    for Quest in Map.Quests do begin
-      Quest.MapID := Map.ID;
-      QuestService.Insert(Quest);
-    end;
+//    for Layer in Map.Layers do begin
+//      Layer.MapID := Map.ID;
+//      LayerService.Insert(Layer);
+//      LayerService.SavePicture(Layer)
+//    end;
+//
+//    for Marker in Map.Tags do begin
+//      Marker.MapID := Map.ID;
+//      MarkerService.Insert(Marker);
+//    end;
+//
+//    for Quest in Map.Quests do begin
+//      Quest.MapID := Map.ID;
+//      QuestService.Insert(Quest);
+//    end;
 
     CommitTransaction;
   except
@@ -96,9 +96,9 @@ end;
 
 procedure TMapService.Update(const Entity: TEntity);
 var
-  Map: TMap;
+  Map: TDBMap;
 begin
-  Map := TMap(Entity);
+  Map := TDBMap(Entity);
 
   StartTransaction;
   try
@@ -125,30 +125,31 @@ begin
   end;
 end;
 
-procedure TMapService.LoadLayers(const Map: TMap; LoadPicture: Boolean);
+procedure TMapService.LoadLayers(const Map: TDBMap; LoadPicture: Boolean);
 begin
-  Map.ClearLevelList;
-  MapDAO.LoadLayers(Map, LoadPicture);
+  Map.Layers.Clear;
+  LayerService.GetMapLayers(Map.ID, Map.Layers);
+//  MapDAO.LoadLayers(Map, LoadPicture);
 end;
 
-procedure TMapService.LoadMarkers(const Map: TMap);
+procedure TMapService.LoadMarkers(const Map: TDBMap);
 begin
-  Map.ClearTagList;
-  MarkerService.LoadMarkers(Map.ID, Map.Tags);
+//  Map.ClearTagList;
+//  MarkerService.LoadMarkers(Map.ID, Map.Tags);
 end;
 
-procedure TMapService.LoadQuests(const Map: TMap);
+procedure TMapService.LoadQuests(const Map: TDBMap);
 begin
-  Map.ClearQuestList;
-  QuestService.LoadQuests(Map.ID, Map.Quests);
+//  Map.ClearQuestList;
+//  QuestService.LoadQuests(Map.ID, Map.Quests);
 end;
 
-procedure TMapService.LoadLayerFromJSON(const Value: TJSONValue; const Items: TList<TLayer>);
+procedure TMapService.LoadLayerFromJSON(const Value: TJSONValue; const Items: TList<TDBLayer>);
 var
   i: Integer;
   List: TJSONArray;
   Item: TJSONValue;
-  Layer: TLayer;
+  Layer: TDBLayer;
 begin
   if not (Value is TJSONArray) then
     Exit;
@@ -157,7 +158,7 @@ begin
   for i := 0 to List.Count - 1 do begin
     Item := List.Items[i] as TJSONObject;
 
-    Layer := TLayer.Create;
+    Layer := TDBLayer.Create;
     try
       Layer.Level := Item.GetValue<Integer>('level');
       Layer.Name := Item.GetValue<string>('name');
@@ -167,11 +168,11 @@ begin
   end;
 end;
 
-procedure TMapService.LoadMarkersFromJSON(const Value: TJSONValue; const Items: TList<TMarker>);
+procedure TMapService.LoadMarkersFromJSON(const Value: TJSONValue; const Items: TList<TDBMarker>);
 var
   List: TJSONArray;
   Item: TJSONValue;
-  Marker: TMarker;
+  Marker: TDBMarker;
   i: Integer;
 begin
   if not (Value is TJSONArray) then
@@ -181,9 +182,9 @@ begin
   for i := 0 to List.Count - 1 do begin
     Item := List.Items[i] as TJSONObject;
 
-    Marker := TMarker.Create;
+    Marker := TDBMarker.Create;
     try
-      Marker.Name := Item.GetValue<string>('name');
+      Marker.Caption := Item.GetValue<string>('name');
       Marker.Kind := TRttiEnumerationType.GetValue<TMarkerKind>(Item.GetValue<string>('kind'));
       Marker.Left := Item.GetValue<Integer>('left');
       Marker.Top := Item.GetValue<Integer>('top');
@@ -193,12 +194,12 @@ begin
   end;
 end;
 
-procedure TMapService.LoadQuestsFromJSON(const Value: TJSONValue; const Items: TList<TQuest>);
+procedure TMapService.LoadQuestsFromJSON(const Value: TJSONValue; const Items: TList<TDBQuest>);
 var
   i: Integer;
   List: TJSONArray;
   Item: TJSONValue;
-  Quest: TQuest;
+  Quest: TDBQuest;
 begin
   if not (Value is TJSONArray) then
     Exit;
@@ -207,23 +208,23 @@ begin
   for i := 0 to List.Count - 1 do begin
     Item := List.Items[i] as TJSONObject;
 
-    Quest := TQuest.Create;
+    Quest := TDBQuest.Create;
     try
       Quest.Name := Item.GetValue<string>('name');
 
-      LoadMarkersFromJSON(Item.FindValue('markers'), Quest.Markers);
+//      LoadMarkersFromJSON(Item.FindValue('markers'), Quest.Markers);
     finally
       Items.Add(Quest);
     end;
   end;
 end;
 
-procedure TMapService.LoadFromJSON(const Data: string; const Items: TList<TMap>);
+procedure TMapService.LoadFromJSON(const Data: string; const Items: TList<TDBMap>);
 var
   Root: TJSONArray;
   JSONObject: TJSONValue;
   i: Integer;
-  Map: TMap;
+  Map: TDBMap;
 begin
   JSONObject := TJSONObject.ParseJSONValue(Data);
   if not (JSONObject is TJSONArray) then
@@ -234,17 +235,17 @@ begin
     for i := 0 to Root.Count - 1 do begin
       JSONObject := Root.Items[i] as TJSONObject;
 
-      Map := TMap.Create;
+      Map := TDBMap.Create;
       try
-        Map.Name := JSONObject.GetValue<string>('name');
+        Map.Caption := JSONObject.GetValue<string>('name');
         Map.Left := JSONObject.GetValue<Integer>('left');
         Map.Top := JSONObject.GetValue<Integer>('top');
         Map.Right := JSONObject.GetValue<Integer>('right');
         Map.Bottom := JSONObject.GetValue<Integer>('bottom');
 
-        LoadLayerFromJSON(JSONObject.FindValue('layers'), Map.Layers);
-        LoadMarkersFromJSON(JSONObject.FindValue('markers'), Map.Tags);
-        LoadQuestsFromJSON(JSONObject.FindValue('quests'), Map.Quests);
+//        LoadLayerFromJSON(JSONObject.FindValue('layers'), Map.Layers);
+//        LoadMarkersFromJSON(JSONObject.FindValue('markers'), Map.Tags);
+//        LoadQuestsFromJSON(JSONObject.FindValue('quests'), Map.Quests);
       finally
         Items.Add(Map);
       end;

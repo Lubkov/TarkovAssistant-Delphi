@@ -3,20 +3,23 @@
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
+  System.SysUtils, System.Classes, System.Variants, Generics.Collections,
+  Data.DB, ME.DB.Entity, ME.DB.Resource;
 
 type
   TMarkerKind = (PMCExtraction, ScavExtraction, CoopExtraction, Quest);
   TMarkerKindSet = set of TMarkerKind;
 
-  TMarker = class(TEntity)
+  TDBMarker = class(TEntity)
   private
     FMapID: Variant;
     FQuestID: Variant;
-    FName: string;
+    FCaption: string;
     FKind: TMarkerKind;
     FLeft: Integer;
     FTop: Integer;
+//    FItems: TObjectList<TQuestItem>;
+    FImages: TObjectList<TDBResource>;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -30,69 +33,75 @@ type
 
     property MapID: Variant read FMapID write FMapID;
     property QuestID: Variant read FQuestID write FQuestID;
-    property Name: string read FName write FName;
+    property Caption: string read FCaption write FCaption;
     property Kind: TMarkerKind read FKind write FKind;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
+//    property Items: TObjectList<TQuestItem> read FItems;
+    property Images: TObjectList<TDBResource> read FImages;
   end;
 
 implementation
 
-{ TMarker }
+{ TDBMarker }
 
-constructor TMarker.Create;
+constructor TDBMarker.Create;
 begin
   inherited;
 
   FMapID := Null;
   FQuestID := Null;
-  FName := '';
+  FCaption := '';
   FKind := TMarkerKind.PMCExtraction;
   FLeft := 0;
   FTop := 0;
+//  FItems := TObjectList<TQuestItem>.Create;
+  FImages := TObjectList<TDBResource>.Create;
 end;
 
-destructor TMarker.Destroy;
+destructor TDBMarker.Destroy;
 begin
+//  FItems.Free;
+  FImages.Free;
 
   inherited;
 end;
 
-procedure TMarker.Assign(const Source: TEntity);
+procedure TDBMarker.Assign(const Source: TEntity);
 begin
   inherited;
 
-  MapID := TMarker(Source).MapID;
-  QuestID := TMarker(Source).QuestID;
-  Name := TMarker(Source).Name;
-  Kind := TMarker(Source).Kind;
-  Left := TMarker(Source).Left;
-  Top := TMarker(Source).Top;
+  MapID := TDBMarker(Source).MapID;
+  QuestID := TDBMarker(Source).QuestID;
+  Caption := TDBMarker(Source).Caption;
+  Kind := TDBMarker(Source).Kind;
+  Left := TDBMarker(Source).Left;
+  Top := TDBMarker(Source).Top;
 end;
 
-procedure TMarker.Assign(const DataSet: TDataSet);
+procedure TDBMarker.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
   MapID := DataSet.FieldByName('MapID').Value;
   QuestID := DataSet.FieldByName('QuestID').Value;
-  Name := DataSet.FieldByName('Name').AsString;
+  Caption := DataSet.FieldByName('Caption').AsString;
   Kind := TMarkerKind(DataSet.FieldByName('Kind').AsInteger);
   Left := DataSet.FieldByName('Left').AsInteger;
   Top := DataSet.FieldByName('Top').AsInteger;
 end;
 
-class function TMarker.EntityName: string;
+class function TDBMarker.EntityName: string;
 begin
   Result := 'Marker';
 end;
 
-class function TMarker.FieldList: string;
+class function TDBMarker.FieldList: string;
 begin
-  Result := 'ID, "MapID", "QuestID", "Name", "Kind", "Left", "Top"';
+  Result := 'ID, "MapID", "QuestID", "Caption", "Kind", "Left", "Top"';
 end;
 
-class function TMarker.KindToStr(Value: TMarkerKind): string;
+class function TDBMarker.KindToStr(Value: TMarkerKind): string;
 begin
   case Value of
     TMarkerKind.PMCExtraction:

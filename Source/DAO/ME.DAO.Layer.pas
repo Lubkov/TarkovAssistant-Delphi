@@ -3,29 +3,40 @@ unit ME.DAO.Layer;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, MemDS, DBAccess, Uni,
-  ME.DB.Entity, ME.DB.DAO, ME.DB.Layer;
+  System.SysUtils, System.Classes, System.Variants, Generics.Collections,
+  FMX.Graphics, Data.DB, MemDS, DBAccess, Uni, ME.DB.Entity, ME.DB.DAO, ME.DB.Layer;
 
 type
   TLayerDAO = class(TDAOCommon)
   private
   protected
     function EntityClass: TEntityClass; override;
+    function GetSqlSelectCommandText: string; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
+    procedure GetMapLayers(const MapID: Variant; const Items: TList<TEntity>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
-    procedure LoadPicture(const Entity: TEntity);
+    procedure LoadPicture(const LayerID: Variant; const Picture: TBitmap); overload;
+    procedure LoadPicture(const Entity: TEntity); overload;
     procedure SavePicture(const Entity: TEntity);
   end;
 
 implementation
 
+uses
+  ME.DB.Utils;
+
 { TLayerDAO }
 
 function TLayerDAO.EntityClass: TEntityClass;
 begin
-  Result := TLayer;
+  Result := TDBLayer;
+end;
+
+function TLayerDAO.GetSqlSelectCommandText: string;
+begin
+  Result := 'SELECT ' + TDBLayer.FieldList + ' FROM Layer %s';
 end;
 
 function TLayerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
@@ -35,7 +46,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + TLayer.FieldList + ' FROM Layer WHERE ID = :ID';
+    Query.SQL.Text := 'SELECT ' + TDBLayer.FieldList + ' FROM Layer WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -47,20 +58,52 @@ begin
   end;
 end;
 
-procedure TLayerDAO.Insert(const Entity: TEntity);
+procedure TLayerDAO.GetMapLayers(const MapID: Variant; const Items: TList<TEntity>);
 var
   Query: TUniQuery;
-  Layer: TLayer;
+  Entity: TEntity;
 begin
-  Layer := TLayer(Entity);
+  Items.Clear;
 
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Layer (MapID, Level, Name) VALUES (:MapID, :Level, :Name)';
+    Query.SQL.Text := Format(GetSqlSelectCommandText, ['WHERE MapID = :MapID']);
+    Query.ParamByName('MapID').Value := MapID;
+    Query.Open;
+
+    while not Query.Eof do begin
+      Entity := EntityClass.Create;
+      try
+        Entity.Assign(Query);
+      finally
+        Items.Add(Entity);
+      end;
+
+      Query.Next;
+    end;
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TLayerDAO.Insert(const Entity: TEntity);
+var
+  Query: TUniQuery;
+  Layer: TDBLayer;
+  Param: TParam;
+begin
+  Layer := TDBLayer(Entity);
+
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'INSERT INTO Layer (MapID, Level, Name, Picture) VALUES (:MapID, :Level, :Name, :Picture)';
     Query.ParamByName('MapID').Value := Layer.MapID;
     Query.ParamByName('Level').AsInteger := Layer.Level;
     Query.ParamByName('Name').AsString := Layer.Name;
+    Param := Query.ParamByName('Picture');
+    Layer.AssignPictureTo(Layer.Picture, Param);
     Query.Execute;
     Layer.ID := Query.LastInsertId;
   finally
@@ -71,9 +114,9 @@ end;
 procedure TLayerDAO.Update(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Layer: TLayer;
+  Layer: TDBLayer;
 begin
-  Layer := TLayer(Entity);
+  Layer := TDBLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try
@@ -82,38 +125,37 @@ begin
       'UPDATE Layer SET ' +
       '    MapID = :MapID, ' +
       '    Level = :Level, ' +
-      '    Name = :Name ' +
+      '    Name = :Name, ' +
+      '    Picture = :Picture ' +
       'WHERE ID = :ID';
     Query.ParamByName('ID').Value := Layer.ID;
     Query.ParamByName('MapID').AsInteger := Layer.MapID;
     Query.ParamByName('Level').AsInteger := Layer.Level;
     Query.ParamByName('Name').AsString := Layer.Name;
+    Layer.AssignPictureTo(Layer.Picture, Query.ParamByName('Picture'));
     Query.Execute;
   finally
     Query.Free;
   end;
 end;
 
-procedure TLayerDAO.LoadPicture(const Entity: TEntity);
+procedure TLayerDAO.LoadPicture(const LayerID: Variant; const Picture: TBitmap);
 var
   Query: TUniQuery;
-  Layer: TLayer;
   Stream: TMemoryStream;
 begin
-  Layer := TLayer(Entity);
-
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
     Query.SQL.Text := 'SELECT ID, Picture FROM Layer WHERE ID = :ID';
-    Query.ParamByName('ID').Value := Layer.ID;
+    Query.ParamByName('ID').Value := LayerID;
     Query.Open;
 
     Stream := TMemoryStream.Create;
     try
       TBlobField(Query.FieldByName('Picture')).SaveToStream(Stream);
       Stream.Position := 0;
-      Layer.Picture.LoadFromStream(Stream);
+      Picture.LoadFromStream(Stream);
     finally
       Stream.Free;
     end;
@@ -122,13 +164,21 @@ begin
   end;
 end;
 
+procedure TLayerDAO.LoadPicture(const Entity: TEntity);
+var
+  Layer: TDBLayer;
+begin
+  Layer := TDBLayer(Entity);
+  LoadPicture(Layer.ID, Layer.Picture);
+end;
+
 procedure TLayerDAO.SavePicture(const Entity: TEntity);
 var
   Query: TUniQuery;
-  Layer: TLayer;
+  Layer: TDBLayer;
   Stream: TMemoryStream;
 begin
-  Layer := TLayer(Entity);
+  Layer := TDBLayer(Entity);
 
   Query := TUniQuery.Create(nil);
   try

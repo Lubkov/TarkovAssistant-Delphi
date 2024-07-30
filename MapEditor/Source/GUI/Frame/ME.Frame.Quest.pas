@@ -7,7 +7,9 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.Rtti, FMX.Grid.Style, System.ImageList, FMX.ImgList, System.Actions,
   FMX.ActnList, FMX.Grid, FMX.ScrollBox, FMX.Controls.Presentation,
-  Map.Data.Types;
+  ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope;
 
 type
   TfrQuest = class(TFrame)
@@ -16,42 +18,39 @@ type
     edEditQuest: TSpeedButton;
     edDeleteQuest: TSpeedButton;
     laTitle: TLabel;
-    Grid: TGrid;
     ActionList1: TActionList;
     acAddQuest: TAction;
     acEditQuest: TAction;
     acDeleteQuest: TAction;
     ImageList1: TImageList;
-    NameColumn: TStringColumn;
-    TraderColumn: TStringColumn;
-    procedure GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
+    F: TUniQuery;
+    FID: TIntegerField;
+    FName: TWideStringField;
+    FTrader: TIntegerField;
+    FTraderName: TWideStringField;
+    BindSourceDB1: TBindSourceDB;
+    Grid: TStringGrid;
+    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
+    BindingsList1: TBindingsList;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);
     procedure acDeleteQuestExecute(Sender: TObject);
-    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
-    procedure GridSelChanged(Sender: TObject);
+    procedure FCalcFields(DataSet: TDataSet);
+    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
   private
-    FMap: TMap;
-    FFocusedIndex: Integer;
+    FMapID: Variant;
+    FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
 
-    function GetCount: Integer;
-    function GetItem(Index: Integer): TQuest;
-    function GetFocusedIndex: Integer;
-    procedure SetFocusedIndex(const Value: Integer);
-    function InternalQuestEdit(const Quest: TQuest): Boolean;
+    function InternalQuestEdit(const Quest: TDBQuest): Boolean;
     procedure QuestEdit(const Index: Integer);
-    procedure DoQuestChanged;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const Map: TMap);
+    procedure Init(const MapID: Variant);
 
-    property Count: Integer read GetCount;
-    property Items[Index: Integer]: TQuest read GetItem;
-    property FocusedIndex: Integer read GetFocusedIndex write SetFocusedIndex;
     property OnQuestChanged: TQuestChangedEvent read FOnQuestChanged write FOnQuestChanged;
   end;
 
@@ -60,7 +59,8 @@ implementation
 {$R *.fmx}
 
 uses
-  ME.Presenter.Quest, ME.Edit.Quest, ME.Dialog.Message;
+  App.Service, ME.DB.Utils, ME.Presenter.Quest, ME.Edit.Quest, ME.Dialog.Message,
+  ME.Service.Quest;
 
 { TfrQuest }
 
@@ -68,6 +68,7 @@ constructor TfrQuest.Create(AOwner: TComponent);
 begin
   inherited;
 
+  FQuestID := Null;
   Grid.RowCount := 0;
   FOnQuestChanged := nil;
 end;
@@ -79,42 +80,44 @@ begin
   inherited;
 end;
 
-function TfrQuest.GetCount: Integer;
+procedure TfrQuest.Init(const MapID: Variant);
 begin
-  Result := FMap.Quests.Count;
+  FMapID := MapID;
+
+  F.Close;
+  F.Connection := AppService.DBConnection.Connection;
+  F.SQL.Text :=
+    ' SELECT ' + TDBQuest.FieldList +
+    ' FROM ' + TDBQuest.EntityName +
+    ' WHERE (MapID = :MapID)';
+  F.ParamByName('MapID').Value := MapID;
+  F.Open;
+
+//  NameColumn.Width := Grid.Width - TraderColumn.Width - 25;
 end;
 
-function TfrQuest.GetItem(Index: Integer): TQuest;
+procedure TfrQuest.FCalcFields(DataSet: TDataSet);
 begin
-  Result := FMap.Quests[Index];
+  FTraderName.AsString := TDBQuest.TraderToStr(TTrader(FTrader.AsInteger));
 end;
 
-function TfrQuest.GetFocusedIndex: Integer;
+procedure TfrQuest.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
 begin
-  if (FMap = nil) or (Grid.Selected < 0) or (Grid.Selected >= Count) then
-    Result := -1
-  else
-    Result := Grid.Selected;
-end;
-
-procedure TfrQuest.SetFocusedIndex(const Value: Integer);
-begin
-  if FFocusedIndex = Value then
+  if FQuestID = FID.Value then
     Exit;
 
-  FFocusedIndex := Value;
-  DoQuestChanged;
+  FQuestID := FID.Value;
+  if Assigned(FOnQuestChanged) then
+    FOnQuestChanged(FID.Value);
 end;
 
-function TfrQuest.InternalQuestEdit(const Quest: TQuest): Boolean;
+function TfrQuest.InternalQuestEdit(const Quest: TDBQuest): Boolean;
 var
   Presenter: TEditQuestPresenter;
   Dialog: TedQuest;
 begin
   Dialog := TedQuest.Create(Self);
   try
-    Dialog.Map := FMap;
-
     Presenter := TEditQuestPresenter.Create(Dialog, Quest);
     try
       Result := Presenter.Edit;
@@ -128,132 +131,74 @@ end;
 
 procedure TfrQuest.QuestEdit(const Index: Integer);
 var
-  Quest: TQuest;
+  Quest: TDBQuest;
 begin
-  if (Index < 0) or (Index >= Count) then
-    Exit;
-
-  Quest := Items[Index];
-  Grid.BeginUpdate;
+  Quest := TDBQuest.Create;
   try
-    InternalQuestEdit(Quest);
+    if not QuestService.GetAt(FID.Value, Quest) then
+      Exit;
+
+    if InternalQuestEdit(Quest) then
+      F.RefreshRecord;
   finally
-    Grid.EndUpdate;
+    Quest.Free;
   end;
-end;
-
-procedure TfrQuest.DoQuestChanged;
-begin
-  if Assigned(FOnQuestChanged) then
-    if FocusedIndex >= 0 then
-      FOnQuestChanged(Items[FocusedIndex])
-    else
-      FOnQuestChanged(nil);
-end;
-
-procedure TfrQuest.Init(const Map: TMap);
-begin
-  FMap := Map;
-
-  Grid.BeginUpdate;
-  try
-    Grid.RowCount := Count;
-  finally
-    Grid.EndUpdate;
-  end;
-
-  if Count > 0 then begin
-    Grid.Selected := 0;
-    DoQuestChanged;
-  end;
-
-  NameColumn.Width := Grid.Width - TraderColumn.Width - 25;
-end;
-
-procedure TfrQuest.GridGetValue(Sender: TObject; const ACol, ARow: Integer; var Value: TValue);
-const
-  ColumnNameIdx = 0;
-  ColumnTraderIdx = 1;
-begin
-  if Count <= ARow then
-    Exit;
-
-  case ACol of
-    ColumnNameIdx:
-      Value := Items[ARow].Caption;
-    ColumnTraderIdx:
-      Value := TQuest.TraderToStr(Items[ARow].Trader);
-  end;
-end;
-
-procedure TfrQuest.GridSelChanged(Sender: TObject);
-begin
-  FocusedIndex := Grid.Selected;
-end;
-
-procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
-begin
-  acAddQuest.Enabled := FMap <> nil;
-  acEditQuest.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
-  acDeleteQuest.Enabled := (FMap <> nil) and (FocusedIndex >= 0);
 end;
 
 procedure TfrQuest.acAddQuestExecute(Sender: TObject);
 var
-  Quest: TQuest;
-  Res: Boolean;
+  Quest: TDBQuest;
 begin
-  Res := False;
-  Quest := TQuest.Create;
+  Quest := TDBQuest.Create;
   try
-    Res := InternalQuestEdit(Quest);
-    if Res then begin
-      FMap.Quests.Add(Quest);
+    Quest.MapID := FMapID;
+    if not InternalQuestEdit(Quest) then
+      Exit;
 
-      Grid.BeginUpdate;
-      try
-        Grid.RowCount := Count;
-      finally
-        Grid.EndUpdate;
-      end;
+    F.DisableControls;
+    try
+      F.Refresh;
+      F.Last;
+    finally
+      F.EnableControls;
     end;
   finally
-    if not Res then
-      Quest.Free;
+    Quest.Free;
   end;
 end;
 
 procedure TfrQuest.acEditQuestExecute(Sender: TObject);
 begin
-  QuestEdit(Grid.Selected);
+  QuestEdit(FID.Value);
 end;
 
 procedure TfrQuest.acDeleteQuestExecute(Sender: TObject);
 var
-  Quest: TQuest;
+  Quest: TDBQuest;
   Presenter: TDelQuestPresenter;
   Dialog: TedMessage;
-  Res: Boolean;
 begin
-  if (Grid.Selected < 0) or (Grid.Selected >= Count) then
+  if IsNullID(FID.Value) then
     Exit;
 
-  Res := False;
-  Quest := Items[Grid.Selected];
+  Quest := TDBQuest.Create;
   try
+    Quest.ID := FID.Value;
+    Quest.MapID := FMapID;
+    Quest.Name := FName.AsString;
+
     Dialog := TedMessage.Create(Self);
     try
       Presenter := TDelQuestPresenter.Create(Dialog, Quest);
       try
-        Res := Presenter.Delete;
-        if Res then begin
-          Grid.BeginUpdate;
-          try
-            FMap.Quests.Delete(Grid.Selected);
-            Grid.RowCount := Count;
-          finally
-            Grid.EndUpdate;
-          end;
+        if not Presenter.Delete then
+          Exit;
+
+        F.DisableControls;
+        try
+          F.Refresh;
+        finally
+          F.EnableControls;
         end;
       finally
         Presenter.Free;
@@ -262,14 +207,15 @@ begin
       Dialog.Free;
     end;
   finally
-    if Res then
-      Quest.Free;
+    Quest.Free;
   end;
 end;
 
-procedure TfrQuest.GridCellDblClick(const Column: TColumn; const Row: Integer);
+procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  QuestEdit(Row);
+  acAddQuest.Enabled := not IsNullID(FMapID);
+  acEditQuest.Enabled := acAddQuest.Enabled and not IsNullID(FID.Value);
+  acDeleteQuest.Enabled := acAddQuest.Enabled and not IsNullID(FID.Value);
 end;
 
 end.

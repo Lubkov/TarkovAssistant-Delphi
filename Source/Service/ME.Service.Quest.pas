@@ -13,8 +13,8 @@ type
   public
     procedure Insert(const Entity: TEntity); override;
 
-    procedure LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
-    procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+    procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
+    procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
   end;
 
 var
@@ -34,11 +34,11 @@ end;
 
 procedure TQuestService.Insert(const Entity: TEntity);
 var
-  Quest: TQuest;
-  Marker: TMarker;
+  Quest: TDBQuest;
+//  Marker: TDBMarker;
   TranStarted: Boolean;
 begin
-  Quest := TQuest(Entity);
+  Quest := TDBQuest(Entity);
   TranStarted := InTransaction;
 
   if not TranStarted then
@@ -46,11 +46,11 @@ begin
   try
     DAO.Insert(Quest);
 
-    for Marker in Quest.Markers do begin
-      Marker.MapID := Quest.MapID;
-      Marker.QuestID := Quest.ID;
-      MarkerService.Insert(Marker);
-    end;
+//    for Marker in Quest.Markers do begin
+//      Marker.MapID := Quest.MapID;
+//      Marker.QuestID := Quest.ID;
+//      MarkerService.Insert(Marker);
+//    end;
 
     if not TranStarted then
       CommitTransaction;
@@ -61,17 +61,17 @@ begin
   end;
 end;
 
-procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TQuest>);
-var
-  Quest: TQuest;
+procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
+//var
+//  Quest: TDBQuest;
 begin
   TQuestDAO(DAO).LoadQuests(MapID, Items);
 
-  for Quest in Items do
-    LoadMarkers(Quest.MapID, Quest.ID, Quest.Markers);
+//  for Quest in Items do
+//    LoadMarkers(Quest.MapID, Quest.ID, Quest.Markers);
 end;
 
-procedure TQuestService.LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+procedure TQuestService.LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
 begin
   MarkerService.LoadQuestMarkers(MapID, QuestID, Items);
 end;

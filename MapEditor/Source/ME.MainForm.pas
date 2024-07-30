@@ -8,7 +8,7 @@ uses
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
   ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
-  ME.Frame.ResourcesGrid;
+  ME.Grid.Resources, ME.DB.Map, ME.DB.Resource;
 
 type
   TMainForm = class(TForm)
@@ -18,10 +18,12 @@ type
     TopLayout: TLayout;
     Panel1: TPanel;
     buExpot: TButton;
+    buExportToDB: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure buExpotClick(Sender: TObject);
-    procedure MapChanged(const Map: TMap);
+    procedure MapChanged(const MapID: Variant);
+    procedure buExportToDBClick(Sender: TObject);
   private
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
@@ -36,8 +38,8 @@ var
 implementation
 
 uses
-  App.Constants, App.Service, ME.Service.Layer, ME.Service.Map, ME.DB.Marker,
-  ME.Service.Marker, ME.Service.Quest, ME.Service.Export,
+  App.Constants, ME.DB.Utils, App.Service, ME.Service.Layer, ME.Service.Map,
+  ME.DB.Marker, ME.Service.Marker, ME.Service.Quest,
   Map.Data.Service, Map.Data.Classes;
 
 {$R *.fmx}
@@ -77,13 +79,13 @@ begin
   AppService.ConnectToDB;
 
   FMapFilter.Init;
-  FResourcesGrid.Init;
+  FResourcesGrid.Init(nil, TResourceKind.QuestItem);
 //  FMapPanel.Init;
 end;
 
-procedure TMainForm.MapChanged(const Map: TMap);
+procedure TMainForm.MapChanged(const MapID: Variant);
 begin
-  FMapData.Init(Map);
+  FMapData.Init(MapID);
 end;
 
 procedure TMainForm.buExpotClick(Sender: TObject);
@@ -92,6 +94,13 @@ var
 begin
   FileName := System.IOUtils.TPath.Combine(AppParams.DataPath, 'data.json');
   TJSONDataExport.SaveToFile(FileName, DataService.Items);
+
+  ShowMessage('Done');
+end;
+
+procedure TMainForm.buExportToDBClick(Sender: TObject);
+begin
+  TDBDataImport.Load(DataService.Items);
 
   ShowMessage('Done');
 end;

@@ -97,21 +97,22 @@ begin
 end;
 
 function TfrMap.InternalMapEdit(const Map: TMap): Boolean;
-var
-  Presenter: TEditMapPresenter;
-  Dialog: TedMap;
+//var
+//  Presenter: TEditMapPresenter;
+//  Dialog: TedMap;
 begin
-  Dialog := TedMap.Create(Self);
-  try
-    Presenter := TEditMapPresenter.Create(Dialog, Map);
-    try
-      Result := Presenter.Edit;
-    finally
-      Presenter.Free;
-    end;
-  finally
-    Dialog.Free;
-  end;
+  Result := True;
+//  Dialog := TedMap.Create(Self);
+//  try
+//    Presenter := TEditMapPresenter.Create(Dialog, Map);
+//    try
+//      Result := Presenter.Edit;
+//    finally
+//      Presenter.Free;
+//    end;
+//  finally
+//    Dialog.Free;
+//  end;
 end;
 
 procedure TfrMap.MapEdit(const Index: Integer);

@@ -46,7 +46,6 @@ uses
   App.DB.Connection in '..\Source\Common\App.DB.Connection.pas',
   App.SQLite.Connection in '..\Source\Common\App.SQLite.Connection.pas',
   App.Service in '..\Source\Common\App.Service.pas',
-  ME.Service.Export in 'Source\ME.Service.Export.pas',
   Map.Data.Classes in '..\Source\Data\Map.Data.Classes.pas',
   Map.Data.Service in '..\Source\Data\Map.Data.Service.pas',
   Map.Data.Types in '..\Source\Data\Map.Data.Types.pas',
@@ -60,9 +59,13 @@ uses
   ME.DB.Resource in '..\Source\Entity\ME.DB.Resource.pas',
   ME.DAO.Resource in '..\Source\DAO\ME.DAO.Resource.pas',
   ME.Service.Resource in '..\Source\Service\ME.Service.Resource.pas',
-  ME.Frame.ResourcesGrid in 'Source\GUI\Frame\ME.Frame.ResourcesGrid.pas' {DBResourcesGrid: TFrame},
+  ME.Grid.Resources in 'Source\GUI\Frame\ME.Grid.Resources.pas' {DBResourcesGrid: TFrame},
   ME.DB.Edit.Resource in 'Source\GUI\Dialog\ME.DB.Edit.Resource.pas' {edDBResource},
-  ME.DB.Presenter.Resource in 'Source\GUI\ME.DB.Presenter.Resource.pas';
+  ME.DB.Presenter.Resource in 'Source\GUI\ME.DB.Presenter.Resource.pas',
+  ME.DB.QuestItem in '..\Source\Entity\ME.DB.QuestItem.pas',
+  ME.DAO.QuestItem in '..\Source\DAO\ME.DAO.QuestItem.pas',
+  ME.Service.QuestItem in '..\Source\Service\ME.Service.QuestItem.pas',
+  ME.MemGrid.Resources in 'Source\GUI\Frame\ME.MemGrid.Resources.pas' {ResourcesMemGrid: TFrame};
 
 {$R *.res}
 

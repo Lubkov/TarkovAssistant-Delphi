@@ -7,16 +7,17 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Marker, System.Actions, FMX.ActnList, FMX.ListBox, FMX.EditBox,
   FMX.NumberBox, FMX.Edit, FMX.Controls.Presentation, System.ImageList,
-  FMX.ImgList, FMX.Layouts, Map.Data.Types, FMX.TabControl, ME.Frame.QuestItem;
+  FMX.ImgList, FMX.Layouts, ME.DB.Marker, FMX.TabControl, ME.Grid.Resources,
+  ME.DB.Resource;
 
 type
   TedQuestPart = class(TedMarker)
     tabQuestItems: TTabItem;
   private
-    FQuestItemsGrid: TQuestItemsGrid;
+    FQuestItemsGrid: TDBResourcesGrid;
   protected
-    function GetTitle(const Value: TMarker): string; override;
-    procedure InternalSetInstance(const Value: TMarker); override;
+    function GetTitle(const Value: TDBMarker): string; override;
+    procedure InternalSetInstance(const Value: TDBMarker); override;
   public
     constructor Create(AOwner: TComponent); override;
   end;
@@ -31,7 +32,7 @@ constructor TedQuestPart.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FQuestItemsGrid := TQuestItemsGrid.Create(Self);
+  FQuestItemsGrid := TDBResourcesGrid.Create(Self);
   FQuestItemsGrid.Name := 'QuestItemsGrid';
   FQuestItemsGrid.Parent := tabQuestItems;
   FQuestItemsGrid.Align := TAlignLayout.Client;
@@ -40,7 +41,7 @@ begin
   edKindName.Visible := False;
 end;
 
-function TedQuestPart.GetTitle(const Value: TMarker): string;
+function TedQuestPart.GetTitle(const Value: TDBMarker): string;
 begin
   if Value.IsNewInstance then
     Result := 'Добавление новой подзадачи квеста'
@@ -48,11 +49,11 @@ begin
     Result := 'Редактирование подзадачи квеста';
 end;
 
-procedure TedQuestPart.InternalSetInstance(const Value: TMarker);
+procedure TedQuestPart.InternalSetInstance(const Value: TDBMarker);
 begin
   inherited;
 
-  FQuestItemsGrid.Init(Marker);
+  FQuestItemsGrid.Init(Marker, TResourceKind.QuestItem);
 end;
 
 end.

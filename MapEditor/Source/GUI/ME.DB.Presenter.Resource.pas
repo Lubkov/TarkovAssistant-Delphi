@@ -25,13 +25,14 @@ type
 implementation
 
 uses
-  App.Constants, ME.Service.Resource;
+  App.Constants, ME.DB.Utils, ME.Service.Resource;
 
 { TEditResourcePresenter }
 
 procedure TEditResourcePresenter.InternalSave;
 begin
-  ResourceService.Save(Instance);
+  if not IsNullID(Instance.MarkerID) then
+    ResourceService.Save(Instance);
 end;
 
 procedure TEditResourcePresenter.Cancel;
@@ -49,7 +50,8 @@ end;
 
 procedure TDelResourcePresenter.InternalDelete;
 begin
-  ResourceService.Remove(Instance);
+  if not IsNullID(Instance.MarkerID) then
+    ResourceService.Remove(Instance);
 end;
 
 end.

@@ -4,11 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
-  Map.Data.Types;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Quest;
 
 type
-  TEditQuestPresenter = class(TEditFormPresenter<TQuest>)
+  TEditQuestPresenter = class(TEditFormPresenter<TDBQuest>)
   private
   protected
     procedure InternalSave; override;
@@ -16,7 +15,7 @@ type
   public
   end;
 
-  TDelQuestPresenter = class(TDelFormPresenter<TQuest>)
+  TDelQuestPresenter = class(TDelFormPresenter<TDBQuest>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -25,7 +24,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils;
+  ME.DB.Utils, ME.Service.Quest;
 
 { TEditQuestPresenter }
 
@@ -33,9 +32,7 @@ procedure TEditQuestPresenter.InternalSave;
 begin
   inherited;
 
-//  if not IsNullID(Instance.MapID) then begin
-//    QuestService.Save(Instance);
-//  end;
+  QuestService.Save(Instance);
 end;
 
 procedure TEditQuestPresenter.Cancel;
@@ -48,12 +45,12 @@ end;
 
 function TDelQuestPresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить квест "' + Instance.Caption + '"?';
+  Result := 'Удалить квест "' + Instance.Name + '"?';
 end;
 
 procedure TDelQuestPresenter.InternalDelete;
 begin
-//  QuestService.Remove(Instance);
+  QuestService.Remove(Instance.ID);
 end;
 
 end.

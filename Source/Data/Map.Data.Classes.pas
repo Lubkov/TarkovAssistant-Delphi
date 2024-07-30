@@ -4,7 +4,9 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.Rtti, System.TypInfo,
-  System.SysConst, System.JSON, Generics.Collections, Map.Data.Types;
+  System.SysConst, System.JSON, Generics.Collections, Map.Data.Types,
+  ME.DB.Map, ME.DB.Layer, ME.DB.Quest, ME.DB.Marker, ME.DB.Resource,
+  ME.DB.QuestItem;
 
 type
   TJSONDataImport = class(TObject)
@@ -31,10 +33,23 @@ type
     class procedure SaveToFile(const FileName: string; Items: TList<TMap>);
   end;
 
+  TDBDataImport = class
+  private
+    class procedure SaveLayers(const MapID: Variant; const Items: TList<TLayer>);
+    class procedure SaveQuests(const MapID: Variant; const Items: TList<TQuest>);
+    class procedure SaveMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+    class function SaveResource(const MarkerID: Variant; const Source: TResource): Variant;
+    class procedure SaveResources(const MarkerID: Variant; const Items: TList<TResource>);
+    class procedure SaveQuestItems(const MarkerID: Variant; const Items: TList<TQuestItem>);
+  public
+    class procedure Load(const Items: TList<TMap>);
+  end;
+
 implementation
 
 uses
-  Map.Data.Service;
+  App.Service, Map.Data.Service, ME.Service.Map, ME.Service.Layer, ME.Service.Quest, 
+  ME.Service.Marker, ME.Service.Resource, ME.Service.QuestItem;
 
 class procedure TJSONDataImport.LoadLayers(const Source: TJSONValue; Items: TList<TLayer>);
 var
@@ -327,6 +342,157 @@ begin
     Data.SaveToFile(FileName, TEncoding.UTF8)
   finally
     Data.Free;
+  end;
+end;
+
+{ TDBDataImport }
+
+class procedure TDBDataImport.Load(const Items: TList<TMap>);
+var
+  Source: TMap;
+  Map: TDBMap;
+begin
+  MapService.StartTransaction;
+  try
+    for Source in Items do begin
+      Map := TDBMap.Create;
+      try
+        Map.Caption := Source.Caption;
+        Map.Left := Source.Left;
+        Map.Top := Source.Top;
+        Map.Right := Source.Right;
+        Map.Bottom := Source.Bottom;
+        DataService.LoadImage(Source, Map.Picture);
+    
+        MapService.Save(Map);
+        SaveLayers(Map.ID, Source.Layers);
+        SaveMarkers(Map.ID, Null, Source.Markers);
+        SaveQuests(Map.ID, Source.Quests);
+      finally
+        Map.Free;
+      end;           
+    end;
+
+    MapService.CommitTransaction;
+  except
+    MapService.RollbackTransaction;
+    raise;
+  end;
+end;
+
+class procedure TDBDataImport.SaveLayers(const MapID: Variant; const Items: TList<TLayer>);
+var
+  Source: TLayer;
+  Layer: TDBLayer;
+begin
+  for Source in Items do begin
+    Layer := TDBLayer.Create;
+    try
+      Layer.MapID := MapID;
+      Layer.Level := Source.Level;
+      Layer.Name := Source.Caption;
+      DataService.LoadImage(Source, Layer.Picture);
+
+      LayerService.Save(Layer);
+    finally
+      Layer.Free;
+    end;
+  end;
+end;
+
+class procedure TDBDataImport.SaveQuests(const MapID: Variant; const Items: TList<TQuest>);
+var
+  Source: TQuest;
+  Quest: TDBQuest;
+begin
+  for Source in Items do begin
+    Quest := TDBQuest.Create;
+    try
+      Quest.MapID := MapID;
+      Quest.Name := Source.Caption;
+      Quest.Trader := TTrader(Ord(Source.Trader));
+
+      QuestService.Save(Quest);
+      SaveMarkers(MapID, Quest.ID, Source.Markers);
+    finally
+      Quest.Free;
+    end;
+  end;
+end;
+
+class procedure TDBDataImport.SaveMarkers(const MapID, QuestID: Variant; const Items: TList<TMarker>);
+var
+  Source: TMarker;
+  Marker: TDBMarker;
+begin
+  for Source in Items do begin
+    Marker := TDBMarker.Create;
+    try
+      Marker.MapID := MapID;
+      Marker.QuestID := QuestID;
+      Marker.Caption := Source.Caption;
+      Marker.Kind := TMarkerKind(Source.Kind);
+      Marker.Left := Source.Left;
+      Marker.Top := Source.Top;
+
+      MarkerService.Save(Marker);
+
+      SaveResources(Marker.ID, Source.Images);
+      SaveQuestItems(Marker.ID, Source.Items);
+    finally
+      Marker.Free;
+    end;
+  end;
+end;
+
+class function TDBDataImport.SaveResource(const MarkerID: Variant; const Source: TResource): Variant;
+var
+  Resource: TDBResource;
+begin
+  Resource := TDBResource.Create;
+  try
+    Resource.MarkerID := MarkerID;
+    if VarIsNull(MarkerID) or VarIsEmpty(MarkerID) then
+      Resource.Kind := TResourceKind.QuestItem
+    else
+      Resource.Kind := TResourceKind.Screenshot;
+
+    Resource.Description := Source.Description;
+    DataService.LoadImage(Source, Resource.Picture);
+
+    ResourceService.Save(Resource);
+    Result := Resource.ID;
+  finally
+    Resource.Free;
+  end;
+end;
+
+class procedure TDBDataImport.SaveResources(const MarkerID: Variant; const Items: TList<TResource>);
+var
+  Resource: TResource;
+begin
+  for Resource in Items do
+    SaveResource(MarkerID, Resource);
+end;
+
+class procedure TDBDataImport.SaveQuestItems(const MarkerID: Variant; const Items: TList<TQuestItem>);
+var
+  Resource: TResource;
+  ResourceID: Variant;
+  QuestItem: TDBQuestItem;
+begin
+  for Resource in Items do begin
+    ResourceID := SaveResource(Null, Resource);
+
+    QuestItem := TDBQuestItem.Create;
+    try
+      QuestItem.ResourceID := ResourceID;
+      QuestItem.MarkerID := MarkerID;
+
+      QuestItemService.Save(QuestItem);
+    finally
+      QuestItem.Free;
+    end;
   end;
 end;
 

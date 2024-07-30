@@ -10,7 +10,7 @@ const
   MainLayerIndex = 0;
 
 type
-  TLayer = class(TEntity)
+  TDBLayer = class(TEntity)
   private
     FMapID: Variant;
     FLevel: Integer;
@@ -38,9 +38,9 @@ type
 
 implementation
 
-{ TLayer }
+{ TDBLayer }
 
-constructor TLayer.Create;
+constructor TDBLayer.Create;
 begin
   inherited;
 
@@ -50,34 +50,34 @@ begin
   FPicture := TBitmap.Create;
 end;
 
-destructor TLayer.Destroy;
+destructor TDBLayer.Destroy;
 begin
   FreeAndNil(FPicture);
 
   inherited;
 end;
 
-function TLayer.GetIsMainLevel: Boolean;
+function TDBLayer.GetIsMainLevel: Boolean;
 begin
   Result := Level = MainLayerIndex;
 end;
 
-procedure TLayer.SetPicture(const Value: TBitmap);
+procedure TDBLayer.SetPicture(const Value: TBitmap);
 begin
   FPicture.Assign(Value);
 end;
 
-procedure TLayer.Assign(const Source: TEntity);
+procedure TDBLayer.Assign(const Source: TEntity);
 begin
   inherited;
 
-  FMapID := TLayer(Source).MapID;
-  FLevel := TLayer(Source).Level;
-  FName := TLayer(Source).Name;
-  Picture := TLayer(Source).Picture;
+  FMapID := TDBLayer(Source).MapID;
+  FLevel := TDBLayer(Source).Level;
+  FName := TDBLayer(Source).Name;
+  Picture := TDBLayer(Source).Picture;
 end;
 
-procedure TLayer.Assign(const DataSet: TDataSet);
+procedure TDBLayer.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
@@ -89,14 +89,14 @@ begin
     AssignPicture(DataSet.FieldByName('Picture'), Picture);
 end;
 
-class function TLayer.EntityName: string;
+class function TDBLayer.EntityName: string;
 begin
   Result := 'Layer';
 end;
 
-class function TLayer.FieldList: string;
+class function TDBLayer.FieldList: string;
 begin
-  Result := 'ID, MapID, Level, Name';
+  Result := 'ID, MapID, Level, "Name"';
 end;
 
 end.

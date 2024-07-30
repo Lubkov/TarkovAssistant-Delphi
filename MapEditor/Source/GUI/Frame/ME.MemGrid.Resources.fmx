@@ -1,0 +1,17 @@
+inherited ResourcesMemGrid: TResourcesMemGrid
+  inherited Grid: TStringGrid
+    Viewport.Width = 556.000000000000000000
+    Viewport.Height = 320.000000000000000000
+  end
+  inherited ActionList1: TActionList
+    inherited acAddResource: TAction
+      ImageIndex = 0
+    end
+    inherited acEditResource: TAction
+      ImageIndex = 1
+    end
+    inherited acDeleteResource: TAction
+      ImageIndex = 2
+    end
+  end
+end

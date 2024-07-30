@@ -7,11 +7,15 @@ uses
   Data.DB, ME.DB.Entity, ME.DB.Marker;
 
 type
-  TQuest = class(TEntity)
+  TTrader = (None, Prapor, Therapist, Skier, Peacemaker, Mechanic, Ragman, Jaeger, Fence, Lightkeeper);
+  TQuestChangedEvent = procedure(const QuestID: Variant) of object;
+
+  TDBQuest = class(TEntity)
   private
     FMapID: Variant;
     FName: string;
-    FMarkers: TList<TMarker>;
+    FTrader: TTrader;
+//    FMarkers: TList<TMarker>;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -22,68 +26,87 @@ type
     class function EntityName: string; override;
     class function FieldList: string; override;
 
-    procedure ClearMarkers;
+    class function TraderToStr(Value: TTrader): string; static;
 
     property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
-    property Markers: TList<TMarker> read FMarkers;
+    property Trader: TTrader read FTrader write FTrader;
+//    property Markers: TList<TMarker> read FMarkers;
   end;
 
 implementation
 
-{ TQuest }
+{ TDBQuest }
 
-constructor TQuest.Create;
+constructor TDBQuest.Create;
 begin
   inherited;
 
   FMapID := Null;
   FName := '';
-  FMarkers := TList<TMarker>.Create;
+//  FMarkers := TList<TMarker>.Create;
 end;
 
-destructor TQuest.Destroy;
+destructor TDBQuest.Destroy;
 begin
-  ClearMarkers;
-  FMarkers.Free;
+//  ClearMarkers;
+//  FMarkers.Free;
 
   inherited;
 end;
 
-procedure TQuest.Assign(const Source: TEntity);
+procedure TDBQuest.Assign(const Source: TEntity);
 begin
   inherited;
 
-  FMapID := TQuest(Source).MapID;
-  FName := TQuest(Source).Name;
+  FMapID := TDBQuest(Source).MapID;
+  FName := TDBQuest(Source).Name;
+  FTrader := TDBQuest(Source).Trader;
 end;
 
-procedure TQuest.Assign(const DataSet: TDataSet);
+procedure TDBQuest.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
   FMapID := DataSet.FieldByName('MapID').Value;
   FName := DataSet.FieldByName('Name').AsString;
+  FTrader := TTrader(DataSet.FieldByName('Trader').AsInteger);
 end;
 
-class function TQuest.EntityName: string;
+class function TDBQuest.EntityName: string;
 begin
   Result := 'Quest';
 end;
 
-class function TQuest.FieldList: string;
+class function TDBQuest.FieldList: string;
 begin
-  Result := 'ID, MapID, Name';
+  Result := 'ID, MapID, Name, Trader';
 end;
 
-procedure TQuest.ClearMarkers;
-var
-  i: Integer;
+class function TDBQuest.TraderToStr(Value: TTrader): string;
 begin
-  for i := 0 to FMarkers.Count - 1 do
-    FMarkers[i].Free;
-
-  FMarkers.Clear;
+  case Value of
+    TTrader.Prapor:
+      Result := 'Прапор';
+    TTrader.Therapist:
+      Result := 'Терапевт';
+    TTrader.Skier:
+      Result := 'Лыжник';
+    TTrader.Peacemaker:
+      Result := 'Миротворец';
+    TTrader.Mechanic:
+      Result := 'Механик';
+    TTrader.Ragman:
+      Result := 'Барахольщик';
+    TTrader.Jaeger:
+      Result := 'Егерь';
+    TTrader.Fence:
+      Result := 'Скупщик';
+    TTrader.Lightkeeper:
+      Result := 'Смотритель';
+  else
+    Result := '';
+  end;
 end;
 
 end.

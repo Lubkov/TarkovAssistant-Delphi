@@ -8,11 +8,11 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
   FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox, ME.Edit.Form.Presenter,
-  FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Platform, Map.Data.Types,
-  FMX.TabControl, ME.Frame.Resource;
+  FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Platform, ME.DB.Marker,
+  FMX.TabControl, ME.DB.Resource, ME.Grid.Resources, ME.MemGrid.Resources;
 
 type
-  TedMarker = class(TEditForm, IEditDialog<TMarker>)
+  TedMarker = class(TEditForm, IEditDialog<TDBMarker>)
     edMarkerCaption: TEdit;
     laMarkerName: TLabel;
     ImageList24: TImageList;
@@ -37,8 +37,6 @@ type
     Layout2: TLayout;
     edPositionX: TNumberBox;
     edPositionY: TNumberBox;
-    laMapWidth: TLabel;
-    laMapHeight: TLabel;
     tabMarkerImages: TTabItem;
     procedure edLeftClick(Sender: TObject);
     procedure buRightClick(Sender: TObject);
@@ -46,9 +44,8 @@ type
     procedure buBottomClick(Sender: TObject);
     procedure buGenerateClick(Sender: TObject);
   private
-    FMap: TMap;
-    FMarker: TMarker;
-    FResourcesGrid: TResourcesGrid;
+    FMarker: TDBMarker;
+    FResourcesGrid: TDBResourcesGrid;
 
     function GetMarkerCaption: string;
     procedure SetMarkerCaption(const Value: string);
@@ -58,20 +55,18 @@ type
     procedure SetPositionX(const Value: Integer);
     function GetPositionY: Integer;
     procedure SetPositionY(const Value: Integer);
-    procedure SetMap(const Value: TMap);
     function GetIncrement: Integer;
   protected
-    function GetTitle(const Value: TMarker): string; virtual;
-    procedure InternalSetInstance(const Value: TMarker); virtual;
+    function GetTitle(const Value: TDBMarker): string; virtual;
+    procedure InternalSetInstance(const Value: TDBMarker); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure SetInstance(const Value: TMarker);
-    procedure PostValues(const Value: TMarker);
+    procedure SetInstance(const Value: TDBMarker);
+    procedure PostValues(const Value: TDBMarker);
 
-    property Map: TMap read FMap write SetMap;
-    property Marker: TMarker read FMarker;
+    property Marker: TDBMarker read FMarker;
     property MarkerCaption: string read GetMarkerCaption write SetMarkerCaption;
     property MarkerKind: TMarkerKind read GetMarkerKind write SetMarkerKind;
     property PositionX: Integer read GetPositionX write SetPositionX;
@@ -91,17 +86,17 @@ var
 begin
   inherited;
 
-  FMap := nil;
   edKindName.Clear;
   for Kind := TMarkerKind.PMCExtraction to TMarkerKind.CoopExtraction do
-    edKindName.Items.Add(TMarker.KindToStr(Kind));
+    edKindName.Items.Add(TDBMarker.KindToStr(Kind));
 
   laScreenShotName.Visible := False;
 
-  FResourcesGrid := TResourcesGrid.Create(Self);
-  FResourcesGrid.Name := 'ImagesGrid';
-  FResourcesGrid.Parent := tabMarkerImages;
-  FResourcesGrid.Align := TAlignLayout.Client;
+  FResourcesGrid := nil;
+//  FResourcesGrid := TDBResourcesGrid.Create(Self);
+//  FResourcesGrid.Name := 'ImagesGrid';
+//  FResourcesGrid.Parent := tabMarkerImages;
+//  FResourcesGrid.Align := TAlignLayout.Client;
 
   MainContainer.TabIndex := tabGeneral.Index;
 end;
@@ -125,50 +120,6 @@ end;
 function TedMarker.GetMarkerKind: TMarkerKind;
 begin
   Result := TMarkerKind(edKindName.ItemIndex);
-end;
-
-procedure TedMarker.SetMap(const Value: TMap);
-var
-  MapLeft: Integer;
-  MapRight: Integer;
-  MapTop: Integer;
-  MapBottom: Integer;
-begin
-  FMap := Value;
-
-  if Map = nil then begin
-    MapLeft := -9999;
-    MapRight := 9999;
-    MapTop := -9999;
-    MapBottom := 9999;
-  end
-  else begin
-    MapLeft := Map.Left;
-    MapRight := Map.Right;
-    MapTop := Map.Top;
-    MapBottom := Map.Bottom;
-  end;
-
-  if MapLeft < MapRight then begin
-    edPositionX.Min := MapLeft;
-    edPositionX.Max := MapRight;
-  end
-  else begin
-    edPositionX.Min := MapRight;
-    edPositionX.Max := MapLeft;
-  end;
-
-  if MapTop < MapBottom then begin
-    edPositionY.Min := MapTop;
-    edPositionY.Max := MapBottom;
-  end
-  else begin
-    edPositionY.Min := MapBottom;
-    edPositionY.Max := MapTop;
-  end;
-
-  laMapWidth.Text := 'Ширина карты: (' + IntToStr(MapLeft) + ', ' + IntToStr(MapRight) + ')';
-  laMapHeight.Text := 'Высота карты: (' + IntToStr(MapTop) + ', ' + IntToStr(MapBottom) + ')';
 end;
 
 procedure TedMarker.SetMarkerKind(const Value: TMarkerKind);
@@ -196,7 +147,7 @@ begin
   edPositionY.Value := Value;
 end;
 
-function TedMarker.GetTitle(const Value: TMarker): string;
+function TedMarker.GetTitle(const Value: TDBMarker): string;
 begin
   if Value.IsNewInstance then
     Result := 'Добавление нового выхода с карты'
@@ -204,7 +155,7 @@ begin
     Result := 'Редактирование выхода с карты';
 end;
 
-procedure TedMarker.InternalSetInstance(const Value: TMarker);
+procedure TedMarker.InternalSetInstance(const Value: TDBMarker);
 begin
 
 end;
@@ -214,9 +165,18 @@ begin
   Result := StrToInt(edIncrement.Items[edIncrement.ItemIndex]);
 end;
 
-procedure TedMarker.SetInstance(const Value: TMarker);
+procedure TedMarker.SetInstance(const Value: TDBMarker);
 begin
   FMarker := Value;
+
+  if FMarker.IsNewInstance then
+    FResourcesGrid := TResourcesMemGrid.Create(Self)
+  else
+    FResourcesGrid := TDBResourcesGrid.Create(Self);
+
+  FResourcesGrid.Name := 'ImagesGrid';
+  FResourcesGrid.Parent := tabMarkerImages;
+  FResourcesGrid.Align := TAlignLayout.Client;
 
   Caption := GetTitle(Value);
   MarkerCaption := FMarker.Caption;
@@ -224,12 +184,12 @@ begin
   PositionX := FMarker.Left;
   PositionY := FMarker.Top;
 
-  FResourcesGrid.Init(FMarker);
+  FResourcesGrid.Init(FMarker, TResourceKind.Screenshot);
 
   InternalSetInstance(Value);
 end;
 
-procedure TedMarker.PostValues(const Value: TMarker);
+procedure TedMarker.PostValues(const Value: TDBMarker);
 begin
   FMarker.Caption := MarkerCaption;
   Value.Kind := MarkerKind;
@@ -239,34 +199,22 @@ end;
 
 procedure TedMarker.edLeftClick(Sender: TObject);
 begin
-  if Map.Left < Map.Right then
-    PositionX := PositionX - Increment
-  else
-    PositionX := PositionX + Increment;
+  PositionX := PositionX + Increment;
 end;
 
 procedure TedMarker.buRightClick(Sender: TObject);
 begin
-  if Map.Left < Map.Right then
-    PositionX := PositionX + Increment
-  else
-    PositionX := PositionX - Increment;
+  PositionX := PositionX - Increment;
 end;
 
 procedure TedMarker.buTopClick(Sender: TObject);
 begin
-  if Map.Top < Map.Bottom then
-    PositionY := PositionY - Increment
-  else
-    PositionY := PositionY + Increment;
+  PositionY := PositionY - Increment;
 end;
 
 procedure TedMarker.buBottomClick(Sender: TObject);
 begin
-  if Map.Top < Map.Bottom then
-    PositionY := PositionY + Increment
-  else
-    PositionY := PositionY - Increment;
+  PositionY := PositionY + Increment;
 end;
 
 procedure TedMarker.buGenerateClick(Sender: TObject);

@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.Controls.Presentation,
   FMX.TabControl, FMX.Layouts,
-  Map.Data.Types, ME.Frame.Marker, ME.Frame.Quest, ME.Frame.Layer, ME.Frame.QuestPart;
+  ME.DB.Map, Map.Data.Types, ME.Frame.Marker, ME.Frame.Quest, ME.Frame.Layer, ME.Frame.QuestPart;
 
 type
   TfrMapData = class(TFrame)
@@ -19,21 +19,25 @@ type
     Splitter1: TSplitter;
     QuestLayout: TLayout;
   private
-    FMap: TMap;
+    FMap: TDBMap;
     FLayerList: TfrLayerList;
     FMarkerGrid: TfrMarkerGrid;
     FQuestList: TfrQuest;
     FQuestPartGrid: TfrQuestPartGrid;
 
-    procedure OnQuestChanged(const Quest: TQuest);
+    procedure OnQuestChanged(const QuestID: Variant);
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
 
-    procedure Init(const Map: TMap);
+    procedure Init(const MapID: Variant);
     procedure Clear;
   end;
 
 implementation
+
+uses
+  ME.DB.Utils, ME.Service.Map;
 
 {$R *.fmx}
 
@@ -42,6 +46,8 @@ implementation
 constructor TfrMapData.Create(AOwner: TComponent);
 begin
   inherited;
+
+  FMap := TDBMap.Create;
 
   FLayerList := TfrLayerList.Create(Self);
   FLayerList.Parent := tabLayer;
@@ -63,19 +69,33 @@ begin
   MainContainer.TabIndex := tabLayer.Index;
 end;
 
-procedure TfrMapData.OnQuestChanged(const Quest: TQuest);
+destructor TfrMapData.Destroy;
 begin
-  FQuestPartGrid.Init(FMap, Quest);
+  FMap.Free;
+
+  inherited;
 end;
 
-procedure TfrMapData.Init(const Map: TMap);
+procedure TfrMapData.OnQuestChanged(const QuestID: Variant);
 begin
-  FMap := Map;
+  FQuestPartGrid.Init(FMap.ID, QuestID);
+end;
 
-  if Map <> nil then begin
-    FLayerList.Init(FMap);
-    FMarkerGrid.Init(FMap);
-    FQuestList.Init(FMap);
+procedure TfrMapData.Init(const MapID: Variant);
+begin
+  if FMap.ID = MapID then
+    Exit;
+
+  // TODO: Clear map instance
+  FMap.Free;
+  FMap := TDBMap.Create;
+
+  if not IsNullID(MapID) then begin
+    MapService.GetAt(MapID, FMap);
+
+    FLayerList.Init(MapID);
+    FMarkerGrid.Init(MapID);
+    FQuestList.Init(MapID);
   end
   else
     Clear;
