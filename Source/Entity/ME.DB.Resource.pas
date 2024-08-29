@@ -77,8 +77,8 @@ begin
   Kind := TResourceKind(DataSet.FieldByName('Kind').AsInteger);
   Description := DataSet.FieldByName('Description').AsString;
 
-  if DataSet.FindField('Picture') <> nil then
-    AssignPicture(DataSet.FieldByName('Picture'), Picture);
+//  if DataSet.FindField('Picture') <> nil then
+//    AssignPicture(DataSet.FieldByName('Picture'), Picture);
 end;
 
 class function TDBResource.EntityName: string;
@@ -88,7 +88,7 @@ end;
 
 class function TDBResource.FieldList: string;
 begin
-  Result := 'ID, MarkerID, Kind, Description, Picture';
+  Result := 'ID, MarkerID, Kind, Description'; //, Picture';
 end;
 
 end.

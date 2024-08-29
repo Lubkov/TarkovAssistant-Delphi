@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.Resource;
+  Data.DB, ME.DB.Entity, ME.DB.Resource, ME.DB.QuestItem;
 
 type
   TMarkerKind = (PMCExtraction, ScavExtraction, CoopExtraction, Quest);
@@ -18,8 +18,8 @@ type
     FKind: TMarkerKind;
     FLeft: Integer;
     FTop: Integer;
-//    FItems: TObjectList<TQuestItem>;
     FImages: TObjectList<TDBResource>;
+    FItems: TObjectList<TDBResource>;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -37,8 +37,8 @@ type
     property Kind: TMarkerKind read FKind write FKind;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
-//    property Items: TObjectList<TQuestItem> read FItems;
     property Images: TObjectList<TDBResource> read FImages;
+    property Items: TObjectList<TDBResource> read FItems;
   end;
 
 implementation
@@ -55,14 +55,14 @@ begin
   FKind := TMarkerKind.PMCExtraction;
   FLeft := 0;
   FTop := 0;
-//  FItems := TObjectList<TQuestItem>.Create;
   FImages := TObjectList<TDBResource>.Create;
+  FItems := TObjectList<TDBResource>.Create;
 end;
 
 destructor TDBMarker.Destroy;
 begin
-//  FItems.Free;
   FImages.Free;
+  FItems.Free;
 
   inherited;
 end;

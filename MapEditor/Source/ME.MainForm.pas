@@ -19,11 +19,13 @@ type
     Panel1: TPanel;
     buExpot: TButton;
     buExportToDB: TButton;
+    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure buExpotClick(Sender: TObject);
     procedure MapChanged(const MapID: Variant);
     procedure buExportToDBClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
@@ -39,7 +41,7 @@ implementation
 
 uses
   App.Constants, ME.DB.Utils, App.Service, ME.Service.Layer, ME.Service.Map,
-  ME.DB.Marker, ME.Service.Marker, ME.Service.Quest,
+  ME.DB.Marker, ME.Service.Marker, ME.Service.Quest, ME.Service.Resource,
   Map.Data.Service, Map.Data.Classes;
 
 {$R *.fmx}
@@ -101,6 +103,13 @@ end;
 procedure TMainForm.buExportToDBClick(Sender: TObject);
 begin
   TDBDataImport.Load(DataService.Items);
+
+  ShowMessage('Done');
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+begin
+  ResourceService.ExportFromDB;
 
   ShowMessage('Done');
 end;

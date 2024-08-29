@@ -60,8 +60,8 @@ object DBResourcesGrid: TDBResourcesGrid
       Align = Center
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
-      Size.Width = 170.399993896484400000
-      Size.Height = 15.200000762939450000
+      Size.Width = 171.000000000000000000
+      Size.Height = 15.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1082#1074#1077#1089#1090#1086#1074#1099#1093' '#1087#1088#1077#1076#1084#1077#1090#1086#1074
@@ -72,14 +72,23 @@ object DBResourcesGrid: TDBResourcesGrid
     Align = Client
     CanFocus = True
     ClipChildren = True
-    Size.Width = 556.000000000000000000
+    Size.Width = 396.000000000000000000
     Size.Height = 320.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 6
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 556.000000000000000000
-    Viewport.Height = 320.000000000000000000
+    Viewport.Width = 392.000000000000000000
+    Viewport.Height = 295.000000000000000000
+  end
+  object paPicture: TPanel
+    Align = Left
+    Position.Y = 40.000000000000000000
+    Size.Width = 160.000000000000000000
+    Size.Height = 320.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'pushpanel'
+    TabOrder = 12
   end
   object ImageList1: TImageList
     Source = <
@@ -356,6 +365,7 @@ object DBResourcesGrid: TDBResourcesGrid
     end
   end
   object BindSourceDB1: TBindSourceDB
+    DataSource.OnDataChange = BindSourceDB1SubDataSourceDataChange
     DataSet = F
     ScopeMappings = <>
     Left = 328

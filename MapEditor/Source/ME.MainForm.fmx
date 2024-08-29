@@ -63,7 +63,7 @@ object MainForm: TMainForm
           Size.Width = 80.000000000000000000
           Size.Height = 35.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 2
+          TabOrder = 3
           Text = 'Expot'
           TextSettings.Trimming = None
           OnClick = buExpotClick
@@ -79,10 +79,26 @@ object MainForm: TMainForm
           Size.Width = 80.000000000000000000
           Size.Height = 35.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 1
+          TabOrder = 2
           Text = 'JSON to DB'
           TextSettings.Trimming = None
           OnClick = buExportToDBClick
+        end
+        object Button1: TButton
+          Align = Left
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Position.X = 200.000000000000000000
+          Position.Y = 5.000000000000000000
+          Size.Width = 110.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Export Resources'
+          TextSettings.Trimming = None
+          OnClick = Button1Click
         end
       end
     end

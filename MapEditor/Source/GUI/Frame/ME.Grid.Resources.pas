@@ -9,7 +9,8 @@ uses
   FMX.ImgList, FMX.Grid, FMX.ScrollBox, FMX.Controls.Presentation, Data.DB,
   MemDS, DBAccess, Uni, Fmx.Bind.Grid, System.Bindings.Outputs, FMX.ExtCtrls,
   Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
-  Data.Bind.Grid, Data.Bind.DBScope, ME.DB.Resource, ME.DB.Marker;
+  Data.Bind.Grid, Data.Bind.DBScope, ME.DB.Resource, ME.DB.Marker,
+  ME.Frame.Picture;
 
 type
   TDBResourcesGrid = class(TFrame)
@@ -31,14 +32,17 @@ type
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     GridBindings: TBindingsList;
     FDescription: TWideStringField;
+    paPicture: TPanel;
     procedure acEditResourceExecute(Sender: TObject);
     procedure acAddResourceExecute(Sender: TObject);
     procedure acDeleteResourceExecute(Sender: TObject);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
   private
     FMarker: TDBMarker;
     FResourceKind: TResourceKind;
+    FPicturePanel: TfrPicture;
   protected
     function GetCommandSQLText: string; virtual;
 //    function InternalResourceAdd(const Resource: TDBResource): Boolean;
@@ -73,6 +77,11 @@ begin
 
   FMarker := nil;
   Grid.RowCount := 0;
+
+  FPicturePanel := TfrPicture.Create(Self);
+  FPicturePanel.Parent := paPicture;
+  FPicturePanel.Align := TAlignLayout.Client;
+  FPicturePanel.Readonly := True;
 end;
 
 destructor TDBResourcesGrid.Destroy;
@@ -148,6 +157,13 @@ procedure TDBResourcesGrid.Init(const Marker: TDBMarker; const Kind: TResourceKi
 begin
   FMarker := Marker;
   FResourceKind := Kind;
+
+  case ResourceKind of
+    TResourceKind.Screenshot:
+      laTitle.Text := 'Список скриншотов маркера';
+    TResourceKind.QuestItem:
+      laTitle.Text := 'Список квестовых предметов';
+  end;
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
@@ -237,6 +253,11 @@ begin
   acAddResource.Enabled := True;
   acEditResource.Enabled := Grid.RowCount > 0;
   acDeleteResource.Enabled := Grid.RowCount > 0;
+end;
+
+procedure TDBResourcesGrid.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  ResourceService.LoadPicture(FID.Value, TResourceKind(FKind.AsInteger), FPicturePanel.Picture);
 end;
 
 end.

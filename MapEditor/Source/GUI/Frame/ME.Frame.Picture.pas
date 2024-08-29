@@ -35,6 +35,8 @@ type
     procedure SetPicture(const Value: TBitmap);
     function GetTitle: string;
     procedure SetTitle(const Value: string);
+    procedure SetReadonly(const Value: Boolean);
+    function GetReadonly: Boolean;
   public
     constructor Create(AOwner: TComponent); override;
 
@@ -42,6 +44,7 @@ type
     property Title: string read GetTitle write SetTitle;
     property Changed: Boolean read FChanged write FChanged;
     property FileName: string read FFileName write FFileName;
+    property Readonly: Boolean read GetReadonly write SetReadonly;
   end;
 
 implementation
@@ -85,6 +88,16 @@ begin
   laTitle.Text := Value;
 end;
 
+function TfrPicture.GetReadonly: Boolean;
+begin
+  Result := not paToolbar.Visible;
+end;
+
+procedure TfrPicture.SetReadonly(const Value: Boolean);
+begin
+  paToolbar.Visible := not Value;
+end;
+
 procedure TfrPicture.acOpenPictureExecute(Sender: TObject);
 begin
   if OpenDialog.Execute then begin
@@ -102,8 +115,8 @@ end;
 
 procedure TfrPicture.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acOpenPicture.Enabled := True;
-  acDeletePicture.Enabled := not Picture.IsEmpty;
+  acOpenPicture.Enabled := not Readonly;
+  acDeletePicture.Enabled := not (Readonly or Picture.IsEmpty);
 end;
 
 end.

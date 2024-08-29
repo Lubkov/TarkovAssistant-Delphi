@@ -58,8 +58,8 @@ begin
     case ResourceKind of
       TResourceKind.Screenshot:
         Marker.Images.Add(Resource);
-//      TResourceKind.QuestItem:
-//        Marker.QuestItems.Add(Resource);
+      TResourceKind.QuestItem:
+        Marker.Items.Add(Resource);
     end;
 
     F.DisableControls;
@@ -85,8 +85,8 @@ begin
   case ResourceKind of
     TResourceKind.Screenshot:
       Resource := Marker.Images[Grid.Selected];
-//    TResourceKind.QuestItem:
-//      Marker.QuestItems.Add(Resource);
+    TResourceKind.QuestItem:
+      Resource := Marker.Items[Grid.Selected];
   end;
 
   if InternalEditRecord(Resource) then begin
@@ -111,8 +111,8 @@ begin
   case ResourceKind of
     TResourceKind.Screenshot:
       Marker.Images.Delete(Grid.Row);
-//    TResourceKind.QuestItem:
-//      Marker.QuestItems.Delete(Grid.Row);
+    TResourceKind.QuestItem:
+      Marker.Items.Delete(Grid.Row);
   end;
 
   F.DisableControls;
