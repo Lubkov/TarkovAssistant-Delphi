@@ -30,19 +30,19 @@ uses
 
 procedure TEditMarkerPresenter.InternalSave;
 var
-  IsNewInstance: Boolean;
+//  IsNewInstance: Boolean;
   Resource: TDBResource;
 begin
   inherited;
 
-  IsNewInstance := Instance.IsNewInstance;
+//  IsNewInstance := Instance.IsNewInstance;
   MarkerService.Save(Instance);
 
-  if IsNewInstance then
-    for Resource in Instance.Images do begin
-      Resource.MarkerID := Instance.ID;
-      ResourceService.Save(Resource);
-    end;
+//  if IsNewInstance then
+//    for Resource in Instance.Images do begin
+//      Resource.MarkerID := Instance.ID;
+//      ResourceService.Save(Resource);
+//    end;
 end;
 
 procedure TEditMarkerPresenter.Cancel;

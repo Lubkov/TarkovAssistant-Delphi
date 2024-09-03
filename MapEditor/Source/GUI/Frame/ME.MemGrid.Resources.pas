@@ -87,6 +87,8 @@ begin
       Resource := Marker.Images[Grid.Selected];
     TResourceKind.QuestItem:
       Resource := Marker.Items[Grid.Selected];
+  else
+    raise Exception.Create('TResourceKind is not supported');
   end;
 
   if InternalEditRecord(Resource) then begin

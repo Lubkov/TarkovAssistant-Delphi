@@ -164,6 +164,7 @@ begin
     TResourceKind.QuestItem:
       laTitle.Text := 'Список квестовых предметов';
   end;
+  FPicturePanel.Resize := Kind = TResourceKind.QuestItem;
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
@@ -208,6 +209,7 @@ begin
     if not ResourceService.GetAt(FID.Value, Resource) then
       Exit;
 
+    ResourceService.LoadPicture(Resource);
     if InternalEditRecord(Resource) then
       F.RefreshRecord;
   finally
@@ -258,6 +260,7 @@ end;
 procedure TDBResourcesGrid.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
 begin
   ResourceService.LoadPicture(FID.Value, TResourceKind(FKind.AsInteger), FPicturePanel.Picture);
+  FPicturePanel.ResizePicture;
 end;
 
 end.

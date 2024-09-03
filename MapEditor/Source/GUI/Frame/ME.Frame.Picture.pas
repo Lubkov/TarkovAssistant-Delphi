@@ -30,6 +30,7 @@ type
   private
     FChanged: Boolean;
     FFileName: string;
+    FResize: Boolean;
 
     function GetPicture: TBitmap;
     procedure SetPicture(const Value: TBitmap);
@@ -37,14 +38,18 @@ type
     procedure SetTitle(const Value: string);
     procedure SetReadonly(const Value: Boolean);
     function GetReadonly: Boolean;
+    procedure SetResize(const Value: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
+
+    procedure ResizePicture;
 
     property Picture: TBitmap read GetPicture write SetPicture;
     property Title: string read GetTitle write SetTitle;
     property Changed: Boolean read FChanged write FChanged;
     property FileName: string read FFileName write FFileName;
     property Readonly: Boolean read GetReadonly write SetReadonly;
+    property Resize: Boolean read FResize write SetResize;
   end;
 
 implementation
@@ -71,11 +76,7 @@ end;
 procedure TfrPicture.SetPicture(const Value: TBitmap);
 begin
   edPicture.Bitmap.Assign(Value);
-  if (Value <> nil) and not Value.IsEmpty then
-    if (Value.Height < edPicture.Height) and (Value.Width < edPicture.Width) then
-      edPicture.WrapMode := TImageWrapMode.Center
-    else
-      edPicture.WrapMode := TImageWrapMode.Fit;
+  ResizePicture;
 end;
 
 function TfrPicture.GetTitle: string;
@@ -98,6 +99,15 @@ begin
   paToolbar.Visible := not Value;
 end;
 
+procedure TfrPicture.SetResize(const Value: Boolean);
+begin
+  if FResize = Value  then
+    Exit;
+
+  FResize := Value;
+  ResizePicture;
+end;
+
 procedure TfrPicture.acOpenPictureExecute(Sender: TObject);
 begin
   if OpenDialog.Execute then begin
@@ -117,6 +127,18 @@ procedure TfrPicture.ActionList1Update(Action: TBasicAction; var Handled: Boolea
 begin
   acOpenPicture.Enabled := not Readonly;
   acDeletePicture.Enabled := not (Readonly or Picture.IsEmpty);
+end;
+
+procedure TfrPicture.ResizePicture;
+var
+  bmp: TBitmap;
+begin
+  bmp := edPicture.Bitmap;
+  if (bmp <> nil) and not bmp.IsEmpty then
+    if Resize and (bmp.Height < edPicture.Height) and (bmp.Width < edPicture.Width) then
+      edPicture.WrapMode := TImageWrapMode.Center
+    else
+      edPicture.WrapMode := TImageWrapMode.Fit;
 end;
 
 end.

@@ -23,7 +23,8 @@ type
     procedure LoadPicture(const Source: TDBResource; const Dest: TBitmap); overload;
     procedure LoadPicture(const Source: TDBResource); overload;
     procedure SavePicture(const Source: TDBResource);
-    procedure DeletePicture(const Source: TDBResource);
+    procedure DeletePicture(const ID: Variant; const Kind: TResourceKind); overload;
+    procedure DeletePicture(const Source: TDBResource); overload;
     procedure ExportFromDB;
   end;
 
@@ -68,24 +69,29 @@ var
 begin
   Resource := TDBResource(Entity);
 
-  case Resource.Kind of
-    TResourceKind.Screenshot:
-      DAO.Insert(Resource);
-    TResourceKind.QuestItem:
-      ;
-  end;
+//  case Resource.Kind of
+//    TResourceKind.Screenshot:
+//      DAO.Insert(Resource);
+//    TResourceKind.QuestItem:
+//      ;
+//  end;
+  DAO.Insert(Resource);
+  SavePicture(Resource);
 end;
 
 procedure TResourceService.Update(const Entity: TEntity);
 begin
   inherited;
 
+  SavePicture(TDBResource(Entity));
 end;
 
 procedure TResourceService.Remove(const ID: Variant);
 begin
   inherited;
 
+  DeletePicture(ID, TResourceKind.Screenshot);
+  DeletePicture(ID, TResourceKind.QuestItem);
 end;
 
 procedure TResourceService.LoadPicture(const ID: Variant; const Kind: TResourceKind; const Dest: TBitmap);
@@ -121,6 +127,21 @@ begin
   end;
 end;
 
+procedure TResourceService.DeletePicture(const ID: Variant; const Kind: TResourceKind);
+var
+  FileName: string;
+begin
+  FileName := GetPictureFileName(ID, Kind);
+
+  if FileExists(FileName) then
+    TFile.Delete(FileName);
+end;
+
+procedure TResourceService.DeletePicture(const Source: TDBResource);
+begin
+  DeletePicture(Source.ID, Source.Kind);
+end;
+
 procedure TResourceService.ExportFromDB;
 var
   Items: TObjectList<TEntity>;
@@ -138,16 +159,6 @@ begin
   finally
     Items.Free;
   end;
-end;
-
-procedure TResourceService.DeletePicture(const Source: TDBResource);
-var
-  FileName: string;
-begin
-  FileName := GetPictureFileName(Source);
-
-  if FileExists(FileName) then
-    TFile.Delete(FileName);
 end;
 
 end.

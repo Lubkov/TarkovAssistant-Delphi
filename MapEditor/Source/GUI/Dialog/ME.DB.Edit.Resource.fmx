@@ -25,8 +25,8 @@ inherited edDBResource: TedDBResource
       Size.Height = 46.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 7
-      Viewport.Width = 456.000000000000000000
-      Viewport.Height = 42.000000000000000000
+      Viewport.Width = 460.000000000000000000
+      Viewport.Height = 46.000000000000000000
     end
     object laDescription: TLabel
       Align = Top
