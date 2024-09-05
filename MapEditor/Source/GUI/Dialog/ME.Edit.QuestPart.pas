@@ -8,13 +8,13 @@ uses
   ME.Edit.Marker, System.Actions, FMX.ActnList, FMX.ListBox, FMX.EditBox,
   FMX.NumberBox, FMX.Edit, FMX.Controls.Presentation, System.ImageList,
   FMX.ImgList, FMX.Layouts, ME.DB.Marker, FMX.TabControl, ME.Grid.Resources,
-  ME.DB.Resource;
+  ME.DB.Resource, ME.Grid.QuestItems;
 
 type
   TedQuestPart = class(TedMarker)
     tabQuestItems: TTabItem;
   private
-    FQuestItemsGrid: TDBResourcesGrid;
+    FQuestItemsGrid: TQuestItemsGrid;
   protected
     function GetTitle(const Value: TDBMarker): string; override;
     procedure InternalSetInstance(const Value: TDBMarker); override;
@@ -32,7 +32,7 @@ constructor TedQuestPart.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FQuestItemsGrid := TDBResourcesGrid.Create(Self);
+  FQuestItemsGrid := TQuestItemsGrid.Create(Self);
   FQuestItemsGrid.Name := 'QuestItemsGrid';
   FQuestItemsGrid.Parent := tabQuestItems;
   FQuestItemsGrid.Align := TAlignLayout.Client;
@@ -53,7 +53,7 @@ procedure TedQuestPart.InternalSetInstance(const Value: TDBMarker);
 begin
   inherited;
 
-  FQuestItemsGrid.Init(Marker, TResourceKind.QuestItem);
+  FQuestItemsGrid.Init(Marker);
 end;
 
 end.

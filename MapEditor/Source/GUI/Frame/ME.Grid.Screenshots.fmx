@@ -1,0 +1,23 @@
+inherited ScreenshotsGrid: TScreenshotsGrid
+  inherited paTopPanel: TPanel
+    inherited laTitle: TLabel
+      Size.Width = 160.000000000000000000
+      Text = #1057#1087#1080#1089#1086#1082' '#1089#1082#1088#1080#1085#1096#1086#1090#1086#1074' '#1084#1072#1088#1082#1077#1088#1072
+    end
+  end
+  inherited Grid: TStringGrid
+    Viewport.Width = 396.000000000000000000
+    Viewport.Height = 320.000000000000000000
+  end
+  inherited ActionList1: TActionList
+    inherited acAddResource: TAction
+      ImageIndex = 0
+    end
+    inherited acEditResource: TAction
+      ImageIndex = 1
+    end
+    inherited acDeleteResource: TAction
+      ImageIndex = 2
+    end
+  end
+end

@@ -52,20 +52,23 @@ uses
   ME.Filter.Map in 'Source\GUI\Frame\ME.Filter.Map.pas' {MapFilter: TFrame},
   ME.Frame.MapData in 'Source\GUI\Frame\ME.Frame.MapData.pas' {frMapData: TFrame},
   ME.Presenter.QuestItem in 'Source\GUI\ME.Presenter.QuestItem.pas',
-  ME.Frame.Resource in 'Source\GUI\Frame\ME.Frame.Resource.pas' {ResourcesGrid: TFrame},
+  ME.Frame.Resource3 in 'Source\GUI\Frame\ME.Frame.Resource3.pas' {ResourcesGrid2: TFrame},
   ME.Edit.Resource in 'Source\GUI\Dialog\ME.Edit.Resource.pas' {edResource},
   ME.Presenter.Resource in 'Source\GUI\ME.Presenter.Resource.pas',
-  ME.Frame.QuestItem in 'Source\GUI\Frame\ME.Frame.QuestItem.pas' {QuestItemsGrid: TFrame},
+  ME.Frame.QuestItem3 in 'Source\GUI\Frame\ME.Frame.QuestItem3.pas' {QuestItemsGrid2: TFrame},
   ME.DB.Resource in '..\Source\Entity\ME.DB.Resource.pas',
   ME.DAO.Resource in '..\Source\DAO\ME.DAO.Resource.pas',
   ME.Service.Resource in '..\Source\Service\ME.Service.Resource.pas',
-  ME.Grid.Resources in 'Source\GUI\Frame\ME.Grid.Resources.pas' {DBResourcesGrid: TFrame},
+  ME.Grid.Resources in 'Source\GUI\Frame\ME.Grid.Resources.pas' {ResourcesDBGrid: TFrame},
   ME.DB.Edit.Resource in 'Source\GUI\Dialog\ME.DB.Edit.Resource.pas' {edDBResource},
   ME.DB.Presenter.Resource in 'Source\GUI\ME.DB.Presenter.Resource.pas',
   ME.DB.QuestItem in '..\Source\Entity\ME.DB.QuestItem.pas',
   ME.DAO.QuestItem in '..\Source\DAO\ME.DAO.QuestItem.pas',
   ME.Service.QuestItem in '..\Source\Service\ME.Service.QuestItem.pas',
-  ME.MemGrid.Resources in 'Source\GUI\Frame\ME.MemGrid.Resources.pas' {ResourcesMemGrid: TFrame};
+  ME.Grid.Screenshots in 'Source\GUI\Frame\ME.Grid.Screenshots.pas' {ScreenshotsGrid: TFrame},
+  ME.MemGrid.Screenshots in 'Source\GUI\Frame\ME.MemGrid.Screenshots.pas' {ScreenshotsMemGrid},
+  ME.Grid.QuestItems in 'Source\GUI\Frame\ME.Grid.QuestItems.pas' {QuestItemsGrid: TFrame},
+  ME.MemGrid.QuestItems in 'Source\GUI\Frame\ME.MemGrid.QuestItems.pas' {QuestItemsMemGrid: TFrame};
 
 {$R *.res}
 

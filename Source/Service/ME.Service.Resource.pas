@@ -25,6 +25,9 @@ type
     procedure SavePicture(const Source: TDBResource);
     procedure DeletePicture(const ID: Variant; const Kind: TResourceKind); overload;
     procedure DeletePicture(const Source: TDBResource); overload;
+
+    procedure LoadMarkerPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
+
     procedure ExportFromDB;
   end;
 
@@ -159,6 +162,11 @@ begin
   finally
     Items.Free;
   end;
+end;
+
+procedure TResourceService.LoadMarkerPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
+begin
+  TResourceDAO(DAO).GetPictures(MarkerID, Items);
 end;
 
 end.

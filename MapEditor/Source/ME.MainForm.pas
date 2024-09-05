@@ -8,7 +8,7 @@ uses
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
   ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
-  ME.Grid.Resources, ME.DB.Map, ME.DB.Resource;
+  ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestItems;
 
 type
   TMainForm = class(TForm)
@@ -30,7 +30,7 @@ type
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
-    FResourcesGrid: TDBResourcesGrid;
+    FResourcesGrid: TQuestItemsGrid;
   public
   end;
 
@@ -71,7 +71,7 @@ begin
   FMapData.Parent := GeneralTab;
   FMapData.Align := TAlignLayout.Client;
 
-  FResourcesGrid := TDBResourcesGrid.Create(Self);
+  FResourcesGrid := TQuestItemsGrid.Create(Self);
   FResourcesGrid.Parent := QuestItemsTab;
   FResourcesGrid.Align := TAlignLayout.Client;
 end;
@@ -81,7 +81,7 @@ begin
   AppService.ConnectToDB;
 
   FMapFilter.Init;
-  FResourcesGrid.Init(nil, TResourceKind.QuestItem);
+  FResourcesGrid.Init(nil);
 //  FMapPanel.Init;
 end;
 

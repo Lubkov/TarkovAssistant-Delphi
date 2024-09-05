@@ -1,4 +1,4 @@
-unit ME.MemGrid.Resources;
+unit ME.MemGrid.Screenshots;
 
 interface
 
@@ -9,10 +9,10 @@ uses
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Fmx.Bind.Grid, Fmx.Bind.Editors, FMX.ActnList,
   FMX.ImgList, FMX.ExtCtrls, FMX.ScrollBox, FMX.Grid, FMX.Controls.Presentation,
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, Data.DB, MemDS, DBAccess,
-  Uni, ME.Grid.Resources, ME.DB.Resource;
+  Uni, ME.Grid.Resources, ME.DB.Resource, ME.Grid.Screenshots;
 
 type
-  TResourcesMemGrid = class(TDBResourcesGrid)
+  TScreenshotsMemGrid = class(TScreenshotsGrid)
   private
   protected
     function GetCommandSQLText: string; override;
@@ -28,7 +28,7 @@ implementation
 
 { TResourcesMemGrid }
 
-function TResourcesMemGrid.GetCommandSQLText: string;
+function TScreenshotsMemGrid.GetCommandSQLText: string;
 begin
   Result :=
     ' SELECT r.ID as ID, ' +
@@ -38,7 +38,7 @@ begin
     ' WHERE (r.MarkerID = :MarkerID) AND (r.Kind = :Kind)';
 end;
 
-procedure TResourcesMemGrid.AddRecord;
+procedure TScreenshotsMemGrid.AddRecord;
 var
   Resource: TDBResource;
   Stored: Boolean;
@@ -78,7 +78,7 @@ begin
   end;
 end;
 
-procedure TResourcesMemGrid.EditRecord;
+procedure TScreenshotsMemGrid.EditRecord;
 var
   Resource: TDBResource;
 begin
@@ -105,7 +105,7 @@ begin
   end;
 end;
 
-procedure TResourcesMemGrid.DeleteRecord;
+procedure TScreenshotsMemGrid.DeleteRecord;
 begin
   if (Grid.Row < 0) or not InternalDeleteRecord then
     Exit;

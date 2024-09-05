@@ -9,7 +9,8 @@ uses
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
   FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox, ME.Edit.Form.Presenter,
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Platform, ME.DB.Marker,
-  FMX.TabControl, ME.DB.Resource, ME.Grid.Resources, ME.MemGrid.Resources;
+  FMX.TabControl, ME.DB.Resource, ME.Grid.Resources, ME.Grid.Screenshots,
+  ME.MemGrid.Screenshots;
 
 type
   TedMarker = class(TEditForm, IEditDialog<TDBMarker>)
@@ -45,7 +46,7 @@ type
     procedure buGenerateClick(Sender: TObject);
   private
     FMarker: TDBMarker;
-    FResourcesGrid: TDBResourcesGrid;
+    FScreenshotsGrid: TScreenshotsGrid;
 
     function GetMarkerCaption: string;
     procedure SetMarkerCaption(const Value: string);
@@ -91,13 +92,7 @@ begin
     edKindName.Items.Add(TDBMarker.KindToStr(Kind));
 
   laScreenShotName.Visible := False;
-
-  FResourcesGrid := nil;
-//  FResourcesGrid := TDBResourcesGrid.Create(Self);
-//  FResourcesGrid.Name := 'ImagesGrid';
-//  FResourcesGrid.Parent := tabMarkerImages;
-//  FResourcesGrid.Align := TAlignLayout.Client;
-
+  FScreenshotsGrid := nil;
   MainContainer.TabIndex := tabGeneral.Index;
 end;
 
@@ -170,13 +165,13 @@ begin
   FMarker := Value;
 
   if FMarker.IsNewInstance then
-    FResourcesGrid := TResourcesMemGrid.Create(Self)
+    FScreenshotsGrid := TScreenshotsMemGrid.Create(Self)
   else
-    FResourcesGrid := TDBResourcesGrid.Create(Self);
+    FScreenshotsGrid := TScreenshotsGrid.Create(Self);
 
-  FResourcesGrid.Name := 'ImagesGrid';
-  FResourcesGrid.Parent := tabMarkerImages;
-  FResourcesGrid.Align := TAlignLayout.Client;
+  FScreenshotsGrid.Name := 'ImagesGrid';
+  FScreenshotsGrid.Parent := tabMarkerImages;
+  FScreenshotsGrid.Align := TAlignLayout.Client;
 
   Caption := GetTitle(Value);
   MarkerCaption := FMarker.Caption;
@@ -184,7 +179,7 @@ begin
   PositionX := FMarker.Left;
   PositionY := FMarker.Top;
 
-  FResourcesGrid.Init(FMarker, TResourceKind.Screenshot);
+  FScreenshotsGrid.Init(FMarker);
 
   InternalSetInstance(Value);
 end;

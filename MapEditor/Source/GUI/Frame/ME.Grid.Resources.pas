@@ -13,7 +13,7 @@ uses
   ME.Frame.Picture;
 
 type
-  TDBResourcesGrid = class(TFrame)
+  TResourcesDBGrid = class(TFrame)
     paTopPanel: TPanel;
     edAddResource: TSpeedButton;
     edEditResource: TSpeedButton;
@@ -41,24 +41,26 @@ type
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
   private
     FMarker: TDBMarker;
-    FResourceKind: TResourceKind;
     FPicturePanel: TfrPicture;
   protected
+    function GetResourceKind: TResourceKind; virtual; abstract;
     function GetCommandSQLText: string; virtual;
 //    function InternalResourceAdd(const Resource: TDBResource): Boolean;
     function InternalEditRecord(const Resource: TDBResource): Boolean;
     function InternalDeleteRecord: Boolean;
+  protected
+    property PicturePanel: TfrPicture read FPicturePanel;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const Marker: TDBMarker; const Kind: TResourceKind);
+    procedure Init(const Marker: TDBMarker); virtual;
     procedure AddRecord; virtual;
     procedure EditRecord; virtual;
     procedure DeleteRecord; virtual;
 
     property Marker: TDBMarker read FMarker;
-    property ResourceKind: TResourceKind read FResourceKind;
+    property ResourceKind: TResourceKind read GetResourceKind;
   end;
 
 implementation
@@ -71,7 +73,7 @@ uses
 
 { TDBResourcesGrid }
 
-constructor TDBResourcesGrid.Create(AOwner: TComponent);
+constructor TResourcesDBGrid.Create(AOwner: TComponent);
 begin
   inherited;
 
@@ -84,13 +86,13 @@ begin
   FPicturePanel.Readonly := True;
 end;
 
-destructor TDBResourcesGrid.Destroy;
+destructor TResourcesDBGrid.Destroy;
 begin
 
   inherited;
 end;
 
-function TDBResourcesGrid.GetCommandSQLText: string;
+function TResourcesDBGrid.GetCommandSQLText: string;
 begin
   Result := 'SELECT r.ID as ID, r.Kind as Kind, r.Description as Description FROM Resource r ';
   if FMarker = nil then
@@ -106,7 +108,7 @@ begin
   Result := Result + ' AND (r.Kind = :Kind)';
 end;
 
-function TDBResourcesGrid.InternalEditRecord(const Resource: TDBResource): Boolean;
+function TResourcesDBGrid.InternalEditRecord(const Resource: TDBResource): Boolean;
 var
   Presenter: TEditResourcePresenter;
   Dialog: TedDBResource;
@@ -124,7 +126,7 @@ begin
   end;
 end;
 
-function TDBResourcesGrid.InternalDeleteRecord: Boolean;
+function TResourcesDBGrid.InternalDeleteRecord: Boolean;
 var
   Resource: TDBResource;
   Presenter: TDelResourcePresenter;
@@ -134,7 +136,7 @@ begin
   try
     Resource.ID := FID.Value;
     Resource.MarkerID := FMarker.ID;
-    Resource.Kind := FResourceKind;
+    Resource.Kind := ResourceKind;
     Resource.Description := FDescription.AsString;
 
     Dialog := TedMessage.Create(Self);
@@ -153,31 +155,30 @@ begin
   end;
 end;
 
-procedure TDBResourcesGrid.Init(const Marker: TDBMarker; const Kind: TResourceKind);
+procedure TResourcesDBGrid.Init(const Marker: TDBMarker);
 begin
   FMarker := Marker;
-  FResourceKind := Kind;
 
-  case ResourceKind of
-    TResourceKind.Screenshot:
-      laTitle.Text := 'Список скриншотов маркера';
-    TResourceKind.QuestItem:
-      laTitle.Text := 'Список квестовых предметов';
-  end;
-  FPicturePanel.Resize := Kind = TResourceKind.QuestItem;
+//  case ResourceKind of
+//    TResourceKind.Screenshot:
+//      laTitle.Text := 'Список скриншотов маркера';
+//    TResourceKind.QuestItem:
+//      laTitle.Text := 'Список квестовых предметов';
+//  end;
+//  FPicturePanel.Resizing := ResourceKind = TResourceKind.QuestItem;
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
   F.CachedUpdates := (FMarker <> nil) and FMarker.IsNewInstance;
   F.SQL.Text := GetCommandSQLText;
-  F.ParamByName('Kind').AsInteger := Ord(Kind);
+  F.ParamByName('Kind').AsInteger := Ord(ResourceKind);
   if F.FindParam('MarkerID') <> nil then
     F.ParamByName('MarkerID').Value := FMarker.ID;
 
   F.Open;
 end;
 
-procedure TDBResourcesGrid.AddRecord;
+procedure TResourcesDBGrid.AddRecord;
 var
   Resource: TDBResource;
 begin
@@ -200,7 +201,7 @@ begin
   end;
 end;
 
-procedure TDBResourcesGrid.EditRecord;
+procedure TResourcesDBGrid.EditRecord;
 var
   Resource: TDBResource;
 begin
@@ -217,7 +218,7 @@ begin
   end;
 end;
 
-procedure TDBResourcesGrid.DeleteRecord;
+procedure TResourcesDBGrid.DeleteRecord;
 begin
   if IsNullID(FID.Value) or not InternalDeleteRecord then
     Exit;
@@ -230,34 +231,34 @@ begin
   end;
 end;
 
-procedure TDBResourcesGrid.acAddResourceExecute(Sender: TObject);
+procedure TResourcesDBGrid.acAddResourceExecute(Sender: TObject);
 begin
   AddRecord;
 end;
 
-procedure TDBResourcesGrid.acEditResourceExecute(Sender: TObject);
+procedure TResourcesDBGrid.acEditResourceExecute(Sender: TObject);
 begin
   EditRecord;
 end;
 
-procedure TDBResourcesGrid.acDeleteResourceExecute(Sender: TObject);
+procedure TResourcesDBGrid.acDeleteResourceExecute(Sender: TObject);
 begin
   DeleteRecord;
 end;
 
-procedure TDBResourcesGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
+procedure TResourcesDBGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
 begin
   EditRecord;
 end;
 
-procedure TDBResourcesGrid.ActionList1Update(Action: TBasicAction;  var Handled: Boolean);
+procedure TResourcesDBGrid.ActionList1Update(Action: TBasicAction;  var Handled: Boolean);
 begin
   acAddResource.Enabled := True;
   acEditResource.Enabled := Grid.RowCount > 0;
   acDeleteResource.Enabled := Grid.RowCount > 0;
 end;
 
-procedure TDBResourcesGrid.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+procedure TResourcesDBGrid.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
 begin
   ResourceService.LoadPicture(FID.Value, TResourceKind(FKind.AsInteger), FPicturePanel.Picture);
   FPicturePanel.ResizePicture;

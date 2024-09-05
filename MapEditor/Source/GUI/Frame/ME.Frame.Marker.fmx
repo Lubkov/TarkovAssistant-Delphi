@@ -61,7 +61,7 @@ object frMarkerGrid: TfrMarkerGrid
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
       Size.Width = 144.000000000000000000
-      Size.Height = 15.000000000000000000
+      Size.Height = 15.200000762939450000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1084#1072#1088#1082#1077#1088#1086#1074' '#1082#1072#1088#1090#1099
@@ -77,8 +77,8 @@ object frMarkerGrid: TfrMarkerGrid
     Size.PlatformDefault = False
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
-    Viewport.Width = 524.000000000000000000
-    Viewport.Height = 312.000000000000000000
+    Viewport.Width = 520.000000000000000000
+    Viewport.Height = 287.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1

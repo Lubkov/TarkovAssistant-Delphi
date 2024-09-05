@@ -49,7 +49,7 @@ type
     property Changed: Boolean read FChanged write FChanged;
     property FileName: string read FFileName write FFileName;
     property Readonly: Boolean read GetReadonly write SetReadonly;
-    property Resize: Boolean read FResize write SetResize;
+    property Resizing: Boolean read FResize write SetResize;
   end;
 
 implementation
@@ -135,7 +135,7 @@ var
 begin
   bmp := edPicture.Bitmap;
   if (bmp <> nil) and not bmp.IsEmpty then
-    if Resize and (bmp.Height < edPicture.Height) and (bmp.Width < edPicture.Width) then
+    if Resizing and (bmp.Height < edPicture.Height) and (bmp.Width < edPicture.Width) then
       edPicture.WrapMode := TImageWrapMode.Center
     else
       edPicture.WrapMode := TImageWrapMode.Fit;

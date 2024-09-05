@@ -379,8 +379,8 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.QuestItem.pas"/>
-        <DCCReference Include="Source\GUI\Frame\ME.Frame.Resource.pas">
-            <Form>ResourcesGrid</Form>
+        <DCCReference Include="Source\GUI\Frame\ME.Frame.Resource3.pas">
+            <Form>ResourcesGrid2</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -389,8 +389,8 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.Resource.pas"/>
-        <DCCReference Include="Source\GUI\Frame\ME.Frame.QuestItem.pas">
-            <Form>QuestItemsGrid</Form>
+        <DCCReference Include="Source\GUI\Frame\ME.Frame.QuestItem3.pas">
+            <Form>QuestItemsGrid2</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -398,7 +398,7 @@
         <DCCReference Include="..\Source\DAO\ME.DAO.Resource.pas"/>
         <DCCReference Include="..\Source\Service\ME.Service.Resource.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Grid.Resources.pas">
-            <Form>DBResourcesGrid</Form>
+            <Form>ResourcesDBGrid</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -410,8 +410,21 @@
         <DCCReference Include="..\Source\Entity\ME.DB.QuestItem.pas"/>
         <DCCReference Include="..\Source\DAO\ME.DAO.QuestItem.pas"/>
         <DCCReference Include="..\Source\Service\ME.Service.QuestItem.pas"/>
-        <DCCReference Include="Source\GUI\Frame\ME.MemGrid.Resources.pas">
-            <Form>ResourcesMemGrid</Form>
+        <DCCReference Include="Source\GUI\Frame\ME.Grid.Screenshots.pas">
+            <Form>ScreenshotsGrid</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Source\GUI\Frame\ME.MemGrid.Screenshots.pas">
+            <Form>ScreenshotsMemGrid</Form>
+        </DCCReference>
+        <DCCReference Include="Source\GUI\Frame\ME.Grid.QuestItems.pas">
+            <Form>QuestItemsGrid</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Source\GUI\Frame\ME.MemGrid.QuestItems.pas">
+            <Form>QuestItemsMemGrid</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

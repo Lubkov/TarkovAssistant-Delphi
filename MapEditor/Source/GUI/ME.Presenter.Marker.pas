@@ -29,9 +29,9 @@ uses
 { TEditMarkerPresenter }
 
 procedure TEditMarkerPresenter.InternalSave;
-var
+//var
 //  IsNewInstance: Boolean;
-  Resource: TDBResource;
+//  Resource: TDBResource;
 begin
   inherited;
 
@@ -60,7 +60,7 @@ end;
 
 procedure TDelMarkerPresenter.InternalDelete;
 begin
-  MarkerService.Remove(Instance.ID);
+  MarkerService.Remove(Instance);
 end;
 
 end.

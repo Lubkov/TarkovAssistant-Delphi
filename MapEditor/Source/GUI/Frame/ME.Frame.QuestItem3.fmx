@@ -1,4 +1,4 @@
-inherited QuestItemsGrid: TQuestItemsGrid
+inherited QuestItemsGrid2: TQuestItemsGrid2
   inherited Grid: TGrid
     Viewport.Width = 604.000000000000000000
     Viewport.Height = 280.000000000000000000
