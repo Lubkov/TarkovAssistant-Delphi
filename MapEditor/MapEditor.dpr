@@ -69,7 +69,7 @@ uses
   ME.MemGrid.QuestItems in 'Source\GUI\Frame\ME.MemGrid.QuestItems.pas' {QuestItemsMemGrid: TFrame},
   ME.Edit.QuestItem in 'Source\GUI\Dialog\ME.Edit.QuestItem.pas' {edQuestItem},
   ME.Grid.QuestResources in 'Source\GUI\Frame\ME.Grid.QuestResources.pas' {QuestResourcesGrid: TFrame},
-  ME.DB.Presenter.Screenshot in 'Source\GUI\ME.DB.Presenter.Screenshot.pas';
+  ME.Presenter.Screenshot in 'Source\GUI\ME.Presenter.Screenshot.pas';
 
 {$R *.res}
 
