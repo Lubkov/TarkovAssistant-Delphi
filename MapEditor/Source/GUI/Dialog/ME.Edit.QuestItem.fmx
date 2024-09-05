@@ -1,0 +1,10 @@
+inherited edQuestItem: TedQuestItem
+  Caption = 'EditForm1'
+  ClientHeight = 524
+  ClientWidth = 620
+  DesignerMasterStyle = 0
+  inherited paBottom: TPanel
+    Position.Y = 478.000000000000000000
+    Size.Width = 620.000000000000000000
+  end
+end

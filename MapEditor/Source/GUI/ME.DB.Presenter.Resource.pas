@@ -8,6 +8,8 @@ uses
   ME.DB.Resource;
 
 type
+  TEditResourcePresenterClass = class of TEditResourcePresenter;
+
   TEditResourcePresenter = class(TEditFormPresenter<TDBResource>)
   private
   protected
@@ -15,6 +17,8 @@ type
     procedure Cancel; override;
   public
   end;
+
+  TDelResourcePresenterClass = class of TDelResourcePresenter;
 
   TDelResourcePresenter = class(TDelFormPresenter<TDBResource>)
   protected
@@ -31,8 +35,7 @@ uses
 
 procedure TEditResourcePresenter.InternalSave;
 begin
-  if not IsNullID(Instance.MarkerID) then
-    ResourceService.Save(Instance);
+  ResourceService.Save(Instance);
 end;
 
 procedure TEditResourcePresenter.Cancel;
@@ -45,13 +48,12 @@ end;
 
 function TDelResourcePresenter.GetDelMessage: string;
 begin
-  Result := 'Удалить скриншот маркера?';
+  Result := 'Удалить ресурс?';
 end;
 
 procedure TDelResourcePresenter.InternalDelete;
 begin
-  if not IsNullID(Instance.MarkerID) then
-    ResourceService.Remove(Instance);
+  ResourceService.Remove(Instance);
 end;
 
 end.

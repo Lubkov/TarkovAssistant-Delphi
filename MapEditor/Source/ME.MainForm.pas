@@ -8,7 +8,7 @@ uses
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
   ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
-  ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestItems;
+  ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestResources;
 
 type
   TMainForm = class(TForm)
@@ -30,7 +30,7 @@ type
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
-    FResourcesGrid: TQuestItemsGrid;
+    FResourcesGrid: TQuestResourcesGrid;
   public
   end;
 
@@ -47,6 +47,7 @@ uses
 {$R *.fmx}
 
 // id, icon, name, выходы чвк(кол-во), выходы дикого(кол-во), выходы совместные(кол-во), квесты (кол-во)
+// QuestResources
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
@@ -71,7 +72,7 @@ begin
   FMapData.Parent := GeneralTab;
   FMapData.Align := TAlignLayout.Client;
 
-  FResourcesGrid := TQuestItemsGrid.Create(Self);
+  FResourcesGrid := TQuestResourcesGrid.Create(Self);
   FResourcesGrid.Parent := QuestItemsTab;
   FResourcesGrid.Align := TAlignLayout.Client;
 end;

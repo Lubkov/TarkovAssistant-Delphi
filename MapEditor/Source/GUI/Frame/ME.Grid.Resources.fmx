@@ -61,7 +61,7 @@ object ResourcesDBGrid: TResourcesDBGrid
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
       Size.Width = 96.000000000000000000
-      Size.Height = 15.199999809265140000
+      Size.Height = 15.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1088#1077#1089#1091#1088#1089#1086#1074
@@ -78,8 +78,8 @@ object ResourcesDBGrid: TResourcesDBGrid
     TabOrder = 6
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 392.000000000000000000
-    Viewport.Height = 295.000000000000000000
+    Viewport.Width = 396.000000000000000000
+    Viewport.Height = 320.000000000000000000
   end
   object paPicture: TPanel
     Align = Left

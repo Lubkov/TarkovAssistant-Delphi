@@ -54,6 +54,7 @@ object MainForm: TMainForm
         TabOrder = 1
         object buExpot: TButton
           Align = Left
+          Enabled = False
           Margins.Left = 10.000000000000000000
           Margins.Top = 5.000000000000000000
           Margins.Right = 5.000000000000000000
@@ -70,6 +71,7 @@ object MainForm: TMainForm
         end
         object buExportToDB: TButton
           Align = Left
+          Enabled = False
           Margins.Left = 10.000000000000000000
           Margins.Top = 5.000000000000000000
           Margins.Right = 5.000000000000000000
@@ -86,6 +88,7 @@ object MainForm: TMainForm
         end
         object Button1: TButton
           Align = Left
+          Enabled = False
           Margins.Left = 10.000000000000000000
           Margins.Top = 5.000000000000000000
           Margins.Right = 5.000000000000000000

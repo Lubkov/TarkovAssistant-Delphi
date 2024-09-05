@@ -4,10 +4,18 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Del.Form.Presenter, Map.Data.Types;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Resource, ME.DB.QuestItem;
 
 type
-  TDelQuestItemPresenter = class(TDelFormPresenter<TQuestItem>)
+  TEditQuestItemPresenter = class(TEditFormPresenter<TDBQuestItem>)
+  private
+  protected
+    procedure InternalSave; override;
+    procedure Cancel; override;
+  public
+  end;
+
+  TDelQuestItemPresenter = class(TDelFormPresenter<TDBQuestItem>)
   protected
     function GetDelMessage: string; override;
     procedure InternalDelete; override;
@@ -16,7 +24,21 @@ type
 implementation
 
 uses
-  Map.Data.Service;
+  App.Constants, ME.DB.Utils, ME.Service.QuestItem;
+
+{ TEditQuestItemPresenter }
+
+procedure TEditQuestItemPresenter.InternalSave;
+begin
+  if not IsNullID(Instance.MarkerID) then
+    QuestItemService.Save(Instance);
+end;
+
+procedure TEditQuestItemPresenter.Cancel;
+begin
+  inherited;
+
+end;
 
 { TDelQuestItemPresenter }
 
@@ -27,7 +49,8 @@ end;
 
 procedure TDelQuestItemPresenter.InternalDelete;
 begin
-  DataService.DeleteImage(Instance);
+  if not IsNullID(Instance.MarkerID) then
+    QuestItemService.Remove(Instance);
 end;
 
 end.

@@ -1,7 +1,7 @@
-inherited QuestItemsGrid: TQuestItemsGrid
+inherited QuestResourcesGrid: TQuestResourcesGrid
   inherited paTopPanel: TPanel
     inherited laTitle: TLabel
-      Size.Width = 172.000000000000000000
+      Size.Width = 170.000000000000000000
       Text = #1057#1087#1080#1089#1086#1082' '#1082#1074#1077#1089#1090#1086#1074#1099#1093' '#1087#1088#1077#1076#1084#1077#1090#1086#1074
     end
   end
@@ -18,14 +18,6 @@ inherited QuestItemsGrid: TQuestItemsGrid
     end
     inherited acDeleteResource: TAction
       ImageIndex = 2
-    end
-  end
-  inherited F: TUniQuery
-    object FMarkerID: TIntegerField
-      FieldName = 'MarkerID'
-    end
-    object FResourceID: TIntegerField
-      FieldName = 'ResourceID'
     end
   end
 end

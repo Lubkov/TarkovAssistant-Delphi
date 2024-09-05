@@ -20,9 +20,11 @@ type
 
     procedure acSuccessExecute(Sender: TObject);
     procedure acCancelExecute(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
+    procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
   private
+  protected
+    function IsSuccessActionEnable: Boolean; virtual;
   public
     function GetModalResult: TModalResult;
     procedure SetModalResult(Value: TModalResult);
@@ -42,6 +44,23 @@ begin
   Close;
 end;
 
+procedure TEditForm.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
+begin
+  if Key = vkEscape then
+    Self.Close;
+end;
+
+procedure TEditForm.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+begin
+  acSuccess.Enabled := IsSuccessActionEnable;
+  acCancel.Enabled := True;
+end;
+
+function TEditForm.IsSuccessActionEnable: Boolean;
+begin
+  Result := True;
+end;
+
 function TEditForm.GetModalResult: TModalResult;
 begin
   Result := ModalResult;
@@ -50,12 +69,6 @@ end;
 procedure TEditForm.SetModalResult(Value: TModalResult);
 begin
   ModalResult := Value;
-end;
-
-procedure TEditForm.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
-begin
-  if Key = vkEscape then
-    Self.Close;
 end;
 
 end.

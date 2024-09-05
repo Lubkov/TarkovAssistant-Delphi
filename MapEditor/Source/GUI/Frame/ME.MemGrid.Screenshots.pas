@@ -30,12 +30,14 @@ implementation
 
 function TScreenshotsMemGrid.GetCommandSQLText: string;
 begin
-  Result :=
-    ' SELECT r.ID as ID, ' +
-    '        r.Kind as Kind, ' +
-    '        r.Description as Description ' +
-    ' FROM Resource r ' +
-    ' WHERE (r.MarkerID = :MarkerID) AND (r.Kind = :Kind)';
+  Result := inherited GetCommandSQLText;
+//
+//  Result :=
+//    ' SELECT r.ID as ID, ' +
+//    '        r.Kind as Kind, ' +
+//    '        r.Description as Description ' +
+//    ' FROM Resource r ' +
+//    ' WHERE (r.MarkerID = :MarkerID) AND (r.Kind = :Kind)';
 end;
 
 procedure TScreenshotsMemGrid.AddRecord;

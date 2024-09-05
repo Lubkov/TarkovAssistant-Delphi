@@ -30,7 +30,6 @@ object EditForm: TEditForm
       object buCancel: TButton
         Action = acCancel
         Align = Left
-        Enabled = True
         StyledSettings = [Size, Style, FontColor]
         ImageIndex = -1
         ModalResult = 2
@@ -44,11 +43,11 @@ object EditForm: TEditForm
         Size.PlatformDefault = False
         TabOrder = 1
         TextSettings.Font.Family = 'Tahoma'
+        TextSettings.Trimming = None
       end
       object buSuccess: TButton
         Action = acSuccess
         Align = Left
-        Enabled = True
         StyledSettings = [Size, Style, FontColor]
         ImageIndex = -1
         ModalResult = 1
@@ -62,10 +61,12 @@ object EditForm: TEditForm
         Size.PlatformDefault = False
         TabOrder = 0
         TextSettings.Font.Family = 'Tahoma'
+        TextSettings.Trimming = None
       end
     end
   end
   object ActionList1: TActionList
+    OnUpdate = ActionList1Update
     Left = 48
     Top = 24
     object acSuccess: TAction

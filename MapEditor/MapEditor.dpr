@@ -52,10 +52,8 @@ uses
   ME.Filter.Map in 'Source\GUI\Frame\ME.Filter.Map.pas' {MapFilter: TFrame},
   ME.Frame.MapData in 'Source\GUI\Frame\ME.Frame.MapData.pas' {frMapData: TFrame},
   ME.Presenter.QuestItem in 'Source\GUI\ME.Presenter.QuestItem.pas',
-  ME.Frame.Resource3 in 'Source\GUI\Frame\ME.Frame.Resource3.pas' {ResourcesGrid2: TFrame},
   ME.Edit.Resource in 'Source\GUI\Dialog\ME.Edit.Resource.pas' {edResource},
   ME.Presenter.Resource in 'Source\GUI\ME.Presenter.Resource.pas',
-  ME.Frame.QuestItem3 in 'Source\GUI\Frame\ME.Frame.QuestItem3.pas' {QuestItemsGrid2: TFrame},
   ME.DB.Resource in '..\Source\Entity\ME.DB.Resource.pas',
   ME.DAO.Resource in '..\Source\DAO\ME.DAO.Resource.pas',
   ME.Service.Resource in '..\Source\Service\ME.Service.Resource.pas',
@@ -68,7 +66,10 @@ uses
   ME.Grid.Screenshots in 'Source\GUI\Frame\ME.Grid.Screenshots.pas' {ScreenshotsGrid: TFrame},
   ME.MemGrid.Screenshots in 'Source\GUI\Frame\ME.MemGrid.Screenshots.pas' {ScreenshotsMemGrid},
   ME.Grid.QuestItems in 'Source\GUI\Frame\ME.Grid.QuestItems.pas' {QuestItemsGrid: TFrame},
-  ME.MemGrid.QuestItems in 'Source\GUI\Frame\ME.MemGrid.QuestItems.pas' {QuestItemsMemGrid: TFrame};
+  ME.MemGrid.QuestItems in 'Source\GUI\Frame\ME.MemGrid.QuestItems.pas' {QuestItemsMemGrid: TFrame},
+  ME.Edit.QuestItem in 'Source\GUI\Dialog\ME.Edit.QuestItem.pas' {edQuestItem},
+  ME.Grid.QuestResources in 'Source\GUI\Frame\ME.Grid.QuestResources.pas' {QuestResourcesGrid: TFrame},
+  ME.DB.Presenter.Screenshot in 'Source\GUI\ME.DB.Presenter.Screenshot.pas';
 
 {$R *.res}
 
