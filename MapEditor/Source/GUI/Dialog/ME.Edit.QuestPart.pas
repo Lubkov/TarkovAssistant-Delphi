@@ -8,7 +8,7 @@ uses
   ME.Edit.Marker, System.Actions, FMX.ActnList, FMX.ListBox, FMX.EditBox,
   FMX.NumberBox, FMX.Edit, FMX.Controls.Presentation, System.ImageList,
   FMX.ImgList, FMX.Layouts, ME.DB.Marker, FMX.TabControl, ME.Grid.Resources,
-  ME.DB.Resource, ME.Grid.QuestItems;
+  ME.DB.Resource, ME.Grid.QuestItems, ME.MemGrid.QuestItems;
 
 type
   TedQuestPart = class(TedMarker)
@@ -32,10 +32,7 @@ constructor TedQuestPart.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FQuestItemsGrid := TQuestItemsGrid.Create(Self);
-  FQuestItemsGrid.Name := 'QuestItemsGrid';
-  FQuestItemsGrid.Parent := tabQuestItems;
-  FQuestItemsGrid.Align := TAlignLayout.Client;
+  FQuestItemsGrid := nil;
 
   MarkerKind := TMarkerKind.Quest;
   edKindName.Visible := False;
@@ -52,6 +49,18 @@ end;
 procedure TedQuestPart.InternalSetInstance(const Value: TDBMarker);
 begin
   inherited;
+
+  if Assigned(FQuestItemsGrid) then
+    FQuestItemsGrid.Free;
+
+  if Marker.IsNewInstance then
+    FQuestItemsGrid := TQuestItemsMemGrid.Create(Self)
+  else
+    FQuestItemsGrid := TQuestItemsGrid.Create(Self);
+
+  FQuestItemsGrid.Name := 'QuestItemsGrid';
+  FQuestItemsGrid.Parent := tabQuestItems;
+  FQuestItemsGrid.Align := TAlignLayout.Client;
 
   FQuestItemsGrid.Init(Marker);
 end;

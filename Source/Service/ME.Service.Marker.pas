@@ -31,7 +31,7 @@ var
 implementation
 
 uses
-  ME.Service.Resource;
+  ME.Service.Resource, ME.Service.QuestItem, ME.DB.QuestItem;
 
 { TMarkerService }
 
@@ -49,6 +49,7 @@ procedure TMarkerService.Insert(const Entity: TEntity);
 var
   Marker: TDBMarker;
   Resource: TDBResource;
+  QuestItem: TDBQuestItem;
 begin
   Marker := TDBMarker(Entity);
 //  case Marker.Kind of
@@ -68,8 +69,17 @@ begin
     ResourceService.SavePicture(Resource);
   end;
 
-//  for Resource in Marker.Items do
-//    ResourceService.SavePicture(Resource);
+  for Resource in Marker.Items do begin
+    QuestItem := TDBQuestItem.Create;
+    try
+      QuestItem.MarkerID := Marker.ID;
+      QuestItem.ResourceID := Resource.ID;
+
+      QuestItemService.Save(QuestItem);
+    finally
+      QuestItem.Free;
+    end;
+  end;
 end;
 
 procedure TMarkerService.Remove(const ID: Variant);
