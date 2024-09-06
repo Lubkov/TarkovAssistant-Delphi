@@ -6,13 +6,13 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
-  ME.DB.QuestItem, ME.Edit.Form.Presenter, ME.Grid.QuestItems;
+  ME.DB.QuestItem, ME.Edit.Form.Presenter, ME.Grid.QuestResources;
 
 type
   TedQuestItem = class(TEditForm, IEditDialog<TDBQuestItem>)
   private
     FQuestItem: TDBQuestItem;
-    FResourcesGrid: TQuestItemsGrid;
+    FResourcesGrid: TQuestResourcesGrid;
   protected
     function IsSuccessActionEnable: Boolean; override;
   public
@@ -37,7 +37,7 @@ begin
 
   FQuestItem := nil;
 
-  FResourcesGrid := TQuestItemsGrid.Create(Self);
+  FResourcesGrid := TQuestResourcesGrid.Create(Self);
   FResourcesGrid.Parent := Self;
   FResourcesGrid.Align := TAlignLayout.Client;
 end;
