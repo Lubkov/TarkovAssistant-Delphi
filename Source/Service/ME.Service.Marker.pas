@@ -16,6 +16,7 @@ type
   public
     procedure Insert(const Entity: TEntity); override;
     procedure Remove(const ID: Variant); override;
+    procedure Remove(const Entity: TEntity); override;
 
     procedure LoadMarkers(const MapID: Variant; const Items: TList<TDBMarker>);
     procedure LoadQuestMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
@@ -88,15 +89,23 @@ var
 begin
   Marker := TDBMarker.Create;
   try
-    if GetAt(ID, Marker) then begin
-      LoadPictures(ID, Marker.Images);
-      DeletePictures(Marker.Images);
-    end;
+    if GetAt(ID, Marker) then
+      Remove(Marker);
   finally
     Marker.Free;
   end;
 
   inherited;
+end;
+
+procedure TMarkerService.Remove(const Entity: TEntity);
+var
+  Marker: TDBMarker;
+begin
+  Marker := TDBMarker(Entity);
+  LoadPictures(Marker.ID, Marker.Images);
+  DeletePictures(Marker.Images);
+  MarkerDAO.Remove(Marker.ID);
 end;
 
 procedure TMarkerService.LoadMarkers(const MapID: Variant; const Items: TList<TDBMarker>);

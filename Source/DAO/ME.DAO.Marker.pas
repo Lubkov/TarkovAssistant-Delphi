@@ -99,8 +99,12 @@ var
   Entity: TDBMarker;
   Filter: string;
 begin
-  Filter := ' WHERE (t.MapID = :MapID) ';
-  if VarIsNull(QuestID) or VarIsEmpty(QuestID) then
+  if IsNullID(MapID) then
+    Filter := ' WHERE (1 = 1) '
+  else
+    Filter := ' WHERE (t.MapID = :MapID) ';
+
+  if IsNullID(QuestID) then
     Filter := Filter + ' AND (t.QuestID IS NULL) '
   else
     Filter := Filter + ' AND (t.QuestID = :QuestID) ';
@@ -109,7 +113,8 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text := Format(SqlSelectCommandText, [Filter]);
-    Query.ParamByName('MapID').Value := MapID;
+    if Query.FindParam('MapID') <> nil then
+      Query.ParamByName('MapID').Value := MapID;
 
     if Query.FindParam('QuestID') <> nil then
       Query.ParamByName('QuestID').Value := QuestID;
@@ -130,6 +135,7 @@ begin
     Query.Free;
   end;
 end;
+
 procedure TMarkerDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
