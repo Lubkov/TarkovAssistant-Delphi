@@ -6,10 +6,10 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   System.ImageList, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Layouts, FMX.Objects, FMX.Controls.Presentation,
-  FMX.ImgList, Map.Data.Types;
+  FMX.ImgList, ME.DB.Map, Map.Data.Service;
 
 type
-  TLocationChangedEvent = procedure (const Value: TMap) of object;
+  TLocationChangedEvent = procedure (const Value: TDBMap) of object;
 
   TLocationGrid = class(TFrame)
     MainContainer: THorzScrollBox;
@@ -22,7 +22,7 @@ type
     FOnLocationChanged: TLocationChangedEvent;
 
     function GetCount: Integer;
-    function GetItem(Index: Integer): TMap;
+    function GetItem(Index: Integer): TDBMap;
     procedure OnLocationClick(Sender: TObject);
     function GetColumnCount: Integer;
     function GetRowCount: Integer;
@@ -35,16 +35,13 @@ type
     property Count: Integer read GetCount;
     property ColumnCount: Integer read GetColumnCount;
     property RowCount: Integer read GetRowCount;
-    property Items[Index: Integer]: TMap read GetItem;
+    property Items[Index: Integer]: TDBMap read GetItem;
     property MaxHeight: Integer read FMaxHeight;
     property MaxWidth: Integer read FMaxWidth;
     property OnLocationChanged: TLocationChangedEvent read FOnLocationChanged write FOnLocationChanged;
   end;
 
 implementation
-
-uses
-  Map.Data.Service;
 
 {$R *.fmx}
 
@@ -90,7 +87,7 @@ begin
   Result := 2;
 end;
 
-function TLocationGrid.GetItem(Index: Integer): TMap;
+function TLocationGrid.GetItem(Index: Integer): TDBMap;
 begin
   Result := DataService.Map[Index];
 end;

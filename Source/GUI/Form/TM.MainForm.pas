@@ -8,7 +8,8 @@ uses
   FMX.Graphics, FMX.Dialogs, TM.Form.Wrapper, FMX.Controls.Presentation, FMX.StdCtrls,
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Objects, System.Actions, FMX.ActnList,
   TM.Map.Wrapper, TM.Frame.Location, TM.Frame.MarkerFilter,
-  Map.Data.Types, Map.Data.Classes, Map.Frame.InteractiveMap, FMX.ListBox;
+  Map.Frame.InteractiveMap, FMX.ListBox,
+  ME.DB.Map;
 
 type
   TMainForm = class(TForm)
@@ -54,7 +55,7 @@ type
 
     procedure HideAllPanels(Sender: TObject);
     procedure SetFullScreenMode(const Value: Boolean);
-    procedure OnLocationChanged(const Value: TMap);
+    procedure OnLocationChanged(const Value: TDBMap);
     procedure MarkerFilterListOnClose(Sender: TObject);
     procedure OnInteractiveMapDblClick(Sender: TObject);
   public
@@ -69,10 +70,6 @@ uses
   App.Constants, App.Service, Map.Data.Service, Map.CursorService;
 
 {$R *.fmx}
-
-// поместить Image с картой в контейнер и двигать контейнер, а не Image с картой
-// Изменять размер контейнер, карта всегда под размеры контейнера
-// добавлять в конейнер маркеры, Image с картинкой маркера, что позволить выполнять клик по маркеру
 
 procedure TMainForm.FormCreate(Sender: TObject);
 const
@@ -168,7 +165,7 @@ begin
 //  FormResize(Self);
 end;
 
-procedure TMainForm.OnLocationChanged(const Value: TMap);
+procedure TMainForm.OnLocationChanged(const Value: TDBMap);
 begin
   HideAllPanels(Self);
 

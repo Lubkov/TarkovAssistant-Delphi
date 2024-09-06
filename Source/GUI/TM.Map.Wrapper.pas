@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Classes, System.IOUtils, System.Types, System.UITypes,
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.ImgList,
-  Map.Data.Types, TM.FilesMonitor, ME.MarkerFilter;
+  TM.FilesMonitor, Map.Data.Types, ME.MarkerFilter, ME.DB.Entity, ME.DB.Map,
+  ME.DB.Marker;
 
 type
   TMarkerIconArray = array[Low(TMarkerKind) .. High(TMarkerKind)] of TBitmap;
@@ -16,7 +17,7 @@ type
   private
     FDirectory: string;
     FTrackLocation: Boolean;
-    FMap: TMap;
+    FMap: TDBMap;
     FBackground: TBitmap;
     FChangeMonitor: TChangeMonitor;
     FPosition: TPoint;
@@ -39,7 +40,7 @@ type
 
     function GetScreenshotName: string;
     procedure DeleteAllScreenshots;
-    procedure LoadMap(const Value: TMap);
+    procedure LoadMap(const Value: TDBMap);
 
     function ExtractPoint(const FileName: string): TPoint;
     procedure DrawPoint(const Value: TPoint);
@@ -50,7 +51,7 @@ type
     procedure Stop;
     procedure Refresh;
 
-    property Map: TMap read FMap;
+    property Map: TDBMap read FMap;
     property Background: TBitmap read FBackground;
     property Position: TPoint read FPosition;
     property Directory: string read FDirectory;
@@ -166,7 +167,7 @@ begin
     TFile.Delete(FileName);
 end;
 
-procedure TMapWrapper.LoadMap(const Value: TMap);
+procedure TMapWrapper.LoadMap(const Value: TDBMap);
 var
   Layer: TLayer;
 begin

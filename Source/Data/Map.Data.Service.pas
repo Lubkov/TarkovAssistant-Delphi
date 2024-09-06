@@ -4,21 +4,20 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.IOUtils, FMX.Graphics,
-  Generics.Collections, Map.Data.Types, Map.Data.Classes;
+  Generics.Collections, ME.DB.Entity, ME.DB.Map;
 
 type
   TDataService = class
   private
-    FItems: TList<TMap>;
+    FItems: TObjectList<TDBMap>;
 
     function GetCount: Integer;
-    function GetMapItem(Index: Integer): TMap;
-    procedure SetMapItem(Index: Integer; const Value: TMap);
+    function GetMapItem(Index: Integer): TDBMap;
+    procedure SetMapItem(Index: Integer; const Value: TDBMap);
   public
     constructor Create;
     destructor Destroy; override;
 
-    procedure Clear;
     procedure Load(const FileName: string);
 
     function GetSourceFileName(const Source: TEntity): string;
@@ -26,9 +25,9 @@ type
     procedure SaveImage(const Source: TEntity; const Dest: TBitmap);
     procedure DeleteImage(const Source: TEntity);
 
-    property Items: TList<TMap> read FItems;
+    property Items: TObjectList<TDBMap> read FItems;
     property Count: Integer read GetCount;
-    property Map[Index: Integer]: TMap read GetMapItem write SetMapItem;
+    property Map[Index: Integer]: TDBMap read GetMapItem write SetMapItem;
   end;
 
 var
@@ -45,12 +44,11 @@ constructor TDataService.Create;
 begin
   inherited;
 
-  FItems := TList<TMap>.Create;
+  FItems := TObjectList<TDBMap>.Create;
 end;
 
 destructor TDataService.Destroy;
 begin
-  Clear;
   FItems.Free;
 
   inherited;
@@ -61,66 +59,54 @@ begin
   Result := FItems.Count;
 end;
 
-function TDataService.GetMapItem(Index: Integer): TMap;
+function TDataService.GetMapItem(Index: Integer): TDBMap;
 begin
   Result := Items[Index];
 end;
 
-procedure TDataService.SetMapItem(Index: Integer; const Value: TMap);
+procedure TDataService.SetMapItem(Index: Integer; const Value: TDBMap);
 begin
   Items[Index] := Value;
 end;
 
-procedure TDataService.Clear;
-var
-  i: Integer;
-begin
-  try
-    for i := 0 to FItems.Count - 1 do
-      FItems[i].Free;
-  finally
-    FItems.Clear;
-  end;
-end;
-
 procedure TDataService.Load(const FileName: string);
-var
-  Data: TStrings;
+//var
+//  Data: TStrings;
 begin
-  Data := TStringList.Create;
-  try
-    Data.LoadFromFile(FileName, TEncoding.UTF8);
-    TJSONDataImport.Load(Data.Text, Items);
-  finally
-    Data.Free;
-  end;
+//  Data := TStringList.Create;
+//  try
+//    Data.LoadFromFile(FileName, TEncoding.UTF8);
+//    TJSONDataImport.Load(Data.Text, Items);
+//  finally
+//    Data.Free;
+//  end;
 end;
 
 function TDataService.GetSourceFileName(const Source: TEntity): string;
-var
-  Folder, Ext: string;
+//var
+//  Folder, Ext: string;
 begin
-  if Source is TMap then begin
-    Folder := 'Maps';
-    Ext := 'jpg';
-  end
-  else
-  if Source is TLayer then begin
-    Folder := 'Levels';
-    Ext := 'png';
-  end
-  else
-  if Source is TQuestItem then begin
-    Folder := 'Items';
-    Ext := 'png';
-  end
-  else
-  if Source is TResource then begin
-    Folder := 'Markers';
-    Ext := 'jpg';
-  end;
-
-  Result := TPath.Combine(AppParams.DataPath, TPath.Combine(Folder, Source.ID + '.' + Ext));
+//  if Source is TDBMap then begin
+//    Folder := 'Maps';
+//    Ext := 'jpg';
+//  end
+//  else
+//  if Source is TLayer then begin
+//    Folder := 'Levels';
+//    Ext := 'png';
+//  end
+//  else
+//  if Source is TQuestItem then begin
+//    Folder := 'Items';
+//    Ext := 'png';
+//  end
+//  else
+//  if Source is TResource then begin
+//    Folder := 'Markers';
+//    Ext := 'jpg';
+//  end;
+//
+//  Result := TPath.Combine(AppParams.DataPath, TPath.Combine(Folder, Source.ID + '.' + Ext));
 end;
 
 procedure TDataService.LoadImage(const Source: TEntity; const Dest: TBitmap);

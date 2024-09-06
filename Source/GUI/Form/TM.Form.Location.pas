@@ -8,7 +8,7 @@ uses
   FMX.Dialogs, Data.DB, ME.DB.Entity, ME.DB.Map, FMX.Objects, FMX.Layouts;
 
 type
-  TLocationChangedEvent = procedure (const Value: TMap) of object;
+  TLocationChangedEvent = procedure (const Value: TDBMap) of object;
 
   TLocationForm = class(TForm)
     GridLayout1: TGridLayout;
@@ -17,7 +17,7 @@ type
     FOnLocationChanged: TLocationChangedEvent;
 
     function GetCount: Integer;
-    function GetItem(Index: Integer): TMap;
+    function GetItem(Index: Integer): TDBMap;
     procedure OnLocationClick(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
@@ -27,7 +27,7 @@ type
     procedure Init;
 
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TMap read GetItem;
+    property Items[Index: Integer]: TDBMap read GetItem;
     property OnLocationChanged: TLocationChangedEvent read FOnLocationChanged write FOnLocationChanged;
   end;
 
@@ -67,9 +67,9 @@ begin
   Result := FItems.Count;
 end;
 
-function TLocationForm.GetItem(Index: Integer): TMap;
+function TLocationForm.GetItem(Index: Integer): TDBMap;
 begin
-  Result := TMap(FItems[Index]);
+  Result := TDBMap(FItems[Index]);
 end;
 
 procedure TLocationForm.Clear;

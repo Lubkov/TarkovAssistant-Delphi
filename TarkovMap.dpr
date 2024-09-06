@@ -42,7 +42,13 @@ uses
   Map.Frame.Marker in 'Source\GUI\Frame\Map.Frame.Marker.pas' {MarkerDescript: TFrame},
   Map.CursorService in 'Source\GUI\Map.CursorService.pas',
   ME.GUI.PictureItem in 'Source\Common\ME.GUI.PictureItem.pas' {PictureItemItem: TFrame},
-  ME.GUI.PictureList in 'Source\Common\ME.GUI.PictureList.pas' {PictureList: TFrame};
+  ME.GUI.PictureList in 'Source\Common\ME.GUI.PictureList.pas' {PictureList: TFrame},
+  ME.DB.Resource in 'Source\Entity\ME.DB.Resource.pas',
+  ME.DB.QuestItem in 'Source\Entity\ME.DB.QuestItem.pas',
+  ME.DAO.Resource in 'Source\DAO\ME.DAO.Resource.pas',
+  ME.DAO.QuestItem in 'Source\DAO\ME.DAO.QuestItem.pas',
+  ME.Service.Resource in 'Source\Service\ME.Service.Resource.pas',
+  ME.Service.QuestItem in 'Source\Service\ME.Service.QuestItem.pas';
 
 {$R *.res}
 
