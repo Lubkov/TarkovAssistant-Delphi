@@ -33,9 +33,7 @@ procedure TQuestItemsMemGrid.AddRecord;
 var
   QuestItem: TDBQuestItem;
   Resource: TDBResource;
-  Stored: Boolean;
 begin
-  Stored := False;
   QuestItem := TDBQuestItem.Create;
   try
     if not InternalEditRecord(QuestItem) then
@@ -69,13 +67,50 @@ begin
 end;
 
 procedure TQuestItemsMemGrid.EditRecord;
+var
+  QuestItem: TDBQuestItem;
+  Resource: TDBResource;
 begin
+  Resource := Marker.Items[Grid.Selected];
 
+  QuestItem := TDBQuestItem.Create;
+  try
+    QuestItem.ResourceID := Resource.ID;
+    if not InternalEditRecord(QuestItem) then
+      Exit;
+
+    if not ResourceService.GetAt(QuestItem.ResourceID, Resource) then
+      Exit;
+
+    F.DisableControls;
+    try
+      F.Edit;
+//      FID.Value := Null;
+//      FMarkerID.Value := Null;
+      FResourceID.Value := Resource.ID;
+      FKind.AsInteger := Ord(Resource.Kind);
+      FDescription.AsString := Resource.Description;
+      F.Post;
+    finally
+      F.EnableControls;
+    end;
+  finally
+    QuestItem.Free;
+  end;
 end;
 
 procedure TQuestItemsMemGrid.DeleteRecord;
 begin
+  if (Grid.Row < 0) or not InternalDeleteRecord then
+    Exit;
+  Marker.Items.Delete(Grid.Selected);
 
+  F.DisableControls;
+  try
+    F.Delete;
+  finally
+    F.EnableControls;
+  end;
 end;
 
 end.

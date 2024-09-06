@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = '[Escape from Tarkov Map Editor]'
-  ClientHeight = 480
-  ClientWidth = 720
+  ClientHeight = 576
+  ClientWidth = 864
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -13,17 +13,17 @@ object MainForm: TMainForm
   DesignerMasterStyle = 0
   object MainContainer: TTabControl
     Align = Client
-    Size.Width = 720.000000000000000000
-    Size.Height = 480.000000000000000000
+    Size.Width = 864.000000000000000000
+    Size.Height = 576.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 0
     TabOrder = 1
     TabPosition = PlatformDefault
     Sizes = (
-      720s
-      454s
-      720s
-      454s)
+      864s
+      550s
+      864s
+      550s)
     object GeneralTab: TTabItem
       CustomIcon = <
         item
@@ -40,15 +40,15 @@ object MainForm: TMainForm
       ExplicitSize.cy = 26.000000000000000000
       object TopLayout: TLayout
         Align = Top
-        Size.Width = 720.000000000000000000
+        Size.Width = 864.000000000000000000
         Size.Height = 60.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 2
       end
       object Panel1: TPanel
         Align = Bottom
-        Position.Y = 409.000000000000000000
-        Size.Width = 720.000000000000000000
+        Position.Y = 505.000000000000000000
+        Size.Width = 864.000000000000000000
         Size.Height = 45.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
