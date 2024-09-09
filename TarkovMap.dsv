@@ -4187,7 +4187,6 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\Delphi\EscapeFromTarkov\Source\GUI\Form\TM.MainForm.pas
-
 [ClosedView_RDpcUHJvamVjdHNcRGVscGhpXEVzY2FwZUZyb21UYXJrb3ZcU291cmNlXEdVSVxGb3JtXFRNLk1h
 aW5Gb3JtLnBhcw==]
 Module=D:\Projects\Delphi\EscapeFromTarkov\Source\GUI\Form\TM.MainForm.pas
@@ -4198,4 +4197,15 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\Delphi\EscapeFromTarkov\Source\GUI\Form\TM.MainForm.pas
+
+[ClosedView_RDpcUHJvamVjdHNcRGVscGhpXEVzY2FwZUZyb21UYXJrb3ZcU291cmNlXEdVSVxGcmFtZVxNYXAu
+RnJhbWUuSW50ZXJhY3RpdmVNYXAucGFz]
+Module=D:\Projects\Delphi\EscapeFromTarkov\Source\GUI\Frame\Map.Frame.InteractiveMap.pas
+CursorX=100
+CursorY=123
+TopLine=94
+LeftCol=1
+Elisions=
+Bookmarks={1,159,25}{3,228,66}
+EditViewName=D:\Projects\Delphi\EscapeFromTarkov\Source\GUI\Frame\Map.Frame.InteractiveMap.pas
 
