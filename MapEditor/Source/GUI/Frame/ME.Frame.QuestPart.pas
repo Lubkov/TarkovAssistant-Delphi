@@ -132,6 +132,8 @@ begin
   try
     Marker.MapID := FMapID;
     Marker.QuestID := FQuestID;
+    Marker.Kind := TMarkerKind.Quest;
+
     if not InternalMarkerEdit(Marker) then
       Exit;
 
