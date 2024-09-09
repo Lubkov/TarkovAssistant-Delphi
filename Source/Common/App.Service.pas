@@ -15,7 +15,7 @@ type
     destructor Destroy; override;
 
     procedure LoadParams;
-    procedure LoadDataFromJSON;
+    procedure LoadDataFromDB;
     procedure ConnectToDB;
 
     property DBConnection: TSQLiteConnection read FDBConnection;
@@ -68,12 +68,9 @@ begin
   AppParams.Load;
 end;
 
-procedure TAppService.LoadDataFromJSON;
-var
-  FileName: string;
+procedure TAppService.LoadDataFromDB;
 begin
-  FileName := TPath.Combine(AppParams.DataPath, 'data.json');
-  DataService.Load(FileName);
+  DataService.Load;
 end;
 
 procedure TAppService.ConnectToDB;

@@ -67,7 +67,8 @@ type
 implementation
 
 uses
-  App.Constants, Map.Data.Service;
+  App.Constants, Map.Data.Service, ME.Service.Map, ME.Service.Layer,
+  ME.Service.Marker, ME.Service.Quest;
 
 { TMapWrapper }
 
@@ -173,16 +174,21 @@ var
 begin
   FMap := Value;
   FPosition.Empty := True;
-  FZoom := 100;
+  FZoom := 100;  
 
+//  if Map.Layers.Count = 0 then
+//    MapService.LoadLayers(Map, True);
+    
   Layer := Map.MainLayer;
   if Layer = nil then begin
     FBackground.Assign(nil);
     Exit;
   end;
 
-  DataService.LoadImage(Layer, FBackground);
-
+//  MarkerService.LoadMarkers(Map.ID, Map.Markers);
+  LayerService.LoadPicture(Layer.ID, FBackground);
+//  QuestService.LoadQuests(Map.ID, Map.Quests, True);
+  
   MarkerFilter.Init(Value);
   DrawPoint(FPosition);
 end;

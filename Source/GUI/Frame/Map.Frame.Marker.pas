@@ -102,7 +102,7 @@ end;
 
 procedure TMarkerDescript.ShowResource(const Index: Integer);
 var
-  Image: TDBResource;
+  Resource: TDBResource;
 begin
   if FCurrentImageIndex = Index then
     Exit;
@@ -110,10 +110,10 @@ begin
   FCurrentImageIndex := Index;
 
   if FMarker.Images.Count > Index then begin
-    Image := FMarker.Images[Index];
+    Resource := FMarker.Images[Index];
 
-    DataService.LoadImage(Image, MarkerImage.Bitmap);
-    laDescription.Text := Image.Description;
+    DataService.LoadImage(Resource, MarkerImage.Bitmap);
+    laDescription.Text := Resource.Description;
   end
   else begin
     MarkerImage.Bitmap.Assign(nil);

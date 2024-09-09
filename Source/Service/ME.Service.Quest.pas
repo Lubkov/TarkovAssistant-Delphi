@@ -14,7 +14,8 @@ type
     procedure Insert(const Entity: TEntity); override;
     procedure Remove(const ID: Variant); override;
 
-    procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
+    procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>; const AllData: Boolean); overload;
+    procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>); overload;
     procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
   end;
 
@@ -92,14 +93,27 @@ begin
   end;
 end;
 
-procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
-//var
-//  Quest: TDBQuest;
+procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>; const AllData: Boolean);
+var
+  Quest: TDBQuest;
+  Marker: TDBMarker;
 begin
   TQuestDAO(DAO).LoadQuests(MapID, Items);
 
-//  for Quest in Items do
-//    LoadMarkers(Quest.MapID, Quest.ID, Quest.Markers);
+  if AllData then
+    for Quest in Items do begin
+      LoadMarkers(MapID, Quest.ID, TList<TDBMarker>(Quest.Markers));
+
+      for Marker in Quest.Markers do begin
+        MarkerService.LoadPictures(Marker.ID, Marker.Images);
+        MarkerService.LoadQuestItems(Marker.ID, Marker.Items);
+      end;
+    end;
+end;
+
+procedure TQuestService.LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>);
+begin
+  LoadQuests(MapID, Items, False);
 end;
 
 procedure TQuestService.LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);

@@ -15,7 +15,7 @@ type
     FMapID: Variant;
     FName: string;
     FTrader: TTrader;
-    FMarkers: TObjectList<TDBMarker>;
+    FMarkers: TList<TDBMarker>;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -31,7 +31,7 @@ type
     property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
     property Trader: TTrader read FTrader write FTrader;
-    property Markers: TObjectList<TDBMarker> read FMarkers;
+    property Markers: TList<TDBMarker> read FMarkers;
   end;
 
 implementation

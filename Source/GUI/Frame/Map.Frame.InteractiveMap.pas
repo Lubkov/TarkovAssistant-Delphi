@@ -43,7 +43,6 @@ type
     function GetMap: TDBMap;
     procedure SetMap(const Value: TDBMap);
 
-    procedure Clear;
     procedure AddMarker(const Marker: TDBMarker; const Title: string; Trader: TTrader);
     procedure AddPosition(const Position: TPoint);
     procedure OnMarkerClick(Sender: TObject);
@@ -75,7 +74,7 @@ type
 implementation
 
 uses
-  App.Constants;
+  App.Constants, ME.Service.Marker;
 
 {$R *.fmx}
 
@@ -100,7 +99,7 @@ begin
   FMarkerDescript.Align := TAlignLayout.Client;
   FMarkerDescript.OnClose := OnMarkerDescriptionClose;
 
-  FItems := TList<TImage>.Create;
+  FItems := TObjectList<TImage>.Create;
 
   PositionImage.Visible := False;
   MarkerPanel.Visible := False;
@@ -128,8 +127,6 @@ begin
   FOnDoubleClick := nil;
   FOnMouseDown := nil;
   FMapWrapper.Free;
-
-  Clear;
   FItems.Free;
 
   inherited;
@@ -161,7 +158,7 @@ begin
 
   Self.Bitmap := Bitmap;
 
-  Clear;
+  FItems.Clear;
   for Marker in Map.Markers do
     if MarkerFilter.IsGropupEnable(Marker.Kind) then
       AddMarker(Marker, Marker.Caption, TTrader.None);
@@ -201,18 +198,6 @@ begin
   FMapWrapper.Start;
 end;
 
-procedure TInteractiveMap.Clear;
-var
-  i: Integer;
-begin
-  try
-    for i := 0 to FItems.Count - 1 do
-      FItems[i].Free;
-  finally
-    FItems.Clear;
-  end;
-end;
-
 procedure TInteractiveMap.AddMarker(const Marker: TDBMarker; const Title: string; Trader: TTrader);
 const
   MarkerHeight = 32;
@@ -240,7 +225,7 @@ begin
     Item.TagObject := Marker;
     Item.Tag := Ord(Trader);
 
-    if (Marker.Images.Count > 0) and (Trim(Marker.Images[0].Description) <> '') then
+    if (Marker.Images.Count > 0) or (Marker.Items.Count > 0) then
       Item.Cursor := crHandPoint
     else
       Item.Cursor := crDefault;
@@ -276,7 +261,10 @@ begin
 
   Item := TImage(Sender);
   Marker := TDBMarker(Item.TagObject);
-  if (Marker.Images.Count > 0) and (Trim(Marker.Images[0].Description) <> '') then begin
+//  MarkerService.LoadPictures(Marker.ID, Marker.Images);
+
+  if (Marker.Images.Count > 0) or (Marker.Items.Count > 0) then begin
+//  if (Marker.Images.Count > 0) and (Trim(Marker.Images[0].Description) <> '') then begin
     FMarkerDescript.Init(Marker, Item.Hint, TTrader(Item.Tag));
 
     MarkerPanel.Height := FMarkerDescript.MaxHeight;
@@ -308,6 +296,7 @@ end;
 
 function TInteractiveMap.NormalizePosition(const Left, Top: Integer):  TPoint;
 const
+  ReserveMapID = 5;
   Angle = 0.268; // 0.523599; //0.523599;  0.268
 var
   x, y: Single;
@@ -315,7 +304,7 @@ var
 begin
   x := Left;
   y := Top;
-  if Map.ID = '{4BD00E08-6780-4351-91FD-8ACB9AB8F215}' then begin
+  if Map.ID = ReserveMapID then begin
     x := Trunc(x * cos(Angle) - y * sin(Angle));
     y := Trunc(x * sin(Angle) + y * cos(Angle));
   end;

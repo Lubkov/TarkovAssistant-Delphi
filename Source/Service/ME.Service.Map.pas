@@ -127,8 +127,7 @@ end;
 
 procedure TMapService.LoadLayers(const Map: TDBMap; LoadPicture: Boolean);
 begin
-  Map.Layers.Clear;
-  LayerService.GetMapLayers(Map.ID, Map.Layers);
+  LayerService.GetMapLayers(Map.ID, Map.Layers, LoadPicture);
 //  MapDAO.LoadLayers(Map, LoadPicture);
 end;
 

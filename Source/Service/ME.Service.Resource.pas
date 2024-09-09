@@ -27,6 +27,7 @@ type
     procedure DeletePicture(const Source: TDBResource); overload;
 
     procedure LoadMarkerPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
+    procedure LoadMarkerQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
 
     procedure ExportFromDB;
   end;
@@ -167,6 +168,11 @@ end;
 procedure TResourceService.LoadMarkerPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
 begin
   TResourceDAO(DAO).GetPictures(MarkerID, Items);
+end;
+
+procedure TResourceService.LoadMarkerQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
+begin
+  TResourceDAO(DAO).GetQuestItems(MarkerID, Items);
 end;
 
 end.

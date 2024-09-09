@@ -4,12 +4,12 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.IOUtils, FMX.Graphics,
-  Generics.Collections, ME.DB.Entity, ME.DB.Map;
+  Generics.Collections, ME.DB.Entity, ME.DB.Map, ME.DB.Layer, ME.DB.Resource;
 
 type
   TDataService = class
   private
-    FItems: TObjectList<TDBMap>;
+    FItems: TList<TDBMap>;
 
     function GetCount: Integer;
     function GetMapItem(Index: Integer): TDBMap;
@@ -18,14 +18,14 @@ type
     constructor Create;
     destructor Destroy; override;
 
-    procedure Load(const FileName: string);
+    procedure Load;
 
     function GetSourceFileName(const Source: TEntity): string;
-    procedure LoadImage(const Source: TEntity; const Dest: TBitmap);
+    procedure LoadImage(const Source: TDBResource; const Dest: TBitmap);
     procedure SaveImage(const Source: TEntity; const Dest: TBitmap);
     procedure DeleteImage(const Source: TEntity);
 
-    property Items: TObjectList<TDBMap> read FItems;
+    property Items: TList<TDBMap> read FItems;
     property Count: Integer read GetCount;
     property Map[Index: Integer]: TDBMap read GetMapItem write SetMapItem;
   end;
@@ -36,7 +36,8 @@ var
 implementation
 
 uses
-  App.Constants, ME.Service.Map;
+  App.Constants, ME.Service.Map, ME.Service.Marker, ME.Service.Layer,
+  ME.Service.Quest, ME.Service.Resource;
 
 { TDataService }
 
@@ -69,18 +70,17 @@ begin
   Items[Index] := Value;
 end;
 
-procedure TDataService.Load(const FileName: string);
-//var
-//  Data: TStrings;
+procedure TDataService.Load;
+var
+  Map: TDBMap;
 begin
   MapService.GetAll(TList<TEntity>(FItems));
-//  Data := TStringList.Create;
-//  try
-//    Data.LoadFromFile(FileName, TEncoding.UTF8);
-//    TJSONDataImport.Load(Data.Text, Items);
-//  finally
-//    Data.Free;
-//  end;
+
+  for Map in FItems do begin
+    MapService.LoadLayers(Map, False);
+    MarkerService.LoadMarkers(Map.ID, Map.Markers);
+    QuestService.LoadQuests(Map.ID, Map.Quests, True);
+  end;
 end;
 
 function TDataService.GetSourceFileName(const Source: TEntity): string;
@@ -110,16 +110,18 @@ begin
 //  Result := TPath.Combine(AppParams.DataPath, TPath.Combine(Folder, Source.ID + '.' + Ext));
 end;
 
-procedure TDataService.LoadImage(const Source: TEntity; const Dest: TBitmap);
-var
-  FileName: string;
+procedure TDataService.LoadImage(const Source: TDBResource; const Dest: TBitmap);
+//var
+//  FileName: string;
 begin
-  FileName := GetSourceFileName(Source);
+  ResourceService.LoadPicture(Source, Dest);
 
-  if FileExists(FileName) then
-    Dest.LoadFromFile(FileName)
-  else
-    Dest.Assign(nil);
+//  FileName := GetSourceFileName(Source);
+//
+//  if FileExists(FileName) then
+//    Dest.LoadFromFile(FileName)
+//  else
+//    Dest.Assign(nil);
 end;
 
 procedure TDataService.SaveImage(const Source: TEntity; const Dest: TBitmap);

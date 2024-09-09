@@ -14,7 +14,7 @@ type
     function GetSqlSelectCommandText: string; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure GetMapLayers(const MapID: Variant; const Items: TList<TEntity>);
+    procedure GetMapLayers(const MapID: Variant; const Items: TList<TEntity>; LoadPicture: Boolean);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
     procedure LoadPicture(const LayerID: Variant; const Picture: TBitmap); overload;
@@ -58,17 +58,15 @@ begin
   end;
 end;
 
-procedure TLayerDAO.GetMapLayers(const MapID: Variant; const Items: TList<TEntity>);
+procedure TLayerDAO.GetMapLayers(const MapID: Variant; const Items: TList<TEntity>; LoadPicture: Boolean);
 var
   Query: TUniQuery;
   Entity: TEntity;
 begin
-  Items.Clear;
-
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := Format(GetSqlSelectCommandText, ['WHERE MapID = :MapID']);
+    Query.SQL.Text := 'SELECT ' + TDBLayer.FieldList + ', Picture FROM Layer WHERE MapID = :MapID';
     Query.ParamByName('MapID').Value := MapID;
     Query.Open;
 

@@ -18,8 +18,8 @@ type
     FKind: TMarkerKind;
     FLeft: Integer;
     FTop: Integer;
-    FImages: TObjectList<TDBResource>;
-    FItems: TObjectList<TDBResource>;
+    FImages: TList<TDBResource>;
+    FItems: TList<TDBResource>;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -37,8 +37,8 @@ type
     property Kind: TMarkerKind read FKind write FKind;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
-    property Images: TObjectList<TDBResource> read FImages;
-    property Items: TObjectList<TDBResource> read FItems;
+    property Images: TList<TDBResource> read FImages;
+    property Items: TList<TDBResource> read FItems;
   end;
 
 implementation

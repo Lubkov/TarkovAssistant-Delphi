@@ -21,6 +21,7 @@ type
     procedure LoadMarkers(const MapID: Variant; const Items: TList<TDBMarker>);
     procedure LoadQuestMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
     procedure LoadPictures(const ID: Variant; const Items: TList<TDBResource>);
+    procedure LoadQuestItems(const ID: Variant; const Items: TList<TDBResource>);
     procedure DeletePictures(const Items: TList<TDBResource>);
 
     property MarkerDAO: TMarkerDAO read GetMarkerDAO;
@@ -120,7 +121,14 @@ end;
 
 procedure TMarkerService.LoadPictures(const ID: Variant; const Items: TList<TDBResource>);
 begin
+  Items.Clear;
   ResourceService.LoadMarkerPictures(ID, Items);
+end;
+
+procedure TMarkerService.LoadQuestItems(const ID: Variant; const Items: TList<TDBResource>);
+begin
+  Items.Clear;
+  ResourceService.LoadMarkerQuestItems(ID, Items);
 end;
 
 procedure TMarkerService.DeletePictures(const Items: TList<TDBResource>);

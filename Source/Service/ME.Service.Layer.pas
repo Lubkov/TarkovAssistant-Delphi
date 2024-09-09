@@ -12,7 +12,7 @@ type
     function GetDAOClass: TDAOClass; override;
   public
     procedure LoadPicture(const LayerID: Variant; const Picture: TBitmap);
-    procedure GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>);
+    procedure GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>; LoadPicture: Boolean);
     procedure SavePicture(const Entity: TEntity);
   end;
 
@@ -33,9 +33,10 @@ begin
   TLayerDAO(DAO).LoadPicture(LayerID, Picture);
 end;
 
-procedure TLayerService.GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>);
+procedure TLayerService.GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>; LoadPicture: Boolean);
 begin
-  TLayerDAO(DAO).GetMapLayers(MapID, TList<TEntity>(Items));
+  Items.Clear;
+  TLayerDAO(DAO).GetMapLayers(MapID, TList<TEntity>(Items), LoadPicture);
 end;
 
 procedure TLayerService.SavePicture(const Entity: TEntity);
