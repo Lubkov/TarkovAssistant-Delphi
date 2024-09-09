@@ -38,6 +38,7 @@ type
     procedure acDeleteQuestExecute(Sender: TObject);
     procedure FCalcFields(DataSet: TDataSet);
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FMapID: Variant;
     FQuestID: Variant;
@@ -209,6 +210,12 @@ begin
   finally
     Quest.Free;
   end;
+end;
+
+procedure TfrQuest.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  if not IsNullID(FID.Value) then
+    QuestEdit(FID.Value);
 end;
 
 procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

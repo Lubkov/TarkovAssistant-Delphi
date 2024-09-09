@@ -36,6 +36,7 @@ type
     procedure acAddMarkerExecute(Sender: TObject);
     procedure acEditMarkerExecute(Sender: TObject);
     procedure acDeleteMarkerExecute(Sender: TObject);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FMapID: Variant;
     FQuestID: Variant;
@@ -189,6 +190,12 @@ begin
   finally
     Marker.Free;
   end;
+end;
+
+procedure TfrQuestPartGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  if not IsNullID(FID.Value) then
+    MarkerEdit(FID.Value);
 end;
 
 procedure TfrQuestPartGrid.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

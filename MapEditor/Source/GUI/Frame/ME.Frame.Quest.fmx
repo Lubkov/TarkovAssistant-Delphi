@@ -77,8 +77,9 @@ object frQuest: TfrQuest
     Size.PlatformDefault = False
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
-    Viewport.Width = 496.000000000000000000
-    Viewport.Height = 263.000000000000000000
+    OnCellDblClick = GridCellDblClick
+    Viewport.Width = 500.000000000000000000
+    Viewport.Height = 288.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1
