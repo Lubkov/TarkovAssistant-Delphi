@@ -36,7 +36,7 @@ var
 implementation
 
 uses
-  App.Constants;
+  App.Constants, ME.Service.Map;
 
 { TDataService }
 
@@ -73,6 +73,7 @@ procedure TDataService.Load(const FileName: string);
 //var
 //  Data: TStrings;
 begin
+  MapService.GetAll(TList<TEntity>(FItems));
 //  Data := TStringList.Create;
 //  try
 //    Data.LoadFromFile(FileName, TEncoding.UTF8);

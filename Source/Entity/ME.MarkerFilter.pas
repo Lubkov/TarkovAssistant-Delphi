@@ -4,11 +4,11 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants,
-  Map.Data.Types;
+  ME.DB.Map, ME.DB.Marker;
 
 type
   TBoolArray = array of Boolean;
-  TMapChangedEvent = procedure(Map: TMap) of object;
+  TMapChangedEvent = procedure(Map: TDBMap) of object;
 
   TMarkerFilter = class
   private
@@ -24,7 +24,7 @@ type
     destructor Destroy; override;
 
     procedure Clear;
-    procedure Init(const Map: TMap);
+    procedure Init(const Map: TDBMap);
 
     procedure EnableGroup(const Kind: TMarkerKind);
     procedure DisableGroup(const Kind: TMarkerKind);
@@ -83,7 +83,7 @@ begin
   SetLength(FQuestFilter, 0);
 end;
 
-procedure TMarkerFilter.Init(const Map: TMap);
+procedure TMarkerFilter.Init(const Map: TDBMap);
 begin
   SetLength(FQuestFilter, Map.Quests.Count);
   SelectAllQuest(False);

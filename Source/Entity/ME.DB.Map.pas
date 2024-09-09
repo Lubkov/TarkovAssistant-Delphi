@@ -19,11 +19,11 @@ type
     FBottom: Integer;
     FPicture: TBitmap;
     FLayers: TList<TDBLayer>;
-//    FTags: TList<TMarker>;
-//    FQuests: TList<TQuest>;
+    FMarkers: TList<TDBMarker>;
+    FQuests: TList<TDBQuest>;
 
     procedure SetPicture(const Value: TBitmap);
-//    function GetMainLayer: TLayer;
+    function GetMainLayer: TDBLayer;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -34,10 +34,6 @@ type
     class function EntityName: string; override;
     class function FieldList: string; override;
 
-//    procedure ClearLevelList;
-//    procedure ClearTagList;
-//    procedure ClearQuestList;
-
     property Caption: string read FCaption write FCaption;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
@@ -45,9 +41,9 @@ type
     property Bottom: Integer read FBottom write FBottom;
     property Picture: TBitmap read FPicture write SetPicture;
     property Layers: TList<TDBLayer> read FLayers;
-//    property Tags: TList<TMarker> read FTags;
-//    property Quests: TList<TQuest> read FQuests;
-//    property MainLayer: TLayer read GetMainLayer;
+    property Markers: TList<TDBMarker> read FMarkers;
+    property Quests: TList<TDBQuest> read FQuests;
+    property MainLayer: TDBLayer read GetMainLayer;
   end;
 
 implementation
@@ -65,20 +61,16 @@ begin
   FBottom := 0;
   FPicture := TBitmap.Create;
   FLayers := TObjectList<TDBLayer>.Create;
-//  FTags := TList<TMarker>.Create;
-//  FQuests := TList<TQuest>.Create;
+  FMarkers := TObjectList<TDBMarker>.Create;
+  FQuests := TObjectList<TDBQuest>.Create;
 end;
 
 destructor TDBMap.Destroy;
 begin
   FPicture.Free;
   FLayers.Free;
-
-//  ClearTagList;
-//  FTags.Free;
-//
-//  ClearQuestList;
-//  FQuests.Free;
+  FQuests.Free;
+  FMarkers.Free;
 
   inherited;
 end;
@@ -88,17 +80,17 @@ begin
   FPicture.Assign(Value);
 end;
 
-//function TDBMap.GetMainLayer: TLayer;
-//var
-//  Layer: TLayer;
-//begin
-//  Result := nil;
-//  for Layer in Layers do
-//    if Layer.IsMainLevel then begin
-//      Result := Layer;
-//      Exit;
-//    end;
-//end;
+function TDBMap.GetMainLayer: TDBLayer;
+var
+  Layer: TDBLayer;
+begin
+  Result := nil;
+  for Layer in Layers do
+    if Layer.IsMainLevel then begin
+      Result := Layer;
+      Exit;
+    end;
+end;
 
 procedure TDBMap.Assign(const Source: TEntity);
 var
@@ -138,35 +130,5 @@ class function TDBMap.FieldList: string;
 begin
   Result := 'ID, "Caption", "Left", "Top", "Right", "Bottom", "Picture"';
 end;
-
-//procedure TDBMap.ClearLevelList;
-//var
-//  i: Integer;
-//begin
-//  for i := 0 to FLayers.Count - 1 do
-//    FLayers[i].Free;
-//
-//  FLayers.Clear;
-//end;
-//
-//procedure TDBMap.ClearTagList;
-//var
-//  i: Integer;
-//begin
-//  for i := 0 to FTags.Count - 1 do
-//    FTags[i].Free;
-//
-//  FTags.Clear;
-//end;
-//
-//procedure TDBMap.ClearQuestList;
-//var
-//  i: Integer;
-//begin
-//  for i := 0 to FQuests.Count - 1 do
-//    FQuests[i].Free;
-//
-//  FQuests.Clear;
-//end;
 
 end.

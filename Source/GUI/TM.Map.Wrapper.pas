@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.IOUtils, System.Types, System.UITypes,
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.ImgList,
   TM.FilesMonitor, Map.Data.Types, ME.MarkerFilter, ME.DB.Entity, ME.DB.Map,
-  ME.DB.Marker;
+  ME.DB.Marker, ME.DB.Layer;
 
 type
   TMarkerIconArray = array[Low(TMarkerKind) .. High(TMarkerKind)] of TBitmap;
@@ -169,7 +169,7 @@ end;
 
 procedure TMapWrapper.LoadMap(const Value: TDBMap);
 var
-  Layer: TLayer;
+  Layer: TDBLayer;
 begin
   FMap := Value;
   FPosition.Empty := True;

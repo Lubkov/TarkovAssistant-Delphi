@@ -7,7 +7,7 @@ uses
   System.IOUtils, Generics.Collections, FMX.Types, FMX.Controls, FMX.Forms,
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
-  ME.Frame.Map, Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
+  Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
   ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestResources;
 
 type
@@ -52,7 +52,7 @@ uses
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   AppService.LoadParams;
-  AppService.LoadDataFromJSON;
+//  AppService.LoadDataFromJSON;
 
   Self.Caption := '[Map Editor] JSON storage';
 //  Self.Caption := '[Maps Editor] Database = "' + AppService.Database + '"';
@@ -96,14 +96,14 @@ var
   FileName: string;
 begin
   FileName := System.IOUtils.TPath.Combine(AppParams.DataPath, 'data.json');
-  TJSONDataExport.SaveToFile(FileName, DataService.Items);
+//  TJSONDataExport.SaveToFile(FileName, DataService.Items);
 
   ShowMessage('Done');
 end;
 
 procedure TMainForm.buExportToDBClick(Sender: TObject);
 begin
-  TDBDataImport.Load(DataService.Items);
+//  TDBDataImport.Load(DataService.Items);
 
   ShowMessage('Done');
 end;

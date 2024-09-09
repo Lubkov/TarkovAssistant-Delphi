@@ -76,7 +76,8 @@ const
   BackgroundColor = $FF0F0F0F;
 begin
   AppService.LoadParams;
-  AppService.LoadDataFromJSON;
+  AppService.ConnectToDB;
+//  AppService.LoadDataFromJSON;
 
   Self.Caption := '["Escape of Tarkov" position tracking]';
   Self.Fill.Color := BackgroundColor;

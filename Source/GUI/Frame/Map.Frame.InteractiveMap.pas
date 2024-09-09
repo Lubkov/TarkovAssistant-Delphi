@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Objects, FMX.Layouts, TM.Form.Wrapper, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, TM.Map.Wrapper, ME.MarkerFilter, Map.Data.Types,
-  Map.Frame.Marker;
+  Map.Frame.Marker, ME.DB.Map, ME.DB.Marker, ME.DB.Quest;
 
 type
   TInteractiveMap = class(TFrame)
@@ -40,11 +40,11 @@ type
     procedure SetBitmap(const Value: TBitmap);
     procedure OnMapChange(Bitmap: TBitmap);
     function GetMarkerFilter: TMarkerFilter;
-    function GetMap: TMap;
-    procedure SetMap(const Value: TMap);
+    function GetMap: TDBMap;
+    procedure SetMap(const Value: TDBMap);
 
     procedure Clear;
-    procedure AddMarker(const Marker: TMarker; const Title: string; Trader: TTrader);
+    procedure AddMarker(const Marker: TDBMarker; const Title: string; Trader: TTrader);
     procedure AddPosition(const Position: TPoint);
     procedure OnMarkerClick(Sender: TObject);
     procedure OnMarkerDescriptionClose(Sender: TObject);
@@ -64,7 +64,7 @@ type
     procedure TestPosition;
   {$ENDIF}
 
-    property Map: TMap read GetMap write SetMap;
+    property Map: TDBMap read GetMap write SetMap;
     property Bitmap: TBitmap read GetBitmap write SetBitmap;
     property MarkerFilter: TMarkerFilter read GetMarkerFilter;
     property MarkerInfoVisible: Boolean read GetMarkerInfoVisible;
@@ -151,8 +151,8 @@ end;
 
 procedure TInteractiveMap.OnMapChange(Bitmap: TBitmap);
 var
-  Marker: TMarker;
-  Quest: TQuest;
+  Marker: TDBMarker;
+  Quest: TDBQuest;
   i: Integer;
 begin
 //{$IFNDEF DEBUG}
@@ -171,7 +171,7 @@ begin
 
     if MarkerFilter.IsQuestEnable(i) then
       for Marker in Quest.Markers do
-        AddMarker(Marker, Quest.Caption, Quest.Trader);
+        AddMarker(Marker, Quest.Name, Quest.Trader);
   end;
 
   AddPosition(FMapWrapper.Position);
@@ -187,12 +187,12 @@ begin
   Result := MarkerPanel.Visible;
 end;
 
-function TInteractiveMap.GetMap: TMap;
+function TInteractiveMap.GetMap: TDBMap;
 begin
   Result := FMapWrapper.Map;
 end;
 
-procedure TInteractiveMap.SetMap(const Value: TMap);
+procedure TInteractiveMap.SetMap(const Value: TDBMap);
 begin
   if (Value = nil) or (FMapWrapper.Map = Value) then
     Exit;
@@ -213,13 +213,13 @@ begin
   end;
 end;
 
-procedure TInteractiveMap.AddMarker(const Marker: TMarker; const Title: string; Trader: TTrader);
+procedure TInteractiveMap.AddMarker(const Marker: TDBMarker; const Title: string; Trader: TTrader);
 const
   MarkerHeight = 32;
   MarkerWidth = 32;
 var
   Item: TImage;
-  Offset: Double;
+//  Offset: Double;
   p: TPoint;
 begin
   p := NormalizePosition(Marker.Left, Marker.Top);
@@ -269,13 +269,13 @@ end;
 procedure TInteractiveMap.OnMarkerClick(Sender: TObject);
 var
   Item: TImage;
-  Marker: TMarker;
+  Marker: TDBMarker;
 begin
   if Assigned(FOnMouseDown) then
     FOnMouseDown(Self);
 
   Item := TImage(Sender);
-  Marker := TMarker(Item.TagObject);
+  Marker := TDBMarker(Item.TagObject);
   if (Marker.Images.Count > 0) and (Trim(Marker.Images[0].Description) <> '') then begin
     FMarkerDescript.Init(Marker, Item.Hint, TTrader(Item.Tag));
 

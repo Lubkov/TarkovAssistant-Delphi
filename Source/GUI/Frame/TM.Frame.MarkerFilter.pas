@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.Layouts, System.ImageList, FMX.ImgList,
-  FMX.ListBox, Map.Data.Types, ME.MarkerFilter;
+  FMX.ListBox, Map.Data.Types, ME.MarkerFilter, ME.DB.Map, ME.DB.Marker, ME.DB.Quest;
 
 type
   TMarkerFilterList = class(TFrame)
@@ -26,13 +26,13 @@ type
     procedure buCloseClick(Sender: TObject);
   private
     FMarkerFilter: TMarkerFilter;
-    FMap: TMap;
+    FMap: TDBMap;
     FQuests: TList<TSpeedButton>;
     FMaxHeight: Integer;
     FOnClose: TNotifyEvent;
 
     procedure ClearQuests;
-    procedure OnMapChanged(Value: TMap);
+    procedure OnMapChanged(Value: TDBMap);
     procedure OnExtractionButtonClick(Sender: TObject);
     procedure OnQuestButtonClick(Sender: TObject);
   public
@@ -98,12 +98,12 @@ begin
   FMarkerFilter.OnMapChanged := OnMapChanged;
 end;
 
-procedure TMarkerFilterList.OnMapChanged(Value: TMap);
+procedure TMarkerFilterList.OnMapChanged(Value: TDBMap);
 var
   Idx: Integer;
-  Quest: TQuest;
+  Quest: TDBQuest;
   Item: TSpeedButton;
-  Marker: TMarker;
+  Marker: TDBMarker;
   PMCCount: Integer;
   ScavCount: Integer;
   CoopCount: Integer;
@@ -127,9 +127,9 @@ begin
         Inc(CoopCount);
     end;
 
-  buPMCExtraction.Text := TMarker.KindToStr(TMarkerKind.PMCExtraction) + ' (' + PMCCount.ToString + ')';
-  buScavExtraction.Text := TMarker.KindToStr(TMarkerKind.ScavExtraction) + ' (' + ScavCount.ToString + ')';
-  buCoopExtraction.Text := TMarker.KindToStr(TMarkerKind.CoopExtraction) + ' (' + CoopCount.ToString + ')';
+  buPMCExtraction.Text := TDBMarker.KindToStr(TMarkerKind.PMCExtraction) + ' (' + PMCCount.ToString + ')';
+  buScavExtraction.Text := TDBMarker.KindToStr(TMarkerKind.ScavExtraction) + ' (' + ScavCount.ToString + ')';
+  buCoopExtraction.Text := TDBMarker.KindToStr(TMarkerKind.CoopExtraction) + ' (' + CoopCount.ToString + ')';
 
   QuestGrid.BeginUpdate;
   try
@@ -148,7 +148,7 @@ begin
         Item.Tag := Idx;
         Item.Parent := QuestGrid;
         Item.Cursor := crHandPoint;
-        Item.Text := Quest.Caption + ' (' + IntToStr(Quest.Markers.Count) + ')';
+        Item.Text := Quest.Name + ' (' + IntToStr(Quest.Markers.Count) + ')';
         Item.StaysPressed := True;
         Item.StyleLookup := 'FilterItemStyle';
         Item.TextSettings.HorzAlign := TTextAlign.Leading;

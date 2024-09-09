@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.Objects, FMX.Layouts, System.ImageList,
-  FMX.ImgList, Map.Data.Types, FMX.ListBox, System.Rtti, ME.GUI.PictureList;
+  FMX.ImgList, Map.Data.Types, FMX.ListBox, System.Rtti, ME.GUI.PictureList,
+  ME.DB.Marker, ME.DB.Quest, ME.DB.Resource; //, ME.DB.QuestItem;
 
 type
   TMarkerDescript = class(TFrame)
@@ -28,7 +29,7 @@ type
 
     procedure buCloseClick(Sender: TObject);
   private
-    [Weak] FMarker: TMarker;
+    [Weak] FMarker: TDBMarker;
     FMaxHeight: Single;
     FMaxWidth: Single;
     FOnClose: TNotifyEvent;
@@ -38,12 +39,12 @@ type
 
     procedure ShowResource(const Index: Integer);
     procedure ChangedPreviewIcon(ItemIndex: Integer);
-    procedure LoadQuestItems(const Marker: TMarker);
+    procedure LoadQuestItems(const Marker: TDBMarker);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const Marker: TMarker; const QuestName: string; Trader: TTrader);
+    procedure Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
 
     property MaxHeight: Single read FMaxHeight;
     property MaxWidth: Single read FMaxWidth;
@@ -101,7 +102,7 @@ end;
 
 procedure TMarkerDescript.ShowResource(const Index: Integer);
 var
-  Image: TResource;
+  Image: TDBResource;
 begin
   if FCurrentImageIndex = Index then
     Exit;
@@ -125,9 +126,9 @@ begin
   ShowResource(ItemIndex);
 end;
 
-procedure TMarkerDescript.LoadQuestItems(const Marker: TMarker);
+procedure TMarkerDescript.LoadQuestItems(const Marker: TDBMarker);
 var
-  QuestItem: TQuestItem;
+  QuestItem: TDBResource;
   Height: Single;
   Width: Single;
 begin
@@ -160,13 +161,13 @@ begin
     FItemIconList.Add(QuestItem.Picture);
 end;
 
-procedure TMarkerDescript.Init(const Marker: TMarker; const QuestName: string; Trader: TTrader);
+procedure TMarkerDescript.Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
 const
   MarkerImageHeight = 360;
   MarkerImageWidth = 640;
 var
   Bitmap: TBitmap;
-  Resource: TResource;
+  Resource: TDBResource;
   ImageHeight: Single;
 begin
   FMarker := Marker;
