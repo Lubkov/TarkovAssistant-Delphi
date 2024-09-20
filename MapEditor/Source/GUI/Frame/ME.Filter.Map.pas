@@ -36,13 +36,14 @@ type
     FOnMapChanged: TDBMapChangedEvent;
 
     function GetMapID: Variant;
+    procedure SetMapID(const Value: Variant);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
     procedure Init;
 
-    property MapID: Variant read GetMapID;
+    property MapID: Variant read GetMapID write SetMapID;
     property OnMapChanged: TDBMapChangedEvent read FOnMapChanged write FOnMapChanged;
   end;
 
@@ -78,6 +79,12 @@ end;
 function TMapFilter.GetMapID: Variant;
 begin
   Result := FID.Value;
+end;
+
+procedure TMapFilter.SetMapID(const Value: Variant);
+begin
+  if F.Active then
+    F.Locate('ID', Value, []);
 end;
 
 procedure TMapFilter.Init;

@@ -80,6 +80,7 @@ var
   FileName: string;
 begin
   FileName := TPath.Combine(AppParams.DataPath, Database);
+  FDBConnection.Disconnect;
   FDBConnection.Database := FileName;
   FDBConnection.Connect;
 end;

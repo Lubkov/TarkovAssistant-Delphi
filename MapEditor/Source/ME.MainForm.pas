@@ -20,17 +20,21 @@ type
     buExpot: TButton;
     buExportToDB: TButton;
     Button1: TButton;
+    buReconnect: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure buExpotClick(Sender: TObject);
     procedure MapChanged(const MapID: Variant);
     procedure buExportToDBClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure buReconnectClick(Sender: TObject);
   private
 //    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
     FResourcesGrid: TQuestResourcesGrid;
+
+    procedure ApplicationInit;
   public
   end;
 
@@ -79,6 +83,11 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
+  ApplicationInit;
+end;
+
+procedure TMainForm.ApplicationInit;
+begin
   AppService.ConnectToDB;
 
   FMapFilter.Init;
@@ -113,6 +122,15 @@ begin
   ResourceService.ExportFromDB;
 
   ShowMessage('Done');
+end;
+
+procedure TMainForm.buReconnectClick(Sender: TObject);
+var
+  MapID: Variant;
+begin
+  MapID := FMapFilter.MapID;
+  ApplicationInit;
+  FMapFilter.MapID := MapID;
 end;
 
 end.
