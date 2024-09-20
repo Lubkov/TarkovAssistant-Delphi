@@ -158,7 +158,7 @@ begin
   end;
 
   for QuestItem in Marker.Items do
-    FItemIconList.Add(QuestItem.Picture);
+    FItemIconList.Add('' {QuestItem.Description}, QuestItem.Picture);
 end;
 
 procedure TMarkerDescript.Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
