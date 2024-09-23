@@ -14,7 +14,7 @@ type
   TPictureList = class(TFrame)
     Background: TRectangle;
     MainContainer: TFramedScrollBox;
-    StyleBook1: TStyleBook;
+    StyleBook: TStyleBook;
 
     procedure MainContainerResize(Sender: TObject);
     procedure MainContainerMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
