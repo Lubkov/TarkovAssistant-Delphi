@@ -10,7 +10,7 @@ uses
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, MemDS, DBAccess, Uni,
   System.Actions, FMX.ActnList, System.ImageList, FMX.ImgList, FMX.ScrollBox,
   FMX.Grid, FMX.Controls.Presentation, ME.DB.Resource, ME.DB.Marker, ME.DB.QuestItem,
-  ME.DB.Presenter.Resource;
+  ME.DB.Presenter.Resource, FMX.Edit;
 
 type
   TQuestItemsGrid = class(TResourcesDBGrid)

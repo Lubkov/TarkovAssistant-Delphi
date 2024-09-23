@@ -10,7 +10,7 @@ uses
   MemDS, DBAccess, Uni, Fmx.Bind.Grid, System.Bindings.Outputs, FMX.ExtCtrls,
   Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
   Data.Bind.Grid, Data.Bind.DBScope, ME.DB.Resource, ME.DB.Marker,
-  ME.Frame.Picture, ME.DB.Presenter.Resource;
+  ME.Frame.Picture, ME.DB.Presenter.Resource, FMX.Edit;
 
 type
   TResourcesDBGrid = class(TFrame)
@@ -33,18 +33,22 @@ type
     GridBindings: TBindingsList;
     FDescription: TWideStringField;
     paPicture: TPanel;
+    edFilterText: TEdit;
     procedure acEditResourceExecute(Sender: TObject);
     procedure acAddResourceExecute(Sender: TObject);
     procedure acDeleteResourceExecute(Sender: TObject);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+    procedure edFilterTextChangeTracking(Sender: TObject);
   private
     FMarker: TDBMarker;
     FResourceID: Variant;
     FPicturePanel: TfrPicture;
 
     function GetMarkerID: Variant;
+    function GetShowFilter: Boolean;
+    procedure SetShowFilter(const Value: Boolean);
   protected
     function GetResourceKind: TResourceKind; virtual; abstract;
     function GetCommandSQLText: string; virtual; abstract;
@@ -71,6 +75,7 @@ type
     property MarkerID: Variant read GetMarkerID;
     property Marker: TDBMarker read FMarker;
     property ResourceKind: TResourceKind read GetResourceKind;
+    property ShowFilter: Boolean read GetShowFilter write SetShowFilter;
   end;
 
 implementation
@@ -95,6 +100,8 @@ begin
   FPicturePanel.Parent := paPicture;
   FPicturePanel.Align := TAlignLayout.Client;
   FPicturePanel.Readonly := True;
+  edFilterText.Visible := False;
+  edFilterText.Position.X := 0;
 end;
 
 destructor TResourcesDBGrid.Destroy;
@@ -131,6 +138,16 @@ begin
     Result := Null
   else
     Result := Marker.ID;
+end;
+
+function TResourcesDBGrid.GetShowFilter: Boolean;
+begin
+  Result := edFilterText.Visible;
+end;
+
+procedure TResourcesDBGrid.SetShowFilter(const Value: Boolean);
+begin
+  edFilterText.Visible := Value;
 end;
 
 procedure TResourcesDBGrid.Init(const Marker: TDBMarker);
@@ -187,6 +204,22 @@ begin
   FResourceID := GetResourceID;
   ResourceService.LoadPicture(ResourceID, ResourceKind, FPicturePanel.Picture);
   FPicturePanel.ResizePicture;
+end;
+
+procedure TResourcesDBGrid.edFilterTextChangeTracking(Sender: TObject);
+var
+  Filter: string;
+begin
+  if not F.Active then
+    Exit;
+
+  Filter := Trim(edFilterText.Text);
+  if Filter <> '' then
+    F.Filter := 'Description like ' + QuotedStr('%' + edFilterText.Text + '%')
+  else
+    F.Filter := '';
+
+  F.Filtered := F.Filter <> '';
 end;
 
 end.

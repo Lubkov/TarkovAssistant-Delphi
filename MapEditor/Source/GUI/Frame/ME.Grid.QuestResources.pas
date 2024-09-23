@@ -10,7 +10,7 @@ uses
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, MemDS, DBAccess, Uni,
   System.Actions, FMX.ActnList, System.ImageList, FMX.ImgList, FMX.ScrollBox,
   FMX.Grid, FMX.Controls.Presentation, ME.DB.Resource, ME.DB.Marker,
-  ME.DB.Presenter.Resource;
+  ME.DB.Presenter.Resource, FMX.Edit;
 
 type
   TQuestResourcesGrid = class(TScreenshotsGrid)
@@ -20,6 +20,8 @@ type
     function GetEditPresenterClass: TEditResourcePresenterClass; override;
     function GetDelPresenterClass: TDelResourcePresenterClass; override;
   public
+    constructor Create(AOwner: TComponent); override;
+
     procedure Init(const Marker: TDBMarker); override;
   end;
 
@@ -28,6 +30,13 @@ implementation
 {$R *.fmx}
 
 { TQuestResourcesGrid }
+
+constructor TQuestResourcesGrid.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  ShowFilter := True;
+end;
 
 function TQuestResourcesGrid.GetResourceKind: TResourceKind;
 begin

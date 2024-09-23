@@ -10,6 +10,7 @@ uses
 
 type
   TedQuestItem = class(TEditForm, IEditDialog<TDBQuestItem>)
+    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
   private
     FQuestItem: TDBQuestItem;
     FResourcesGrid: TQuestResourcesGrid;
@@ -40,6 +41,15 @@ begin
   FResourcesGrid := TQuestResourcesGrid.Create(Self);
   FResourcesGrid.Parent := Self;
   FResourcesGrid.Align := TAlignLayout.Client;
+end;
+
+procedure TedQuestItem.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
+begin
+  inherited;
+
+  if (Key = vkF) and (TShiftStateItem.ssCtrl in Shift) then
+    if FResourcesGrid.ShowFilter then
+      FResourcesGrid.edFilterText.SetFocus;
 end;
 
 function TedQuestItem.IsSuccessActionEnable: Boolean;
