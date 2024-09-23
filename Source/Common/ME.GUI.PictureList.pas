@@ -335,7 +335,6 @@ begin
 end;
 
 procedure TPictureList.OnMouseWheel(WheelDelta: Integer);
-// -120 = вниз, 120 = вверх
 var
   Offset: Single;
   Item: TPictureItemItem;
