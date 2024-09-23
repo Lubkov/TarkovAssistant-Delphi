@@ -13,9 +13,11 @@ type
 
   TPictureList = class(TFrame)
     Background: TRectangle;
-    MainContainer: TLayout;
+    MainContainer: TFramedScrollBox;
+    StyleBook1: TStyleBook;
 
     procedure MainContainerResize(Sender: TObject);
+    procedure MainContainerMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
   private
     FItems: TObjectList<TPictureItemItem>;
     FListDirection: TListDirection;
@@ -54,6 +56,8 @@ type
     procedure Add(const Title: string; const Bitmap: TBitmap); overload;
     procedure Add(const Bitmap: TBitmap); overload;
     procedure Clear;
+
+    procedure OnMouseWheel(WheelDelta: Integer);
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TPictureItemItem read GetPreviewIconItem;
@@ -255,12 +259,17 @@ begin
   if Count = 0 then begin
     FSelectedIndex := -1;
     Exit;
-  end
-  else
-    FSelectedIndex := Value;
+  end;
 
+  if (Value < 0) or (Value >= Count) then
+    Exit;
+
+  FSelectedIndex := Value;
   for Item in FItems do
     Item.IsSelected := (Item.Index = Value);
+
+  if Assigned(FOnChangeItem) then
+    FOnChangeItem(FSelectedIndex);
 end;
 
 function TPictureList.GetStrokeThickness: Integer;
@@ -325,6 +334,25 @@ begin
   FItems.Clear;
 end;
 
+procedure TPictureList.OnMouseWheel(WheelDelta: Integer);
+// -120 = вниз, 120 = вверх
+var
+  Offset: Single;
+  Item: TPictureItemItem;
+begin
+  if Count <= 1 then
+    Exit;
+
+  if WheelDelta > 0 then
+    SelectedIndex := SelectedIndex - 1
+  else
+    SelectedIndex := SelectedIndex + 1;
+
+  Item := Items[SelectedIndex];
+  Offset := MainContainer.Width - Item.Position.X - Item.Width;
+  MainContainer.ScrollBy(Offset, 0);
+end;
+
 procedure TPictureList.MainContainerResize(Sender: TObject);
 begin
   if MainContainer.Height > Height then
@@ -337,8 +365,12 @@ end;
 procedure TPictureList.PreviewIconItemClick(Sender: TObject);
 begin
   SelectedIndex := TPictureItemItem(Sender).Index;
-  if Assigned(FOnChangeItem) then
-    FOnChangeItem(SelectedIndex);
+end;
+
+procedure TPictureList.MainContainerMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+begin
+  Handled := True;
+  OnMouseWheel(WheelDelta);
 end;
 
 end.

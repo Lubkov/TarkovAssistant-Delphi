@@ -26,8 +26,10 @@ type
     MarkerStyleBook: TStyleBook;
     PreviewLayout: TLayout;
     Background: TRectangle;
+    MaouseWheelImage: TImage;
 
     procedure buCloseClick(Sender: TObject);
+    procedure MarkerImageMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
   private
     [Weak] FMarker: TDBMarker;
     FMaxHeight: Single;
@@ -214,12 +216,21 @@ begin
       TListDirection.Horizontal:
         FMaxHeight := FMaxHeight + ItemsLayout.Height + ItemsLayout.Margins.Top + ItemsLayout.Margins.Bottom;
     end;
+
+  MaouseWheelImage.Visible := FPictureIconList.Count > 1;
+  MaouseWheelImage.Position.X := MarkerImage.Width - MaouseWheelImage.Width - 5;
+  MaouseWheelImage.Position.Y := MarkerImage.Height - MaouseWheelImage.Height - 5;
 end;
 
 procedure TMarkerDescript.buCloseClick(Sender: TObject);
 begin
   if Assigned(FOnClose) then
     FOnClose(Self);
+end;
+
+procedure TMarkerDescript.MarkerImageMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+begin
+  FPictureIconList.OnMouseWheel(WheelDelta);
 end;
 
 end.

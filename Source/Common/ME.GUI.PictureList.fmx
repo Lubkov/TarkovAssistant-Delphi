@@ -11,12 +11,20 @@ object PictureList: TPictureList
     Size.PlatformDefault = False
     Stroke.Thickness = 0.000000000000000000
   end
-  object MainContainer: TLayout
+  object MainContainer: TFramedScrollBox
     Align = Top
     Size.Width = 372.000000000000000000
     Size.Height = 50.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    OnResize = MainContainerResize
+    OnMouseWheel = MainContainerMouseWheel
+    ShowScrollBars = False
+    Viewport.Width = 368.000000000000000000
+    Viewport.Height = 46.000000000000000000
+  end
+  object StyleBook1: TStyleBook
+    Styles = <>
+    Left = 176
+    Top = 16
   end
 end
