@@ -211,6 +211,21 @@ object MainForm: TMainForm
       TextSettings.Trimming = None
       OnMouseMove = buToolButtonMouseMove
     end
+    object SpeedButton1: TSpeedButton
+      Action = acShowOptions
+      Align = Bottom
+      Cursor = crHandPoint
+      Images = ImageList32
+      ImageIndex = 8
+      Margins.Top = 10.000000000000000000
+      Position.Y = 604.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'IconToolButtonStyle'
+      TextSettings.Trimming = None
+      OnMouseMove = buToolButtonMouseMove
+    end
   end
   object LocationPanel: TPanel
     Position.X = 120.000000000000000000
@@ -469,6 +484,41 @@ object MainForm: TMainForm
             FileName = 'D:\Downloads\11490414_pin_point_navigation_map_location_icon.png'
           end>
         Name = 'map_position_test_32'
+      end
+      item
+        MultiResBitmap.Height = 32
+        MultiResBitmap.Width = 32
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 32
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
+              F40000000473424954080808087C0864880000026D494441545885D597BD6B54
+              4114C5CF5D0D5162B0484214D1A8602C2584200A7601530886248DF857686395
+              5EB0B0114408A4138C82A8E047A928428AD52A45140B31D968239817D498CDCF
+              E2BDCDCEEEBE8F998D0A9EEAF1EE9C73EFCCDCB977460A04D00BDC0322EA8880
+              BB406FA85E3012E759980BD5B3360288247565982333EBFEDB01902B6816A459
+              0A74DEE93166678866C36060AFA40B4960F7CDACD2347ED4437344D2EB26DDFD
+              922E4AFA2EE9B6997D6D61013DC07B27A17E003780A3C00E600C58C949C01A16
+              80C144730F300DAC39F645A0272D80991CD14D0FC72EAAC0071A8FAA8B999A5F
+              4B9C0F4B9A57604E6C039B924E99D97CCDE1957FE85C89AF69A99E84C7DA10A9
+              487AA378158724ED0BE49FD8FA026E05ECEF12300E941C7E09980096037466DD
+              00FA80B2A7F343595302063C8378047437933B804BC06A0E71BC685D81C91CFE
+              3270BE486004D8C82017262AF1765452F8EBC0F1227E4DE4558AC0132F72CC7F
+              9AC27F9E36366B46C14DCA03857D4492049C24AE64DBD982B4925D05CEE4117D
+              9270C22380A91C7E94F8E868261D04DEE610DD5518C8717E3863F6CD28037D2E
+              F1A107C90D6292D64234E5E9BC869B52BD197D9274A068799BF059712996E252
+              DC1FC82F9BD970AD17BC507C110941BFA4B1408E8B8F5B5FC020F03360F9FE04
+              CE4A491D30B34549D73322FD26E99DA46AE00C37726C0FCCEC59C31F6037F0D2
+              897005B80C7439ABB4E031B325601430E253314B635DF942D649A27EF73B07EC
+              4AB19FF608A0252F8021E01A701538E2DA824A2EF195FB57C1B04E335BF7D5FC
+              BF1E2609D6726C51A8583B01E4B5E5C76DE88581F8793E4763D35A05EED0C6F3
+              FC3709AB4EEA9939F5500000000049454E44AE426082}
+            FileName = 'D:\Projects\Delphi\EscapeFromTarkov\Ico\PNG\settings_32.png'
+          end>
+        Name = 'settings_32'
       end>
     Destination = <
       item
@@ -532,6 +582,14 @@ object MainForm: TMainForm
             SourceRect.Right = 32.000000000000000000
             SourceRect.Bottom = 32.000000000000000000
           end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'settings_32'
+            SourceRect.Right = 32.000000000000000000
+            SourceRect.Bottom = 32.000000000000000000
+          end>
       end>
     Left = 408
     Top = 120
@@ -576,6 +634,10 @@ object MainForm: TMainForm
       ImageIndex = 7
       OnExecute = acTestPositionExecute
       ImageIndex = 7
+    end
+    object acShowOptions: TAction
+      ImageIndex = 8
+      ImageIndex = 8
     end
   end
   object MapTagImages: TImageList

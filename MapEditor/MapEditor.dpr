@@ -72,7 +72,10 @@ uses
   ME.DB.QuestTracker in '..\Source\Entity\ME.DB.QuestTracker.pas',
   ME.Service.Profile in '..\Source\Service\ME.Service.Profile.pas',
   ME.DAO.QuestTracker in '..\Source\DAO\ME.DAO.QuestTracker.pas',
-  ME.Service.QuestTracker in '..\Source\Service\ME.Service.QuestTracker.pas';
+  ME.Service.QuestTracker in '..\Source\Service\ME.Service.QuestTracker.pas',
+  ME.DB.Options in '..\Source\Entity\ME.DB.Options.pas',
+  ME.DAO.Options in '..\Source\DAO\ME.DAO.Options.pas',
+  ME.Service.Options in '..\Source\Service\ME.Service.Options.pas';
 
 {$R *.res}
 

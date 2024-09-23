@@ -290,6 +290,9 @@
         <DCCReference Include="..\Source\Service\ME.Service.Profile.pas"/>
         <DCCReference Include="..\Source\DAO\ME.DAO.QuestTracker.pas"/>
         <DCCReference Include="..\Source\Service\ME.Service.QuestTracker.pas"/>
+        <DCCReference Include="..\Source\Entity\ME.DB.Options.pas"/>
+        <DCCReference Include="..\Source\DAO\ME.DAO.Options.pas"/>
+        <DCCReference Include="..\Source\Service\ME.Service.Options.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

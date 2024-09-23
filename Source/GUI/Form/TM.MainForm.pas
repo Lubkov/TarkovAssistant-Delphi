@@ -34,6 +34,8 @@ type
     MarkerFilterPanel: TPanel;
     buPositionTest: TSpeedButton;
     acTestPosition: TAction;
+    SpeedButton1: TSpeedButton;
+    acShowOptions: TAction;
 
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

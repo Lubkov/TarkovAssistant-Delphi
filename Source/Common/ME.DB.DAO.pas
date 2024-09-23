@@ -21,7 +21,7 @@ type
     constructor Create(const Connection: TCustomConnection);
 
     function GetNewInstance: TEntity; virtual; //CreateInstance
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual; abstract;
+    function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual;
     procedure GetAll(const Items: TList<TEntity>); virtual; abstract;
     procedure Insert(const Entity: TEntity); virtual; abstract;
     procedure Update(const Entity: TEntity); virtual; abstract;
@@ -51,6 +51,25 @@ end;
 function TDAOCommon.GetNewInstance: TEntity;
 begin
   Result := EntityClass.Create;
+end;
+
+function TDAOCommon.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' WHERE ID = :ID';
+    Query.ParamByName('ID').Value := ID;
+    Query.Open;
+
+    Result := not Query.Eof;
+    if Result then
+      Entity.Assign(Query);
+  finally
+    Query.Free;
+  end;
 end;
 
 procedure TDAOCommon.Remove(const ID: Variant);

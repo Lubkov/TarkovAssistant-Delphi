@@ -48,7 +48,13 @@ uses
   ME.DAO.Resource in 'Source\DAO\ME.DAO.Resource.pas',
   ME.DAO.QuestItem in 'Source\DAO\ME.DAO.QuestItem.pas',
   ME.Service.Resource in 'Source\Service\ME.Service.Resource.pas',
-  ME.Service.QuestItem in 'Source\Service\ME.Service.QuestItem.pas';
+  ME.Service.QuestItem in 'Source\Service\ME.Service.QuestItem.pas',
+  ME.DB.Profile in 'Source\Entity\ME.DB.Profile.pas',
+  ME.DB.QuestTracker in 'Source\Entity\ME.DB.QuestTracker.pas',
+  ME.DAO.Profile in 'Source\DAO\ME.DAO.Profile.pas',
+  ME.DAO.QuestTracker in 'Source\DAO\ME.DAO.QuestTracker.pas',
+  ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
+  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas';
 
 {$R *.res}
 
