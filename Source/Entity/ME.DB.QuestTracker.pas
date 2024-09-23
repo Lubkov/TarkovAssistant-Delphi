@@ -49,27 +49,30 @@ end;
 
 procedure TQuestTracker.Assign(const Source: TEntity);
 begin
+  inherited;
 
+  FQuestID := TQuestTracker(Source).QuestID;
+  FMarkerID := TQuestTracker(Source).MarkerID;
+  FStatus := TQuestTracker(Source).Status;
 end;
 
 procedure TQuestTracker.Assign(const DataSet: TDataSet);
 begin
+  inherited;
 
+  FQuestID := DataSet.FieldByName('QuestID').Value;
+  FMarkerID := DataSet.FieldByName('MarkerID').Value;
+  FStatus := TQuestStatus(DataSet.FieldByName('Status').AsInteger);
 end;
 
 class function TQuestTracker.EntityName: string;
 begin
-
+  Result := 'QuestTracker';
 end;
 
 class function TQuestTracker.FieldList: string;
 begin
-
-end;
-
-function TQuestTracker.write: Variant;
-begin
-
+ Result := 'ID, QuestID, MarkerID, Status';
 end;
 
 end.

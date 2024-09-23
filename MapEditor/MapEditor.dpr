@@ -66,7 +66,13 @@ uses
   ME.MemGrid.QuestItems in 'Source\GUI\Frame\ME.MemGrid.QuestItems.pas' {QuestItemsMemGrid: TFrame},
   ME.Edit.QuestItem in 'Source\GUI\Dialog\ME.Edit.QuestItem.pas' {edQuestItem},
   ME.Grid.QuestResources in 'Source\GUI\Frame\ME.Grid.QuestResources.pas' {QuestResourcesGrid: TFrame},
-  ME.Presenter.Screenshot in 'Source\GUI\ME.Presenter.Screenshot.pas';
+  ME.Presenter.Screenshot in 'Source\GUI\ME.Presenter.Screenshot.pas',
+  ME.DAO.Profile in '..\Source\DAO\ME.DAO.Profile.pas',
+  ME.DB.Profile in '..\Source\Entity\ME.DB.Profile.pas',
+  ME.DB.QuestTracker in '..\Source\Entity\ME.DB.QuestTracker.pas',
+  ME.Service.Profile in '..\Source\Service\ME.Service.Profile.pas',
+  ME.DAO.QuestTracker in '..\Source\DAO\ME.DAO.QuestTracker.pas',
+  ME.Service.QuestTracker in '..\Source\Service\ME.Service.QuestTracker.pas';
 
 {$R *.res}
 

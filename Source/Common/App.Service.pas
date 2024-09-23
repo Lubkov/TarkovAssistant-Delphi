@@ -28,7 +28,8 @@ implementation
 
 uses
   App.Constants, Map.Data.Service, ME.Service.Resource, ME.Service.Map,
-  ME.Service.Layer, ME.Service.Quest, ME.Service.Marker, ME.Service.QuestItem;
+  ME.Service.Layer, ME.Service.Quest, ME.Service.Marker, ME.Service.QuestItem,
+  ME.Service.Profile, ME.Service.QuestTracker;
 
 { TAppService }
 
@@ -46,6 +47,8 @@ begin
   QuestService := TQuestService.Create(DBConnection.Connection);
   MarkerService := TMarkerService.Create(DBConnection.Connection);
   QuestItemService := TQuestItemService.Create(DBConnection.Connection);
+  ProfileService := TProfileService.Create(DBConnection.Connection);
+  QuestTrackerService := TQuestTrackerService.Create(DBConnection.Connection);
 end;
 
 destructor TAppService.Destroy;
@@ -59,6 +62,8 @@ begin
   QuestService.Free;
   MarkerService.Free;
   QuestItemService.Free;
+  ProfileService.Free;
+  QuestTrackerService.Free;
 
   inherited;
 end;
