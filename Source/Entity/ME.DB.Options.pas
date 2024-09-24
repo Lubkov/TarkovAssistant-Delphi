@@ -65,7 +65,7 @@ begin
   FProfileID := DataSet.FieldByName('ProfileID').Value;
   FDataPath := DataSet.FieldByName('DataPath').AsString;
   FSreenshotPath := DataSet.FieldByName('SreenshotPath').AsString;
-  FTrackLocation := DataSet.FieldByName('TrackLocation').AsBoolean;
+  FTrackLocation := DataSet.FieldByName('TrackLocation').AsInteger = 1;
 end;
 
 class function TOptions.EntityName: string;

@@ -54,7 +54,12 @@ uses
   ME.DAO.Profile in 'Source\DAO\ME.DAO.Profile.pas',
   ME.DAO.QuestTracker in 'Source\DAO\ME.DAO.QuestTracker.pas',
   ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
-  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas';
+  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas',
+  ME.Service.Options in 'Source\Service\ME.Service.Options.pas',
+  ME.DB.Options in 'Source\Entity\ME.DB.Options.pas',
+  ME.DAO.Options in 'Source\DAO\ME.DAO.Options.pas',
+  ME.Edit.Options in 'Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
+  ME.Presenter.Options in 'Source\GUI\Presenter\ME.Presenter.Options.pas';
 
 {$R *.res}
 
@@ -69,5 +74,6 @@ begin
   AppService := TAppService.Create(Application);
 
   Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TedOptions, edOptions);
   Application.Run;
 end.

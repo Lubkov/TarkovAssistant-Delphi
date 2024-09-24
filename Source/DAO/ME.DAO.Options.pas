@@ -12,6 +12,7 @@ type
   protected
     function EntityClass: TEntityClass; override;
   public
+    function GetFirst(const Entity: TEntity): Boolean;
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -24,6 +25,24 @@ implementation
 function TOptionsDAO.EntityClass: TEntityClass;
 begin
   Result := TOptions;
+end;
+
+function TOptionsDAO.GetFirst(const Entity: TEntity): Boolean;
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' ORDER BY ROWID ASC LIMIT 1';
+    Query.Open;
+
+    Result := not Query.Eof;
+    if Result then
+      Entity.Assign(Query);
+  finally
+    Query.Free;
+  end;
 end;
 
 procedure TOptionsDAO.Insert(const Entity: TEntity);

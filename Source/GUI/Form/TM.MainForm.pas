@@ -9,7 +9,7 @@ uses
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Objects, System.Actions, FMX.ActnList,
   TM.Map.Wrapper, TM.Frame.Location, TM.Frame.MarkerFilter,
   Map.Frame.InteractiveMap, FMX.ListBox,
-  ME.DB.Map;
+  ME.DB.Map, ME.DB.Options;
 
 type
   TMainForm = class(TForm)
@@ -49,6 +49,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure buToolButtonMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure acTestPositionExecute(Sender: TObject);
+    procedure acShowOptionsExecute(Sender: TObject);
   private
     FFormWrapper: TFormWrapper;
     FLocationGrid: TLocationGrid;
@@ -69,7 +70,8 @@ var
 implementation
 
 uses
-  App.Constants, App.Service, Map.Data.Service, Map.CursorService;
+  App.Constants, App.Service, Map.Data.Service, Map.CursorService,
+  ME.Edit.Options, ME.Service.Options, ME.Presenter.Options;
 
 {$R *.fmx}
 
@@ -255,6 +257,25 @@ end;
 procedure TMainForm.acTestPositionExecute(Sender: TObject);
 begin
   FInteractiveMap.TestPosition;
+end;
+
+procedure TMainForm.acShowOptionsExecute(Sender: TObject);
+var
+  Presenter: TEditOptionsPresenter;
+  Dialog: TedOptions;
+begin
+  Dialog := TedOptions.Create(Self);
+  try
+    Presenter := TEditOptionsPresenter.Create(Dialog, AppService.Options);
+    try
+      if Presenter.Edit then
+        ;
+    finally
+      Presenter.Free;
+    end;
+  finally
+    Dialog.Free;
+  end;
 end;
 
 end.

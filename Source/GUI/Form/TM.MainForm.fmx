@@ -637,6 +637,7 @@ object MainForm: TMainForm
     end
     object acShowOptions: TAction
       ImageIndex = 8
+      OnExecute = acShowOptionsExecute
       ImageIndex = 8
     end
   end

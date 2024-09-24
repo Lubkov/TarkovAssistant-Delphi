@@ -1,0 +1,80 @@
+inherited edOptions: TedOptions
+  Caption = 'EditForm1'
+  DesignerMasterStyle = 0
+  inherited paBottom: TPanel
+    TabOrder = 2
+  end
+  object laDataPath: TLabel [1]
+    Align = Top
+    StyledSettings = [Size, Style, FontColor]
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 20.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    Text = 'DataPath:'
+    TabOrder = 7
+  end
+  object edDataPath: TEdit [2]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Align = Top
+    TabOrder = 1
+    Position.X = 20.000000000000000000
+    Position.Y = 39.000000000000000000
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 2.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object laSreenshotPath: TLabel [3]
+    Align = Top
+    StyledSettings = [Size, Style, FontColor]
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 81.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    Text = 'DataPath:'
+    TabOrder = 6
+  end
+  object edSreenshotPath: TEdit [4]
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Align = Top
+    TabOrder = 0
+    Position.X = 20.000000000000000000
+    Position.Y = 100.000000000000000000
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 2.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edTrackLocation: TCheckBox [5]
+    Align = Top
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 142.000000000000000000
+    Size.Width = 304.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Text = 'edTrackLocation'
+  end
+  inherited ActionList1: TActionList
+    Left = 16
+    Top = 208
+  end
+end

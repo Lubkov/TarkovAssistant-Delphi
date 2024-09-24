@@ -4,12 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, System.IOUtils,
-  App.SQLite.Connection;
+  App.SQLite.Connection, ME.DB.Options;
 
 type
   TAppService = class(TComponent)
   private
     FDBConnection: TSQLiteConnection;
+    FOptions: TOptions;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -19,6 +20,7 @@ type
     procedure ConnectToDB;
 
     property DBConnection: TSQLiteConnection read FDBConnection;
+    property Options: TOptions read FOptions;
   end;
 
 var
@@ -38,6 +40,7 @@ begin
   inherited;
 
   DataService := TDataService.Create;
+  FOptions := TOptions.Create;
 
   // DB layer
   FDBConnection := TSQLiteConnection.Create(Self);
@@ -55,6 +58,7 @@ end;
 destructor TAppService.Destroy;
 begin
   DataService.Free;
+  FOptions.Free;
 
   ResourceService.Free;
   MapService.Free;
@@ -73,6 +77,8 @@ end;
 procedure TAppService.LoadParams;
 begin
   AppParams.Load;
+  ConnectToDB;
+  OptionsService.Load(FOptions);
 end;
 
 procedure TAppService.LoadDataFromDB;
