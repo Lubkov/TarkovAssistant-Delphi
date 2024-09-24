@@ -77,7 +77,8 @@ uses
   ME.DAO.Options in '..\Source\DAO\ME.DAO.Options.pas',
   ME.Service.Options in '..\Source\Service\ME.Service.Options.pas',
   ME.Edit.Options in '..\Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
-  ME.Presenter.Options in '..\Source\GUI\Presenter\ME.Presenter.Options.pas';
+  ME.Presenter.Options in '..\Source\GUI\Presenter\ME.Presenter.Options.pas',
+  ME.Filter.Profile in '..\Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame};
 
 {$R *.res}
 

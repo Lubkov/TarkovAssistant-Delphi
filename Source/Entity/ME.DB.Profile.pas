@@ -6,9 +6,12 @@ uses
   System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
 
 type
+  TPMCType = (pmcBear, pmcUsec);
+
   TProfile = class(TEntity)
   private
     FName: string;
+    FKind: TPMCType;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -20,6 +23,7 @@ type
     class function FieldList: string; override;
 
     property Name: string read FName write FName;
+    property Kind: TPMCType read FKind write FKind;
   end;
 
 implementation
@@ -31,6 +35,7 @@ begin
   inherited;
 
   FName := '';
+  FKind := TPMCType.pmcBear;
 end;
 
 destructor TProfile.Destroy;

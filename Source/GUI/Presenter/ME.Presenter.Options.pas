@@ -18,7 +18,7 @@ type
 implementation
 
 uses
-  ME.DB.Utils, ME.Service.Options;
+  ME.DB.Utils, App.Service;
 
 { TEditOptionsPresenter }
 
@@ -26,7 +26,7 @@ procedure TEditOptionsPresenter.InternalSave;
 begin
   inherited;
 
-  OptionsService.Save(Instance);
+  AppService.SaveParams;
 end;
 
 procedure TEditOptionsPresenter.Cancel;

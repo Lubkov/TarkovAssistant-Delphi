@@ -6,17 +6,27 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
-  ME.Edit.Form.Presenter, ME.DB.Options, FMX.Edit;
+  ME.Edit.Form.Presenter, ME.DB.Options, FMX.Edit, System.ImageList, FMX.ImgList,
+  FMX.Layouts, FMX.Objects, ME.Filter.Profile;
 
 type
   TedOptions = class(TEditForm, IEditDialog<TOptions>)
     laDataPath: TLabel;
-    edDataPath: TEdit;
     laSreenshotPath: TLabel;
-    edSreenshotPath: TEdit;
     edTrackLocation: TCheckBox;
+    OpenDialog: TOpenDialog;
+    ImageList1: TImageList;
+    paDataPath: TLayout;
+    edDataPath: TEdit;
+    buDataPath: TSpeedButton;
+    paSreenshotPath: TLayout;
+    edSreenshotPath: TEdit;
+    buSreenshotPath: TSpeedButton;
+    Background: TRectangle;
+    paProfileFilter: TLayout;
   private
     FOptions: TOptions;
+    FProfileFilter: TProfileFilter;
 
     function GetDataPath: string;
     procedure SetDataPath(const Value: string);
@@ -24,6 +34,9 @@ type
     procedure SetSreenshotPath(const Value: string);
     function GetTrackLocation: Boolean;
     procedure SetTrackLocation(const Value: Boolean);
+
+    function InternalOpenFolder(const FileName: string): string;
+    procedure OpenFolderButtonClick(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -50,6 +63,15 @@ begin
   inherited;
 
   FOptions := nil;
+  Background.Fill.Color := $FF252525; // FFB97A57
+//  laDataPath.TextSettings.FontColor := TColorRec.White;
+
+  buDataPath.OnClick := OpenFolderButtonClick;
+  buSreenshotPath.OnClick := OpenFolderButtonClick;
+
+  FProfileFilter := TProfileFilter.Create(Self);
+  FProfileFilter.Parent := paProfileFilter;
+  FProfileFilter.Align := TAlignLayout.Top;
 end;
 
 destructor TedOptions.Destroy;
@@ -89,21 +111,51 @@ begin
   edTrackLocation.IsChecked := Value;
 end;
 
+function TedOptions.InternalOpenFolder(const FileName: string): string;
+var
+  Directory: string;
+begin
+  if SelectDirectory('Выбор директории' {Caption}, FileName {Root}, Directory {out}) then
+    Result := Directory
+  else
+    Result := FileName;
+end;
+
+procedure TedOptions.OpenFolderButtonClick(Sender: TObject);
+var
+  Edit: TEdit;
+begin
+  if Sender = buDataPath then
+    Edit := edDataPath
+  else
+    Edit := edSreenshotPath;
+
+  Edit.Text := InternalOpenFolder(Edit.Text);
+end;
+
 procedure TedOptions.SetInstance(const Value: TOptions);
 begin
   FOptions := Value;
-  Caption := 'Редактирование квеста';
+  Caption := 'Параметры приложения';
 
   DataPath := FOptions.DataPath;
   SreenshotPath := FOptions.SreenshotPath;
   TrackLocation := FOptions.TrackLocation;
+
+  FProfileFilter.Init;
+  FProfileFilter.ProfileName := '';
 end;
 
 procedure TedOptions.PostValues(const Value: TOptions);
+var
+  Str: string;
 begin
   Value.DataPath := DataPath;
   Value.SreenshotPath := SreenshotPath;
   Value.TrackLocation := TrackLocation;
+  Str := FProfileFilter.ProfileName;
+  if Str <> '' then
+    Str := Str;
 end;
 
 end.

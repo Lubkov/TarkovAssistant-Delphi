@@ -53,13 +53,16 @@ uses
   ME.DB.QuestTracker in 'Source\Entity\ME.DB.QuestTracker.pas',
   ME.DAO.Profile in 'Source\DAO\ME.DAO.Profile.pas',
   ME.DAO.QuestTracker in 'Source\DAO\ME.DAO.QuestTracker.pas',
-  ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
   ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas',
   ME.Service.Options in 'Source\Service\ME.Service.Options.pas',
   ME.DB.Options in 'Source\Entity\ME.DB.Options.pas',
   ME.DAO.Options in 'Source\DAO\ME.DAO.Options.pas',
   ME.Edit.Options in 'Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
-  ME.Presenter.Options in 'Source\GUI\Presenter\ME.Presenter.Options.pas';
+  ME.Presenter.Options in 'Source\GUI\Presenter\ME.Presenter.Options.pas',
+  ME.Filter.Profile in 'Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
+  ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
+  ME.Presenter.Profile in 'Source\GUI\Presenter\ME.Presenter.Profile.pas',
+  ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile};
 
 {$R *.res}
 
@@ -75,5 +78,6 @@ begin
 
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TedOptions, edOptions);
+  Application.CreateForm(TedProfile, edProfile);
   Application.Run;
 end.

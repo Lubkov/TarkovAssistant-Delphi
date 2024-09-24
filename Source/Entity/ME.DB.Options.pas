@@ -3,29 +3,32 @@ unit ME.DB.Options;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
+  System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
+  Data.DB, ME.DB.Entity;
 
 type
   TOptions = class(TEntity)
   private
-    FProfileID: Variant;
     FDataPath: string;
     FSreenshotPath: string;
     FTrackLocation: Boolean;
+    FProfile: string;
   public
     constructor Create; override;
     destructor Destroy; override;
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
+    procedure Assign(const Source: TJSONValue); overload;
+    procedure AssignTo(const Dest: TJSONObject);
 
     class function EntityName: string; override;
     class function FieldList: string; override;
 
-    property ProfileID: Variant read FProfileID write FProfileID;
     property DataPath: string read FDataPath write FDataPath;
     property SreenshotPath: string read FSreenshotPath write FSreenshotPath;
     property TrackLocation: Boolean read FTrackLocation write FTrackLocation;
+    property Profile: string read FProfile write FProfile;
   end;
 
 implementation
@@ -36,10 +39,10 @@ constructor TOptions.Create;
 begin
   inherited;
 
-  FProfileID := Null;
   FDataPath := '';
   FSreenshotPath := '';
   FTrackLocation := True;
+  FProfile := '';
 end;
 
 destructor TOptions.Destroy;
@@ -52,20 +55,36 @@ procedure TOptions.Assign(const Source: TEntity);
 begin
   inherited;
 
-  FProfileID := TOptions(Source).ProfileID;
   FDataPath := TOptions(Source).DataPath;
   FSreenshotPath := TOptions(Source).SreenshotPath;
   FTrackLocation := TOptions(Source).TrackLocation;
+  FProfile := TOptions(Source).Profile;
 end;
 
 procedure TOptions.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
-  FProfileID := DataSet.FieldByName('ProfileID').Value;
   FDataPath := DataSet.FieldByName('DataPath').AsString;
   FSreenshotPath := DataSet.FieldByName('SreenshotPath').AsString;
   FTrackLocation := DataSet.FieldByName('TrackLocation').AsInteger = 1;
+  FProfile := DataSet.FieldByName('Profile').Value;
+end;
+
+procedure TOptions.Assign(const Source: TJSONValue);
+begin
+  FDataPath := Source.GetValue<string>('data_path');
+  FSreenshotPath := Source.GetValue<string>('sreenshot_path');
+  FTrackLocation := Source.GetValue<Boolean>('track_location');
+  FProfile := Source.GetValue<string>('profile');
+end;
+
+procedure TOptions.AssignTo(const Dest: TJSONObject);
+begin
+  Dest.AddPair('data_path', DataPath);
+  Dest.AddPair('sreenshot_path', SreenshotPath);
+  Dest.AddPair('track_location', TrackLocation);
+  Dest.AddPair('profile', Profile);
 end;
 
 class function TOptions.EntityName: string;
@@ -75,7 +94,7 @@ end;
 
 class function TOptions.FieldList: string;
 begin
-  Result := 'ID, ProfileID, DataPath, SreenshotPath, TrackLocation';
+  Result := 'ID, DataPath, SreenshotPath, TrackLocation, Profile';
 end;
 
 end.

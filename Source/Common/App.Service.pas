@@ -3,8 +3,8 @@ unit App.Service;
 interface
 
 uses
-  System.SysUtils, System.Variants, System.Classes, System.IOUtils,
-  App.SQLite.Connection, ME.DB.Options;
+  System.SysUtils, System.Variants, System.Classes, System.IOUtils, System.Rtti,
+  System.TypInfo, System.SysConst, System.JSON, App.SQLite.Connection, ME.DB.Options;
 
 type
   TAppService = class(TComponent)
@@ -16,6 +16,8 @@ type
     destructor Destroy; override;
 
     procedure LoadParams;
+    procedure SaveParams;
+
     procedure LoadDataFromDB;
     procedure ConnectToDB;
 
@@ -75,10 +77,59 @@ begin
 end;
 
 procedure TAppService.LoadParams;
+const
+  ConfigFile = 'config.json';
+var
+  Data: TStrings;
+  FileName: string;
+  Root: TJSONValue;
 begin
   AppParams.Load;
   ConnectToDB;
-  OptionsService.Load(FOptions);
+//  OptionsService.Load(FOptions);
+
+  FileName := TPath.Combine(AppParams.Path, ConfigFile);
+  Data := TStringList.Create;
+  try
+    Data.LoadFromFile(FileName, TEncoding.UTF8);
+
+    Root := TJSONObject.ParseJSONValue(Data.Text);
+    try
+      if not (Root is TJSONObject) then
+        Exit;
+
+      FOptions.Assign(Root);
+    finally
+      Root.Free;
+    end;
+  finally
+    Data.Free;
+  end;
+end;
+
+procedure TAppService.SaveParams;
+const
+  ConfigFile = 'config.json';
+var
+  Data: TStrings;
+  FileName: string;
+  JSONObject: TJSONObject;
+begin
+  FileName := TPath.Combine(AppParams.Path, ConfigFile);
+  Data := TStringList.Create;
+  try
+    JSONObject := TJSONObject.Create;
+    try
+      FOptions.AssignTo(JSONObject);
+      Data.Text := JSONObject.ToJSON;
+    finally
+      JSONObject.Free;
+    end;
+
+    Data.SaveToFile(FileName, TEncoding.UTF8);
+  finally
+    Data.Free;
+  end;
 end;
 
 procedure TAppService.LoadDataFromDB;

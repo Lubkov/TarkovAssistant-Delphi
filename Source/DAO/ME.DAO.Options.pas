@@ -57,10 +57,10 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text :=
       'INSERT INTO ' + EntityClass.EntityName +
-      '  (ProfileID, DataPath, SreenshotPath, TrackLocation) ' +
+      '  (Profile, DataPath, SreenshotPath, TrackLocation) ' +
       'VALUES ' +
       '  (:ProfileID, :DataPath, :SreenshotPath, :TrackLocation)';
-    Query.ParamByName('ProfileID').Value := Options.ProfileID;
+    Query.ParamByName('Profile').AsString := Options.Profile;
     Query.ParamByName('DataPath').AsString := Options.DataPath;
     Query.ParamByName('SreenshotPath').AsString := Options.SreenshotPath;
     Query.ParamByName('TrackLocation').AsBoolean := Boolean(Options.TrackLocation);
@@ -84,13 +84,13 @@ begin
     Query.SQL.Text :=
       'UPDATE ' + EntityClass.EntityName +
       'SET ' +
-      '  ProfileID = :ProfileID, ' +
+      '  Profile = :Profile, ' +
       '  DataPath = :DataPath, ' +
       '  SreenshotPath = :SreenshotPath, ' +
       '  TrackLocation = :TrackLocation ' +
       'WHERE ID = :ID';
     Query.ParamByName('ID').Value := Profile.ID;
-    Query.ParamByName('ProfileID').Value := Profile.ProfileID;
+    Query.ParamByName('Profile').AsString := Profile.Profile;
     Query.ParamByName('DataPath').AsString := Profile.DataPath;
     Query.ParamByName('SreenshotPath').AsString := Profile.SreenshotPath;
     Query.ParamByName('TrackLocation').AsBoolean := Profile.TrackLocation;

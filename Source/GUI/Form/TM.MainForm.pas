@@ -202,7 +202,9 @@ var
   Height: Single;
   Width: Single;
   OffsetX: Single;
+  Visible: Boolean;
 begin
+  Visible := LocationPanel.Visible;
   HideAllPanels(Sender);
 
   OffsetX := MapControlLayout.Position.X + MapControlLayout.Width;
@@ -221,7 +223,7 @@ begin
 
   LocationPanel.Position.X := (Width / 2) - (LocationPanel.Width / 2) + OffsetX + 20;
   LocationPanel.Position.Y := (Height / 2) - (LocationPanel.Height / 2);
-  LocationPanel.Visible := not LocationPanel.Visible;
+  LocationPanel.Visible := not Visible;
 end;
 
 procedure TMainForm.OnInteractiveMapDblClick(Sender: TObject);
@@ -264,6 +266,8 @@ var
   Presenter: TEditOptionsPresenter;
   Dialog: TedOptions;
 begin
+  HideAllPanels(Sender);
+
   Dialog := TedOptions.Create(Self);
   try
     Presenter := TEditOptionsPresenter.Create(Dialog, AppService.Options);
