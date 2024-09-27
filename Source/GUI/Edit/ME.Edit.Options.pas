@@ -143,19 +143,15 @@ begin
   TrackLocation := FOptions.TrackLocation;
 
   FProfileFilter.Init;
-  FProfileFilter.ProfileName := '';
+  FProfileFilter.ProfileName := FOptions.Profile;
 end;
 
 procedure TedOptions.PostValues(const Value: TOptions);
-var
-  Str: string;
 begin
   Value.DataPath := DataPath;
   Value.SreenshotPath := SreenshotPath;
   Value.TrackLocation := TrackLocation;
-  Str := FProfileFilter.ProfileName;
-  if Str <> '' then
-    Str := Str;
+  Value.Profile := FProfileFilter.ProfileName;
 end;
 
 end.

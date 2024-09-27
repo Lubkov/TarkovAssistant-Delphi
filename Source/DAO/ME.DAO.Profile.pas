@@ -56,8 +56,9 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Profile (Name) VALUES (:Name)';
-    Query.ParamByName('Name').Value := Profile.Name;
+    Query.SQL.Text := 'INSERT INTO Profile (Name, Kind) VALUES (:Name, :Kind)';
+    Query.ParamByName('Name').AsString := Profile.Name;
+    Query.ParamByName('Kind').AsInteger := Ord(Profile.Kind);
     Query.Execute;
     Profile.ID := Query.LastInsertId;
   finally
@@ -75,9 +76,10 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'UPDATE Profile SET Name = :Name WHERE ID = :ID';
+    Query.SQL.Text := 'UPDATE Profile SET Name = :Name, Kind = :Kind WHERE ID = :ID';
     Query.ParamByName('ID').Value := Profile.ID;
     Query.ParamByName('Name').AsString := Profile.Name;
+    Query.ParamByName('Kind').AsInteger := Ord(Profile.Kind);
     Query.Execute;
   finally
     Query.Free;

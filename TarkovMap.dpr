@@ -62,7 +62,8 @@ uses
   ME.Filter.Profile in 'Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
   ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
   ME.Presenter.Profile in 'Source\GUI\Presenter\ME.Presenter.Profile.pas',
-  ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile};
+  ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
+  ME.Dialog.Message in 'Source\Common\ME.Dialog.Message.pas' {edMessage};
 
 {$R *.res}
 
@@ -77,5 +78,6 @@ begin
   AppService := TAppService.Create(Application);
 
   Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TedMessage, edMessage);
   Application.Run;
 end.

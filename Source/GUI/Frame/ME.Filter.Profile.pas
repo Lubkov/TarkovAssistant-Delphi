@@ -60,7 +60,8 @@ type
 implementation
 
 uses
-  App.Service, ME.Service.Profile, ME.Presenter.Profile, ME.Edit.Profile;
+  App.Service, ME.DB.Utils, ME.Service.Profile, ME.Presenter.Profile, ME.Edit.Profile,
+  ME.Dialog.Message;
 
 {$R *.fmx}
 
@@ -171,7 +172,7 @@ var
 begin
   Profile := TProfile.Create;
   try
-    if not ProfileService.GetAt(3 {FID.Value}, Profile) then
+    if not ProfileService.GetAt(FID.Value, Profile) then
       Exit;
 
     if InternalProfileEdit(Profile) then
@@ -182,8 +183,44 @@ begin
 end;
 
 procedure TProfileFilter.acDeleteProfileExecute(Sender: TObject);
+var
+  Profile: TProfile;
+  Presenter: TDelProfilePresenter;
+  Dialog: TedMessage;
 begin
-//
+  if IsNullID(FID.Value) then
+    Exit;
+
+  Profile := TProfile.Create;
+  try
+    Profile.ID := FID.Value;
+    Profile.Name := FProfileName.AsString;
+    Profile.Kind := TPMCType(FKind.AsInteger);
+
+    Dialog := TedMessage.Create(Self);
+    try
+      Presenter := TDelProfilePresenter.Create(Dialog, Profile);
+      try
+        if not Presenter.Delete then
+          Exit;
+
+        F.DisableControls;
+        try
+          F.Refresh;
+        finally
+          F.EnableControls;
+        end;
+
+        edProfileName.ItemIndex := -1;
+      finally
+        Presenter.Free;
+      end;
+    finally
+      Dialog.Free;
+    end;
+  finally
+    Profile.Free;
+  end;
 end;
 
 end.

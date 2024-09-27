@@ -18,7 +18,6 @@ uses
   ME.Service.Map in '..\Source\Service\ME.Service.Map.pas',
   ME.Service.Layer in '..\Source\Service\ME.Service.Layer.pas',
   ME.Presenter.Map in 'Source\GUI\ME.Presenter.Map.pas',
-  ME.Dialog.Message in 'Source\GUI\Dialog\ME.Dialog.Message.pas' {edMessage},
   ME.Frame.Layer in 'Source\GUI\Frame\ME.Frame.Layer.pas' {frLayerList: TFrame},
   ME.Presenter.Layer in 'Source\GUI\ME.Presenter.Layer.pas',
   ME.Edit.Form in '..\Source\Common\ME.Edit.Form.pas' {EditForm},
@@ -80,7 +79,8 @@ uses
   ME.Presenter.Options in '..\Source\GUI\Presenter\ME.Presenter.Options.pas',
   ME.Filter.Profile in '..\Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
   ME.Presenter.Profile in '..\Source\GUI\Presenter\ME.Presenter.Profile.pas',
-  ME.Edit.Profile in '..\Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile};
+  ME.Edit.Profile in '..\Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
+  ME.Dialog.Message in '..\Source\Common\ME.Dialog.Message.pas' {edMessage};
 
 {$R *.res}
 
@@ -96,5 +96,6 @@ begin
 
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TedOptions, edOptions);
+  Application.CreateForm(TedMessage, edMessage);
   Application.Run;
 end.

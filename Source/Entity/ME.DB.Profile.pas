@@ -49,6 +49,7 @@ begin
   inherited;
 
   FName := TProfile(Source).Name;
+  FKind := TProfile(Source).Kind;
 end;
 
 procedure TProfile.Assign(const DataSet: TDataSet);
@@ -56,6 +57,7 @@ begin
   inherited;
 
   FName := DataSet.FieldByName('Name').AsString;
+  FKind := TPMCType(DataSet.FieldByName('Kind').AsInteger);
 end;
 
 class function TProfile.EntityName: string;
@@ -65,7 +67,7 @@ end;
 
 class function TProfile.FieldList: string;
 begin
-  Result := 'ID, Name';
+  Result := 'ID, Name, Kind';
 end;
 
 end.

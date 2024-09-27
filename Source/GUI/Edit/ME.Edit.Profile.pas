@@ -12,14 +12,14 @@ type
   TedProfile = class(TEditForm, IEditDialog<TProfile>)
     laProfileName: TLabel;
     edProfileName: TEdit;
-    ComboBox1: TComboBox;
+    edPMCKind: TComboBox;
   private
     FProfile: TProfile;
 
     function GetProfileName: string;
     procedure SetProfileName(const Value: string);
-    function GetProfileKind: TPMCType;
-    procedure SetProfileKind(const Value: TPMCType);
+    function GetPMCType: TPMCType;
+    procedure SetPMCType(const Value: TPMCType);
   public
     constructor Create(AOwner: TComponent); override;
 
@@ -27,12 +27,16 @@ type
     procedure PostValues(const Value: TProfile);
 
     property ProfileName: string read GetProfileName write SetProfileName;
-    property Kind: TPMCType read GetProfileKind write SetProfileKind;
+    property PMCType: TPMCType read GetPMCType write SetPMCType;
   end;
 
 implementation
 
 {$R *.fmx}
+
+const
+  BearPMCIndex = 0;
+  UsecPMCIndex = 1;
 
 { TEditForm1 }
 
@@ -52,14 +56,19 @@ begin
   edProfileName.Text := Value;
 end;
 
-function TedProfile.GetProfileKind: TPMCType;
+function TedProfile.GetPMCType: TPMCType;
 begin
-
+  case edPMCKind.ItemIndex of
+    UsecPMCIndex:
+      Result := TPMCType.pmcUsec;
+  else
+    Result := TPMCType.pmcBear;
+  end;
 end;
 
-procedure TedProfile.SetProfileKind(const Value: TPMCType);
+procedure TedProfile.SetPMCType(const Value: TPMCType);
 begin
-
+  edPMCKind.ItemIndex := Ord(Value);
 end;
 
 procedure TedProfile.SetInstance(const Value: TProfile);
@@ -72,11 +81,13 @@ begin
     Caption := 'Редактирование профиля пользователя';
 
   ProfileName := FProfile.Name;
+  PMCType := FProfile.Kind;
 end;
 
 procedure TedProfile.PostValues(const Value: TProfile);
 begin
   Value.Name := ProfileName;
+  FProfile.Kind := PMCType;
 end;
 
 end.

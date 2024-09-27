@@ -12,7 +12,7 @@ inherited edProfile: TedProfile
     Margins.Right = 20.000000000000000000
     Position.X = 20.000000000000000000
     Position.Y = 20.000000000000000000
-    Size.Width = 304.000000000000000000
+    Size.Width = 305.000000000000000000
     Size.Height = 17.000000000000000000
     Size.PlatformDefault = False
     TextSettings.Font.Family = 'Tahoma'
@@ -28,11 +28,11 @@ inherited edProfile: TedProfile
     Margins.Left = 20.000000000000000000
     Margins.Top = 2.000000000000000000
     Margins.Right = 20.000000000000000000
-    Size.Width = 304.000000000000000000
+    Size.Width = 305.000000000000000000
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
   end
-  object ComboBox1: TComboBox [3]
+  object edPMCKind: TComboBox [3]
     Locked = True
     Items.Strings = (
       'Bear'
