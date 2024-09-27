@@ -45,6 +45,7 @@ type
     FMarker: TDBMarker;
     FResourceID: Variant;
     FPicturePanel: TfrPicture;
+    FSorted: Boolean;
 
     function GetMarkerID: Variant;
     function GetShowFilter: Boolean;
@@ -76,6 +77,7 @@ type
     property Marker: TDBMarker read FMarker;
     property ResourceKind: TResourceKind read GetResourceKind;
     property ShowFilter: Boolean read GetShowFilter write SetShowFilter;
+    property Sorted: Boolean read FSorted write FSorted;
   end;
 
 implementation
@@ -95,6 +97,7 @@ begin
   FMarker := nil;
   FResourceID := Null;
   Grid.RowCount := 0;
+  FSorted := False;
 
   FPicturePanel := TfrPicture.Create(Self);
   FPicturePanel.Parent := paPicture;

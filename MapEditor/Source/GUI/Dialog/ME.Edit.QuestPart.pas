@@ -61,6 +61,7 @@ begin
   FQuestItemsGrid.Name := 'QuestItemsGrid';
   FQuestItemsGrid.Parent := tabQuestItems;
   FQuestItemsGrid.Align := TAlignLayout.Client;
+  FQuestItemsGrid.Sorted := True;
 
   FQuestItemsGrid.Init(Marker);
 end;

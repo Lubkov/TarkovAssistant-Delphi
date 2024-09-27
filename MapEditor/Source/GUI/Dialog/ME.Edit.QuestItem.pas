@@ -41,6 +41,7 @@ begin
   FResourcesGrid := TQuestResourcesGrid.Create(Self);
   FResourcesGrid.Parent := Self;
   FResourcesGrid.Align := TAlignLayout.Client;
+  FResourcesGrid.Sorted := True;
 end;
 
 procedure TedQuestItem.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);

@@ -71,7 +71,8 @@ begin
       '       AND (qi.MarkerID = :MarkerID) ' +
       '       AND (r.Kind = :Kind) ';
 
-
+  if Sorted then
+    Result := Result + ' ORDER BY r.Description ';
 //SELECT qi.ID as ID,
 //       qi.MarkerID as MarkerID,
 //       r.ID as ResourceID,

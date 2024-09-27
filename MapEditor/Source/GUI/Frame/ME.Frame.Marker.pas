@@ -83,7 +83,8 @@ begin
     ' SELECT ' + TDBMarker.FieldList +
     ' FROM ' + TDBMarker.EntityName +
     ' WHERE (MapID = :MapID)' +
-    '      AND (Kind in (0, 1, 2))';
+    '      AND (Kind in (0, 1, 2))' +
+    ' ORDER BY Kind, Caption';
   F.ParamByName('MapID').Value := MapID;
   F.Open;
 end;

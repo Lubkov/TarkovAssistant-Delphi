@@ -61,7 +61,8 @@ begin
   if Marker <> nil then
     Result := Result + ' AND (r.MarkerID = :MarkerID)';
 
-  Result := Result + ' ORDER BY r.Description ';
+  if Sorted then
+    Result := Result + ' ORDER BY r.Description ';
 end;
 
 function TScreenshotsGrid.GetRefreshSQLText: string;

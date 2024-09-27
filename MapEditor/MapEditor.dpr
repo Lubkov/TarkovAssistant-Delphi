@@ -78,7 +78,9 @@ uses
   ME.Service.Options in '..\Source\Service\ME.Service.Options.pas',
   ME.Edit.Options in '..\Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
   ME.Presenter.Options in '..\Source\GUI\Presenter\ME.Presenter.Options.pas',
-  ME.Filter.Profile in '..\Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame};
+  ME.Filter.Profile in '..\Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
+  ME.Presenter.Profile in '..\Source\GUI\Presenter\ME.Presenter.Profile.pas',
+  ME.Edit.Profile in '..\Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile};
 
 {$R *.res}
 

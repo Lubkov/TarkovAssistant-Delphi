@@ -90,7 +90,8 @@ begin
   F.SQL.Text :=
     ' SELECT ' + TDBQuest.FieldList +
     ' FROM ' + TDBQuest.EntityName +
-    ' WHERE (MapID = :MapID)';
+    ' WHERE (MapID = :MapID)' +
+    ' ORDER BY Name';
   F.ParamByName('MapID').Value := MapID;
   F.Open;
 

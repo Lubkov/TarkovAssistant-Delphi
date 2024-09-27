@@ -79,6 +79,7 @@ begin
   FResourcesGrid := TQuestResourcesGrid.Create(Self);
   FResourcesGrid.Parent := QuestItemsTab;
   FResourcesGrid.Align := TAlignLayout.Client;
+  FResourcesGrid.Sorted := True;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
