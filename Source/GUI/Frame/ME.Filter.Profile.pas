@@ -34,9 +34,9 @@ type
     edAddProfile: TSpeedButton;
     SpeedButton1: TSpeedButton;
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
-    procedure edEditProfileClick(Sender: TObject);
     procedure acAddProfileExecute(Sender: TObject);
     procedure acDeleteProfileExecute(Sender: TObject);
+    procedure acEditProfileExecute(Sender: TObject);
   private
 //    FOnMapChanged: TDBMapChangedEvent;
 
@@ -44,6 +44,8 @@ type
     procedure SetProfileID(const Value: Variant);
     function GetProfileName: string;
     procedure SetProfileName(const Value: string);
+
+    function InternalProfileEdit(const Profile: TProfile): Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -58,7 +60,7 @@ type
 implementation
 
 uses
-  App.Service, ME.Service.Profile; // ME.Presenter.Profile;
+  App.Service, ME.Service.Profile, ME.Presenter.Profile, ME.Edit.Profile;
 
 {$R *.fmx}
 
@@ -112,6 +114,24 @@ begin
     F.Locate('ProfileName', Value, [loCaseInsensitive]);
 end;
 
+function TProfileFilter.InternalProfileEdit(const Profile: TProfile): Boolean;
+var
+  Presenter: TEditProfilePresenter;
+  Dialog: TedProfile;
+begin
+  Dialog := TedProfile.Create(Self);
+  try
+    Presenter := TEditProfilePresenter.Create(Dialog, Profile);
+    try
+      Result := Presenter.Edit;
+    finally
+      Presenter.Free;
+    end;
+  finally
+    Dialog.Free;
+  end;
+end;
+
 procedure TProfileFilter.Init;
 begin
   F.Close;
@@ -123,36 +143,42 @@ begin
 end;
 
 procedure TProfileFilter.acAddProfileExecute(Sender: TObject);
+var
+  Profile: TProfile;
+  Res: Boolean;
 begin
-//
+  Profile := TProfile.Create;
+  try
+    Res := InternalProfileEdit(Profile);
+    if not Res then
+      Exit;
+
+    F.DisableControls;
+    try
+      F.Refresh;
+      F.Last;
+    finally
+      F.EnableControls;
+    end;
+  finally
+    Profile.Free;
+  end;
 end;
 
-procedure TProfileFilter.edEditProfileClick(Sender: TObject);
-//var
-//  Presenter: TEditMapPresenter;
-//  Dialog: TedMap;
-//  Map: TDBMap;
+procedure TProfileFilter.acEditProfileExecute(Sender: TObject);
+var
+  Profile: TProfile;
 begin
-//  Dialog := TedMap.Create(Self);
-//  try
-//    Map := TDBMap.Create;
-//    try
-//      if not MapService.GetAt(FID.Value, Map) then
-//        Exit;
-//
-//      Presenter := TEditMapPresenter.Create(Dialog, Map);
-//      try
-//        if Presenter.Edit then
-//          F.RefreshRecord;
-//      finally
-//        Presenter.Free;
-//      end;
-//    finally
-//      Map.Free;
-//    end;
-//  finally
-//    Dialog.Free;
-//  end;
+  Profile := TProfile.Create;
+  try
+    if not ProfileService.GetAt(3 {FID.Value}, Profile) then
+      Exit;
+
+    if InternalProfileEdit(Profile) then
+      F.RefreshRecord;
+  finally
+    Profile.Free;
+  end;
 end;
 
 procedure TProfileFilter.acDeleteProfileExecute(Sender: TObject);

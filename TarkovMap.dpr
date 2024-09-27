@@ -77,7 +77,5 @@ begin
   AppService := TAppService.Create(Application);
 
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TedOptions, edOptions);
-  Application.CreateForm(TedProfile, edProfile);
   Application.Run;
 end.
