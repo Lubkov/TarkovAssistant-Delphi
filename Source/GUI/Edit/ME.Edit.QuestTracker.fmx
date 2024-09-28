@@ -1,0 +1,25 @@
+inherited edQuestTracker: TedQuestTracker
+  Caption = 'EditForm1'
+  ClientHeight = 148
+  ClientWidth = 436
+  DesignerMasterStyle = 0
+  inherited paBottom: TPanel
+    Position.Y = 102.000000000000000000
+    Size.Width = 436.000000000000000000
+  end
+  object laMessage: TLabel [1]
+    StyledSettings = [Size, Style, FontColor]
+    Position.X = 32.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 377.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    Text = 'laMessage'
+    TabOrder = 2
+  end
+  inherited ActionList1: TActionList
+    Left = 32
+    Top = 104
+  end
+end

@@ -13,6 +13,7 @@ type
     function EntityClass: TEntityClass; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
+    function GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -46,6 +47,25 @@ begin
   end;
 end;
 
+function TQuestTrackerDAO.GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' WHERE MarkerID = :MarkerID';
+    Query.ParamByName('MarkerID').Value := MarkerID;
+    Query.Open;
+
+    Result := not Query.Eof;
+    if Result then
+      Entity.Assign(Query);
+  finally
+    Query.Free;
+  end;
+end;
+
 procedure TQuestTrackerDAO.Insert(const Entity: TEntity);
 var
   Query: TUniQuery;
@@ -56,7 +76,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Profile (QuestID, MarkerID, Status) VALUES (:QuestID, :MarkerID, :Status)';
+    Query.SQL.Text := 'INSERT INTO QuestTracker (QuestID, MarkerID, Status) VALUES (:QuestID, :MarkerID, :Status)';
     Query.ParamByName('QuestID').Value := Tracker.QuestID;
     Query.ParamByName('MarkerID').Value := Tracker.MarkerID;
     Query.ParamByName('Status').AsInteger := Ord(Tracker.Status);
@@ -78,7 +98,7 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      'UPDATE Profile ' +
+      'UPDATE QuestTracker ' +
       'SET QuestID = :QuestID, ' +
       '    MarkerID = :MarkerID, ' +
       '    Status = :Status ' +

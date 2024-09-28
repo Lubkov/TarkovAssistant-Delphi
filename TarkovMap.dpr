@@ -63,7 +63,9 @@ uses
   ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
   ME.Presenter.Profile in 'Source\GUI\Presenter\ME.Presenter.Profile.pas',
   ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
-  ME.Dialog.Message in 'Source\Common\ME.Dialog.Message.pas' {edMessage};
+  ME.Dialog.Message in 'Source\Common\ME.Dialog.Message.pas' {edMessage},
+  ME.Presenter.QuestTracker in 'Source\GUI\Presenter\ME.Presenter.QuestTracker.pas',
+  ME.Edit.QuestTracker in 'Source\GUI\Edit\ME.Edit.QuestTracker.pas' {edQuestTracker};
 
 {$R *.res}
 
@@ -78,6 +80,5 @@ begin
   AppService := TAppService.Create(Application);
 
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TedMessage, edMessage);
   Application.Run;
 end.

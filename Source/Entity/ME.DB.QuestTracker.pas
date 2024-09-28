@@ -10,6 +10,7 @@ type
 
   TQuestTracker = class(TEntity)
   private
+    FProfileID: Variant;
     FQuestID: Variant;
     FMarkerID: Variant;
     FStatus: TQuestStatus;
@@ -23,6 +24,7 @@ type
     class function EntityName: string; override;
     class function FieldList: string; override;
 
+    property ProfileID: Variant read FProfileID write FProfileID;
     property QuestID: Variant read FQuestID write FQuestID;
     property MarkerID: Variant read FMarkerID write FMarkerID;
     property Status: TQuestStatus read FStatus write FStatus;
@@ -36,6 +38,7 @@ constructor TQuestTracker.Create;
 begin
   inherited;
 
+  FProfileID := Null;
   FQuestID := Null;
   FMarkerID := Null;
   FStatus := TQuestStatus.qsNone;
@@ -51,6 +54,7 @@ procedure TQuestTracker.Assign(const Source: TEntity);
 begin
   inherited;
 
+  FProfileID := TQuestTracker(Source).ProfileID;
   FQuestID := TQuestTracker(Source).QuestID;
   FMarkerID := TQuestTracker(Source).MarkerID;
   FStatus := TQuestTracker(Source).Status;
@@ -60,6 +64,7 @@ procedure TQuestTracker.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
+  ProfileID := DataSet.FieldByName('ProfileID').Value;
   FQuestID := DataSet.FieldByName('QuestID').Value;
   FMarkerID := DataSet.FieldByName('MarkerID').Value;
   FStatus := TQuestStatus(DataSet.FieldByName('Status').AsInteger);
@@ -72,7 +77,7 @@ end;
 
 class function TQuestTracker.FieldList: string;
 begin
- Result := 'ID, QuestID, MarkerID, Status';
+ Result := 'ID, ProfileID, QuestID, MarkerID, Status';
 end;
 
 end.

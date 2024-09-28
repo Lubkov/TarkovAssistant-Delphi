@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.Objects, FMX.Layouts, System.ImageList,
   FMX.ImgList, Map.Data.Types, FMX.ListBox, System.Rtti, ME.GUI.PictureList,
-  ME.DB.Marker, ME.DB.Quest, ME.DB.Resource; //, ME.DB.QuestItem;
+  ME.DB.Marker, ME.DB.Quest, ME.DB.Resource, ME.DB.QuestTracker;
 
 type
   TMarkerDescript = class(TFrame)
@@ -27,9 +27,12 @@ type
     PreviewLayout: TLayout;
     Background: TRectangle;
     MaouseWheelImage: TImage;
+    CompleteQuestLayout: TLayout;
+    buCompleteQuest: TSpeedButton;
 
     procedure buCloseClick(Sender: TObject);
     procedure MarkerImageMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+    procedure buCompleteQuestClick(Sender: TObject);
   private
     [Weak] FMarker: TDBMarker;
     FMaxHeight: Single;
@@ -42,6 +45,8 @@ type
     procedure ShowResource(const Index: Integer);
     procedure ChangedPreviewIcon(ItemIndex: Integer);
     procedure LoadQuestItems(const Marker: TDBMarker);
+    function InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
+    procedure SaveQuestTracker;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -56,9 +61,12 @@ type
 implementation
 
 uses
-  Map.Data.Service;
+  ME.Dialog.Message, Map.Data.Service, ME.Presenter.QuestTracker,
+  ME.Edit.QuestTracker, ME.Service.QuestTracker;
 
 {$R *.fmx}
+
+// Завершить / Отменить выполнение
 
 { TMarkerDescript }
 
@@ -163,6 +171,48 @@ begin
     FItemIconList.Add('' {QuestItem.Description}, QuestItem.Picture);
 end;
 
+function TMarkerDescript.InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
+var
+  Presenter: TEditQuestTrackerPresenter;
+  Dialog: TedQuestTracker;
+begin
+  Dialog := TedQuestTracker.Create(Self);
+  try
+    Presenter := TEditQuestTrackerPresenter.Create(Dialog, QuestTracker);
+    try
+      Result := Presenter.Edit;
+    finally
+      Presenter.Free;
+    end;
+  finally
+    Dialog.Free;
+  end;
+end;
+
+procedure TMarkerDescript.SaveQuestTracker;
+var
+  QuestTracker: TQuestTracker;
+begin
+  QuestTracker := TQuestTracker.Create;
+  try
+    QuestTracker.MarkerID := FMarker.ID;
+    QuestTracker.QuestID := FMarker.QuestID;
+    QuestTracker.Status := TQuestStatus.qsNone;
+
+    if not QuestTrackerService.GetMarkerState(FMarker.ID, QuestTracker) then
+      QuestTracker.Status := TQuestStatus.qsFinished
+    else
+    if QuestTracker.Status = TQuestStatus.qsFinished then
+      QuestTracker.Status := TQuestStatus.qsNew
+    else
+      QuestTracker.Status := TQuestStatus.qsFinished;
+
+    QuestTrackerService.Save(QuestTracker);
+  finally
+    QuestTracker.Free;
+  end;
+end;
+
 procedure TMarkerDescript.Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
 const
   MarkerImageHeight = 360;
@@ -231,6 +281,11 @@ end;
 procedure TMarkerDescript.MarkerImageMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
 begin
   FPictureIconList.OnMouseWheel(WheelDelta);
+end;
+
+procedure TMarkerDescript.buCompleteQuestClick(Sender: TObject);
+begin
+  SaveQuestTracker;
 end;
 
 end.
