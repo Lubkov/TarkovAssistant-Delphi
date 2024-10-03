@@ -28,15 +28,15 @@ object ProfileFilter: TProfileFilter
           Align = Left
           Images = ImageList1
           ImageIndex = 1
-          Margins.Left = 2.000000000000000000
+          Margins.Left = 4.000000000000000000
           Margins.Top = 2.000000000000000000
           Margins.Bottom = 2.000000000000000000
-          Position.X = 38.000000000000000000
+          Position.X = 40.000000000000000000
           Position.Y = 2.000000000000000000
           Size.Width = 36.000000000000000000
           Size.Height = 36.000000000000000000
           Size.PlatformDefault = False
-          StyleLookup = 'actiontoolbutton'
+          StyleLookup = 'IconToolButtonStyle'
           TextSettings.Trimming = None
         end
         object edAddProfile: TSpeedButton
@@ -50,23 +50,23 @@ object ProfileFilter: TProfileFilter
           Size.Width = 36.000000000000000000
           Size.Height = 36.000000000000000000
           Size.PlatformDefault = False
-          StyleLookup = 'actiontoolbutton'
+          StyleLookup = 'IconToolButtonStyle'
           TextSettings.Trimming = None
         end
-        object SpeedButton1: TSpeedButton
+        object edDelProfile: TSpeedButton
           Action = acDeleteProfile
           Align = Left
           Images = ImageList1
           ImageIndex = 2
-          Margins.Left = 2.000000000000000000
+          Margins.Left = 4.000000000000000000
           Margins.Top = 2.000000000000000000
           Margins.Bottom = 2.000000000000000000
-          Position.X = 76.000000000000000000
+          Position.X = 80.000000000000000000
           Position.Y = 2.000000000000000000
           Size.Width = 36.000000000000000000
           Size.Height = 36.000000000000000000
           Size.PlatformDefault = False
-          StyleLookup = 'actiontoolbutton'
+          StyleLookup = 'IconToolButtonStyle'
           TextSettings.Trimming = None
         end
       end
@@ -79,7 +79,7 @@ object ProfileFilter: TProfileFilter
       TabOrder = 5
       object laProfileName: TLabel
         Align = Top
-        StyledSettings = [Style, FontColor]
+        StyledSettings = [Style]
         Margins.Left = 20.000000000000000000
         Margins.Top = 10.000000000000000000
         Margins.Right = 20.000000000000000000
@@ -89,6 +89,7 @@ object ProfileFilter: TProfileFilter
         Size.Height = 17.000000000000000000
         Size.PlatformDefault = False
         TextSettings.Font.Family = 'Tahoma'
+        TextSettings.FontColor = claWhite
         Text = #1055#1088#1086#1092#1080#1083#1100':'
         TabOrder = 2
       end

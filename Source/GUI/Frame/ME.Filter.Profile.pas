@@ -5,10 +5,10 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   System.ImageList, System.Actions, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms,
-  FMX.Dialogs, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox, FMX.Layouts,
-  FMX.ImgList, FMX.ActnList, ME.DB.Profile, Data.DB, MemDS, DBAccess, Uni,
+  FMX.Dialogs, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox,
+  FMX.Layouts, FMX.ImgList, FMX.ActnList, Data.DB, MemDS, DBAccess, Uni,
   System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
-  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope;
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, ME.DB.Profile;
 
 type
   TProfileFilter = class(TFrame)
@@ -32,7 +32,7 @@ type
     LinkListControlToField1: TLinkListControlToField;
     FKind: TIntegerField;
     edAddProfile: TSpeedButton;
-    SpeedButton1: TSpeedButton;
+    edDelProfile: TSpeedButton;
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
     procedure acAddProfileExecute(Sender: TObject);
     procedure acDeleteProfileExecute(Sender: TObject);

@@ -6,14 +6,12 @@ uses
   System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
 
 type
-  TQuestStatus = (qsNone, qsNew, qsStarted, qsFinished);
-
   TQuestTracker = class(TEntity)
   private
     FProfileID: Variant;
     FQuestID: Variant;
     FMarkerID: Variant;
-    FStatus: TQuestStatus;
+    FFinished: Boolean;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -27,7 +25,7 @@ type
     property ProfileID: Variant read FProfileID write FProfileID;
     property QuestID: Variant read FQuestID write FQuestID;
     property MarkerID: Variant read FMarkerID write FMarkerID;
-    property Status: TQuestStatus read FStatus write FStatus;
+    property Finished: Boolean read FFinished write FFinished;
   end;
 
 implementation
@@ -41,7 +39,7 @@ begin
   FProfileID := Null;
   FQuestID := Null;
   FMarkerID := Null;
-  FStatus := TQuestStatus.qsNone;
+  Finished := False;
 end;
 
 destructor TQuestTracker.Destroy;
@@ -57,7 +55,7 @@ begin
   FProfileID := TQuestTracker(Source).ProfileID;
   FQuestID := TQuestTracker(Source).QuestID;
   FMarkerID := TQuestTracker(Source).MarkerID;
-  FStatus := TQuestTracker(Source).Status;
+  FFinished := TQuestTracker(Source).Finished;
 end;
 
 procedure TQuestTracker.Assign(const DataSet: TDataSet);
@@ -67,7 +65,7 @@ begin
   ProfileID := DataSet.FieldByName('ProfileID').Value;
   FQuestID := DataSet.FieldByName('QuestID').Value;
   FMarkerID := DataSet.FieldByName('MarkerID').Value;
-  FStatus := TQuestStatus(DataSet.FieldByName('Status').AsInteger);
+  FFinished := DataSet.FieldByName('Finished').AsInteger = 1;
 end;
 
 class function TQuestTracker.EntityName: string;
@@ -77,7 +75,7 @@ end;
 
 class function TQuestTracker.FieldList: string;
 begin
- Result := 'ID, ProfileID, QuestID, MarkerID, Status';
+ Result := 'ID, ProfileID, QuestID, MarkerID, Finished';
 end;
 
 end.

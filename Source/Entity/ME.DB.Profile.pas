@@ -3,7 +3,8 @@ unit ME.DB.Profile;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
+  System.SysUtils, System.Classes, System.Variants, Generics.Collections,
+  Data.DB, ME.DB.Entity, ME.DB.QuestTracker;
 
 type
   TPMCType = (pmcBear, pmcUsec);
@@ -12,18 +13,25 @@ type
   private
     FName: string;
     FKind: TPMCType;
+    FQuestTrackers: TList<TQuestTracker>;
   public
     constructor Create; override;
     destructor Destroy; override;
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
+    procedure Clear;
+
+    procedure AddQuestState(const Value: TQuestTracker);
+    function GetQuestState(const MarkerID: Variant): TQuestTracker;
+    function IsQuestPartFinished(const MarkerID: Variant): Boolean;
 
     class function EntityName: string; override;
     class function FieldList: string; override;
 
     property Name: string read FName write FName;
     property Kind: TPMCType read FKind write FKind;
+    property QuestTrackers: TList<TQuestTracker> read FQuestTrackers;
   end;
 
 implementation
@@ -34,12 +42,13 @@ constructor TProfile.Create;
 begin
   inherited;
 
-  FName := '';
-  FKind := TPMCType.pmcBear;
+  FQuestTrackers := TObjectList<TQuestTracker>.Create;
+  Clear;
 end;
 
 destructor TProfile.Destroy;
 begin
+  FQuestTrackers.Free;
 
   inherited;
 end;
@@ -58,6 +67,41 @@ begin
 
   FName := DataSet.FieldByName('Name').AsString;
   FKind := TPMCType(DataSet.FieldByName('Kind').AsInteger);
+end;
+
+procedure TProfile.Clear;
+begin
+  ID := Null;
+  FName := '';
+  FKind := TPMCType.pmcBear;
+  FQuestTrackers.Clear;
+end;
+
+procedure TProfile.AddQuestState(const Value: TQuestTracker);
+begin
+  QuestTrackers.Add(Value);
+end;
+
+function TProfile.GetQuestState(const MarkerID: Variant): TQuestTracker;
+var
+  Item: TQuestTracker;
+begin
+  for Item in QuestTrackers do
+    if Item.MarkerID = MarkerID then
+      Exit(Item);
+
+  Result := nil;
+end;
+
+function TProfile.IsQuestPartFinished(const MarkerID: Variant): Boolean;
+var
+  Item: TQuestTracker;
+begin
+  Item := GetQuestState(MarkerID);
+  if Item <> nil then
+    Result := Item.Finished
+  else
+    Result := False;
 end;
 
 class function TProfile.EntityName: string;

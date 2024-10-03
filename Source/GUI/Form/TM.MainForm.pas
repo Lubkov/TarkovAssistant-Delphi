@@ -4,11 +4,11 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  System.IOUtils, Generics.Collections, FMX.Types, FMX.Controls, FMX.Forms,
+  System.IOUtils, Generics.Collections, FMX.Types, FMX.Controls, FMX.Forms, FMX.ListBox,
   FMX.Graphics, FMX.Dialogs, TM.Form.Wrapper, FMX.Controls.Presentation, FMX.StdCtrls,
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Objects, System.Actions, FMX.ActnList,
   TM.Map.Wrapper, TM.Frame.Location, TM.Frame.MarkerFilter,
-  Map.Frame.InteractiveMap, FMX.ListBox,
+  Map.Frame.InteractiveMap, TM.Frame.Options,
   ME.DB.Map, ME.DB.Options;
 
 type
@@ -34,8 +34,9 @@ type
     MarkerFilterPanel: TPanel;
     buPositionTest: TSpeedButton;
     acTestPosition: TAction;
-    SpeedButton1: TSpeedButton;
+    buOptions: TSpeedButton;
     acShowOptions: TAction;
+    OptionsPanel: TPanel;
 
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -55,8 +56,10 @@ type
     FLocationGrid: TLocationGrid;
     FMarkerFilterList: TMarkerFilterList;
     FInteractiveMap: TInteractiveMap;
+    FOptionsFrame: TOptionsFrame;
 
     procedure HideAllPanels(Sender: TObject);
+    procedure HideOptionsPanel(Sender: TObject);
     procedure SetFullScreenMode(const Value: Boolean);
     procedure OnLocationChanged(const Value: TDBMap);
     procedure MarkerFilterListOnClose(Sender: TObject);
@@ -71,7 +74,7 @@ implementation
 
 uses
   App.Constants, App.Service, Map.Data.Service, Map.CursorService,
-  ME.Edit.Options, ME.Service.Options, ME.Presenter.Options;
+  ME.Service.Options;
 
 {$R *.fmx}
 
@@ -111,6 +114,12 @@ begin
   FLocationGrid.Init;
   FLocationGrid.OnLocationChanged := OnLocationChanged;
 
+  FOptionsFrame := TOptionsFrame.Create(Self);
+  FOptionsFrame.Parent := OptionsPanel;
+  FOptionsFrame.Align := TAlignLayout.Client;
+  FOptionsFrame.Init(AppService.Options);
+  FOptionsFrame.OnClose := HideOptionsPanel;
+
   buPositionTest.Visible := {$IFDEF DEBUG}True{$ELSE}False{$ENDIF};
 end;
 
@@ -132,6 +141,9 @@ begin
       else
       if FInteractiveMap.MarkerInfoVisible then
         FInteractiveMap.HideMarkerInfo
+      else
+      if OptionsPanel.Visible then
+        HideOptionsPanel(Sender)
       else
         SetFullScreenMode(False);
     vkF11:
@@ -159,8 +171,19 @@ begin
   LocationPanel.Visible := False;
   MarkerFilterPanel.Visible := False;
   FInteractiveMap.HideMarkerInfo;
+  HideOptionsPanel(Sender);
 
   Application.ProcessMessages;
+end;
+
+procedure TMainForm.HideOptionsPanel(Sender: TObject);
+begin
+  if OptionsPanel.Visible then begin
+    FOptionsFrame.Save;
+    FInteractiveMap.Refresh;
+  end;
+
+  OptionsPanel.Visible := False;
 end;
 
 procedure TMainForm.SetFullScreenMode(const Value: Boolean);
@@ -263,23 +286,16 @@ end;
 
 procedure TMainForm.acShowOptionsExecute(Sender: TObject);
 var
-  Presenter: TEditOptionsPresenter;
-  Dialog: TedOptions;
+  Visible: Boolean;
 begin
+  Visible := OptionsPanel.Visible;
   HideAllPanels(Sender);
 
-  Dialog := TedOptions.Create(Self);
-  try
-    Presenter := TEditOptionsPresenter.Create(Dialog, AppService.Options);
-    try
-      if Presenter.Edit then
-        ;
-    finally
-      Presenter.Free;
-    end;
-  finally
-    Dialog.Free;
-  end;
+  OptionsPanel.Height := FOptionsFrame.MaxHeight;
+  OptionsPanel.Width := FOptionsFrame.MaxWidth;
+  OptionsPanel.Position.X := Self.Width / 2 - OptionsPanel.Width / 2;
+  OptionsPanel.Position.Y := Self.Height / 2 - OptionsPanel.Height / 2 - 28;
+  OptionsPanel.Visible := not Visible;
 end;
 
 end.

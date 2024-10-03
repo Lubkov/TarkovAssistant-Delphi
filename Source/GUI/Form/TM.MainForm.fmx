@@ -211,7 +211,7 @@ object MainForm: TMainForm
       TextSettings.Trimming = None
       OnMouseMove = buToolButtonMouseMove
     end
-    object SpeedButton1: TSpeedButton
+    object buOptions: TSpeedButton
       Action = acShowOptions
       Align = Bottom
       Cursor = crHandPoint
@@ -231,13 +231,19 @@ object MainForm: TMainForm
     Position.X = 120.000000000000000000
     Position.Y = 8.000000000000000000
     StyleLookup = 'LocationPanelStyle'
-    TabOrder = 11
+    TabOrder = 12
   end
   object MarkerFilterPanel: TPanel
     Position.X = 120.000000000000000000
     Position.Y = 144.000000000000000000
     StyleLookup = 'LocationPanelStyle'
-    TabOrder = 16
+    TabOrder = 17
+  end
+  object OptionsPanel: TPanel
+    Position.X = 120.000000000000000000
+    Position.Y = 280.000000000000000000
+    StyleLookup = 'LocationPanelStyle'
+    TabOrder = 11
   end
   object ImageList32: TImageList
     Source = <

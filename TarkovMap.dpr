@@ -57,15 +57,12 @@ uses
   ME.Service.Options in 'Source\Service\ME.Service.Options.pas',
   ME.DB.Options in 'Source\Entity\ME.DB.Options.pas',
   ME.DAO.Options in 'Source\DAO\ME.DAO.Options.pas',
-  ME.Edit.Options in 'Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
-  ME.Presenter.Options in 'Source\GUI\Presenter\ME.Presenter.Options.pas',
   ME.Filter.Profile in 'Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
   ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
   ME.Presenter.Profile in 'Source\GUI\Presenter\ME.Presenter.Profile.pas',
   ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
   ME.Dialog.Message in 'Source\Common\ME.Dialog.Message.pas' {edMessage},
-  ME.Presenter.QuestTracker in 'Source\GUI\Presenter\ME.Presenter.QuestTracker.pas',
-  ME.Edit.QuestTracker in 'Source\GUI\Edit\ME.Edit.QuestTracker.pas' {edQuestTracker};
+  TM.Frame.Options in 'Source\GUI\Frame\TM.Frame.Options.pas' {OptionsFrame: TFrame};
 
 {$R *.res}
 

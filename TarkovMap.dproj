@@ -364,11 +364,6 @@
         <DCCReference Include="Source\Service\ME.Service.Options.pas"/>
         <DCCReference Include="Source\Entity\ME.DB.Options.pas"/>
         <DCCReference Include="Source\DAO\ME.DAO.Options.pas"/>
-        <DCCReference Include="Source\GUI\Edit\ME.Edit.Options.pas">
-            <Form>edOptions</Form>
-            <FormType>fmx</FormType>
-        </DCCReference>
-        <DCCReference Include="Source\GUI\Presenter\ME.Presenter.Options.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Filter.Profile.pas">
             <Form>ProfileFilter</Form>
             <FormType>fmx</FormType>
@@ -384,10 +379,10 @@
             <Form>edMessage</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="Source\GUI\Presenter\ME.Presenter.QuestTracker.pas"/>
-        <DCCReference Include="Source\GUI\Edit\ME.Edit.QuestTracker.pas">
-            <Form>edQuestTracker</Form>
+        <DCCReference Include="Source\GUI\Frame\TM.Frame.Options.pas">
+            <Form>OptionsFrame</Form>
             <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

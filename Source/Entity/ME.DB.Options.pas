@@ -22,6 +22,8 @@ type
     procedure Assign(const Source: TJSONValue); overload;
     procedure AssignTo(const Dest: TJSONObject);
 
+    function IsEqual(const Source: TOptions): Boolean;
+
     class function EntityName: string; override;
     class function FieldList: string; override;
 
@@ -85,6 +87,14 @@ begin
   Dest.AddPair('sreenshot_path', SreenshotPath);
   Dest.AddPair('track_location', TrackLocation);
   Dest.AddPair('profile', Profile);
+end;
+
+function TOptions.IsEqual(const Source: TOptions): Boolean;
+begin
+  Result := SameText(DataPath, Source.DataPath) and
+            SameText(SreenshotPath, Source.SreenshotPath) and
+            (TrackLocation = Source.TrackLocation) and
+            SameText(Profile, Source.Profile);
 end;
 
 class function TOptions.EntityName: string;

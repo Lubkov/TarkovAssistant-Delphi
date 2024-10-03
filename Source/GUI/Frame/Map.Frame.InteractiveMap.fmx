@@ -293,6 +293,31 @@ object InteractiveMap: TInteractiveMap
               'g'
           end>
         Name = 'quest_item_32_24'
+      end
+      item
+        MultiResBitmap.Height = 32
+        MultiResBitmap.Width = 32
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 32
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
+              F40000000473424954080808087C086488000000E5494441545885ED94310EC2
+              300C457F281282A19D7B885EA00B47AB7AB42E5C804330C3D60199012199284E
+              E3905021F2B6268EFAF4131B2814FE0522DABBD6B7D281A6EDC9B57EBD9C8CB4
+              E7C3186354020070BF9DDFBEABBA13F7788DEF9C4A000076C71100304F83B8F7
+              82D7F8CE71364B023631F1FB584C8023C5AEAD8912B0E38EADB1515F416A5457
+              10CAD2C3CB2E00F85BEF2B02C07368AD2AC05B5692C926C0DBD1771D62444DDB
+              93DDD3316D364F03AABA8B4B2064F67F8A28C08D538FDF20819C3F0D1200F2C5
+              1E2C00C43DBCA4029AB19A5C20749CFE04447458DBA15070F20072AD4AA66B7C
+              C94F0000000049454E44AE426082}
+            FileName = 
+              'D:\Projects\Delphi\EscapeFromTarkov\Ico\Temp\quest_item_finished' +
+              '_32_24.png'
+          end>
+        Name = 'quest_item_finished_32_24'
       end>
     Destination = <
       item
@@ -323,6 +348,14 @@ object InteractiveMap: TInteractiveMap
         Layers = <
           item
             Name = 'quest_item_32_24'
+            SourceRect.Right = 32.000000000000000000
+            SourceRect.Bottom = 32.000000000000000000
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'quest_item_finished_32_24'
             SourceRect.Right = 32.000000000000000000
             SourceRect.Bottom = 32.000000000000000000
           end>

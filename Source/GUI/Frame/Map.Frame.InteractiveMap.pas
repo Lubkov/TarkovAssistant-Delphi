@@ -58,6 +58,7 @@ type
     procedure SetMouseDown(const Value: Boolean);
     procedure HideMarkerInfo;
     function NormalizePosition(const Left, Top: Integer):  TPoint;
+    procedure Refresh;
 
   {$IFDEF DEBUG}
     procedure TestPosition;
@@ -74,7 +75,7 @@ type
 implementation
 
 uses
-  App.Constants, ME.Service.Marker;
+  App.Constants, App.Service, ME.Service.Marker;
 
 {$R *.fmx}
 
@@ -206,6 +207,7 @@ var
   Item: TImage;
 //  Offset: Double;
   p: TPoint;
+  ImageIdex: Integer;
 begin
   p := NormalizePosition(Marker.Left, Marker.Top);
   p.Top := p.Top - MarkerHeight div 2;
@@ -218,7 +220,12 @@ begin
     Item.Parent := Background;
     Item.Position.X := p.Left;
     Item.Position.Y := p.Top;
-    Item.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), Ord(Marker.Kind)));
+
+    ImageIdex := Ord(Marker.Kind);
+    if (Marker.Kind = TMarkerKind.Quest) and AppService.Profile.IsQuestPartFinished(Marker.ID) then
+      Inc(ImageIdex);
+
+    Item.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIdex));
     Item.Hint := Title;
     Item.ShowHint := Trim(Title) <> '';
     Item.OnClick := OnMarkerClick;
@@ -313,6 +320,11 @@ begin
   Result.Top := Trunc(Bitmap.Height * Offset); // - MarkerHeight div 2;
   Offset := Abs((Map.Left - x) / (Map.Right - Map.Left));
   Result.Left := Trunc(Bitmap.Width * Offset); // - MarkerWidth div 2;
+end;
+
+procedure TInteractiveMap.Refresh;
+begin
+  FMapWrapper.Refresh;
 end;
 
 {$IFDEF DEBUG}

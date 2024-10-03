@@ -26,15 +26,17 @@ type
     MarkerStyleBook: TStyleBook;
     PreviewLayout: TLayout;
     Background: TRectangle;
-    MaouseWheelImage: TImage;
+    MouseWheelImage: TImage;
     CompleteQuestLayout: TLayout;
-    buCompleteQuest: TSpeedButton;
+    buCompleteQuest: TSwitch;
+    laCompleteQuest: TLabel;
 
     procedure buCloseClick(Sender: TObject);
     procedure MarkerImageMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
-    procedure buCompleteQuestClick(Sender: TObject);
+    procedure buCompleteQuestSwitch(Sender: TObject);
   private
     [Weak] FMarker: TDBMarker;
+    [Weak] FQuestTracker: TQuestTracker;
     FMaxHeight: Single;
     FMaxWidth: Single;
     FOnClose: TNotifyEvent;
@@ -45,7 +47,7 @@ type
     procedure ShowResource(const Index: Integer);
     procedure ChangedPreviewIcon(ItemIndex: Integer);
     procedure LoadQuestItems(const Marker: TDBMarker);
-    function InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
+//    function InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
     procedure SaveQuestTracker;
   public
     constructor Create(AOwner: TComponent); override;
@@ -61,8 +63,7 @@ type
 implementation
 
 uses
-  ME.Dialog.Message, Map.Data.Service, ME.Presenter.QuestTracker,
-  ME.Edit.QuestTracker, ME.Service.QuestTracker;
+  ME.Dialog.Message, Map.Data.Service, ME.Service.QuestTracker, App.Service;
 
 {$R *.fmx}
 
@@ -78,6 +79,7 @@ begin
 
   FMarker := nil;
   FOnClose := nil;
+  FQuestTracker := nil;
   Background.Fill.Color := $FF252525; // FFB97A57
   laQuestName.TextSettings.FontColor := $FFFFFFFF;
   laDescription.TextSettings.FontColor := $FFFFFFFF;
@@ -106,6 +108,7 @@ destructor TMarkerDescript.Destroy;
 begin
   FOnClose := nil;
   FMarker := nil;
+  FQuestTracker := nil;
 
   inherited;
 end;
@@ -171,46 +174,28 @@ begin
     FItemIconList.Add('' {QuestItem.Description}, QuestItem.Picture);
 end;
 
-function TMarkerDescript.InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
-var
-  Presenter: TEditQuestTrackerPresenter;
-  Dialog: TedQuestTracker;
-begin
-  Dialog := TedQuestTracker.Create(Self);
-  try
-    Presenter := TEditQuestTrackerPresenter.Create(Dialog, QuestTracker);
-    try
-      Result := Presenter.Edit;
-    finally
-      Presenter.Free;
-    end;
-  finally
-    Dialog.Free;
-  end;
-end;
+//function TMarkerDescript.InternalQuestTrackerEdit(const QuestTracker: TQuestTracker): Boolean;
+//var
+//  Presenter: TEditQuestTrackerPresenter;
+//  Dialog: TedQuestTracker;
+//begin
+//  Dialog := TedQuestTracker.Create(Self);
+//  try
+//    Presenter := TEditQuestTrackerPresenter.Create(Dialog, QuestTracker);
+//    try
+//      Result := Presenter.Edit;
+//    finally
+//      Presenter.Free;
+//    end;
+//  finally
+//    Dialog.Free;
+//  end;
+//end;
 
 procedure TMarkerDescript.SaveQuestTracker;
-var
-  QuestTracker: TQuestTracker;
 begin
-  QuestTracker := TQuestTracker.Create;
-  try
-    QuestTracker.MarkerID := FMarker.ID;
-    QuestTracker.QuestID := FMarker.QuestID;
-    QuestTracker.Status := TQuestStatus.qsNone;
-
-    if not QuestTrackerService.GetMarkerState(FMarker.ID, QuestTracker) then
-      QuestTracker.Status := TQuestStatus.qsFinished
-    else
-    if QuestTracker.Status = TQuestStatus.qsFinished then
-      QuestTracker.Status := TQuestStatus.qsNew
-    else
-      QuestTracker.Status := TQuestStatus.qsFinished;
-
-    QuestTrackerService.Save(QuestTracker);
-  finally
-    QuestTracker.Free;
-  end;
+  FQuestTracker.Finished := buCompleteQuest.IsChecked;
+  QuestTrackerService.Save(FQuestTracker);
 end;
 
 procedure TMarkerDescript.Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
@@ -267,9 +252,12 @@ begin
         FMaxHeight := FMaxHeight + ItemsLayout.Height + ItemsLayout.Margins.Top + ItemsLayout.Margins.Bottom;
     end;
 
-  MaouseWheelImage.Visible := FPictureIconList.Count > 1;
-  MaouseWheelImage.Position.X := MarkerImage.Width - MaouseWheelImage.Width - 5;
-  MaouseWheelImage.Position.Y := MarkerImage.Height - MaouseWheelImage.Height - 5;
+  MouseWheelImage.Visible := FPictureIconList.Count > 1;
+  MouseWheelImage.Position.X := MarkerImage.Width - MouseWheelImage.Width - 5;
+  MouseWheelImage.Position.Y := MarkerImage.Height - MouseWheelImage.Height - 5;
+
+  FQuestTracker := AppService.GetQuestState(FMarker);
+  buCompleteQuest.IsChecked := FQuestTracker.Finished;
 end;
 
 procedure TMarkerDescript.buCloseClick(Sender: TObject);
@@ -283,7 +271,7 @@ begin
   FPictureIconList.OnMouseWheel(WheelDelta);
 end;
 
-procedure TMarkerDescript.buCompleteQuestClick(Sender: TObject);
+procedure TMarkerDescript.buCompleteQuestSwitch(Sender: TObject);
 begin
   SaveQuestTracker;
 end;

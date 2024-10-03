@@ -13,6 +13,7 @@ type
     function EntityClass: TEntityClass; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
+    function GetAtName(const Name: string; const Entity: TEntity): Boolean;
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -36,6 +37,25 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
+    Query.Open;
+
+    Result := not Query.Eof;
+    if Result then
+      Entity.Assign(Query);
+  finally
+    Query.Free;
+  end;
+end;
+
+function TProfileDAO.GetAtName(const Name: string; const Entity: TEntity): Boolean;
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' WHERE Name = :Name';
+    Query.ParamByName('Name').AsString := Name;
     Query.Open;
 
     Result := not Query.Eof;

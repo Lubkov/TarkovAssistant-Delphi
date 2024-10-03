@@ -4,25 +4,32 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, System.IOUtils, System.Rtti,
-  System.TypInfo, System.SysConst, System.JSON, App.SQLite.Connection, ME.DB.Options;
+  System.TypInfo, System.SysConst, System.JSON, App.SQLite.Connection, ME.DB.Profile,
+  ME.DB.Options, ME.DB.QuestTracker, ME.DB.Marker, ME.DB.Quest;
 
 type
   TAppService = class(TComponent)
   private
     FDBConnection: TSQLiteConnection;
     FOptions: TOptions;
+    FProfile: TProfile;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
     procedure LoadParams;
     procedure SaveParams;
+    procedure LoadProfile;
 
     procedure LoadDataFromDB;
     procedure ConnectToDB;
 
+    function GetQuestState(const Marker: TDBMarker): TQuestTracker;
+    function IsQuestFinished(const Quest: TDBQuest): Boolean;
+
     property DBConnection: TSQLiteConnection read FDBConnection;
     property Options: TOptions read FOptions;
+    property Profile: TProfile read FProfile;
   end;
 
 var
@@ -43,6 +50,7 @@ begin
 
   DataService := TDataService.Create;
   FOptions := TOptions.Create;
+  FProfile := TProfile.Create;
 
   // DB layer
   FDBConnection := TSQLiteConnection.Create(Self);
@@ -61,6 +69,7 @@ destructor TAppService.Destroy;
 begin
   DataService.Free;
   FOptions.Free;
+  FProfile.Free;
 
   ResourceService.Free;
   MapService.Free;
@@ -105,6 +114,8 @@ begin
   finally
     Data.Free;
   end;
+
+  LoadProfile;
 end;
 
 procedure TAppService.SaveParams;
@@ -130,6 +141,20 @@ begin
   finally
     Data.Free;
   end;
+
+  if not SameText(FOptions.Profile, FProfile.Name) then
+    LoadProfile;
+end;
+
+procedure TAppService.LoadProfile;
+begin
+  if FOptions.Profile <> '' then
+    if ProfileService.GetByName(FOptions.Profile, FProfile) then
+      QuestTrackerService.GetProfileProgress(FProfile.QuestTrackers)
+    else
+      FProfile.Clear
+  else
+    FProfile.Clear;
 end;
 
 procedure TAppService.LoadDataFromDB;
@@ -147,6 +172,40 @@ begin
   FDBConnection.Disconnect;
   FDBConnection.Database := FileName;
   FDBConnection.Connect;
+end;
+
+function TAppService.GetQuestState(const Marker: TDBMarker): TQuestTracker;
+begin
+  Result := Profile.GetQuestState(Marker.ID);
+  if Result = nil then begin
+    Result := TQuestTracker.Create;
+    try
+      Result.MarkerID := Marker.ID;
+      Result.QuestID := Marker.QuestID;
+      Result.ProfileID := Profile.ID;
+      Result.Finished := False;
+
+      QuestTrackerService.Save(Result);
+    except
+      Result.Free;
+      raise;
+    end;
+    Profile.AddQuestState(Result);
+  end;
+end;
+
+function TAppService.IsQuestFinished(const Quest: TDBQuest): Boolean;
+var
+  Marker: TDBMarker;
+  Finished: Boolean;
+begin
+  for Marker in Quest.Markers do begin
+    Finished := Profile.IsQuestPartFinished(Marker.ID);
+    if not Finished then
+      Exit(False);
+  end;
+
+  Result := True;
 end;
 
 end.

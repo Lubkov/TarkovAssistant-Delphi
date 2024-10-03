@@ -13,7 +13,8 @@ type
     function EntityClass: TEntityClass; override;
   public
     function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    function GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
+    function GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TEntity): Boolean;
+    procedure GetProfileProgress(ProfileID: Variant; const Items: TList<TQuestTracker>);
     procedure Insert(const Entity: TEntity); override;
     procedure Update(const Entity: TEntity); override;
   end;
@@ -47,20 +48,55 @@ begin
   end;
 end;
 
-function TQuestTrackerDAO.GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
+function TQuestTrackerDAO.GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TEntity): Boolean;
 var
   Query: TUniQuery;
 begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + EntityClass.FieldList + ' FROM ' + EntityClass.EntityName + ' WHERE MarkerID = :MarkerID';
+    Query.SQL.Text :=
+      ' SELECT ' + EntityClass.FieldList +
+      ' FROM ' + EntityClass.EntityName +
+      ' WHERE (MarkerID = :MarkerID) ' +
+      '      AND (ProfileID = :ProfileID) ';
     Query.ParamByName('MarkerID').Value := MarkerID;
+    Query.ParamByName('ProfileID').Value := ProfileID;
     Query.Open;
 
     Result := not Query.Eof;
     if Result then
       Entity.Assign(Query);
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TQuestTrackerDAO.GetProfileProgress(ProfileID: Variant; const Items: TList<TQuestTracker>);
+var
+  Query: TUniQuery;
+  Entity: TQuestTracker;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text :=
+      ' SELECT ' + EntityClass.FieldList +
+      ' FROM ' + EntityClass.EntityName +
+      ' WHERE (ProfileID = :ProfileID) ';
+    Query.ParamByName('ProfileID').Value := ProfileID;
+    Query.Open;
+
+    while not Query.Eof do begin
+      Entity := TQuestTracker.Create;
+      try
+        Entity.Assign(Query);
+      finally
+        Items.Add(Entity);
+      end;
+
+      Query.Next;
+    end;
   finally
     Query.Free;
   end;
@@ -76,10 +112,11 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO QuestTracker (QuestID, MarkerID, Status) VALUES (:QuestID, :MarkerID, :Status)';
+    Query.SQL.Text := 'INSERT INTO QuestTracker (QuestID, MarkerID, ProfileID, Finished) VALUES (:QuestID, :MarkerID, :ProfileID, :Finished)';
     Query.ParamByName('QuestID').Value := Tracker.QuestID;
     Query.ParamByName('MarkerID').Value := Tracker.MarkerID;
-    Query.ParamByName('Status').AsInteger := Ord(Tracker.Status);
+    Query.ParamByName('ProfileID').Value := Tracker.ProfileID;
+    Query.ParamByName('Finished').AsInteger := Integer(Tracker.Finished);
     Query.Execute;
     Tracker.ID := Query.LastInsertId;
   finally
@@ -101,12 +138,14 @@ begin
       'UPDATE QuestTracker ' +
       'SET QuestID = :QuestID, ' +
       '    MarkerID = :MarkerID, ' +
-      '    Status = :Status ' +
+      '    ProfileID = :ProfileID, ' +
+      '    Finished = :Finished ' +
       'WHERE ID = :ID';
     Query.ParamByName('ID').Value := Tracker.ID;
     Query.ParamByName('QuestID').Value := Tracker.QuestID;
     Query.ParamByName('MarkerID').Value := Tracker.MarkerID;
-    Query.ParamByName('Status').AsInteger := Ord(Tracker.Status);
+    Query.ParamByName('ProfileID').Value := Tracker.ProfileID;
+    Query.ParamByName('Finished').AsInteger := Integer(Tracker.Finished);
     Query.Execute;
   finally
     Query.Free;

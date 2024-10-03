@@ -1,0 +1,237 @@
+object OptionsFrame: TOptionsFrame
+  Size.Width = 408.000000000000000000
+  Size.Height = 260.000000000000000000
+  Size.PlatformDefault = False
+  object OpenDialog: TOpenDialog
+    Left = 144
+    Top = 64
+  end
+  object laDataPath: TLabel
+    Align = Top
+    StyledSettings = [Size, Style]
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 29.000000000000000000
+    Size.Width = 368.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.FontColor = claWhite
+    Text = 'System data path:'
+    TabOrder = 5
+  end
+  object paDataPath: TLayout
+    Align = Top
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 46.000000000000000000
+    Size.Width = 368.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    object edDataPath: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 1
+      Margins.Top = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Size.Width = 334.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object buDataPath: TSpeedButton
+      Align = Right
+      Images = ImageList24
+      ImageIndex = 1
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 1.000000000000000000
+      Margins.Right = 1.000000000000000000
+      Position.X = 339.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 28.000000000000000000
+      Size.Height = 29.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'IconToolButtonStyle'
+      Text = 'IconToolButtonStyle'
+      TextSettings.Trimming = None
+    end
+  end
+  object laSreenshotPath: TLabel
+    Align = Top
+    StyledSettings = [Size, Style]
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 15.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 91.000000000000000000
+    Size.Width = 368.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.FontColor = claWhite
+    Text = #1055#1091#1090#1100' '#1082' '#1089#1082#1088#1080#1085#1096#1086#1090#1072#1084' '#1080#1075#1088#1099':'
+    TabOrder = 4
+  end
+  object paSreenshotPath: TLayout
+    Align = Top
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 108.000000000000000000
+    Size.Width = 368.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    object edSreenshotPath: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 0
+      Margins.Top = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Size.Width = 334.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object buSreenshotPath: TSpeedButton
+      Align = Right
+      Images = ImageList24
+      ImageIndex = 1
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 1.000000000000000000
+      Margins.Right = 1.000000000000000000
+      Position.X = 339.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 28.000000000000000000
+      Size.Height = 29.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'IconToolButtonStyle'
+      Text = 'IconToolButtonStyle'
+      TextSettings.Trimming = None
+    end
+  end
+  object edTrackLocation: TCheckBox
+    Align = Top
+    StyledSettings = [Size, Style]
+    Margins.Left = 20.000000000000000000
+    Margins.Top = 15.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 153.000000000000000000
+    Size.Width = 368.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    Text = #1054#1090#1089#1083#1077#1078#1080#1074#1072#1090#1100' '#1084#1077#1089#1090#1086#1087#1086#1083#1086#1078#1077#1085#1080#1077
+    TextSettings.Font.Family = 'Tahoma'
+    TextSettings.FontColor = claWhite
+  end
+  object paProfileFilter: TLayout
+    Align = Top
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.Y = 182.000000000000000000
+    Size.Width = 388.000000000000000000
+    Size.Height = 67.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 15
+  end
+  object Layout1: TLayout
+    Align = Top
+    Margins.Left = 5.000000000000000000
+    Margins.Top = 5.000000000000000000
+    Margins.Right = 5.000000000000000000
+    Position.X = 5.000000000000000000
+    Position.Y = 5.000000000000000000
+    Size.Width = 398.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 16
+    object buClose: TSpeedButton
+      Align = Right
+      Images = ImageList24
+      ImageIndex = 0
+      Margins.Left = 96.000000000000000000
+      Position.X = 374.000000000000000000
+      Size.Width = 24.000000000000000000
+      Size.Height = 24.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'IconToolButtonStyle'
+      Text = 'actiontoolbutton'
+      TextSettings.Trimming = None
+      OnClick = buCloseClick
+    end
+  end
+  object ImageList24: TImageList
+    Source = <
+      item
+        MultiResBitmap.Height = 24
+        MultiResBitmap.Width = 24
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 24
+            Height = 24
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
+              F80000000473424954080808087C08648800000100494441544889ED94314A43
+              411086BF89CFCA4250EC2CECC403A448E52DBC868217B013B4D0C2C60BD8D8DA
+              8474826508E408C1420B118258453F8BF8E4110C79663758E807DBCC0EFFBFB3
+              33BBF0CF6F13006A0BD89C92338C88F6DC0EEA99B3394A3178A96130B749A8FE
+              20BF0D0CA7ECDD032711F19062308BDB88D85DA4C15B4414D54023A338C0D264
+              A0F826A9075C010320B9BAC92B3A070E819DCF1589FA7D2A6378A736D4D39A63
+              5B87C7B28277A009AC019DC45357B92E2BB8540BB59FF1F4AFEA16EAB3BAA11E
+              6414D7F2E5ABFBEABAFA94517CA0AE9406CB8EAF28277B5F5D5057D55146F19B
+              6A970BC69FD731B09D383123A00B5C24EAFC353E00777E933A17639714000000
+              0049454E44AE426082}
+            FileName = 'E:\Downloads\8541857_folder_open_icon.png'
+          end>
+        Name = 'folder_open_icon'
+      end
+      item
+        MultiResBitmap.Height = 24
+        MultiResBitmap.Width = 24
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 24
+            Height = 24
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
+              F80000000473424954080808087C0864880000011A494441544889DD95CD4E83
+              501085C7AA6FD144AD75C1A69B6EEC83F8DC4D5CD59A58B158133126C614089B
+              CF0534229DFB07D5852761C599EFCC9DCBBD88FC2B016360593FE3C0BA051003
+              1393E90A48F8D60B1079C0DB75EFC054332ED957625B49DD79A2D43D68E69562
+              348658E000775A40548F45D38F712963696A6D5CB54F486778236402A4064062
+              815BF72B6425DD3AEF11120E0F0871C207B697799E7F8AC8D6D54768E3222292
+              65D910B8F71CD1E56FC1777A2A8A627408788AF9135E01677DE0AF5467C4B6F1
+              3170D119BEF33A421E81F3BD00E0D65090A2DCF1D84FFCBC6D3E029E7DE11E21
+              1BCD3CA5FA59A863B184B4C7F551965C9BCC33E08DEAE272C25B2BD9D44DCD5C
+              E653919B635F78A3EEA4AAFD637D011C1F012B871DA5880000000049454E44AE
+              426082}
+            FileName = 'D:\Projects\Delphi\EscapeFromTarkov\Ico\PNG\close_cross_24.png'
+          end>
+        Name = 'close_cross_24'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'close_cross_24'
+            SourceRect.Right = 24.000000000000000000
+            SourceRect.Bottom = 24.000000000000000000
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'folder_open_icon'
+            SourceRect.Right = 24.000000000000000000
+            SourceRect.Bottom = 24.000000000000000000
+          end>
+      end>
+    Left = 64
+    Top = 64
+  end
+end

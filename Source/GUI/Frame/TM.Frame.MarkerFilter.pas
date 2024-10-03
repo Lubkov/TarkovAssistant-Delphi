@@ -31,7 +31,6 @@ type
     FMaxHeight: Integer;
     FOnClose: TNotifyEvent;
 
-    procedure ClearQuests;
     procedure OnMapChanged(Value: TDBMap);
     procedure OnExtractionButtonClick(Sender: TObject);
     procedure OnQuestButtonClick(Sender: TObject);
@@ -46,6 +45,9 @@ type
   end;
 
 implementation
+
+uses
+  App.Service;
 
 {$R *.fmx}
 
@@ -63,7 +65,7 @@ begin
   buCoopExtraction.Tag := Ord(TMarkerKind.CoopExtraction);
   buCoopExtraction.OnClick := OnExtractionButtonClick;
 
-  FQuests := TList<TSpeedButton>.Create;
+  FQuests := TObjectList<TSpeedButton>.Create;
 
   laExtractionGroup.FontColor := $FFFFFFFF;
   laQuestGroup.FontColor := $FFFFFFFF;
@@ -75,21 +77,9 @@ end;
 destructor TMarkerFilterList.Destroy;
 begin
   FOnClose := nil;
-
-  ClearQuests;
   FQuests.Free;
 
   inherited;
-end;
-
-procedure TMarkerFilterList.ClearQuests;
-var
-  Items: TSpeedButton;
-begin
-  for Items in FQuests do
-    Items.Free;
-
-  FQuests.Clear;
 end;
 
 procedure TMarkerFilterList.Init(const MarkerFilter: TMarkerFilter);
@@ -110,7 +100,7 @@ var
 begin
   FMap := Value;
   if FMap = nil then begin
-    ClearQuests;
+    FQuests.Clear;
     Exit;
   end;
 
@@ -133,7 +123,7 @@ begin
 
   QuestGrid.BeginUpdate;
   try
-    ClearQuests;
+    FQuests.Clear;
   finally
     QuestGrid.EndUpdate;
   end;
@@ -150,7 +140,12 @@ begin
         Item.Cursor := crHandPoint;
         Item.Text := Quest.Name + ' (' + IntToStr(Quest.Markers.Count) + ')';
         Item.StaysPressed := True;
-        Item.StyleLookup := 'FilterItemStyle';
+
+        if AppService.IsQuestFinished(Quest) then
+          Item.StyleLookup :=  'QuestFinishedStyle'
+        else
+          Item.StyleLookup :=  'FilterItemStyle';
+
         Item.TextSettings.HorzAlign := TTextAlign.Leading;
         Item.OnClick := OnQuestButtonClick;
       finally
