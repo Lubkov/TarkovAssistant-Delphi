@@ -27,6 +27,7 @@ type
     FMapWrapper: TMapWrapper;
     FMousePosition: TMousePosition;
     FItems: TList<TImage>;
+    FCurrent: TImage;
     FMarkerDescript: TMarkerDescript;
     FOnDoubleClick: TNotifyEvent;
     FOnMouseDown: TNotifyEvent;
@@ -47,6 +48,7 @@ type
     procedure AddPosition(const Position: TPoint);
     procedure OnMarkerClick(Sender: TObject);
     procedure OnMarkerDescriptionClose(Sender: TObject);
+    procedure OnQuestComplete(const Value: Boolean);
     function GetMarkerInfoVisible: Boolean;
   public
     constructor Create(AOwner: TComponent); override;
@@ -99,8 +101,10 @@ begin
   FMarkerDescript.Parent := MarkerPanel;
   FMarkerDescript.Align := TAlignLayout.Client;
   FMarkerDescript.OnClose := OnMarkerDescriptionClose;
+  FMarkerDescript.OnQuestComplete := OnQuestComplete;
 
   FItems := TObjectList<TImage>.Create;
+  FCurrent := nil;
 
   PositionImage.Visible := False;
   MarkerPanel.Visible := False;
@@ -195,6 +199,7 @@ begin
   if (Value = nil) or (FMapWrapper.Map = Value) then
     Exit;
 
+  FCurrent := nil;
   FMapWrapper.LoadMap(Value);
   FMapWrapper.Start;
 end;
@@ -260,19 +265,18 @@ end;
 
 procedure TInteractiveMap.OnMarkerClick(Sender: TObject);
 var
-  Item: TImage;
   Marker: TDBMarker;
 begin
   if Assigned(FOnMouseDown) then
     FOnMouseDown(Self);
 
-  Item := TImage(Sender);
-  Marker := TDBMarker(Item.TagObject);
+  FCurrent := TImage(Sender);
+  Marker := TDBMarker(FCurrent.TagObject);
 //  MarkerService.LoadPictures(Marker.ID, Marker.Images);
 
   if (Marker.Images.Count > 0) or (Marker.Items.Count > 0) then begin
 //  if (Marker.Images.Count > 0) and (Trim(Marker.Images[0].Description) <> '') then begin
-    FMarkerDescript.Init(Marker, Item.Hint, TTrader(Item.Tag));
+    FMarkerDescript.Init(Marker, FCurrent.Hint, TTrader(FCurrent.Tag));
 
     MarkerPanel.Height := FMarkerDescript.MaxHeight;
     MarkerPanel.Width := FMarkerDescript.MaxWidth;
@@ -285,6 +289,19 @@ end;
 procedure TInteractiveMap.OnMarkerDescriptionClose(Sender: TObject);
 begin
   MarkerPanel.Visible := False;
+end;
+
+procedure TInteractiveMap.OnQuestComplete(const Value: Boolean);
+var
+  Marker: TDBMarker;
+  ImageIdex: Integer;
+begin
+  Marker := TDBMarker(FCurrent.TagObject);
+  ImageIdex := Ord(Marker.Kind);
+  if (Marker.Kind = TMarkerKind.Quest) and Value then
+    Inc(ImageIdex);
+
+  FCurrent.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIdex));
 end;
 
 procedure TInteractiveMap.SetMouseDown(const Value: Boolean);

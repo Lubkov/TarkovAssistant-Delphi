@@ -10,6 +10,8 @@ uses
   ME.DB.Marker, ME.DB.Quest, ME.DB.Resource, ME.DB.QuestTracker;
 
 type
+  TQuestCompleteEvent = procedure (const Value: Boolean) of object;
+
   TMarkerDescript = class(TFrame)
     TitleLayout: TLayout;
     TraderImage: TImage;
@@ -39,10 +41,11 @@ type
     [Weak] FQuestTracker: TQuestTracker;
     FMaxHeight: Single;
     FMaxWidth: Single;
-    FOnClose: TNotifyEvent;
     FCurrentImageIndex: Integer;
     FItemIconList: TPictureList;
     FPictureIconList: TPictureList;
+    FOnClose: TNotifyEvent;
+    FOnQuestComplete: TQuestCompleteEvent;
 
     procedure ShowResource(const Index: Integer);
     procedure ChangedPreviewIcon(ItemIndex: Integer);
@@ -58,6 +61,7 @@ type
     property MaxHeight: Single read FMaxHeight;
     property MaxWidth: Single read FMaxWidth;
     property OnClose: TNotifyEvent read FOnClose write FOnClose;
+    property OnQuestComplete: TQuestCompleteEvent read FOnQuestComplete write FOnQuestComplete;
   end;
 
 implementation
@@ -79,6 +83,7 @@ begin
 
   FMarker := nil;
   FOnClose := nil;
+  FOnQuestComplete := nil;
   FQuestTracker := nil;
   Background.Fill.Color := $FF252525; // FFB97A57
   laQuestName.TextSettings.FontColor := $FFFFFFFF;
@@ -109,6 +114,7 @@ begin
   FOnClose := nil;
   FMarker := nil;
   FQuestTracker := nil;
+  FOnQuestComplete := nil;
 
   inherited;
 end;
@@ -196,6 +202,9 @@ procedure TMarkerDescript.SaveQuestTracker;
 begin
   FQuestTracker.Finished := buCompleteQuest.IsChecked;
   QuestTrackerService.Save(FQuestTracker);
+
+  if Assigned(FOnQuestComplete) then
+    FOnQuestComplete(FQuestTracker.Finished);
 end;
 
 procedure TMarkerDescript.Init(const Marker: TDBMarker; const QuestName: string; Trader: TTrader);
