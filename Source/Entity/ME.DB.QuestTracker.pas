@@ -3,7 +3,8 @@ unit ME.DB.QuestTracker;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
+  System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
+  System.Rtti, System.TypInfo, Data.DB, ME.DB.Entity;
 
 type
   TQuestTracker = class(TEntity)
@@ -18,6 +19,8 @@ type
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
+    procedure Assign(const Source: TJSONValue); overload; override;
+    procedure AssignTo(const Dest: TJSONObject); overload; override;
 
     class function EntityName: string; override;
     class function FieldList: string; override;
@@ -66,6 +69,18 @@ begin
   FQuestID := DataSet.FieldByName('QuestID').Value;
   FMarkerID := DataSet.FieldByName('MarkerID').Value;
   FFinished := DataSet.FieldByName('Finished').AsInteger = 1;
+end;
+
+procedure TQuestTracker.Assign(const Source: TJSONValue);
+begin
+  FMarkerID := Source.GetValue<Integer>('id');
+  FFinished := Source.GetValue<Boolean>('finished');
+end;
+
+procedure TQuestTracker.AssignTo(const Dest: TJSONObject);
+begin
+  Dest.AddPair('id', Integer(FMarkerID));
+  Dest.AddPair('finished', FFinished);
 end;
 
 class function TQuestTracker.EntityName: string;

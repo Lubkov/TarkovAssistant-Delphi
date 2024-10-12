@@ -19,8 +19,8 @@ type
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
-    procedure Assign(const Source: TJSONValue); overload;
-    procedure AssignTo(const Dest: TJSONObject);
+    procedure Assign(const Source: TJSONValue); overload; override;
+    procedure AssignTo(const Dest: TJSONObject); override;
 
     function IsEqual(const Source: TOptions): Boolean;
 

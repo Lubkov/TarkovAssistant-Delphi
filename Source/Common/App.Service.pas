@@ -4,8 +4,9 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, System.IOUtils, System.Rtti,
-  System.TypInfo, System.SysConst, System.JSON, App.SQLite.Connection, ME.DB.Profile,
-  ME.DB.Options, ME.DB.QuestTracker, ME.DB.Marker, ME.DB.Quest;
+  System.TypInfo, System.SysConst, System.JSON, Generics.Collections,
+  App.SQLite.Connection, ME.DB.Profile, ME.DB.Options, ME.DB.QuestTracker,
+  ME.DB.Marker, ME.DB.Quest;
 
 type
   TAppService = class(TComponent)
@@ -20,6 +21,8 @@ type
     procedure LoadParams;
     procedure SaveParams;
     procedure LoadProfile;
+    procedure SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
+    procedure SaveProfile;
 
     procedure LoadDataFromDB;
     procedure ConnectToDB;
@@ -116,6 +119,7 @@ begin
   end;
 
   LoadProfile;
+  SaveProfile;
 end;
 
 procedure TAppService.SaveParams;
@@ -155,6 +159,52 @@ begin
       FProfile.Clear
   else
     FProfile.Clear;
+end;
+
+procedure TAppService.SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
+var
+  QuestTracker: TQuestTracker;
+  JSONItems: TJSONArray;
+  JSONObject: TJSONObject;
+begin
+  JSONItems := TJSONArray.Create;
+  for QuestTracker in Items do begin
+    JSONObject := TJSONObject.Create;
+    try
+      QuestTracker.AssignTo(JSONObject);
+    finally
+      JSONItems.Add(JSONObject);
+    end;
+  end;
+  Root.AddPair('items', JSONItems);
+end;
+
+procedure TAppService.SaveProfile;
+const
+  ProfileName = 'Profiles\stalker.json';
+var
+  Data: TStrings;
+  FileName: string;
+  JSONObject: TJSONObject;
+begin
+  FileName := TPath.Combine(AppParams.DataPath, ProfileName);
+
+  Data := TStringList.Create;
+  try
+    JSONObject := TJSONObject.Create;
+    try
+      FProfile.AssignTo(JSONObject);
+      SaveQuestTracker(JSONObject, FProfile.QuestTrackers);
+
+      Data.Text := JSONObject.ToJSON;
+    finally
+      JSONObject.Free;
+    end;
+
+    Data.SaveToFile(FileName, TEncoding.UTF8);
+  finally
+    Data.Free;
+  end;
 end;
 
 procedure TAppService.LoadDataFromDB;

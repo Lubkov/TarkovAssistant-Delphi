@@ -3,8 +3,9 @@ unit ME.DB.Profile;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.QuestTracker;
+  System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
+  System.Rtti, System.TypInfo, Generics.Collections, Data.DB,
+  ME.DB.Entity, ME.DB.QuestTracker;
 
 type
   TPMCType = (pmcBear, pmcUsec);
@@ -20,6 +21,8 @@ type
 
     procedure Assign(const Source: TEntity); overload; override;
     procedure Assign(const DataSet: TDataSet); overload; override;
+    procedure Assign(const Source: TJSONValue); overload; override;
+    procedure AssignTo(const Dest: TJSONObject); overload; override;
     procedure Clear;
 
     procedure AddQuestState(const Value: TQuestTracker);
@@ -67,6 +70,22 @@ begin
 
   FName := DataSet.FieldByName('Name').AsString;
   FKind := TPMCType(DataSet.FieldByName('Kind').AsInteger);
+end;
+
+procedure TProfile.Assign(const Source: TJSONValue);
+begin
+  inherited;
+
+  FName := Source.GetValue<string>('name');
+  FKind := TRttiEnumerationType.GetValue<TPMCType>(Source.GetValue<string>('kind'));
+end;
+
+procedure TProfile.AssignTo(const Dest: TJSONObject);
+begin
+  inherited;
+
+  Dest.AddPair('name', FName);
+  Dest.AddPair('kind', TRttiEnumerationType.GetName<TPMCType>(FKind));
 end;
 
 procedure TProfile.Clear;

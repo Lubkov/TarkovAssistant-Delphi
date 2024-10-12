@@ -3,8 +3,8 @@ unit ME.DB.Entity;
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Variants, FMX.Graphics, Data.DB,
-  Uni;
+  System.Classes, System.SysUtils, System.Variants, System.SysConst, System.JSON,
+  FMX.Graphics, Data.DB, Uni;
 
 type
   TEntityClass = class of TEntity;
@@ -22,6 +22,8 @@ type
 
     procedure Assign(const Source: TEntity); overload; virtual;
     procedure Assign(const DataSet: TDataSet); overload; virtual;
+    procedure Assign(const Source: TJSONValue); overload; virtual;
+    procedure AssignTo(const Dest: TJSONObject); virtual;
     class procedure AssignPicture(const Field: TField; Bitmap: TBitmap);
     class procedure AssignPictureTo(const Source: TBitmap; const Field: TField); overload;
     class procedure AssignPictureTo(const Source: TBitmap; Param: TParam); overload;
@@ -35,6 +37,9 @@ type
   end;
 
 implementation
+
+uses
+  ME.DB.Utils;
 
 { TEntity }
 
@@ -65,6 +70,23 @@ end;
 procedure TEntity.Assign(const DataSet: TDataSet);
 begin
   FID := DataSet.FieldByName('ID').Value;
+end;
+
+procedure TEntity.Assign(const Source: TJSONValue);
+begin
+  FID := Source.GetValue<Integer>('id');
+end;
+
+procedure TEntity.AssignTo(const Dest: TJSONObject);
+var
+  Value: Integer;
+begin          
+  if VarIsEmpty(FID) or VarIsNull(FID) then
+    Value := -1
+  else
+    Value := Integer(FID);
+    
+  Dest.AddPair('id', Value);
 end;
 
 class procedure TEntity.AssignPicture(const Field: TField; Bitmap: TBitmap);
