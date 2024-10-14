@@ -4,10 +4,10 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
-  Data.DB, ME.DB.Entity;
+  Data.DB, App.Entity, ME.DB.Entity;
 
 type
-  TOptions = class(TEntity)
+  TOptions = class(TDBEntity)
   private
     FDataPath: string;
     FSreenshotPath: string;
@@ -54,13 +54,17 @@ begin
 end;
 
 procedure TOptions.Assign(const Source: TEntity);
+var
+  Options: TOptions;
 begin
   inherited;
 
-  FDataPath := TOptions(Source).DataPath;
-  FSreenshotPath := TOptions(Source).SreenshotPath;
-  FTrackLocation := TOptions(Source).TrackLocation;
-  FProfile := TOptions(Source).Profile;
+  Options := TOptions(Source);
+
+  FDataPath := Options.DataPath;
+  FSreenshotPath := Options.SreenshotPath;
+  FTrackLocation := Options.TrackLocation;
+  FProfile := Options.Profile;
 end;
 
 procedure TOptions.Assign(const DataSet: TDataSet);

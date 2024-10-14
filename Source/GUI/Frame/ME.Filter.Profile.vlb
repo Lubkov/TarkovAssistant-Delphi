@@ -1,18 +1,5 @@
-﻿[F]
-Visible=False
-Coordinates=264,166,40,33
-
-[ImageList1]
+﻿[ImageList1]
 Coordinates=46,165,68,33
-
-[BindingsList1]
-Coordinates=264,1,82,33
-
-[FProfileName]
-Coordinates=264,56,80,33
-
-[BindSourceDB1]
-Coordinates=390,50,92,123
 
 [MainLayout]
 Coordinates=264,111,71,33
@@ -32,12 +19,6 @@ Coordinates=264,331,69,33
 [ProfileNameLayout]
 Coordinates=36,339,108,33
 
-[FID]
-Coordinates=395,1,40,33
-
-[FKind]
-Coordinates=395,56,43,33
-
 [edProfileName]
 Coordinates=600,70,86,123
 Visible=True
@@ -53,4 +34,7 @@ Coordinates=264,221,65,33
 
 [acDeleteProfile]
 Coordinates=165,339,77,33
+
+[]
+Coordinates=314,176,40,33
 

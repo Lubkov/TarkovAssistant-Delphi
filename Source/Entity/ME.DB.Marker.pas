@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.Resource, ME.DB.QuestItem;
+  Data.DB, App.Entity, ME.DB.Entity, ME.DB.Resource, ME.DB.QuestItem;
 
 type
   TMarkerKind = (PMCExtraction, ScavExtraction, CoopExtraction, Quest);
   TMarkerKindSet = set of TMarkerKind;
 
-  TDBMarker = class(TEntity)
+  TDBMarker = class(TDBEntity)
   private
     FMapID: Variant;
     FQuestID: Variant;
@@ -68,15 +68,19 @@ begin
 end;
 
 procedure TDBMarker.Assign(const Source: TEntity);
+var
+  Marker: TDBMarker;
 begin
   inherited;
 
-  MapID := TDBMarker(Source).MapID;
-  QuestID := TDBMarker(Source).QuestID;
-  Caption := TDBMarker(Source).Caption;
-  Kind := TDBMarker(Source).Kind;
-  Left := TDBMarker(Source).Left;
-  Top := TDBMarker(Source).Top;
+  Marker := TDBMarker(Source);
+
+  MapID := Marker.MapID;
+  QuestID := Marker.QuestID;
+  Caption := Marker.Caption;
+  Kind := Marker.Kind;
+  Left := Marker.Left;
+  Top := Marker.Top;
 end;
 
 procedure TDBMarker.Assign(const DataSet: TDataSet);

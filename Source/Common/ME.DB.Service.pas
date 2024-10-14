@@ -20,17 +20,17 @@ type
     constructor Create(const Connection: TCustomConnection);
     destructor Destroy; override;
 
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual;
-    procedure GetAll(const Items: TList<TEntity>); virtual;
-    procedure Insert(const Entity: TEntity); virtual;
-    procedure Update(const Entity: TEntity); virtual;
-    procedure Save(const Entity: TEntity); virtual;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; virtual;
+    procedure GetAll(const Items: TList<TDBEntity>); virtual;
+    procedure Insert(const Entity: TDBEntity); virtual;
+    procedure Update(const Entity: TDBEntity); virtual;
+    procedure Save(const Entity: TDBEntity); virtual;
     procedure Remove(const ID: Variant); overload; virtual;
-    procedure Remove(const Entity: TEntity); overload; virtual;
+    procedure Remove(const Entity: TDBEntity); overload; virtual;
     procedure RemoveAll; virtual;
     function RecordCount: Int64; virtual;
 
-    function GetNewInstance: TEntity; virtual;
+    function GetNewInstance: TDBEntity; virtual;
 
     procedure StartTransaction;
     procedure CommitTransaction;
@@ -73,27 +73,27 @@ begin
   Result := Connection.InTransaction;
 end;
 
-function TServiceCommon.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TServiceCommon.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 begin
   Result := FDAO.GetAt(ID, Entity);
 end;
 
-procedure TServiceCommon.GetAll(const Items: TList<TEntity>);
+procedure TServiceCommon.GetAll(const Items: TList<TDBEntity>);
 begin
   FDAO.GetAll(Items);
 end;
 
-procedure TServiceCommon.Insert(const Entity: TEntity);
+procedure TServiceCommon.Insert(const Entity: TDBEntity);
 begin
   FDAO.Insert(Entity);
 end;
 
-procedure TServiceCommon.Update(const Entity: TEntity);
+procedure TServiceCommon.Update(const Entity: TDBEntity);
 begin
   FDAO.Update(Entity);
 end;
 
-procedure TServiceCommon.Save(const Entity: TEntity);
+procedure TServiceCommon.Save(const Entity: TDBEntity);
 begin
   if IsNullID(Entity.ID) then
     Insert(Entity)
@@ -106,7 +106,7 @@ begin
   FDAO.Remove(ID);
 end;
 
-procedure TServiceCommon.Remove(const Entity: TEntity);
+procedure TServiceCommon.Remove(const Entity: TDBEntity);
 begin
   Remove(Entity.ID);
 end;
@@ -121,7 +121,7 @@ begin
   Result := FDAO.RecordCount;
 end;
 
-function TServiceCommon.GetNewInstance: TEntity;
+function TServiceCommon.GetNewInstance: TDBEntity;
 begin
   Result := FDAO.GetNewInstance;
 end;

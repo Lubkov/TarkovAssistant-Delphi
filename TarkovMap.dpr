@@ -49,20 +49,19 @@ uses
   ME.DAO.QuestItem in 'Source\DAO\ME.DAO.QuestItem.pas',
   ME.Service.Resource in 'Source\Service\ME.Service.Resource.pas',
   ME.Service.QuestItem in 'Source\Service\ME.Service.QuestItem.pas',
-  ME.DB.Profile in 'Source\Entity\ME.DB.Profile.pas',
-  ME.DB.QuestTracker in 'Source\Entity\ME.DB.QuestTracker.pas',
-  ME.DAO.Profile in 'Source\DAO\ME.DAO.Profile.pas',
-  ME.DAO.QuestTracker in 'Source\DAO\ME.DAO.QuestTracker.pas',
-  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas',
+  ME.Profile in 'Source\Entity\ME.Profile.pas',
+  ME.QuestTracker in 'Source\Entity\ME.QuestTracker.pas',
   ME.Service.Options in 'Source\Service\ME.Service.Options.pas',
   ME.DB.Options in 'Source\Entity\ME.DB.Options.pas',
   ME.DAO.Options in 'Source\DAO\ME.DAO.Options.pas',
   ME.Filter.Profile in 'Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
-  ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
   ME.Presenter.Profile in 'Source\GUI\Presenter\ME.Presenter.Profile.pas',
   ME.Edit.Profile in 'Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
   ME.Dialog.Message in 'Source\Common\ME.Dialog.Message.pas' {edMessage},
-  TM.Frame.Options in 'Source\GUI\Frame\TM.Frame.Options.pas' {OptionsFrame: TFrame};
+  TM.Frame.Options in 'Source\GUI\Frame\TM.Frame.Options.pas' {OptionsFrame: TFrame},
+  App.Entity in 'Source\Common\App.Entity.pas',
+  ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
+  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas';
 
 {$R *.res}
 

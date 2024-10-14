@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.Layer, ME.DB.Marker, ME.DB.Quest;
+  Data.DB, App.Entity, ME.DB.Entity, ME.DB.Layer, ME.DB.Marker, ME.DB.Quest;
 
 type
   TDBMap = class;
   TDBMapChangedEvent = procedure(const MapID: Variant) of object;
 
-  TDBMap = class(TEntity)
+  TDBMap = class(TDBEntity)
   private
     FCaption: string;
     FLeft: Integer;
@@ -99,6 +99,7 @@ begin
   inherited;
 
   Map := TDBMap(Source);
+
   FCaption := Map.Caption;
   FLeft := Map.Left;
   FTop := Map.Top;

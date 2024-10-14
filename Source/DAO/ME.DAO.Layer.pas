@@ -10,16 +10,16 @@ type
   TLayerDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
     function GetSqlSelectCommandText: string; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure GetMapLayers(const MapID: Variant; const Items: TList<TEntity>; LoadPicture: Boolean);
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure GetMapLayers(const MapID: Variant; const Items: TList<TDBEntity>; LoadPicture: Boolean);
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
     procedure LoadPicture(const LayerID: Variant; const Picture: TBitmap); overload;
-    procedure LoadPicture(const Entity: TEntity); overload;
-    procedure SavePicture(const Entity: TEntity);
+    procedure LoadPicture(const Entity: TDBEntity); overload;
+    procedure SavePicture(const Entity: TDBEntity);
   end;
 
 implementation
@@ -29,7 +29,7 @@ uses
 
 { TLayerDAO }
 
-function TLayerDAO.EntityClass: TEntityClass;
+function TLayerDAO.EntityClass: TDBEntityClass;
 begin
   Result := TDBLayer;
 end;
@@ -39,7 +39,7 @@ begin
   Result := 'SELECT ' + TDBLayer.FieldList + ' FROM Layer %s';
 end;
 
-function TLayerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TLayerDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -58,10 +58,10 @@ begin
   end;
 end;
 
-procedure TLayerDAO.GetMapLayers(const MapID: Variant; const Items: TList<TEntity>; LoadPicture: Boolean);
+procedure TLayerDAO.GetMapLayers(const MapID: Variant; const Items: TList<TDBEntity>; LoadPicture: Boolean);
 var
   Query: TUniQuery;
-  Entity: TEntity;
+  Entity: TDBEntity;
 begin
   Query := TUniQuery.Create(nil);
   try
@@ -85,7 +85,7 @@ begin
   end;
 end;
 
-procedure TLayerDAO.Insert(const Entity: TEntity);
+procedure TLayerDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Layer: TDBLayer;
@@ -109,7 +109,7 @@ begin
   end;
 end;
 
-procedure TLayerDAO.Update(const Entity: TEntity);
+procedure TLayerDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Layer: TDBLayer;
@@ -162,7 +162,7 @@ begin
   end;
 end;
 
-procedure TLayerDAO.LoadPicture(const Entity: TEntity);
+procedure TLayerDAO.LoadPicture(const Entity: TDBEntity);
 var
   Layer: TDBLayer;
 begin
@@ -170,7 +170,7 @@ begin
   LoadPicture(Layer.ID, Layer.Picture);
 end;
 
-procedure TLayerDAO.SavePicture(const Entity: TEntity);
+procedure TLayerDAO.SavePicture(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Layer: TDBLayer;

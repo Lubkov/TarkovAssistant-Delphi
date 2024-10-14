@@ -15,8 +15,8 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
     procedure Remove(const ID: Variant); override;
 
     procedure LoadPicture(const ID: Variant; const Kind: TResourceKind; const Dest: TBitmap); overload;
@@ -67,7 +67,7 @@ begin
   Result := TResourceDAO;
 end;
 
-procedure TResourceService.Insert(const Entity: TEntity);
+procedure TResourceService.Insert(const Entity: TDBEntity);
 var
   Resource: TDBResource;
 begin
@@ -83,7 +83,7 @@ begin
   SavePicture(Resource);
 end;
 
-procedure TResourceService.Update(const Entity: TEntity);
+procedure TResourceService.Update(const Entity: TDBEntity);
 begin
   inherited;
 
@@ -148,11 +148,11 @@ end;
 
 procedure TResourceService.ExportFromDB;
 var
-  Items: TObjectList<TEntity>;
+  Items: TObjectList<TDBEntity>;
   Resource: TDBResource;
   i: Integer;
 begin
-  Items := TObjectList<TEntity>.Create;
+  Items := TObjectList<TDBEntity>.Create;
   try
     TResourceDAO(DAO).GetAll(Items);
 

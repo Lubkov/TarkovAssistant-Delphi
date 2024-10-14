@@ -10,11 +10,11 @@ type
   TOptionsDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetFirst(const Entity: TEntity): Boolean;
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetFirst(const Entity: TDBEntity): Boolean;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
   end;
 
 
@@ -22,12 +22,12 @@ implementation
 
 { TOptionsDAO }
 
-function TOptionsDAO.EntityClass: TEntityClass;
+function TOptionsDAO.EntityClass: TDBEntityClass;
 begin
   Result := TOptions;
 end;
 
-function TOptionsDAO.GetFirst(const Entity: TEntity): Boolean;
+function TOptionsDAO.GetFirst(const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -45,7 +45,7 @@ begin
   end;
 end;
 
-procedure TOptionsDAO.Insert(const Entity: TEntity);
+procedure TOptionsDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Options: TOptions;
@@ -71,7 +71,7 @@ begin
   end;
 end;
 
-procedure TOptionsDAO.Update(const Entity: TEntity);
+procedure TOptionsDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Profile: TOptions;

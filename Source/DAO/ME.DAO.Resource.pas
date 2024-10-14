@@ -10,29 +10,29 @@ type
   TResourceDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure GetAll(const Items: TList<TEntity>); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure GetAll(const Items: TList<TDBEntity>); override;
     procedure GetPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
     procedure GetQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
 
-//    procedure LoadPicture(const Entity: TEntity);
-//    procedure SavePicture(const Entity: TEntity);
+//    procedure LoadPicture(const Entity: TDBEntity);
+//    procedure SavePicture(const Entity: TDBEntity);
   end;
 
 implementation
 
 { TResourceDAO }
 
-function TResourceDAO.EntityClass: TEntityClass;
+function TResourceDAO.EntityClass: TDBEntityClass;
 begin
   Result := TDBResource;
 end;
 
-function TResourceDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TResourceDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -51,10 +51,10 @@ begin
   end;
 end;
 
-procedure TResourceDAO.GetAll(const Items: TList<TEntity>);
+procedure TResourceDAO.GetAll(const Items: TList<TDBEntity>);
 var
   Query: TUniQuery;
-  Entity: TEntity;
+  Entity: TDBEntity;
 begin
   Query := TUniQuery.Create(nil);
   try
@@ -141,7 +141,7 @@ begin
   end;
 end;
 
-procedure TResourceDAO.Insert(const Entity: TEntity);
+procedure TResourceDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Resource: TDBResource;
@@ -160,7 +160,7 @@ begin
     Query.ParamByName('MarkerID').Value := Resource.MarkerID;
     Query.ParamByName('Kind').AsInteger := Ord(Resource.Kind);
     Query.ParamByName('Description').AsString := Resource.Description;
-//    TEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
+//    TDBEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
     Query.Execute;
     Resource.ID := Query.LastInsertId;
   finally
@@ -168,7 +168,7 @@ begin
   end;
 end;
 
-procedure TResourceDAO.Update(const Entity: TEntity);
+procedure TResourceDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Resource: TDBResource;
@@ -190,14 +190,14 @@ begin
     Query.ParamByName('MarkerID').Value := Resource.MarkerID;
     Query.ParamByName('Kind').AsInteger := Ord(Resource.Kind);
     Query.ParamByName('Description').AsString := Resource.Description;
-//    TEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
+//    TDBEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
     Query.Execute;
   finally
     Query.Free;
   end;
 end;
 
-//procedure TResourceDAO.LoadPicture(const Entity: TEntity);
+//procedure TResourceDAO.LoadPicture(const Entity: TDBEntity);
 //var
 //  Query: TUniQuery;
 //  Resource: TDBResource;
@@ -225,7 +225,7 @@ end;
 //  end;
 //end;
 //
-//procedure TResourceDAO.SavePicture(const Entity: TEntity);
+//procedure TResourceDAO.SavePicture(const Entity: TDBEntity);
 //var
 //  Query: TUniQuery;
 //  Resource: TDBResource;

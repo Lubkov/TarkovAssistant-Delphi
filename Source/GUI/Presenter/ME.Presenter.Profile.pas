@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.DB.Profile;
+  ME.Edit.Form.Presenter, ME.Del.Form.Presenter, ME.Profile;
 
 type
   TEditProfilePresenter = class(TEditFormPresenter<TProfile>)
@@ -24,13 +24,13 @@ type
 implementation
 
 uses
-  App.Constants, ME.DB.Utils, ME.Service.Profile;
+  App.Constants, ME.DB.Utils; //, ME.Service.Profile;
 
 { TEditProfilePresenter }
 
 procedure TEditProfilePresenter.InternalSave;
 begin
-  ProfileService.Save(Instance);
+//  ProfileService.Save(Instance);
 end;
 
 procedure TEditProfilePresenter.Cancel;
@@ -48,7 +48,7 @@ end;
 
 procedure TDelProfilePresenter.InternalDelete;
 begin
-  ProfileService.Remove(Instance);
+//  ProfileService.Remove(Instance);
 end;
 
 end.

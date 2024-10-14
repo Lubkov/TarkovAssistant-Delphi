@@ -10,23 +10,23 @@ type
   TQuestItemDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
   end;
 
 implementation
 
 { TQuestItemDAO }
 
-function TQuestItemDAO.EntityClass: TEntityClass;
+function TQuestItemDAO.EntityClass: TDBEntityClass;
 begin
   Result := TDBQuestItem;
 end;
 
-function TQuestItemDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TQuestItemDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -45,7 +45,7 @@ begin
   end;
 end;
 
-procedure TQuestItemDAO.Insert(const Entity: TEntity);
+procedure TQuestItemDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   QuestItem: TDBQuestItem;
@@ -69,7 +69,7 @@ begin
   end;
 end;
 
-procedure TQuestItemDAO.Update(const Entity: TEntity);
+procedure TQuestItemDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   QuestItem: TDBQuestItem;

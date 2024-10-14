@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Variants, Generics.Collections,
-  Data.DB, MemDS, DBAccess, Uni, ME.DB.Entity;
+  Data.DB, MemDS, DBAccess, Uni, App.Entity, ME.DB.Entity;
 
 type
   TDAOClass = class of TDAOCommon;
@@ -15,16 +15,16 @@ type
 
     function GetConnection: TUniConnection;
   protected
-    function EntityClass: TEntityClass; virtual; abstract;
+    function EntityClass: TDBEntityClass; virtual; abstract;
     function GetSqlSelectCommandText: string; virtual; abstract;
   public
     constructor Create(const Connection: TCustomConnection);
 
-    function GetNewInstance: TEntity; virtual; //CreateInstance
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; virtual;
-    procedure GetAll(const Items: TList<TEntity>); virtual; abstract;
-    procedure Insert(const Entity: TEntity); virtual; abstract;
-    procedure Update(const Entity: TEntity); virtual; abstract;
+    function GetNewInstance: TDBEntity; virtual; //CreateInstance
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; virtual;
+    procedure GetAll(const Items: TList<TDBEntity>); virtual; abstract;
+    procedure Insert(const Entity: TDBEntity); virtual; abstract;
+    procedure Update(const Entity: TDBEntity); virtual; abstract;
     procedure Remove(const ID: Variant);
     procedure TruncateTable;
     function RecordCount: Int64;
@@ -48,12 +48,12 @@ begin
   Result := TUniConnection(FConnection);
 end;
 
-function TDAOCommon.GetNewInstance: TEntity;
+function TDAOCommon.GetNewInstance: TDBEntity;
 begin
   Result := EntityClass.Create;
 end;
 
-function TDAOCommon.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TDAOCommon.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin

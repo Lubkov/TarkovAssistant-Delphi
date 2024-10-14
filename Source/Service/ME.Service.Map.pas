@@ -18,9 +18,9 @@ type
     procedure LoadMarkersFromJSON(const Value: TJSONValue; const Items: TList<TDBMarker>);
     procedure LoadQuestsFromJSON(const Value: TJSONValue; const Items: TList<TDBQuest>);
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
     procedure Remove(const ID: Variant); override;
 
     procedure LoadLayers(const Map: TDBMap; LoadPicture: Boolean);
@@ -53,12 +53,12 @@ begin
   Result := TMapDAO;
 end;
 
-function TMapService.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TMapService.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 begin
   Result := inherited GetAt(ID, Entity);
 end;
 
-procedure TMapService.Insert(const Entity: TEntity);
+procedure TMapService.Insert(const Entity: TDBEntity);
 var
   Map: TDBMap;
 //  Layer: TDBLayer;
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-procedure TMapService.Update(const Entity: TEntity);
+procedure TMapService.Update(const Entity: TDBEntity);
 var
   Map: TDBMap;
 begin

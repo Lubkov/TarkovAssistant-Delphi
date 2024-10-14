@@ -3,10 +3,10 @@ unit ME.DB.QuestItem;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Variants, Data.DB, ME.DB.Entity;
+  System.SysUtils, System.Classes, System.Variants, Data.DB, App.Entity, ME.DB.Entity;
 
 type
-  TDBQuestItem = class(TEntity)
+  TDBQuestItem = class(TDBEntity)
   private
     FResourceID: Variant;
     FMarkerID: Variant;
@@ -43,11 +43,15 @@ begin
 end;
 
 procedure TDBQuestItem.Assign(const Source: TEntity);
+var
+  QuestItem: TDBQuestItem;
 begin
   inherited;
 
-  FResourceID := TDBQuestItem(Source).ResourceID;
-  FMarkerID := TDBQuestItem(Source).MarkerID;
+  QuestItem := TDBQuestItem(Source);
+
+  FResourceID := QuestItem.ResourceID;
+  FMarkerID := QuestItem.MarkerID;
 end;
 
 procedure TDBQuestItem.Assign(const DataSet: TDataSet);

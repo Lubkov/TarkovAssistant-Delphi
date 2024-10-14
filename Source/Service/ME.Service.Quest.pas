@@ -11,7 +11,7 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
-    procedure Insert(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
     procedure Remove(const ID: Variant); override;
 
     procedure LoadQuests(const MapID: Variant; const Items: TList<TDBQuest>; const AllData: Boolean); overload;
@@ -34,7 +34,7 @@ begin
   Result := TQuestDAO;
 end;
 
-procedure TQuestService.Insert(const Entity: TEntity);
+procedure TQuestService.Insert(const Entity: TDBEntity);
 var
   Quest: TDBQuest;
 //  Marker: TDBMarker;

@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, ME.DB.Entity, ME.DB.Marker;
+  Data.DB, App.Entity, ME.DB.Entity, ME.DB.Marker;
 
 type
   TTrader = (None, Prapor, Therapist, Skier, Peacemaker, Mechanic, Ragman, Jaeger, Fence, Lightkeeper);
   TQuestChangedEvent = procedure(const QuestID: Variant) of object;
 
-  TDBQuest = class(TEntity)
+  TDBQuest = class(TDBEntity)
   private
     FMapID: Variant;
     FName: string;
@@ -55,12 +55,16 @@ begin
 end;
 
 procedure TDBQuest.Assign(const Source: TEntity);
+var
+  Quest: TDBQuest;
 begin
   inherited;
 
-  FMapID := TDBQuest(Source).MapID;
-  FName := TDBQuest(Source).Name;
-  FTrader := TDBQuest(Source).Trader;
+  Quest := TDBQuest(Source);
+
+  FMapID := Quest.MapID;
+  FName := Quest.Name;
+  FTrader := Quest.Trader;
 end;
 
 procedure TDBQuest.Assign(const DataSet: TDataSet);

@@ -13,7 +13,7 @@ type
   public
     procedure LoadPicture(const LayerID: Variant; const Picture: TBitmap);
     procedure GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>; LoadPicture: Boolean);
-    procedure SavePicture(const Entity: TEntity);
+    procedure SavePicture(const Entity: TDBEntity);
   end;
 
 var
@@ -36,10 +36,10 @@ end;
 procedure TLayerService.GetMapLayers(const MapID: Variant; const Items: TList<TDBLayer>; LoadPicture: Boolean);
 begin
   Items.Clear;
-  TLayerDAO(DAO).GetMapLayers(MapID, TList<TEntity>(Items), LoadPicture);
+  TLayerDAO(DAO).GetMapLayers(MapID, TList<TDBEntity>(Items), LoadPicture);
 end;
 
-procedure TLayerService.SavePicture(const Entity: TEntity);
+procedure TLayerService.SavePicture(const Entity: TDBEntity);
 begin
   TLayerDAO(DAO).SavePicture(Entity);
 end;

@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics,
-  Data.DB, ME.DB.Entity;
+  Data.DB, App.Entity, ME.DB.Entity;
 
 const
   MainLayerIndex = 0;
 
 type
-  TDBLayer = class(TEntity)
+  TDBLayer = class(TDBEntity)
   private
     FMapID: Variant;
     FLevel: Integer;
@@ -68,13 +68,17 @@ begin
 end;
 
 procedure TDBLayer.Assign(const Source: TEntity);
+var
+  Layer: TDBLayer;
 begin
   inherited;
 
-  FMapID := TDBLayer(Source).MapID;
-  FLevel := TDBLayer(Source).Level;
-  FName := TDBLayer(Source).Name;
-  Picture := TDBLayer(Source).Picture;
+  Layer := TDBLayer(Source);
+
+  FMapID := Layer.MapID;
+  FLevel := Layer.Level;
+  FName := Layer.Name;
+  Picture := Layer.Picture;
 end;
 
 procedure TDBLayer.Assign(const DataSet: TDataSet);

@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.Objects, FMX.Layouts, System.ImageList,
   FMX.ImgList, Map.Data.Types, FMX.ListBox, System.Rtti, ME.GUI.PictureList,
-  ME.DB.Marker, ME.DB.Quest, ME.DB.Resource, ME.DB.QuestTracker;
+  ME.DB.Marker, ME.DB.Quest, ME.DB.Resource, ME.QuestTracker;
 
 type
   TQuestCompleteEvent = procedure (const Value: Boolean) of object;
@@ -67,7 +67,7 @@ type
 implementation
 
 uses
-  ME.Dialog.Message, Map.Data.Service, ME.Service.QuestTracker, App.Service;
+  ME.Dialog.Message, Map.Data.Service, {ME.Service.QuestTracker,} App.Service;
 
 {$R *.fmx}
 

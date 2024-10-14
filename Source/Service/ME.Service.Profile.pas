@@ -3,15 +3,18 @@ unit ME.Service.Profile;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, ME.DB.Entity, ME.DB.DAO, ME.DB.Service,
-  ME.DB.Profile, ME.DAO.Profile;
+  System.SysUtils, System.Classes, System.IOUtils, System.Rtti, System.TypInfo,
+  System.SysConst, System.JSON, ME.Profile;
 
 type
-  TProfileService = class(TServiceCommon)
-  protected
-    function GetDAOClass: TDAOClass; override;
+  TProfileService = class(TObject)
+  private
+    function GetProfileFolder: string;
+    function GetProfileFileName(const ProfileName: string): string;
   public
-    function GetByName(const Name: string; const Entity: TEntity): Boolean;
+    procedure GetAll(const Names: TStrings);
+    function Load(const ProfileName: string; const Profile: TProfile): Boolean;
+    procedure Save(const Profile: TProfile);
   end;
 
 var
@@ -19,16 +22,94 @@ var
 
 implementation
 
+uses
+  App.Constants, ME.Service.QuestTracker;
+
 { TProfileService }
 
-function TProfileService.GetDAOClass: TDAOClass;
+function TProfileService.GetProfileFolder: string;
+const
+  FolderName = 'Profiles';
 begin
-  Result := TProfileDAO;
+ Result := TPath.Combine(AppParams.DataPath, FolderName);
 end;
 
-function TProfileService.GetByName(const Name: string; const Entity: TEntity): Boolean;
+function TProfileService.GetProfileFileName(const ProfileName: string): string;
 begin
-  Result := TProfileDAO(DAO).GetAtName(Name, Entity);
+  Result := TPath.Combine(GetProfileFolder, ProfileName + '.json');
+end;
+
+procedure TProfileService.GetAll(const Names: TStrings);
+var
+  FileName: string;
+begin
+  Names.BeginUpdate;
+  try
+    Names.Clear;
+
+    for FileName in TDirectory.GetFiles(GetProfileFolder, '*.json', TSearchOption.soTopDirectoryOnly) do
+      Names.Add(TPath.GetFileNameWithoutExtension(FileName));
+  finally
+    Names.EndUpdate;
+  end;
+end;
+
+function TProfileService.Load(const ProfileName: string; const Profile: TProfile): Boolean;
+var
+  FileName: string;
+  Data: TStrings;
+  Root: TJSONValue;
+begin
+  Profile.Clear;
+
+  FileName := GetProfileFileName(ProfileName);
+  if (ProfileName = '') or not FileExists(FileName) then
+    Exit(False);
+
+  Data := TStringList.Create;
+  try
+    Data.LoadFromFile(FileName, TEncoding.UTF8);
+
+    Root := TJSONObject.ParseJSONValue(Data.Text);
+    try
+      if not (Root is TJSONObject) then
+        Exit(False);
+
+      Profile.Assign(Root);
+      QuestTrackerService.Load(Root.FindValue('items'), Profile.QuestTrackers);
+      Result := True;
+    finally
+      Root.Free;
+    end;
+  finally
+    Data.Free;
+  end;
+end;
+
+procedure TProfileService.Save(const Profile: TProfile);
+var
+  Data: TStrings;
+  FileName: string;
+  JSONObject: TJSONObject;
+begin
+  FileName := GetProfileFileName(Profile.Name);
+
+  Data := TStringList.Create;
+  try
+    JSONObject := TJSONObject.Create;
+    try
+      Profile.AssignTo(JSONObject);
+      QuestTrackerService.Save(JSONObject, Profile.QuestTrackers);
+
+      Data.Text := JSONObject.ToJSON;
+    finally
+      JSONObject.Free;
+    end;
+
+    Data.SaveToFile(FileName, TEncoding.UTF8);
+  finally
+    Data.Free;
+  end;
 end;
 
 end.

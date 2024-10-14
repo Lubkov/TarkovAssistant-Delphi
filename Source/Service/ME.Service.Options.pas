@@ -11,7 +11,7 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
-    function Load(const Entity: TEntity): Boolean;
+    function Load(const Entity: TDBEntity): Boolean;
   end;
 
 var
@@ -26,7 +26,7 @@ begin
   Result := TOptionsDAO;
 end;
 
-function TOptionsService.Load(const Entity: TEntity): Boolean;
+function TOptionsService.Load(const Entity: TDBEntity): Boolean;
 begin
   Result := TOptionsDAO(DAO).GetFirst(Entity);
 end;

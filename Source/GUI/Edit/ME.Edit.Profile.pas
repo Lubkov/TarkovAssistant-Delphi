@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Edit.Form, System.Actions, FMX.ActnList, FMX.Controls.Presentation,
-  ME.Edit.Form.Presenter, ME.DB.Profile, FMX.Edit, FMX.ListBox;
+  ME.Edit.Form.Presenter, ME.Profile, FMX.Edit, FMX.ListBox;
 
 type
   TedProfile = class(TEditForm, IEditDialog<TProfile>)
@@ -75,9 +75,9 @@ procedure TedProfile.SetInstance(const Value: TProfile);
 begin
   FProfile := Value;
 
-  if FProfile.IsNewInstance then
-    Caption := 'Добавление нового профиля пользователя'
-  else
+//  if FProfile.IsNewInstance then
+//    Caption := 'Добавление нового профиля пользователя'
+//  else
     Caption := 'Редактирование профиля пользователя';
 
   ProfileName := FProfile.Name;

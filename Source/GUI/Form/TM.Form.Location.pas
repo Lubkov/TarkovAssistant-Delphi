@@ -13,7 +13,7 @@ type
   TLocationForm = class(TForm)
     GridLayout1: TGridLayout;
   private
-    FItems: TList<TEntity>;
+    FItems: TList<TDBEntity>;
     FOnLocationChanged: TLocationChangedEvent;
 
     function GetCount: Integer;
@@ -49,7 +49,7 @@ begin
   Self.Fill.Color := BackgroundColor;
   Self.Fill.Kind := TBrushKind.Solid;
 
-  FItems := TList<TEntity>.Create;
+  FItems := TList<TDBEntity>.Create;
   FOnLocationChanged := nil;
 end;
 

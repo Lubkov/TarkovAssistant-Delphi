@@ -14,9 +14,9 @@ type
   protected
     function GetDAOClass: TDAOClass; override;
   public
-    procedure Insert(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
     procedure Remove(const ID: Variant); override;
-    procedure Remove(const Entity: TEntity); override;
+    procedure Remove(const Entity: TDBEntity); override;
 
     procedure LoadMarkers(const MapID: Variant; const Items: TList<TDBMarker>);
     procedure LoadQuestMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
@@ -47,7 +47,7 @@ begin
   Result := TMarkerDAO;
 end;
 
-procedure TMarkerService.Insert(const Entity: TEntity);
+procedure TMarkerService.Insert(const Entity: TDBEntity);
 var
   Marker: TDBMarker;
   Resource: TDBResource;
@@ -99,7 +99,7 @@ begin
   inherited;
 end;
 
-procedure TMarkerService.Remove(const Entity: TEntity);
+procedure TMarkerService.Remove(const Entity: TDBEntity);
 var
   Marker: TDBMarker;
 begin

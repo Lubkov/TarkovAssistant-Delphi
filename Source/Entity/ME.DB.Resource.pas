@@ -4,12 +4,12 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, FMX.Graphics,
-  Data.DB, ME.DB.Entity;
+  Data.DB, App.Entity, ME.DB.Entity;
 
 type
   TResourceKind = (Screenshot, QuestItem);
 
-  TDBResource = class(TEntity)
+  TDBResource = class(TDBEntity)
   private
     FMarkerID: Variant;
     FKind: TResourceKind;
@@ -60,13 +60,17 @@ begin
 end;
 
 procedure TDBResource.Assign(const Source: TEntity);
+var
+  Resource: TDBResource;
 begin
   inherited;
 
-  MarkerID := TDBResource(Source).MarkerID;
-  Kind := TDBResource(Source).Kind;
-  Description := TDBResource(Source).Description;
-  Picture := TDBResource(Source).Picture;
+  Resource := TDBResource(Source);
+
+  MarkerID := Resource.MarkerID;
+  Kind := Resource.Kind;
+  Description := Resource.Description;
+  Picture := Resource.Picture;
 end;
 
 procedure TDBResource.Assign(const DataSet: TDataSet);

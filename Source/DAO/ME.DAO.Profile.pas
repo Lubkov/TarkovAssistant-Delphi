@@ -4,18 +4,18 @@ interface
 
 uses
   System.SysUtils, System.Classes, Generics.Collections,  Data.DB, MemDS, DBAccess,
-  Uni, ME.DB.Entity, ME.DB.DAO, ME.DB.Profile;
+  Uni, ME.DB.Entity, ME.DB.DAO, ME.Profile;
 
 type
   TProfileDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    function GetAtName(const Name: string; const Entity: TEntity): Boolean;
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    function GetAtName(const Name: string; const Entity: TDBEntity): Boolean;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
   end;
 
 
@@ -23,12 +23,12 @@ implementation
 
 { TProfileDAO }
 
-function TProfileDAO.EntityClass: TEntityClass;
+function TProfileDAO.EntityClass: TDBEntityClass;
 begin
   Result := TProfile;
 end;
 
-function TProfileDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TProfileDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -47,7 +47,7 @@ begin
   end;
 end;
 
-function TProfileDAO.GetAtName(const Name: string; const Entity: TEntity): Boolean;
+function TProfileDAO.GetAtName(const Name: string; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -66,7 +66,7 @@ begin
   end;
 end;
 
-procedure TProfileDAO.Insert(const Entity: TEntity);
+procedure TProfileDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Profile: TProfile;
@@ -86,7 +86,7 @@ begin
   end;
 end;
 
-procedure TProfileDAO.Update(const Entity: TEntity);
+procedure TProfileDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Profile: TProfile;

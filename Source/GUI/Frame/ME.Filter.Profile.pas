@@ -6,9 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   System.ImageList, System.Actions, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms,
   FMX.Dialogs, FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox,
-  FMX.Layouts, FMX.ImgList, FMX.ActnList, Data.DB, MemDS, DBAccess, Uni,
-  System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
-  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope, ME.DB.Profile;
+  FMX.Layouts, FMX.ImgList, FMX.ActnList, ME.Profile;
 
 type
   TProfileFilter = class(TFrame)
@@ -24,16 +22,9 @@ type
     edEditProfile: TSpeedButton;
     ProfileNameLayout: TLayout;
     ButtonLayout: TLayout;
-    F: TUniQuery;
-    FID: TIntegerField;
-    FProfileName: TWideStringField;
-    BindSourceDB1: TBindSourceDB;
-    BindingsList1: TBindingsList;
-    LinkListControlToField1: TLinkListControlToField;
-    FKind: TIntegerField;
     edAddProfile: TSpeedButton;
     edDelProfile: TSpeedButton;
-    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+//    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
     procedure acAddProfileExecute(Sender: TObject);
     procedure acDeleteProfileExecute(Sender: TObject);
     procedure acEditProfileExecute(Sender: TObject);
@@ -81,38 +72,34 @@ begin
   inherited;
 end;
 
-procedure TProfileFilter.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
-begin
+//procedure TProfileFilter.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+//begin
 //  if Assigned(FOnMapChanged) then
 //    FOnMapChanged(FID.Value);
-end;
+//end;
 
 function TProfileFilter.GetProfileID: Variant;
 begin
-  if edProfileName.ItemIndex >= 0 then
-    Result := FID.Value
-  else
-    Result := Null;
+//  if edProfileName.ItemIndex >= 0 then
+//    Result := FID.Value
+//  else
+//    Result := Null;
 end;
 
 procedure TProfileFilter.SetProfileID(const Value: Variant);
 begin
-  if F.Active then
-    F.Locate('ID', Value, []);
+//  if F.Active then
+//    F.Locate('ID', Value, []);
 end;
 
 function TProfileFilter.GetProfileName: string;
 begin
-  if edProfileName.ItemIndex >= 0 then
-    Result := FProfileName.AsString
-  else
-    Result := '';
+  Result := edProfileName.Text;
 end;
 
 procedure TProfileFilter.SetProfileName(const Value: string);
 begin
-  if F.Active then
-    F.Locate('ProfileName', Value, [loCaseInsensitive]);
+  edProfileName.ItemIndex := edProfileName.Items.IndexOf(Value);
 end;
 
 function TProfileFilter.InternalProfileEdit(const Profile: TProfile): Boolean;
@@ -135,11 +122,7 @@ end;
 
 procedure TProfileFilter.Init;
 begin
-  F.Close;
-  F.Connection := AppService.DBConnection.Connection;
-  F.SQL.Text := 'SELECT ID, Name as ProfileName, Kind FROM Profile';
-  F.Open;
-
+  ProfileService.GetAll(edProfileName.Items);
   edProfileName.ItemIndex := -1;
 end;
 
@@ -154,73 +137,69 @@ begin
     if not Res then
       Exit;
 
-    F.DisableControls;
-    try
-      F.Refresh;
-      F.Last;
-    finally
-      F.EnableControls;
-    end;
+    ProfileService.Save(Profile);
+    edProfileName.Items.Add(Profile.Name);
+    edProfileName.ItemIndex := edProfileName.Count - 1;
   finally
     Profile.Free;
   end;
 end;
 
 procedure TProfileFilter.acEditProfileExecute(Sender: TObject);
-var
-  Profile: TProfile;
+//var
+//  Profile: TProfile;
 begin
-  Profile := TProfile.Create;
-  try
-    if not ProfileService.GetAt(FID.Value, Profile) then
-      Exit;
-
-    if InternalProfileEdit(Profile) then
-      F.RefreshRecord;
-  finally
-    Profile.Free;
-  end;
+//  Profile := TProfile.Create;
+//  try
+//    if not ProfileService.GetAt(FID.Value, Profile) then
+//      Exit;
+//
+//    if InternalProfileEdit(Profile) then
+//      F.RefreshRecord;
+//  finally
+//    Profile.Free;
+//  end;
 end;
 
 procedure TProfileFilter.acDeleteProfileExecute(Sender: TObject);
-var
-  Profile: TProfile;
-  Presenter: TDelProfilePresenter;
-  Dialog: TedMessage;
+//var
+//  Profile: TProfile;
+//  Presenter: TDelProfilePresenter;
+//  Dialog: TedMessage;
 begin
-  if IsNullID(FID.Value) then
-    Exit;
-
-  Profile := TProfile.Create;
-  try
-    Profile.ID := FID.Value;
-    Profile.Name := FProfileName.AsString;
-    Profile.Kind := TPMCType(FKind.AsInteger);
-
-    Dialog := TedMessage.Create(Self);
-    try
-      Presenter := TDelProfilePresenter.Create(Dialog, Profile);
-      try
-        if not Presenter.Delete then
-          Exit;
-
-        F.DisableControls;
-        try
-          F.Refresh;
-        finally
-          F.EnableControls;
-        end;
-
-        edProfileName.ItemIndex := -1;
-      finally
-        Presenter.Free;
-      end;
-    finally
-      Dialog.Free;
-    end;
-  finally
-    Profile.Free;
-  end;
+//  if IsNullID(FID.Value) then
+//    Exit;
+//
+//  Profile := TProfile.Create;
+//  try
+//    Profile.ID := FID.Value;
+//    Profile.Name := FProfileName.AsString;
+//    Profile.Kind := TPMCType(FKind.AsInteger);
+//
+//    Dialog := TedMessage.Create(Self);
+//    try
+//      Presenter := TDelProfilePresenter.Create(Dialog, Profile);
+//      try
+//        if not Presenter.Delete then
+//          Exit;
+//
+//        F.DisableControls;
+//        try
+//          F.Refresh;
+//        finally
+//          F.EnableControls;
+//        end;
+//
+//        edProfileName.ItemIndex := -1;
+//      finally
+//        Presenter.Free;
+//      end;
+//    finally
+//      Dialog.Free;
+//    end;
+//  finally
+//    Profile.Free;
+//  end;
 end;
 
 end.

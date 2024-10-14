@@ -20,10 +20,10 @@ type
 
     procedure Load;
 
-    function GetSourceFileName(const Source: TEntity): string;
+    function GetSourceFileName(const Source: TDBEntity): string;
     procedure LoadImage(const Source: TDBResource; const Dest: TBitmap);
-    procedure SaveImage(const Source: TEntity; const Dest: TBitmap);
-    procedure DeleteImage(const Source: TEntity);
+    procedure SaveImage(const Source: TDBEntity; const Dest: TBitmap);
+    procedure DeleteImage(const Source: TDBEntity);
 
     property Items: TList<TDBMap> read FItems;
     property Count: Integer read GetCount;
@@ -74,7 +74,7 @@ procedure TDataService.Load;
 var
   Map: TDBMap;
 begin
-  MapService.GetAll(TList<TEntity>(FItems));
+  MapService.GetAll(TList<TDBEntity>(FItems));
 
   for Map in FItems do begin
     MapService.LoadLayers(Map, False);
@@ -83,7 +83,7 @@ begin
   end;
 end;
 
-function TDataService.GetSourceFileName(const Source: TEntity): string;
+function TDataService.GetSourceFileName(const Source: TDBEntity): string;
 //var
 //  Folder, Ext: string;
 begin
@@ -124,7 +124,7 @@ begin
 //    Dest.Assign(nil);
 end;
 
-procedure TDataService.SaveImage(const Source: TEntity; const Dest: TBitmap);
+procedure TDataService.SaveImage(const Source: TDBEntity; const Dest: TBitmap);
 var
   FileName: string;
 begin
@@ -136,7 +136,7 @@ begin
     Dest.SaveToFile(FileName);
 end;
 
-procedure TDataService.DeleteImage(const Source: TEntity);
+procedure TDataService.DeleteImage(const Source: TDBEntity);
 var
   FileName: string;
 begin

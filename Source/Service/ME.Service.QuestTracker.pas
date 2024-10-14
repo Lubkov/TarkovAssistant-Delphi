@@ -3,20 +3,20 @@ unit ME.Service.QuestTracker;
 interface
 
 uses
-  System.SysUtils, System.Classes, Generics.Collections, Data.DB, ME.DB.Entity,
-  ME.DB.DAO, ME.DB.Service, ME.DB.QuestTracker, ME.DAO.QuestTracker;
+  System.SysUtils, System.Classes, System.IOUtils, System.Rtti, System.TypInfo,
+  System.SysConst, System.JSON, Generics.Collections, ME.QuestTracker;
 
 type
-  TQuestTrackerService = class(TServiceCommon)
+  TQuestTrackerService = class(TObject)
   private
-    function GetQuestTrackerDAO: TQuestTrackerDAO;
-  protected
-    function GetDAOClass: TDAOClass; override;
   public
-    function GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
-    procedure GetProfileProgress(const Items: TList<TQuestTracker>);
+//    function GetMarkerState(MarkerID: Integer; const Entity: TDBEntity): Boolean;
+//    procedure GetProfileProgress(const Items: TList<TQuestTracker>);
+//
+//    property QuestTrackerDAO: TQuestTrackerDAO read GetQuestTrackerDAO;
 
-    property QuestTrackerDAO: TQuestTrackerDAO read GetQuestTrackerDAO;
+    procedure Load(const Source: TJSONValue; Items: TList<TQuestTracker>);
+    procedure Save(const Root: TJSONObject; Items: TList<TQuestTracker>);
   end;
 
 var
@@ -29,25 +29,69 @@ uses
 
 { TQuestTrackerService }
 
-function TQuestTrackerService.GetQuestTrackerDAO: TQuestTrackerDAO;
+//function TQuestTrackerService.GetQuestTrackerDAO: TQuestTrackerDAO;
+//begin
+//  Result := TQuestTrackerDAO(DAO);
+//end;
+//
+//function TQuestTrackerService.GetDAOClass: TDAOClass;
+//begin
+//  Result := TQuestTrackerDAO;
+//end;
+//
+//function TQuestTrackerService.GetMarkerState(MarkerID: Integer; const Entity: TDBEntity): Boolean;
+//begin
+//  Result := QuestTrackerDAO.GetMarkerState(MarkerID, AppService.Profile.ID, Entity);
+//end;
+//
+//procedure TQuestTrackerService.GetProfileProgress(const Items: TList<TQuestTracker>);
+//begin
+//  Items.Clear;
+//  QuestTrackerDAO.GetProfileProgress(AppService.Profile.ID, Items);
+//end;
+
+{ TQuestTrackerService }
+
+procedure TQuestTrackerService.Load(const Source: TJSONValue; Items: TList<TQuestTracker>);
+var
+  i: Integer;
+  List: TJSONArray;
+  JSONObject: TJSONValue;
+  QuestTracker: TQuestTracker;
 begin
-  Result := TQuestTrackerDAO(DAO);
+  if not (Source is TJSONArray) then
+    Exit;
+
+  List := TJSONArray(Source);
+  for i := 0 to List.Count - 1 do begin
+    JSONObject := TJSONObject(List.Items[i]);
+
+    QuestTracker := TQuestTracker.Create;
+    try
+      QuestTracker.Assign(JSONObject);
+    finally
+      Items.Add(QuestTracker);
+    end;
+  end;
 end;
 
-function TQuestTrackerService.GetDAOClass: TDAOClass;
+procedure TQuestTrackerService.Save(const Root: TJSONObject; Items: TList<TQuestTracker>);
+var
+  QuestTracker: TQuestTracker;
+  JSONItems: TJSONArray;
+  JSONObject: TJSONObject;
 begin
-  Result := TQuestTrackerDAO;
-end;
+  JSONItems := TJSONArray.Create;
+  for QuestTracker in Items do begin
+    JSONObject := TJSONObject.Create;
+    try
+      QuestTracker.AssignTo(JSONObject);
+    finally
+      JSONItems.Add(JSONObject);
+    end;
+  end;
 
-function TQuestTrackerService.GetMarkerState(MarkerID: Integer; const Entity: TEntity): Boolean;
-begin
-  Result := QuestTrackerDAO.GetMarkerState(MarkerID, AppService.Profile.ID, Entity);
-end;
-
-procedure TQuestTrackerService.GetProfileProgress(const Items: TList<TQuestTracker>);
-begin
-  Items.Clear;
-  QuestTrackerDAO.GetProfileProgress(AppService.Profile.ID, Items);
+  Root.AddPair('items', JSONItems);
 end;
 
 end.

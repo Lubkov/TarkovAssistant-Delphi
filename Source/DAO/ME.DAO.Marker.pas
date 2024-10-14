@@ -10,13 +10,13 @@ type
   TMarkerDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure GetAll(const Items: TList<TEntity>); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure GetAll(const Items: TList<TDBEntity>); override;
     procedure LoadMarkers(const MapID, QuestID: Variant; const Items: TList<TDBMarker>);
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
   end;
 
 implementation
@@ -39,12 +39,12 @@ const
 
 { TMarkerDAO }
 
-function TMarkerDAO.EntityClass: TEntityClass;
+function TMarkerDAO.EntityClass: TDBEntityClass;
 begin
   Result := TDBMarker;
 end;
 
-function TMarkerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TMarkerDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -63,12 +63,12 @@ begin
   end;
 end;
 
-procedure TMarkerDAO.GetAll(const Items: TList<TEntity>);
+procedure TMarkerDAO.GetAll(const Items: TList<TDBEntity>);
 const
   Filter = '';
 var
   Query: TUniQuery;
-  Entity: TEntity;
+  Entity: TDBEntity;
 begin
   Query := TUniQuery.Create(nil);
   try
@@ -136,7 +136,7 @@ begin
   end;
 end;
 
-procedure TMarkerDAO.Insert(const Entity: TEntity);
+procedure TMarkerDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Marker: TDBMarker;
@@ -162,7 +162,7 @@ begin
   end;
 end;
 
-procedure TMarkerDAO.Update(const Entity: TEntity);
+procedure TMarkerDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Marker: TDBMarker;

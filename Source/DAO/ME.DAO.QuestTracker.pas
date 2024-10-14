@@ -10,13 +10,13 @@ type
   TQuestTrackerDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    function GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TEntity): Boolean;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    function GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TDBEntity): Boolean;
     procedure GetProfileProgress(ProfileID: Variant; const Items: TList<TQuestTracker>);
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
   end;
 
 
@@ -24,12 +24,12 @@ implementation
 
 { TQuestTrackerDAO }
 
-function TQuestTrackerDAO.EntityClass: TEntityClass;
+function TQuestTrackerDAO.EntityClass: TDBEntityClass;
 begin
   Result := TQuestTracker;
 end;
 
-function TQuestTrackerDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TQuestTrackerDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -48,7 +48,7 @@ begin
   end;
 end;
 
-function TQuestTrackerDAO.GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TEntity): Boolean;
+function TQuestTrackerDAO.GetMarkerState(MarkerID, ProfileID: Variant; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -102,7 +102,7 @@ begin
   end;
 end;
 
-procedure TQuestTrackerDAO.Insert(const Entity: TEntity);
+procedure TQuestTrackerDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Tracker: TQuestTracker;
@@ -124,7 +124,7 @@ begin
   end;
 end;
 
-procedure TQuestTrackerDAO.Update(const Entity: TEntity);
+procedure TQuestTrackerDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Tracker: TQuestTracker;

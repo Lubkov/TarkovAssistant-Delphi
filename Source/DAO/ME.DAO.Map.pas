@@ -10,14 +10,14 @@ type
   TMapDAO = class(TDAOCommon)
   private
   protected
-    function EntityClass: TEntityClass; override;
+    function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TEntity): Boolean; override;
-    procedure GetAll(const Items: TList<TEntity>); override;
-    procedure Insert(const Entity: TEntity); override;
-    procedure Update(const Entity: TEntity); override;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    procedure GetAll(const Items: TList<TDBEntity>); override;
+    procedure Insert(const Entity: TDBEntity); override;
+    procedure Update(const Entity: TDBEntity); override;
 
-    procedure LoadLayers(const Entity: TEntity; LoadPicture: Boolean);
+    procedure LoadLayers(const Entity: TDBEntity; LoadPicture: Boolean);
     procedure RemoveLayers(const MapID: Variant);
   end;
 
@@ -38,12 +38,12 @@ const
 
 { TMapDAO }
 
-function TMapDAO.EntityClass: TEntityClass;
+function TMapDAO.EntityClass: TDBEntityClass;
 begin
   Result := TDBMap;
 end;
 
-function TMapDAO.GetAt(ID: Integer; const Entity: TEntity): Boolean;
+function TMapDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
@@ -62,10 +62,10 @@ begin
   end;
 end;
 
-procedure TMapDAO.GetAll(const Items: TList<TEntity>);
+procedure TMapDAO.GetAll(const Items: TList<TDBEntity>);
 var
   Query: TUniQuery;
-  Entity: TEntity;
+  Entity: TDBEntity;
 begin
   Query := TUniQuery.Create(nil);
   try
@@ -88,7 +88,7 @@ begin
   end;
 end;
 
-procedure TMapDAO.Insert(const Entity: TEntity);
+procedure TMapDAO.Insert(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Map: TDBMap;
@@ -118,7 +118,7 @@ begin
   end;
 end;
 
-procedure TMapDAO.Update(const Entity: TEntity);
+procedure TMapDAO.Update(const Entity: TDBEntity);
 var
   Query: TUniQuery;
   Map: TDBMap;
@@ -151,7 +151,7 @@ begin
   end;
 end;
 
-procedure TMapDAO.LoadLayers(const Entity: TEntity; LoadPicture: Boolean);
+procedure TMapDAO.LoadLayers(const Entity: TDBEntity; LoadPicture: Boolean);
 const
   PictureFileName = 'Picture';
 //var
