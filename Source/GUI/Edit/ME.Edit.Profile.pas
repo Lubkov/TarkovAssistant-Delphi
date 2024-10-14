@@ -75,13 +75,15 @@ procedure TedProfile.SetInstance(const Value: TProfile);
 begin
   FProfile := Value;
 
-//  if FProfile.IsNewInstance then
-//    Caption := 'Добавление нового профиля пользователя'
-//  else
+  if FProfile.IsNewInstance then
+    Caption := 'Добавление нового профиля пользователя'
+  else
     Caption := 'Редактирование профиля пользователя';
 
   ProfileName := FProfile.Name;
   PMCType := FProfile.Kind;
+
+  edProfileName.ReadOnly := not FProfile.IsNewInstance;
 end;
 
 procedure TedProfile.PostValues(const Value: TProfile);

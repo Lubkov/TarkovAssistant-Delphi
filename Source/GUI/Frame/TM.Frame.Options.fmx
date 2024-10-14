@@ -83,7 +83,7 @@ object OptionsFrame: TOptionsFrame
     Size.Width = 368.000000000000000000
     Size.Height = 30.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 10
+    TabOrder = 9
     object edSreenshotPath: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Client
@@ -135,7 +135,7 @@ object OptionsFrame: TOptionsFrame
     Size.Width = 388.000000000000000000
     Size.Height = 67.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 14
+    TabOrder = 13
   end
   object Layout1: TLayout
     Align = Top

@@ -24,13 +24,13 @@ type
 implementation
 
 uses
-  App.Constants, ME.DB.Utils; //, ME.Service.Profile;
+  App.Constants, ME.DB.Utils, ME.Service.Profile;
 
 { TEditProfilePresenter }
 
 procedure TEditProfilePresenter.InternalSave;
 begin
-//  ProfileService.Save(Instance);
+  ProfileService.Save(Instance);
 end;
 
 procedure TEditProfilePresenter.Cancel;
@@ -48,7 +48,7 @@ end;
 
 procedure TDelProfilePresenter.InternalDelete;
 begin
-//  ProfileService.Remove(Instance);
+  ProfileService.Remove(Instance);
 end;
 
 end.

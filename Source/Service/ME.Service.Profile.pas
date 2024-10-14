@@ -15,6 +15,8 @@ type
     procedure GetAll(const Names: TStrings);
     function Load(const ProfileName: string; const Profile: TProfile): Boolean;
     procedure Save(const Profile: TProfile);
+    procedure Remove(const ProfileName: string); overload;
+    procedure Remove(const Profile: TProfile); overload;
   end;
 
 var
@@ -110,6 +112,22 @@ begin
   finally
     Data.Free;
   end;
+end;
+
+procedure TProfileService.Remove(const ProfileName: string);
+var
+  FileName: string;
+begin
+  FileName := GetProfileFileName(ProfileName);
+  if (ProfileName = '') or not FileExists(FileName) then
+    Exit;
+
+  TFile.Delete(FileName);
+end;
+
+procedure TProfileService.Remove(const Profile: TProfile);
+begin
+  Remove(Profile.Name);
 end;
 
 end.
