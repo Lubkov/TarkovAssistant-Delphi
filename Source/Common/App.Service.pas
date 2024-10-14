@@ -21,8 +21,9 @@ type
     procedure LoadParams;
     procedure SaveParams;
     procedure LoadProfile;
-    procedure SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
     procedure SaveProfile;
+    procedure SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
+    procedure LoadQuestTracker(const Source: TJSONValue; Items: TList<TQuestTracker>);
 
     procedure LoadDataFromDB;
     procedure ConnectToDB;
@@ -119,7 +120,6 @@ begin
   end;
 
   LoadProfile;
-  SaveProfile;
 end;
 
 procedure TAppService.SaveParams;
@@ -151,32 +151,43 @@ begin
 end;
 
 procedure TAppService.LoadProfile;
-begin
-  if FOptions.Profile <> '' then
-    if ProfileService.GetByName(FOptions.Profile, FProfile) then
-      QuestTrackerService.GetProfileProgress(FProfile.QuestTrackers)
-    else
-      FProfile.Clear
-  else
-    FProfile.Clear;
-end;
-
-procedure TAppService.SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
+const
+  ProfileName = 'Profiles\stalker.json';
 var
-  QuestTracker: TQuestTracker;
-  JSONItems: TJSONArray;
-  JSONObject: TJSONObject;
+  FileName: string;
+  Data: TStrings;
+  Root: TJSONValue;
 begin
-  JSONItems := TJSONArray.Create;
-  for QuestTracker in Items do begin
-    JSONObject := TJSONObject.Create;
+//  if FOptions.Profile <> '' then
+//    if ProfileService.GetByName(FOptions.Profile, FProfile) then
+//      QuestTrackerService.GetProfileProgress(FProfile.QuestTrackers)
+//    else
+//      FProfile.Clear
+//  else
+//    FProfile.Clear;
+
+  FProfile.Clear;
+  FileName := TPath.Combine(AppParams.DataPath, ProfileName);
+  if (FOptions.Profile = '') or not FileExists(FileName) then
+    Exit;
+
+  Data := TStringList.Create;
+  try
+    Data.LoadFromFile(FileName, TEncoding.UTF8);
+
+    Root := TJSONObject.ParseJSONValue(Data.Text);
     try
-      QuestTracker.AssignTo(JSONObject);
+      if not (Root is TJSONObject) then
+        Exit;
+
+      FProfile.Assign(Root);
+      LoadQuestTracker(Root.FindValue('items'), FProfile.QuestTrackers);
     finally
-      JSONItems.Add(JSONObject);
+      Root.Free;
     end;
+  finally
+    Data.Free;
   end;
-  Root.AddPair('items', JSONItems);
 end;
 
 procedure TAppService.SaveProfile;
@@ -204,6 +215,48 @@ begin
     Data.SaveToFile(FileName, TEncoding.UTF8);
   finally
     Data.Free;
+  end;
+end;
+
+procedure TAppService.SaveQuestTracker(const Root: TJSONObject; Items: TList<TQuestTracker>);
+var
+  QuestTracker: TQuestTracker;
+  JSONItems: TJSONArray;
+  JSONObject: TJSONObject;
+begin
+  JSONItems := TJSONArray.Create;
+  for QuestTracker in Items do begin
+    JSONObject := TJSONObject.Create;
+    try
+      QuestTracker.AssignTo(JSONObject);
+    finally
+      JSONItems.Add(JSONObject);
+    end;
+  end;
+
+  Root.AddPair('items', JSONItems);
+end;
+
+procedure TAppService.LoadQuestTracker(const Source: TJSONValue; Items: TList<TQuestTracker>);
+var
+  i: Integer;
+  List: TJSONArray;
+  JSONObject: TJSONValue;
+  QuestTracker: TQuestTracker;
+begin
+  if not (Source is TJSONArray) then
+    Exit;
+
+  List := TJSONArray(Source);
+  for i := 0 to List.Count - 1 do begin
+    JSONObject := TJSONObject(List.Items[i]);
+
+    QuestTracker := TQuestTracker.Create;
+    try
+      QuestTracker.Assign(JSONObject);
+    finally
+      Items.Add(QuestTracker);
+    end;
   end;
 end;
 

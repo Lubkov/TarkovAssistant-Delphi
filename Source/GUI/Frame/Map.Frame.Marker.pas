@@ -200,8 +200,12 @@ end;
 
 procedure TMarkerDescript.SaveQuestTracker;
 begin
+  if IsUpdating then
+    Exit;
+
   FQuestTracker.Finished := buCompleteQuest.IsChecked;
-  QuestTrackerService.Save(FQuestTracker);
+//  QuestTrackerService.Save(FQuestTracker);
+  AppService.SaveProfile;
 
   if Assigned(FOnQuestComplete) then
     FOnQuestComplete(FQuestTracker.Finished);
@@ -216,57 +220,62 @@ var
   Resource: TDBResource;
   ImageHeight: Single;
 begin
-  FMarker := Marker;
-  FCurrentImageIndex := -1;
-  laQuestName.Text := ' вест: "' + QuestName + '"';
-  Bitmap := TraderImageList.Bitmap(TSizeF.Create(64, 64), Ord(Trader));
-  TraderImage.Bitmap.Assign(Bitmap);
-  ShowResource(0);
+  BeginUpdate;
+  try
+    FMarker := Marker;
+    FCurrentImageIndex := -1;
+    laQuestName.Text := ' вест: "' + QuestName + '"';
+    Bitmap := TraderImageList.Bitmap(TSizeF.Create(64, 64), Ord(Trader));
+    TraderImage.Bitmap.Assign(Bitmap);
+    ShowResource(0);
 
-  if MarkerImage.Bitmap.IsEmpty then
-    ImageHeight := MarkerImageHeight
-  else
-    ImageHeight := MarkerImageWidth * (MarkerImage.Bitmap.Height / MarkerImage.Bitmap.Width);
+    if MarkerImage.Bitmap.IsEmpty then
+      ImageHeight := MarkerImageHeight
+    else
+      ImageHeight := MarkerImageWidth * (MarkerImage.Bitmap.Height / MarkerImage.Bitmap.Width);
 
-  FPictureIconList.Clear;
-  if Marker.Images.Count > 1 then
-    for Resource in Marker.Images do begin
-      if Resource.Picture.IsEmpty then
-        DataService.LoadImage(Resource, Resource.Picture);
+    FPictureIconList.Clear;
+    if Marker.Images.Count > 1 then
+      for Resource in Marker.Images do begin
+        if Resource.Picture.IsEmpty then
+          DataService.LoadImage(Resource, Resource.Picture);
 
-      FPictureIconList.Add(Resource.Picture);
-    end;
+        FPictureIconList.Add(Resource.Picture);
+      end;
 
-  if Marker.Images.Count > 1 then
-    FPictureIconList.SelectedIndex := 0;
+    if Marker.Images.Count > 1 then
+      FPictureIconList.SelectedIndex := 0;
 
-  PreviewLayout.Visible := Marker.Images.Count > 1;
+    PreviewLayout.Visible := Marker.Images.Count > 1;
 
-  LoadQuestItems(Marker);
-  ItemsLayout.Visible := Marker.Items.Count > 0;
+    LoadQuestItems(Marker);
+    ItemsLayout.Visible := Marker.Items.Count > 0;
 
-  FMaxHeight := TitleLayout.Height + TitleLayout.Margins.Top;
-  FMaxHeight := FMaxHeight + ImageHeight + MainLayout.Margins.Top + MainLayout.Margins.Bottom;
-  FMaxHeight := FMaxHeight + laDescription.Height + laDescription.Margins.Top;
-  FMaxWidth := MarkerImageWidth + MainLayout.Margins.Left + MainLayout.Margins.Right;
+    FMaxHeight := TitleLayout.Height + TitleLayout.Margins.Top;
+    FMaxHeight := FMaxHeight + ImageHeight + MainLayout.Margins.Top + MainLayout.Margins.Bottom;
+    FMaxHeight := FMaxHeight + laDescription.Height + laDescription.Margins.Top;
+    FMaxWidth := MarkerImageWidth + MainLayout.Margins.Left + MainLayout.Margins.Right;
 
-  if PreviewLayout.Visible then
-    FMaxHeight := FMaxHeight + PreviewLayout.Height + PreviewLayout.Margins.Top + PreviewLayout.Margins.Bottom;
+    if PreviewLayout.Visible then
+      FMaxHeight := FMaxHeight + PreviewLayout.Height + PreviewLayout.Margins.Top + PreviewLayout.Margins.Bottom;
 
-  if ItemsLayout.Visible then
-    case FItemIconList.ListDirection of
-      TListDirection.Vertical:
-        FMaxWidth := FMaxWidth + ItemsLayout.Width + ItemsLayout.Margins.Left + ItemsLayout.Margins.Right;
-      TListDirection.Horizontal:
-        FMaxHeight := FMaxHeight + ItemsLayout.Height + ItemsLayout.Margins.Top + ItemsLayout.Margins.Bottom;
-    end;
+    if ItemsLayout.Visible then
+      case FItemIconList.ListDirection of
+        TListDirection.Vertical:
+          FMaxWidth := FMaxWidth + ItemsLayout.Width + ItemsLayout.Margins.Left + ItemsLayout.Margins.Right;
+        TListDirection.Horizontal:
+          FMaxHeight := FMaxHeight + ItemsLayout.Height + ItemsLayout.Margins.Top + ItemsLayout.Margins.Bottom;
+      end;
 
-  MouseWheelImage.Visible := FPictureIconList.Count > 1;
-  MouseWheelImage.Position.X := MarkerImage.Width - MouseWheelImage.Width - 5;
-  MouseWheelImage.Position.Y := MarkerImage.Height - MouseWheelImage.Height - 5;
+    MouseWheelImage.Visible := FPictureIconList.Count > 1;
+    MouseWheelImage.Position.X := MarkerImage.Width - MouseWheelImage.Width - 5;
+    MouseWheelImage.Position.Y := MarkerImage.Height - MouseWheelImage.Height - 5;
 
-  FQuestTracker := AppService.GetQuestState(FMarker);
-  buCompleteQuest.IsChecked := FQuestTracker.Finished;
+    FQuestTracker := AppService.GetQuestState(FMarker);
+    buCompleteQuest.IsChecked := FQuestTracker.Finished;
+  finally
+    EndUpdate;
+  end;
 end;
 
 procedure TMarkerDescript.buCloseClick(Sender: TObject);
