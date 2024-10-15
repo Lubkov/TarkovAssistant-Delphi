@@ -24,10 +24,14 @@ type
     ButtonLayout: TLayout;
     edAddProfile: TSpeedButton;
     edDelProfile: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    acClearProfile: TAction;
 
     procedure acAddProfileExecute(Sender: TObject);
     procedure acDeleteProfileExecute(Sender: TObject);
     procedure acEditProfileExecute(Sender: TObject);
+    procedure acClearProfileExecute(Sender: TObject);
+    procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
   private
     function GetProfileName: string;
     procedure SetProfileName(const Value: string);
@@ -120,6 +124,9 @@ procedure TProfileFilter.acEditProfileExecute(Sender: TObject);
 var
   Profile: TProfile;
 begin
+  if edProfileName.ItemIndex = -1 then
+    Exit;
+
   Profile := TProfile.Create;
   try
     if not ProfileService.Load(ProfileName, Profile) then
@@ -161,6 +168,19 @@ begin
   finally
     Profile.Free;
   end;
+end;
+
+procedure TProfileFilter.acClearProfileExecute(Sender: TObject);
+begin
+  edProfileName.ItemIndex := -1;
+end;
+
+procedure TProfileFilter.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+begin
+  acAddProfile.Enabled := True;
+  acEditProfile.Enabled := edProfileName.ItemIndex >= 0;
+  acDeleteProfile.Enabled := edProfileName.ItemIndex >= 0;
+  acClearProfile.Enabled := edProfileName.ItemIndex >= 0;
 end;
 
 end.
