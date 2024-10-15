@@ -4,12 +4,12 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
-  System.Rtti, System.TypInfo, App.Entity;
+  System.Rtti, System.TypInfo, System.Generics.Defaults, App.Entity;
 
 type
   TQuestTracker = class(TEntity)
   private
-    FMarkerID: Variant;
+    FMarkerID: Integer;
     FFinished: Boolean;
     FSeleced: Boolean;
   protected
@@ -22,15 +22,17 @@ type
     procedure Assign(const Source: TJSONValue); overload; override;
     procedure AssignTo(const Dest: TJSONObject); overload; override;
 
-    property MarkerID: Variant read FMarkerID write FMarkerID;
+    property MarkerID: Integer read FMarkerID write FMarkerID;
     property Finished: Boolean read FFinished write FFinished;
     property Seleced: Boolean read FSeleced write FSeleced;
   end;
 
-implementation
+  TQuestTrackerComparer = class(TComparer<TQuestTracker>)
+  public
+    function Compare(const Left, Right: TQuestTracker): Integer; override;
+  end;
 
-uses
-  ME.DB.Utils;
+implementation
 
 { TQuestTracker }
 
@@ -38,7 +40,7 @@ constructor TQuestTracker.Create;
 begin
   inherited;
 
-  FMarkerID := Null;
+  FMarkerID := -1;
   FFinished := False;
   FSeleced := False;
 end;
@@ -51,7 +53,7 @@ end;
 
 function TQuestTracker.GetIsNewInstance: Boolean;
 begin
-  Result := IsNullID(FMarkerID);
+  Result := FMarkerID <= 0;
 end;
 
 procedure TQuestTracker.Assign(const Source: TEntity);
@@ -74,9 +76,22 @@ end;
 
 procedure TQuestTracker.AssignTo(const Dest: TJSONObject);
 begin
-  Dest.AddPair('id', Integer(FMarkerID));
+  Dest.AddPair('id', FMarkerID);
   Dest.AddPair('finished', FFinished);
   Dest.AddPair('seleced', FSeleced);
+end;
+
+{ TQuestTrackerComparer }
+
+function TQuestTrackerComparer.Compare(const Left, Right: TQuestTracker): Integer;
+begin
+  if Left.MarkerID = Right.MarkerID then
+    Result := 0
+  else
+  if Left.MarkerID < Right.MarkerID then
+    Result := -1
+  else
+    Result := 1;
 end;
 
 end.

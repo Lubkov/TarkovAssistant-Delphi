@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
-  System.Rtti, System.TypInfo, Generics.Collections, App.Entity, ME.QuestTracker;
+  System.Rtti, System.TypInfo, System.Generics.Defaults, Generics.Collections,
+  App.Entity, ME.QuestTracker;
 
 type
   TPMCType = (pmcBear, pmcUsec);
@@ -14,6 +15,7 @@ type
     FName: string;
     FKind: TPMCType;
     FQuestTrackers: TList<TQuestTracker>;
+    FQuestTrackerComparer: TQuestTrackerComparer;
   protected
     function GetIsNewInstance: Boolean; override;
   public
@@ -44,6 +46,7 @@ constructor TProfile.Create;
 begin
   inherited;
 
+  FQuestTrackerComparer := TQuestTrackerComparer.Create;
   FQuestTrackers := TObjectList<TQuestTracker>.Create;
   Clear;
 end;
@@ -51,6 +54,7 @@ end;
 destructor TProfile.Destroy;
 begin
   FQuestTrackers.Free;
+  FQuestTrackerComparer.Free;
 
   inherited;
 end;
@@ -104,6 +108,8 @@ function TProfile.GetQuestState(const MarkerID: Variant): TQuestTracker;
 var
   Item: TQuestTracker;
 begin
+//   FQuestTrackers.Sort;
+
   for Item in QuestTrackers do
     if Item.MarkerID = MarkerID then
       Exit(Item);
