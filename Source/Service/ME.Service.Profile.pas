@@ -25,7 +25,7 @@ var
 implementation
 
 uses
-  App.Constants, ME.Service.QuestTracker;
+  App.Service, ME.Service.QuestTracker;
 
 { TProfileService }
 
@@ -33,7 +33,7 @@ function TProfileService.GetProfileFolder: string;
 const
   FolderName = 'Profiles';
 begin
- Result := TPath.Combine(AppParams.DataPath, FolderName);
+ Result := TPath.Combine(AppService.Options.DataPath, FolderName);
 end;
 
 function TProfileService.GetProfileFileName(const ProfileName: string): string;

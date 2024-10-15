@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Controls.Presentation, FMX.Edit,
-  FMX.Layouts, ME.DB.Options, ME.Filter.Profile;
+  FMX.Layouts, ME.Options, ME.Filter.Profile;
 
 type
   TOptionsFrame = class(TFrame)

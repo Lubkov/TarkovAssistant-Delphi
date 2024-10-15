@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.IOUtils, System.Types, System.UITypes,
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.ImgList,
   TM.FilesMonitor, Map.Data.Types, ME.MarkerFilter, ME.DB.Entity, ME.DB.Map,
-  ME.DB.Marker, ME.DB.Layer;
+  ME.DB.Marker, ME.DB.Layer, ME.Options;
 
 type
   TMarkerIconArray = array[Low(TMarkerKind) .. High(TMarkerKind)] of TBitmap;
@@ -67,7 +67,7 @@ type
 implementation
 
 uses
-  App.Constants, Map.Data.Service, ME.Service.Map, ME.Service.Layer,
+  App.Service, Map.Data.Service, ME.Service.Map, ME.Service.Layer,
   ME.Service.Marker, ME.Service.Quest;
 
 { TMapWrapper }
@@ -293,7 +293,7 @@ procedure TMapWrapper.Start;
 begin
 {$IFDEF DEBUG}
   if not TDirectory.Exists(FDirectory) then
-    FDirectory := TPath.Combine(AppParams.Path, 'Screenshots');
+    FDirectory := TPath.Combine(TOptions.Path, 'Screenshots');
 {$ENDIF}
 
   if not TDirectory.Exists(FDirectory) then

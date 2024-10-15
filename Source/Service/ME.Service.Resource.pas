@@ -38,7 +38,7 @@ var
 implementation
 
 uses
-  App.Constants;
+  App.Service;
 
 { TResourceService }
 
@@ -54,7 +54,7 @@ begin
     TResourceKind.QuestItem:
       Result := Format(QuestItemFileFmt, [VarToStr(ID)]);
   end;
-  Result := TPath.Combine(AppParams.DataPath, Result);
+  Result := TPath.Combine(AppService.Options.DataPath, Result);
 end;
 
 function TResourceService.GetPictureFileName(const Source: TDBResource): string;

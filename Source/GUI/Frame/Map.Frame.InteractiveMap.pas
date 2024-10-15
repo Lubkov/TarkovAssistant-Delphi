@@ -77,7 +77,7 @@ type
 implementation
 
 uses
-  App.Constants, App.Service, ME.Service.Marker;
+  App.Service, ME.Service.Marker;
 
 {$R *.fmx}
 
@@ -92,8 +92,8 @@ begin
   FOnDoubleClick := nil;
   FOnMouseDown := nil;
 
-  FMapWrapper := TMapWrapper.Create(AppParams.SreenshotPath);
-  FMapWrapper.TrackLocation := AppParams.TrackLocation;
+  FMapWrapper := TMapWrapper.Create(AppService.Options.SreenshotPath);
+  FMapWrapper.TrackLocation := AppService.Options.TrackLocation;
   FMapWrapper.Images := MapTagImages;
   FMapWrapper.OnMapChange := OnMapChange;
 

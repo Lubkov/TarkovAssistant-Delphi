@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  App.Constants, ME.DB.Utils, ME.Service.Profile;
+  ME.DB.Utils, ME.Service.Profile;
 
 { TEditProfilePresenter }
 

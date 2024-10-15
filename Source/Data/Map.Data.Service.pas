@@ -36,8 +36,8 @@ var
 implementation
 
 uses
-  App.Constants, ME.Service.Map, ME.Service.Marker, ME.Service.Layer,
-  ME.Service.Quest, ME.Service.Resource;
+  ME.Service.Map, ME.Service.Marker, ME.Service.Layer, ME.Service.Quest,
+  ME.Service.Resource;
 
 { TDataService }
 

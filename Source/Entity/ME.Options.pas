@@ -1,32 +1,34 @@
-unit ME.DB.Options;
+unit ME.Options;
 
 interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, System.SysConst, System.JSON,
-  Data.DB, App.Entity, ME.DB.Entity;
+  Data.DB, App.Entity;
 
 type
-  TOptions = class(TDBEntity)
+  TOptions = class(TEntity)
+  private
+    class var
+      FAppPath: string;
   private
     FDataPath: string;
     FSreenshotPath: string;
     FTrackLocation: Boolean;
     FProfile: string;
+  protected
+    function GetIsNewInstance: Boolean; override;
   public
     constructor Create; override;
     destructor Destroy; override;
 
     procedure Assign(const Source: TEntity); overload; override;
-    procedure Assign(const DataSet: TDataSet); overload; override;
     procedure Assign(const Source: TJSONValue); overload; override;
     procedure AssignTo(const Dest: TJSONObject); override;
 
     function IsEqual(const Source: TOptions): Boolean;
 
-    class function EntityName: string; override;
-    class function FieldList: string; override;
-
+    class property Path: string read FAppPath;
     property DataPath: string read FDataPath write FDataPath;
     property SreenshotPath: string read FSreenshotPath write FSreenshotPath;
     property TrackLocation: Boolean read FTrackLocation write FTrackLocation;
@@ -53,6 +55,11 @@ begin
   inherited;
 end;
 
+function TOptions.GetIsNewInstance: Boolean;
+begin
+  Result := FDataPath = '';
+end;
+
 procedure TOptions.Assign(const Source: TEntity);
 var
   Options: TOptions;
@@ -65,16 +72,6 @@ begin
   FSreenshotPath := Options.SreenshotPath;
   FTrackLocation := Options.TrackLocation;
   FProfile := Options.Profile;
-end;
-
-procedure TOptions.Assign(const DataSet: TDataSet);
-begin
-  inherited;
-
-  FDataPath := DataSet.FieldByName('DataPath').AsString;
-  FSreenshotPath := DataSet.FieldByName('SreenshotPath').AsString;
-  FTrackLocation := DataSet.FieldByName('TrackLocation').AsInteger = 1;
-  FProfile := DataSet.FieldByName('Profile').Value;
 end;
 
 procedure TOptions.Assign(const Source: TJSONValue);
@@ -101,14 +98,7 @@ begin
             SameText(Profile, Source.Profile);
 end;
 
-class function TOptions.EntityName: string;
-begin
-  Result := 'Options';
-end;
-
-class function TOptions.FieldList: string;
-begin
-  Result := 'ID, DataPath, SreenshotPath, TrackLocation, Profile';
-end;
+initialization
+  TOptions.FAppPath := IncludeTrailingPathDelimiter(System.SysUtils.GetCurrentDir);
 
 end.

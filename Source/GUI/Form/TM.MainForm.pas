@@ -9,7 +9,7 @@ uses
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Objects, System.Actions, FMX.ActnList,
   TM.Map.Wrapper, TM.Frame.Location, TM.Frame.MarkerFilter,
   Map.Frame.InteractiveMap, TM.Frame.Options,
-  ME.DB.Map, ME.DB.Options;
+  ME.DB.Map, ME.Options;
 
 type
   TMainForm = class(TForm)
@@ -73,8 +73,7 @@ var
 implementation
 
 uses
-  App.Constants, App.Service, Map.Data.Service, Map.CursorService,
-  ME.Service.Options;
+  App.Service, Map.Data.Service, Map.CursorService;
 
 {$R *.fmx}
 

@@ -319,7 +319,6 @@
         <DCCReference Include="Source\Entity\ME.MarkerFilter.pas"/>
         <DCCReference Include="Source\Common\App.DB.Connection.pas"/>
         <DCCReference Include="Source\Common\App.SQLite.Connection.pas"/>
-        <DCCReference Include="Source\Common\App.Constants.pas"/>
         <DCCReference Include="Source\Common\App.Service.pas"/>
         <DCCReference Include="Source\GUI\Frame\TM.Frame.Location.pas">
             <Form>LocationGrid</Form>
@@ -358,9 +357,7 @@
         <DCCReference Include="Source\Service\ME.Service.QuestItem.pas"/>
         <DCCReference Include="Source\Entity\ME.Profile.pas"/>
         <DCCReference Include="Source\Entity\ME.QuestTracker.pas"/>
-        <DCCReference Include="Source\Service\ME.Service.Options.pas"/>
-        <DCCReference Include="Source\Entity\ME.DB.Options.pas"/>
-        <DCCReference Include="Source\DAO\ME.DAO.Options.pas"/>
+        <DCCReference Include="Source\Entity\ME.Options.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Filter.Profile.pas">
             <Form>ProfileFilter</Form>
             <FormType>fmx</FormType>
@@ -426,7 +423,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Bin\TarkovMap.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Bin\TarkovMap.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Bin\TarkovMap.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>TarkovMap.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Bin\TarkovMap.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">

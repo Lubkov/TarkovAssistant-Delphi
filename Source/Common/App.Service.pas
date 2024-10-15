@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Variants, System.Classes, System.IOUtils, System.Rtti,
   System.TypInfo, System.SysConst, System.JSON, Generics.Collections,
-  App.SQLite.Connection, ME.Profile, ME.DB.Options, ME.QuestTracker,
+  App.SQLite.Connection, ME.Profile, ME.Options, ME.QuestTracker,
   ME.DB.Marker, ME.DB.Quest;
 
 type
@@ -46,9 +46,9 @@ var
 implementation
 
 uses
-  App.Constants, Map.Data.Service, ME.Service.Resource, ME.Service.Map,
-  ME.Service.Layer, ME.Service.Quest, ME.Service.Marker, ME.Service.QuestItem,
-  ME.Service.Profile, ME.Service.QuestTracker, ME.Service.Options;
+  Map.Data.Service, ME.Service.Resource, ME.Service.Map, ME.Service.Layer,
+  ME.Service.Quest, ME.Service.Marker, ME.Service.QuestItem, ME.Service.Profile,
+  ME.Service.QuestTracker;
 
 { TAppService }
 
@@ -71,7 +71,6 @@ begin
 
   ProfileService := TProfileService.Create;
   QuestTrackerService := TQuestTrackerService.Create;
-  OptionsService := TOptionsService.Create(DBConnection.Connection);
 end;
 
 destructor TAppService.Destroy;
@@ -89,7 +88,6 @@ begin
   QuestItemService.Free;
   ProfileService.Free;
   QuestTrackerService.Free;
-  OptionsService.Free;
 
   inherited;
 end;
@@ -107,11 +105,7 @@ var
   FileName: string;
   Root: TJSONValue;
 begin
-  AppParams.Load;
-  ConnectToDB;
-//  OptionsService.Load(FOptions);
-
-  FileName := TPath.Combine(AppParams.Path, ConfigFile);
+  FileName := TPath.Combine(TOptions.Path, ConfigFile);
   Data := TStringList.Create;
   try
     Data.LoadFromFile(FileName, TEncoding.UTF8);
@@ -130,6 +124,7 @@ begin
   end;
 
   LoadProfile;
+  ConnectToDB;
 end;
 
 procedure TAppService.SaveParams;
@@ -140,7 +135,7 @@ var
   FileName: string;
   JSONObject: TJSONObject;
 begin
-  FileName := TPath.Combine(AppParams.Path, ConfigFile);
+  FileName := TPath.Combine(TOptions.Path, ConfigFile);
   Data := TStringList.Create;
   try
     JSONObject := TJSONObject.Create;
@@ -181,7 +176,7 @@ const
 var
   FileName: string;
 begin
-  FileName := TPath.Combine(AppParams.DataPath, Database);
+  FileName := TPath.Combine(FOptions.DataPath, Database);
   FDBConnection.Disconnect;
   FDBConnection.Database := FileName;
   FDBConnection.Connect;
