@@ -14,6 +14,8 @@ type
     FDBConnection: TSQLiteConnection;
     FOptions: TOptions;
     FProfile: TProfile;
+
+    function GetIsLogIn: Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -29,9 +31,13 @@ type
     function GetQuestState(const Marker: TDBMarker): TQuestTracker;
     function IsQuestFinished(const Quest: TDBQuest): Boolean;
 
+    function GetQuestSelected(const Quest: TDBQuest): Boolean;
+    procedure SetQuestSelected(const Quest: TDBQuest; const Value: Boolean);
+
     property DBConnection: TSQLiteConnection read FDBConnection;
     property Options: TOptions read FOptions;
     property Profile: TProfile read FProfile;
+    property IsLogIn: Boolean read GetIsLogIn;
   end;
 
 var
@@ -86,6 +92,11 @@ begin
   OptionsService.Free;
 
   inherited;
+end;
+
+function TAppService.GetIsLogIn: Boolean;
+begin
+  Result := FOptions.Profile <> '';
 end;
 
 procedure TAppService.LoadParams;
@@ -204,6 +215,33 @@ begin
   end;
 
   Result := True;
+end;
+
+function TAppService.GetQuestSelected(const Quest: TDBQuest): Boolean;
+var
+  Marker: TDBMarker;
+begin
+  if not AppService.IsLogIn then
+    Exit(False);
+
+  for Marker in Quest.Markers do
+    if Profile.IsMarkerSelected(Marker.ID) then
+      Exit(True);
+
+  Result := False;
+end;
+
+procedure TAppService.SetQuestSelected(const Quest: TDBQuest; const Value: Boolean);
+var
+  Marker: TDBMarker;
+begin
+  if not AppService.IsLogIn then
+    Exit;
+
+  for Marker in Quest.Markers do
+    Profile.SetMarkerSelected(Marker.ID, Value);
+
+  SaveProfile;
 end;
 
 end.

@@ -14,11 +14,13 @@ type
   private
     FGroupFilter: TMarkerKindSet;
     FQuestFilter: TBoolArray;
+    FUpdateCount: Integer;
     FOnChanged: TNotifyEvent;
     FOnMapChanged: TMapChangedEvent;
 
     procedure DoChange;
     procedure SelectAllQuest(const Enable: Boolean);
+    function GetUpdating: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -36,9 +38,15 @@ type
     function IsGropupEnable(const Kind: TMarkerKind): Boolean;
     function IsQuestEnable(const Index: Integer): Boolean;
 
+    procedure BeginUpdate;
+    procedure EndUpdate;
+
     // read-only filter state
     property GroupFilter: TMarkerKindSet read FGroupFilter;
     property QuestFilter: TBoolArray read FQuestFilter;
+
+    property Updating: Boolean read GetUpdating;
+
     // events
     property OnChanged: TNotifyEvent read FOnChanged write FOnChanged;
     property OnMapChanged: TMapChangedEvent read FOnMapChanged write FOnMapChanged;
@@ -52,6 +60,7 @@ constructor TMarkerFilter.Create;
 begin
   inherited;
 
+  FUpdateCount := 0;
   FOnChanged := nil;
   FOnMapChanged := nil;
   Clear;
@@ -67,7 +76,7 @@ end;
 
 procedure TMarkerFilter.DoChange;
 begin
-  if Assigned(FOnChanged) then
+  if Assigned(FOnChanged) and not Updating then
     FOnChanged(Self);
 end;
 
@@ -138,6 +147,21 @@ end;
 function TMarkerFilter.IsQuestEnable(const Index: Integer): Boolean;
 begin
   Result := FQuestFilter[Index];
+end;
+
+procedure TMarkerFilter.BeginUpdate;
+begin
+  Inc(FUpdateCount);
+end;
+
+procedure TMarkerFilter.EndUpdate;
+begin
+  Dec(FUpdateCount);
+end;
+
+function TMarkerFilter.GetUpdating: Boolean;
+begin
+  Result := FUpdateCount > 0;
 end;
 
 end.

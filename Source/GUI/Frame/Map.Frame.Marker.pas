@@ -273,6 +273,7 @@ begin
 
     FQuestTracker := AppService.GetQuestState(FMarker);
     buCompleteQuest.IsChecked := FQuestTracker.Finished;
+    buCompleteQuest.Enabled := AppService.IsLogIn;
   finally
     EndUpdate;
   end;

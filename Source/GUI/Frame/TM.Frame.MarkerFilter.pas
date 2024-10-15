@@ -130,33 +130,44 @@ begin
 
   QuestGrid.BeginUpdate;
   try
-    for Idx := 0 to FMap.Quests.Count - 1 do begin
-      Quest := FMap.Quests[Idx];
+    FMarkerFilter.BeginUpdate;
+    try
+      for Idx := 0 to FMap.Quests.Count - 1 do begin
+        Quest := FMap.Quests[Idx];
 
-      Item := TSpeedButton.Create(Self);
-      try
-        Item.Tag := Idx;
-        Item.Parent := QuestGrid;
-        Item.Cursor := crHandPoint;
-        Item.Text := Quest.Name + ' (' + IntToStr(Quest.Markers.Count) + ')';
-        Item.StaysPressed := True;
+        Item := TSpeedButton.Create(Self);
+        try
+          Item.Tag := Idx;
+          Item.Parent := QuestGrid;
+          Item.Cursor := crHandPoint;
+          Item.Text := Quest.Name + ' (' + IntToStr(Quest.Markers.Count) + ')';
+          Item.StaysPressed := True;
 
-        if AppService.IsQuestFinished(Quest) then
-          Item.StyleLookup :=  'QuestFinishedStyle'
-        else
-          Item.StyleLookup :=  'FilterItemStyle';
+          if AppService.IsQuestFinished(Quest) then
+            Item.StyleLookup :=  'QuestFinishedStyle'
+          else
+            Item.StyleLookup :=  'FilterItemStyle';
 
-        Item.TextSettings.HorzAlign := TTextAlign.Leading;
-        Item.OnClick := OnQuestButtonClick;
-      finally
-        FQuests.Add(Item);
+          Item.IsPressed := AppService.GetQuestSelected(Quest);
+          Item.TextSettings.HorzAlign := TTextAlign.Leading;
+          Item.OnClick := OnQuestButtonClick;
+
+          if Item.IsPressed then
+            FMarkerFilter.EnableQuest(Idx)
+          else
+            FMarkerFilter.DisablQuest(Idx);
+        finally
+          FQuests.Add(Item);
+        end;
       end;
-    end;
 
-    QuestGrid.Position.X := 0;
-    QuestGrid.Position.Y := 0;
-    QuestGrid.Width := QuestContainer.Width;
-    QuestGrid.Height := QuestGrid.ItemHeight * FMap.Quests.Count;
+      QuestGrid.Position.X := 0;
+      QuestGrid.Position.Y := 0;
+      QuestGrid.Width := QuestContainer.Width;
+      QuestGrid.Height := QuestGrid.ItemHeight * FMap.Quests.Count;
+    finally
+      FMarkerFilter.EndUpdate;
+    end;
   finally
     QuestGrid.EndUpdate;
   end;
@@ -187,6 +198,8 @@ begin
     FMarkerFilter.EnableQuest(Item.Tag)
   else
     FMarkerFilter.DisablQuest(Item.Tag);
+
+  AppService.SetQuestSelected(FMap.Quests[Item.Tag], Item.IsPressed);
 end;
 
 procedure TMarkerFilterList.buCloseClick(Sender: TObject);

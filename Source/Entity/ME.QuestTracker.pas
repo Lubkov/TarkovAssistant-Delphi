@@ -11,6 +11,7 @@ type
   private
     FMarkerID: Variant;
     FFinished: Boolean;
+    FSeleced: Boolean;
   protected
     function GetIsNewInstance: Boolean; override;
   public
@@ -23,6 +24,7 @@ type
 
     property MarkerID: Variant read FMarkerID write FMarkerID;
     property Finished: Boolean read FFinished write FFinished;
+    property Seleced: Boolean read FSeleced write FSeleced;
   end;
 
 implementation
@@ -37,7 +39,8 @@ begin
   inherited;
 
   FMarkerID := Null;
-  Finished := False;
+  FFinished := False;
+  FSeleced := False;
 end;
 
 destructor TQuestTracker.Destroy;
@@ -59,18 +62,21 @@ begin
 
   FMarkerID := QuestTracker.MarkerID;
   FFinished := QuestTracker.Finished;
+  FSeleced := QuestTracker.Seleced;
 end;
 
 procedure TQuestTracker.Assign(const Source: TJSONValue);
 begin
   FMarkerID := Source.GetValue<Integer>('id');
   FFinished := Source.GetValue<Boolean>('finished');
+  FSeleced := Source.GetValue<Boolean>('seleced');
 end;
 
 procedure TQuestTracker.AssignTo(const Dest: TJSONObject);
 begin
   Dest.AddPair('id', Integer(FMarkerID));
   Dest.AddPair('finished', FFinished);
+  Dest.AddPair('seleced', FSeleced);
 end;
 
 end.

@@ -78,7 +78,7 @@ begin
         Exit(False);
 
       Profile.Assign(Root);
-      QuestTrackerService.Load(Root.FindValue('items'), Profile.QuestTrackers);
+      QuestTrackerService.Load(Root.FindValue('markers'), Profile.QuestTrackers);
       Result := True;
     finally
       Root.Free;

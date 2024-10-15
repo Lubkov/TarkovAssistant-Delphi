@@ -28,6 +28,8 @@ type
     procedure AddQuestState(const Value: TQuestTracker);
     function GetQuestState(const MarkerID: Variant): TQuestTracker;
     function IsQuestPartFinished(const MarkerID: Variant): Boolean;
+    function IsMarkerSelected(const MarkerID: Variant): Boolean;
+    procedure SetMarkerSelected(const MarkerID: Variant; const Value: Boolean);
 
     property Name: string read FName write FName;
     property Kind: TPMCType read FKind write FKind;
@@ -113,11 +115,49 @@ function TProfile.IsQuestPartFinished(const MarkerID: Variant): Boolean;
 var
   Item: TQuestTracker;
 begin
+  if IsNewInstance then
+    Exit(False);
+
   Item := GetQuestState(MarkerID);
   if Item <> nil then
     Result := Item.Finished
   else
     Result := False;
+end;
+
+function TProfile.IsMarkerSelected(const MarkerID: Variant): Boolean;
+var
+  Item: TQuestTracker;
+begin
+  if IsNewInstance then
+    Exit(False);
+
+  Item := GetQuestState(MarkerID);
+  if Item <> nil then
+    Result := Item.Seleced
+  else
+    Result := False;
+end;
+
+procedure TProfile.SetMarkerSelected(const MarkerID: Variant; const Value: Boolean);
+var
+  Item: TQuestTracker;
+begin
+  if IsNewInstance then
+    Exit;
+
+  Item := GetQuestState(MarkerID);
+  if Item = nil then begin
+    Item := TQuestTracker.Create;
+    try
+      Item.MarkerID := MarkerID;
+      Item.Finished := False;
+    finally
+      AddQuestState(Item);
+    end;
+  end;
+
+  Item.Seleced := Value;
 end;
 
 end.

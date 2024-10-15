@@ -33,6 +33,8 @@ type
     procedure acClearProfileExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
   private
+    function GetProfileIndex: Integer;
+    procedure SetProfileIndex(const Value: Integer);
     function GetProfileName: string;
     procedure SetProfileName(const Value: string);
 
@@ -43,6 +45,7 @@ type
 
     procedure Init;
 
+    property ProfileIndex: Integer read GetProfileIndex write SetProfileIndex;
     property ProfileName: string read GetProfileName write SetProfileName;
   end;
 
@@ -68,6 +71,16 @@ begin
   inherited;
 end;
 
+function TProfileFilter.GetProfileIndex: Integer;
+begin
+  Result := edProfileName.ItemIndex;
+end;
+
+procedure TProfileFilter.SetProfileIndex(const Value: Integer);
+begin
+  edProfileName.ItemIndex := Value;
+end;
+
 function TProfileFilter.GetProfileName: string;
 begin
   Result := edProfileName.Text;
@@ -75,7 +88,7 @@ end;
 
 procedure TProfileFilter.SetProfileName(const Value: string);
 begin
-  edProfileName.ItemIndex := edProfileName.Items.IndexOf(Value);
+  ProfileIndex := edProfileName.Items.IndexOf(Value);
 end;
 
 function TProfileFilter.InternalProfileEdit(const Profile: TProfile): Boolean;
@@ -99,7 +112,7 @@ end;
 procedure TProfileFilter.Init;
 begin
   ProfileService.GetAll(edProfileName.Items);
-  edProfileName.ItemIndex := -1;
+  ProfileIndex := -1;
 end;
 
 procedure TProfileFilter.acAddProfileExecute(Sender: TObject);
@@ -114,7 +127,7 @@ begin
       Exit;
 
     edProfileName.Items.Add(Profile.Name);
-    edProfileName.ItemIndex := edProfileName.Count - 1;
+    ProfileIndex := edProfileName.Count - 1;
   finally
     Profile.Free;
   end;
@@ -124,7 +137,7 @@ procedure TProfileFilter.acEditProfileExecute(Sender: TObject);
 var
   Profile: TProfile;
 begin
-  if edProfileName.ItemIndex = -1 then
+  if ProfileIndex = -1 then
     Exit;
 
   Profile := TProfile.Create;
@@ -158,7 +171,7 @@ begin
         if not Presenter.Delete then
           Exit;
 
-        edProfileName.Items.Delete(edProfileName.ItemIndex);
+        edProfileName.Items.Delete(ProfileIndex);
       finally
         Presenter.Free;
       end;
@@ -172,15 +185,15 @@ end;
 
 procedure TProfileFilter.acClearProfileExecute(Sender: TObject);
 begin
-  edProfileName.ItemIndex := -1;
+  ProfileIndex := -1;
 end;
 
 procedure TProfileFilter.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   acAddProfile.Enabled := True;
-  acEditProfile.Enabled := edProfileName.ItemIndex >= 0;
-  acDeleteProfile.Enabled := edProfileName.ItemIndex >= 0;
-  acClearProfile.Enabled := edProfileName.ItemIndex >= 0;
+  acEditProfile.Enabled := ProfileIndex >= 0;
+  acDeleteProfile.Enabled := ProfileIndex >= 0;
+  acClearProfile.Enabled := ProfileIndex >= 0;
 end;
 
 end.
