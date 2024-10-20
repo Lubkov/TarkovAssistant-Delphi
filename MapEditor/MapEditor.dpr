@@ -40,7 +40,6 @@ uses
   ME.Frame.QuestPart in 'Source\GUI\Frame\ME.Frame.QuestPart.pas' {frQuestPartGrid: TFrame},
   ME.Presenter.QuestPart in 'Source\GUI\ME.Presenter.QuestPart.pas',
   LocalMap in '..\Source\Entity\LocalMap.pas',
-  App.Constants in '..\Source\Common\App.Constants.pas',
   App.DB.Connection in '..\Source\Common\App.DB.Connection.pas',
   App.SQLite.Connection in '..\Source\Common\App.SQLite.Connection.pas',
   App.Service in '..\Source\Common\App.Service.pas',
@@ -66,21 +65,16 @@ uses
   ME.Edit.QuestItem in 'Source\GUI\Dialog\ME.Edit.QuestItem.pas' {edQuestItem},
   ME.Grid.QuestResources in 'Source\GUI\Frame\ME.Grid.QuestResources.pas' {QuestResourcesGrid: TFrame},
   ME.Presenter.Screenshot in 'Source\GUI\ME.Presenter.Screenshot.pas',
-  ME.DAO.Profile in '..\Source\DAO\ME.DAO.Profile.pas',
-  ME.DB.Profile in '..\Source\Entity\ME.DB.Profile.pas',
-  ME.DB.QuestTracker in '..\Source\Entity\ME.DB.QuestTracker.pas',
   ME.Service.Profile in '..\Source\Service\ME.Service.Profile.pas',
-  ME.DAO.QuestTracker in '..\Source\DAO\ME.DAO.QuestTracker.pas',
   ME.Service.QuestTracker in '..\Source\Service\ME.Service.QuestTracker.pas',
-  ME.DB.Options in '..\Source\Entity\ME.DB.Options.pas',
-  ME.DAO.Options in '..\Source\DAO\ME.DAO.Options.pas',
-  ME.Service.Options in '..\Source\Service\ME.Service.Options.pas',
-  ME.Edit.Options in '..\Source\GUI\Edit\ME.Edit.Options.pas' {edOptions},
-  ME.Presenter.Options in '..\Source\GUI\Presenter\ME.Presenter.Options.pas',
   ME.Filter.Profile in '..\Source\GUI\Frame\ME.Filter.Profile.pas' {ProfileFilter: TFrame},
   ME.Presenter.Profile in '..\Source\GUI\Presenter\ME.Presenter.Profile.pas',
   ME.Edit.Profile in '..\Source\GUI\Edit\ME.Edit.Profile.pas' {edProfile},
-  ME.Dialog.Message in '..\Source\Common\ME.Dialog.Message.pas' {edMessage};
+  ME.Dialog.Message in '..\Source\Common\ME.Dialog.Message.pas' {edMessage},
+  App.Entity in '..\Source\Common\App.Entity.pas',
+  ME.Profile in '..\Source\Entity\ME.Profile.pas',
+  ME.QuestTracker in '..\Source\Entity\ME.QuestTracker.pas',
+  ME.Options in '..\Source\Entity\ME.Options.pas';
 
 {$R *.res}
 
@@ -95,7 +89,6 @@ begin
   AppService := TAppService.Create(Application);
 
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TedOptions, edOptions);
   Application.CreateForm(TedMessage, edMessage);
   Application.Run;
 end.

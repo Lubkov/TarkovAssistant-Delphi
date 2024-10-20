@@ -44,7 +44,7 @@ var
 implementation
 
 uses
-  App.Constants, ME.DB.Utils, App.Service, ME.Service.Layer, ME.Service.Map,
+  ME.DB.Utils, App.Service, ME.Service.Layer, ME.Service.Map,
   ME.DB.Marker, ME.Service.Marker, ME.Service.Quest, ME.Service.Resource,
   Map.Data.Service, Map.Data.Classes;
 
@@ -105,7 +105,7 @@ procedure TMainForm.buExpotClick(Sender: TObject);
 var
   FileName: string;
 begin
-  FileName := System.IOUtils.TPath.Combine(AppParams.DataPath, 'data.json');
+  FileName := System.IOUtils.TPath.Combine(AppService.Options.DataPath, 'data.json');
 //  TJSONDataExport.SaveToFile(FileName, DataService.Items);
 
   ShowMessage('Done');

@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  App.Constants, ME.DB.Utils, ME.Service.QuestItem;
+  ME.DB.Utils, ME.Service.QuestItem;
 
 { TEditQuestItemPresenter }
 

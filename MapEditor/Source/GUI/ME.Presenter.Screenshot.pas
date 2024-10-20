@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  App.Constants, ME.DB.Utils, ME.Service.Resource;
+  ME.DB.Utils, ME.Service.Resource;
 
 { TEditScreenshotPresenter }
 
