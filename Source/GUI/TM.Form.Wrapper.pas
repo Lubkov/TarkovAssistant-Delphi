@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  FMX.Controls, FMX.Forms, FMX.Types;
+  System.UITypes, FMX.Controls, FMX.Forms, FMX.Types;
 
 type
   TMousePosition = record
@@ -112,6 +112,7 @@ begin
   FForm.Height := FHeight;
   FForm.BorderStyle := FBorderStyle;
   FForm.FormStyle := FFormStyle;
+  FForm.WindowState := TWindowState.wsNormal;
 end;
 
 procedure TFormWrapper.EnableFullScreenMode;
@@ -126,7 +127,8 @@ begin
   FForm.Top := Display.{$IFDEF VER360}PhysicalBounds{$ELSE}Bounds{$ENDIF}.Top;
   FForm.Width := Display.{$IFDEF VER360}PhysicalBounds{$ELSE}Bounds{$ENDIF}.Width;
   FForm.Height := Display.{$IFDEF VER360}PhysicalBounds{$ELSE}Bounds{$ENDIF}.Height;
-  FForm.FormStyle := TFormStyle.StayOnTop;
+  FForm.WindowState := TWindowState.wsMaximized;
+//  FForm.FormStyle := TFormStyle.StayOnTop;
 
   FFullScreen := True;
 end;

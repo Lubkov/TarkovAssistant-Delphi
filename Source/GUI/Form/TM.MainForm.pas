@@ -269,7 +269,7 @@ begin
   MarkerFilterPanel.Height := 550;
   MarkerFilterPanel.Width := 340;
 
-  Height :=  Self.ClientHeight - MarkerFilterPanel.Position.Y - 20;
+  Height := Self.ClientHeight - MarkerFilterPanel.Position.Y - 10;
   if Height < FMarkerFilterList.MaxHeight then
     MarkerFilterPanel.Height := Height
   else
