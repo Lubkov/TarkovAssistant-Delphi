@@ -37,7 +37,8 @@ type
 implementation
 
 uses
-  ME.Dialog.Message, ME.Presenter.QuestItem, ME.Edit.QuestItem, ME.Service.QuestItem;
+  ME.DB.Utils, ME.Dialog.Message, ME.Presenter.QuestItem, ME.Edit.QuestItem,
+  ME.Service.QuestItem;
 
 {$R *.fmx}
 
@@ -151,8 +152,8 @@ var
 begin
   QuestItem := TDBQuestItem.Create;
   try
-//    QuestItem.ID := FID.Value;
-    QuestItem.MarkerID := Marker.ID;
+    if not QuestItemService.GetAt(FID.Value, QuestItem) then
+      Exit;
 
     Dialog := TedMessage.Create(Self);
     try
@@ -218,7 +219,15 @@ end;
 
 procedure TQuestItemsGrid.DeleteRecord;
 begin
+  if IsNullID(FID.Value) or not InternalDeleteRecord then
+    Exit;
 
+  F.DisableControls;
+  try
+    F.Refresh;
+  finally
+    F.EnableControls;
+  end;
 end;
 
 end.

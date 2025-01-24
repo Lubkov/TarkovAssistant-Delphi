@@ -3,7 +3,9 @@ object frPicture: TfrPicture
   Size.Height = 240.000000000000000000
   Size.PlatformDefault = False
   object OpenDialog: TOpenDialog
-    Filter = '*.jpg|*.jpg;*.PNG|*.png;'
+    Filter = 
+      'All files|*.jpg;*.jpeg;*.png;*.webp|JPEG (*.jpg;*.jpeg)|*.jpg;*.' +
+      'jpeg|PNG (*.png)|*.png|WEB Pictures (*.webp)|*.webp'
     Left = 152
     Top = 136
   end
