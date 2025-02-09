@@ -77,19 +77,25 @@ type
 
 implementation
 
+const
+  PMCExtractionIdx = 0;
+  ScavExtractionIdx = 1;
+  CoopExtractionIdx = 2;
+  TransitExtractionIdx = 3;
+
 {$R *.fmx}
 
 { TedMarker }
 
 constructor TedMarker.Create(AOwner: TComponent);
-var
-  Kind: TMarkerKind;
 begin
   inherited;
 
   edKindName.Clear;
-  for Kind := TMarkerKind.PMCExtraction to TMarkerKind.CoopExtraction do
-    edKindName.Items.Add(TDBMarker.KindToStr(Kind));
+  edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.PMCExtraction));
+  edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.ScavExtraction));
+  edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.CoopExtraction));
+  edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.TransitExtraction));
 
   laScreenShotName.Visible := False;
   FScreenshotsGrid := nil;
@@ -114,12 +120,34 @@ end;
 
 function TedMarker.GetMarkerKind: TMarkerKind;
 begin
-  Result := TMarkerKind(edKindName.ItemIndex);
+  case edKindName.ItemIndex of
+    PMCExtractionIdx:
+      Result := TMarkerKind.PMCExtraction;
+    ScavExtractionIdx:
+      Result := TMarkerKind.ScavExtraction;
+    CoopExtractionIdx:
+      Result := TMarkerKind.CoopExtraction;
+    TransitExtractionIdx:
+      Result := TMarkerKind.TransitExtraction;
+  else
+    raise Exception.Create('Wrong marker type "' + IntToStr(edKindName.ItemIndex) + '"');
+  end;
 end;
 
 procedure TedMarker.SetMarkerKind(const Value: TMarkerKind);
 begin
-  edKindName.ItemIndex := Ord(Value);
+  case Value of
+    TMarkerKind.PMCExtraction:
+      edKindName.ItemIndex := PMCExtractionIdx;
+    TMarkerKind.ScavExtraction:
+      edKindName.ItemIndex := ScavExtractionIdx;
+    TMarkerKind.CoopExtraction:
+      edKindName.ItemIndex := CoopExtractionIdx;
+    TMarkerKind.TransitExtraction:
+      edKindName.ItemIndex := TransitExtractionIdx;
+  else
+    edKindName.ItemIndex := -1;
+  end;
 end;
 
 function TedMarker.GetPositionX: Integer;

@@ -23,6 +23,8 @@ type
     laQuestGroup: TLabel;
     QuestContainer: TVertScrollBox;
     buClose: TSpeedButton;
+    laTransitGroup: TLayout;
+    buTransitExtraction: TSpeedButton;
     procedure buCloseClick(Sender: TObject);
   private
     FMarkerFilter: TMarkerFilter;
@@ -64,6 +66,9 @@ begin
   // CoopExtraction
   buCoopExtraction.Tag := Ord(TMarkerKind.CoopExtraction);
   buCoopExtraction.OnClick := OnExtractionButtonClick;
+  // TransitExtraction
+  buTransitExtraction.Tag := Ord(TMarkerKind.TransitExtraction);
+  buTransitExtraction.OnClick := OnExtractionButtonClick;
 
   FQuests := TObjectList<TSpeedButton>.Create;
 
@@ -97,6 +102,7 @@ var
   PMCCount: Integer;
   ScavCount: Integer;
   CoopCount: Integer;
+  TransitCount: Integer;
 begin
   FMap := Value;
   if FMap = nil then begin
@@ -107,6 +113,7 @@ begin
   PMCCount := 0;
   ScavCount := 0;
   CoopCount := 0;
+  TransitCount := 0;
   for Marker in FMap.Markers do
     case Marker.Kind of
       TMarkerKind.PMCExtraction:
@@ -115,11 +122,14 @@ begin
         Inc(ScavCount);
       TMarkerKind.CoopExtraction:
         Inc(CoopCount);
+      TMarkerKind.TransitExtraction:
+        Inc(TransitCount);
     end;
 
   buPMCExtraction.Text := TDBMarker.KindToStr(TMarkerKind.PMCExtraction) + ' (' + PMCCount.ToString + ')';
   buScavExtraction.Text := TDBMarker.KindToStr(TMarkerKind.ScavExtraction) + ' (' + ScavCount.ToString + ')';
   buCoopExtraction.Text := TDBMarker.KindToStr(TMarkerKind.CoopExtraction) + ' (' + CoopCount.ToString + ')';
+  buTransitExtraction.Text := TDBMarker.KindToStr(TMarkerKind.TransitExtraction) + ' (' + TransitCount.ToString + ')';
 
   QuestGrid.BeginUpdate;
   try

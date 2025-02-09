@@ -79,6 +79,9 @@ implementation
 uses
   App.Service, ME.Service.Marker;
 
+const
+  TransitExtractionImageIdx = 5;
+
 {$R *.fmx}
 
 { TInteractiveMap }
@@ -228,7 +231,7 @@ begin
 
     ImageIdex := Ord(Marker.Kind);
     if (Marker.Kind = TMarkerKind.Quest) and AppService.Profile.IsQuestPartFinished(Marker.ID) then
-      Inc(ImageIdex);
+      ImageIdex := TransitExtractionImageIdx;
 
     Item.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIdex));
     Item.Hint := Title;
@@ -299,7 +302,7 @@ begin
   Marker := TDBMarker(FCurrent.TagObject);
   ImageIdex := Ord(Marker.Kind);
   if (Marker.Kind = TMarkerKind.Quest) and Value then
-    Inc(ImageIdex);
+    ImageIdex := TransitExtractionImageIdx;
 
   FCurrent.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIdex));
 end;

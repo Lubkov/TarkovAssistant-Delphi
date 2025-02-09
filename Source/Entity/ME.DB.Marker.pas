@@ -7,7 +7,7 @@ uses
   Data.DB, App.Entity, ME.DB.Entity, ME.DB.Resource, ME.DB.QuestItem;
 
 type
-  TMarkerKind = (PMCExtraction, ScavExtraction, CoopExtraction, Quest);
+  TMarkerKind = (PMCExtraction, ScavExtraction, CoopExtraction, Quest, TransitExtraction);
   TMarkerKindSet = set of TMarkerKind;
 
   TDBMarker = class(TDBEntity)
@@ -114,6 +114,8 @@ begin
       Result := 'Выход дикого';
     TMarkerKind.CoopExtraction:
       Result := 'Совм. выход';
+    TMarkerKind.TransitExtraction:
+      Result := 'Переход';
   else
     Result := '';
   end;
