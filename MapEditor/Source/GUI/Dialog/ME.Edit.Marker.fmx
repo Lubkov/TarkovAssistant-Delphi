@@ -26,7 +26,7 @@ inherited edMarker: TedMarker
         end>
       TextSettings.Trimming = None
       IsSelected = True
-      Size.Width = 75.000000000000000000
+      Size.Width = 76.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''

@@ -39,6 +39,7 @@ type
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acDeleteExtractionExecute(Sender: TObject);
     procedure FCalcFields(DataSet: TDataSet);
+    procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FMapID: Variant;
 
@@ -83,7 +84,10 @@ begin
     ' SELECT ' + TDBMarker.FieldList +
     ' FROM ' + TDBMarker.EntityName +
     ' WHERE (MapID = :MapID)' +
-    '      AND (Kind in (0, 1, 2))' +
+    '      AND (Kind in (' + IntToStr(Ord(TMarkerKind.PMCExtraction)) + ', ' +
+                             IntToStr(Ord(TMarkerKind.ScavExtraction)) + ', ' +
+                             IntToStr(Ord(TMarkerKind.CoopExtraction)) + ', ' +
+                             IntToStr(Ord(TMarkerKind.TransitExtraction)) + '))' +
     ' ORDER BY Kind, Caption';
   F.ParamByName('MapID').Value := MapID;
   F.Open;
@@ -92,6 +96,12 @@ end;
 procedure TfrMarkerGrid.FCalcFields(DataSet: TDataSet);
 begin
   FKindName.AsString := TDBMarker.KindToStr(TMarkerKind(FKind.AsInteger));
+end;
+
+procedure TfrMarkerGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
+begin
+  if not IsNullID(FID.Value) then
+    ExtractionEdit(FID.Value);
 end;
 
 function TfrMarkerGrid.InternalExtractionEdit(const Marker: TDBMarker): Boolean;
