@@ -104,6 +104,7 @@ begin
   FItemIconList.Align := TAlignLayout.Client;
   FItemIconList.ListDirection := TListDirection.Vertical;
   FItemIconList.ItemWidth := 64;
+  FItemIconList.ItemHeight := 64;
   FItemIconList.Stretch := True;
   FItemIconList.HideFocus := True;
   FItemIconList.HideSelect := True;
@@ -163,6 +164,9 @@ begin
     Width := Width + QuestItem.Picture.Width;
   end;
 
+  ItemsLayout.Align := TAlignLayout.None;
+  ItemsLayout.Height := 64;
+  ItemsLayout.Width := 64;
   if Height < Width then begin
     ItemsLayout.Align := TAlignLayout.Bottom;
     ItemsLayout.Height := 64;
@@ -247,6 +251,7 @@ begin
       FPictureIconList.SelectedIndex := 0;
 
     PreviewLayout.Visible := Marker.Images.Count > 1;
+    FPictureIconList.Visible := PreviewLayout.Visible;
 
     LoadQuestItems(Marker);
     ItemsLayout.Visible := Marker.Items.Count > 0;
@@ -266,6 +271,9 @@ begin
         TListDirection.Horizontal:
           FMaxHeight := FMaxHeight + ItemsLayout.Height + ItemsLayout.Margins.Top + ItemsLayout.Margins.Bottom;
       end;
+
+    FItemIconList.Height := ItemsLayout.Height;
+    FItemIconList.Width := ItemsLayout.Width;
 
     MouseWheelImage.Visible := FPictureIconList.Count > 1;
     MouseWheelImage.Position.X := MarkerImage.Width - MouseWheelImage.Width - 5;
