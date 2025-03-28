@@ -49,6 +49,9 @@ type
     procedure SetItemSize(const Item: TPictureItemItem);
     procedure SetItemPosition(const Item: TPictureItemItem);
     function GetStrokeThickness: Integer;
+  protected
+    procedure SetHeight(const Value: Single); override;
+    procedure SetWidth(const Value: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -278,6 +281,26 @@ begin
     Result := 0
   else
     Result := FStrokeThickness;
+end;
+
+procedure TPictureList.SetHeight(const Value: Single);
+begin
+  inherited;
+
+  case FListDirection of
+    TListDirection.Horizontal:
+      MainContainer.Height := Value;
+  end;
+end;
+
+procedure TPictureList.SetWidth(const Value: Single);
+begin
+  inherited;
+
+  case FListDirection of
+    TListDirection.Vertical:
+      MainContainer.Width := Value;
+  end;
 end;
 
 procedure TPictureList.Add(const Title: string; const Bitmap: TBitmap);
