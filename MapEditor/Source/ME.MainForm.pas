@@ -8,7 +8,8 @@ uses
   FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls,
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
   Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
-  ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestResources;
+  ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestResources, ME.Frame.Quest,
+  ME.Frame.QuestPart;
 
 type
   TMainForm = class(TForm)
@@ -21,6 +22,10 @@ type
     buExportToDB: TButton;
     Button1: TButton;
     buReconnect: TButton;
+    QuestsTab: TTabItem;
+    QuestLayout: TLayout;
+    QuestPartsLayout: TLayout;
+    Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure buExpotClick(Sender: TObject);
@@ -33,8 +38,11 @@ type
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
     FResourcesGrid: TQuestResourcesGrid;
+    FQuestGrid: TfrQuest;
+    FQuestPartGrid: TfrQuestPartGrid;
 
     procedure ApplicationInit;
+    procedure OnQuestChanged(const QuestID: Variant);
   public
   end;
 
@@ -80,6 +88,17 @@ begin
   FResourcesGrid.Parent := QuestItemsTab;
   FResourcesGrid.Align := TAlignLayout.Client;
   FResourcesGrid.Sorted := True;
+
+  FQuestGrid := TfrQuest.Create(Self);
+  FQuestGrid.Parent := QuestLayout;
+  FQuestGrid.Align := TAlignLayout.Client;
+  FQuestGrid.OnQuestChanged := OnQuestChanged;
+
+  FQuestPartGrid := TfrQuestPartGrid.Create(Self);
+  FQuestPartGrid.Parent := QuestPartsLayout;
+  FQuestPartGrid.Align := TAlignLayout.Client;
+
+  MainContainer.ActiveTab := GeneralTab;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -93,7 +112,13 @@ begin
 
   FMapFilter.Init;
   FResourcesGrid.Init(nil);
+  FQuestGrid.Init(Null);
 //  FMapPanel.Init;
+end;
+
+procedure TMainForm.OnQuestChanged(const QuestID: Variant);
+begin
+  FQuestPartGrid.Init(FMapFilter.MapID, QuestID);
 end;
 
 procedure TMainForm.MapChanged(const MapID: Variant);

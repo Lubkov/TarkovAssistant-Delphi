@@ -82,20 +82,27 @@ begin
 end;
 
 procedure TfrQuest.Init(const MapID: Variant);
+var
+  Filter: string;
 begin
   FMapID := MapID;
+
+  if VarIsNull(MapID) then
+    Filter := ''
+  else
+    Filter := '(MapID = ' + VarToStr(MapID) + ')';
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
   F.SQL.Text :=
     ' SELECT ' + TDBQuest.FieldList +
-    ' FROM ' + TDBQuest.EntityName +
-    ' WHERE (MapID = :MapID)' +
-    ' ORDER BY Name';
-  F.ParamByName('MapID').Value := MapID;
-  F.Open;
+    ' FROM ' + TDBQuest.EntityName;
 
-//  NameColumn.Width := Grid.Width - TraderColumn.Width - 25;
+  if Filter <> '' then
+    F.SQL.Add('WHERE ' + Filter);
+
+  F.SQL.Add(' ORDER BY Name');
+  F.Open;
 end;
 
 procedure TfrQuest.FCalcFields(DataSet: TDataSet);
