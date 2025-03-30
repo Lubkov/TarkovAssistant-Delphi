@@ -16,10 +16,12 @@ object MainForm: TMainForm
     Size.Width = 864.000000000000000000
     Size.Height = 576.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 1
     TabPosition = PlatformDefault
     Sizes = (
+      864s
+      550s
       864s
       550s
       864s
@@ -29,7 +31,7 @@ object MainForm: TMainForm
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = True
+      IsSelected = False
       Size.Width = 61.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -119,6 +121,45 @@ object MainForm: TMainForm
           TextSettings.Trimming = None
           OnClick = buReconnectClick
         end
+      end
+    end
+    object QuestsTab: TTabItem
+      CustomIcon = <
+        item
+        end>
+      TextSettings.Trimming = None
+      IsSelected = True
+      Size.Width = 57.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Quests'
+      object QuestLayout: TLayout
+        Align = Client
+        Size.Width = 864.000000000000000000
+        Size.Height = 405.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+      object QuestPartsLayout: TLayout
+        Align = Bottom
+        Position.Y = 410.000000000000000000
+        Size.Width = 864.000000000000000000
+        Size.Height = 140.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
+      object Splitter1: TSplitter
+        Align = Bottom
+        Cursor = crVSplit
+        MinSize = 5.000000000000000000
+        Position.Y = 405.000000000000000000
+        ShowGrip = False
+        Size.Width = 864.000000000000000000
+        Size.Height = 5.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'splitterstyle'
       end
     end
     object QuestItemsTab: TTabItem
