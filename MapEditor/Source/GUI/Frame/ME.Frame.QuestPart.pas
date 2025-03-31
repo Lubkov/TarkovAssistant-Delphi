@@ -32,6 +32,7 @@ type
     Grid: TStringGrid;
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     BindingsList1: TBindingsList;
+    FMap: TWideStringField;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddMarkerExecute(Sender: TObject);
     procedure acEditMarkerExecute(Sender: TObject);
@@ -75,18 +76,41 @@ begin
 end;
 
 procedure TfrQuestPartGrid.Init(const MapID, QuestID: Variant);
+var
+  Filter: string;
 begin
   FMapID := MapID;
   FQuestID := QuestID;
 
+  Filter := '';
+  if not VarIsNull(MapID) then
+    Filter := '(MapID = ' + VarToStr(MapID) + ')';
+
+  if not VarIsNull(QuestID) then begin
+    if Filter <> '' then
+      Filter := Filter + ' AND ';
+
+    Filter := Filter + '(QuestID = ' + VarToStr(QuestID) + ')';
+  end;
+
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
   F.SQL.Text :=
-    ' SELECT ' + TDBMarker.FieldList +
-    ' FROM ' + TDBMarker.EntityName +
-    ' WHERE (MapID = :MapID) AND (QuestID = :QuestID)';
-  F.ParamByName('MapID').Value := MapID;
-  F.ParamByName('QuestID').Value := QuestID;
+    ' SELECT ' +
+    '       m.ID as ID, ' +
+    '       m."MapID" as MapID, ' +
+    '       m."QuestID" as QuestID, ' +
+    '       m."Caption" as Caption, ' +
+    '       m."Kind" as Kind, ' +
+    '       m."Left" as Left, ' +
+    '       m."Top" as Top, ' +
+    '       Map.Caption as Map ' +
+    ' FROM Marker m ' +
+    '     INNER JOIN Map ON Map.ID = m.MapID';
+
+  if Filter <> '' then
+    F.SQL.Add(' WHERE ' + Filter);
+
   F.Open;
 end;
 

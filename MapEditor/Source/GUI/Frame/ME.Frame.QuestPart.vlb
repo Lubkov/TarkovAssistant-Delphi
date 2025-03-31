@@ -1,58 +1,62 @@
 ﻿[ActionList1]
-Coordinates=12,70,70,33
+Coordinates=12,70,78,36
 
 [acAddMarker]
-Coordinates=227,71,79,33
+Coordinates=227,71,91,36
 
 [edEditMarker]
-Coordinates=61,10,79,51
+Coordinates=85,204,91,58
 
 [edDeleteMarker]
-Coordinates=150,10,91,51
+Coordinates=202,204,106,58
 
 [laTitle]
-Coordinates=10,143,44,51
+Coordinates=10,204,49,58
 
 [acDeleteMarker]
-Coordinates=345,1,90,33
+Coordinates=345,1,105,36
 
 [ImageList1]
-Coordinates=345,53,68,33
+Coordinates=345,53,77,36
 
 [acEditMarker]
-Coordinates=345,105,79,33
+Coordinates=345,105,90,36
 
 [edAddMarker]
-Coordinates=251,10,80,51
+Coordinates=285,10,91,58
 
 [paTopPanel]
-Coordinates=64,143,72,33
+Coordinates=400,204,84,36
 
 [FCaption]
-Coordinates=345,209,58,33
+Coordinates=345,209,67,36
 
 [FTop]
-Coordinates=296,230,40,33
+Coordinates=296,230,44,36
 
 [FLeft]
-Coordinates=98,230,40,33
+Coordinates=98,230,44,36
 
 [F]
-Coordinates=10,10,40,33
+Coordinates=334,204,40,36
 Visible=True
 
 [FID]
-Coordinates=49,230,40,33
+Coordinates=49,230,40,36
 
 []
 Coordinates=91,204,40,33
 
 [BindSourceDB1]
-Coordinates=61,10,92,141
+Coordinates=10,10,106,168
 
 [BindingsList1]
-Coordinates=172,80,82,33
+Coordinates=172,80,91,36
 
 [Grid]
-Coordinates=289,80,143,51
+Coordinates=196,21,63,146
+Visible=True
+
+[FMap]
+Coordinates=205,135,47,36
 
