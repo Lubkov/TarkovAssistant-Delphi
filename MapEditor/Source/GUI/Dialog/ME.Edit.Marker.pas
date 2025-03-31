@@ -52,14 +52,14 @@ type
 
     function GetMarkerCaption: string;
     procedure SetMarkerCaption(const Value: string);
-    function GetMarkerKind: TMarkerKind;
-    procedure SetMarkerKind(const Value: TMarkerKind);
     function GetPositionX: Integer;
     procedure SetPositionX(const Value: Integer);
     function GetPositionY: Integer;
     procedure SetPositionY(const Value: Integer);
     function GetIncrement: Integer;
   protected
+    function GetMarkerKind: TMarkerKind; virtual;
+    procedure SetMarkerKind(const Value: TMarkerKind);
     function GetTitle(const Value: TDBMarker): string; virtual;
     procedure InternalSetInstance(const Value: TDBMarker); virtual;
   public
@@ -90,6 +90,8 @@ const
 { TedMarker }
 
 constructor TedMarker.Create(AOwner: TComponent);
+var
+  Title: TTitleSettings;
 begin
   inherited;
 
@@ -102,6 +104,10 @@ begin
   FMapEdit := TMapFilter.Create(Self);
   FMapEdit.Parent := MapLayout;
   FMapEdit.Align := TAlignLayout.Client;
+  Title.Caption := 'Карта:';
+  Title.FontSize := 12;
+  FMapEdit.Title := Title;
+  FMapEdit.ReadOnly := True;
 
   laScreenShotName.Visible := False;
   FScreenshotsGrid := nil;
@@ -122,6 +128,26 @@ end;
 procedure TedMarker.SetMarkerCaption(const Value: string);
 begin
   edMarkerCaption.Text := Value;
+end;
+
+function TedMarker.GetPositionX: Integer;
+begin
+  Result := Trunc(edPositionX.Value);
+end;
+
+procedure TedMarker.SetPositionX(const Value: Integer);
+begin
+  edPositionX.Value := Value;
+end;
+
+function TedMarker.GetPositionY: Integer;
+begin
+  Result := Trunc(edPositionY.Value);
+end;
+
+procedure TedMarker.SetPositionY(const Value: Integer);
+begin
+  edPositionY.Value := Value;
 end;
 
 function TedMarker.GetMarkerKind: TMarkerKind;
@@ -154,26 +180,6 @@ begin
   else
     edKindName.ItemIndex := -1;
   end;
-end;
-
-function TedMarker.GetPositionX: Integer;
-begin
-  Result := Trunc(edPositionX.Value);
-end;
-
-procedure TedMarker.SetPositionX(const Value: Integer);
-begin
-  edPositionX.Value := Value;
-end;
-
-function TedMarker.GetPositionY: Integer;
-begin
-  Result := Trunc(edPositionY.Value);
-end;
-
-procedure TedMarker.SetPositionY(const Value: Integer);
-begin
-  edPositionY.Value := Value;
 end;
 
 function TedMarker.GetTitle(const Value: TDBMarker): string;
@@ -216,6 +222,7 @@ begin
   FScreenshotsGrid.Init(FMarker);
 
   FMapEdit.Init;
+  FMapEdit.MapID := FMarker.MapID;
 
   InternalSetInstance(Value);
 end;
@@ -224,6 +231,7 @@ procedure TedMarker.PostValues(const Value: TDBMarker);
 begin
   FMarker.Caption := MarkerCaption;
   Value.Kind := MarkerKind;
+  Value.MapID := FMapEdit.MapID;
   Value.Left := PositionX;
   Value.Top := PositionY;
 end;

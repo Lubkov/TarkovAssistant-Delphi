@@ -11,6 +11,12 @@ uses
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.DBScope;
 
 type
+  TTitleSettings = record
+  public
+    Caption: string;
+    FontSize: Single;
+  end;
+
   TMapFilter = class(TFrame)
     laMapName: TLabel;
     edMapName: TComboBox;
@@ -37,6 +43,10 @@ type
 
     function GetMapID: Variant;
     procedure SetMapID(const Value: Variant);
+    function GetTitleSettings: TTitleSettings;
+    procedure SetTitleSettings(const Value: TTitleSettings);
+    function GetReadOnly: Boolean;
+    procedure SetReadOnly(const Value: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -44,6 +54,8 @@ type
     procedure Init;
 
     property MapID: Variant read GetMapID write SetMapID;
+    property Title: TTitleSettings read GetTitleSettings write SetTitleSettings;
+    property ReadOnly: Boolean read GetReadOnly write SetReadOnly;
     property OnMapChanged: TDBMapChangedEvent read FOnMapChanged write FOnMapChanged;
   end;
 
@@ -55,12 +67,6 @@ uses
 {$R *.fmx}
 
 { TMapFilter }
-
-procedure TMapFilter.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
-begin
-  if Assigned(FOnMapChanged) then
-    FOnMapChanged(FID.Value);
-end;
 
 constructor TMapFilter.Create(AOwner: TComponent);
 begin
@@ -76,6 +82,12 @@ begin
   inherited;
 end;
 
+procedure TMapFilter.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  if Assigned(FOnMapChanged) then
+    FOnMapChanged(FID.Value);
+end;
+
 function TMapFilter.GetMapID: Variant;
 begin
   Result := FID.Value;
@@ -85,6 +97,28 @@ procedure TMapFilter.SetMapID(const Value: Variant);
 begin
   if F.Active then
     F.Locate('ID', Value, []);
+end;
+
+function TMapFilter.GetTitleSettings: TTitleSettings;
+begin
+  Result.Caption := laMapName.Text;
+  Result.FontSize := laMapName.TextSettings.Font.Size;
+end;
+
+procedure TMapFilter.SetTitleSettings(const Value: TTitleSettings);
+begin
+  laMapName.Text := Value.Caption;
+  laMapName.TextSettings.Font.Size := Value.FontSize;
+end;
+
+function TMapFilter.GetReadOnly: Boolean;
+begin
+  Result := not ToolLayout.Visible;
+end;
+
+procedure TMapFilter.SetReadOnly(const Value: Boolean);
+begin
+  ToolLayout.Visible := not Value;
 end;
 
 procedure TMapFilter.Init;

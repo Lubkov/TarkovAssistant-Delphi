@@ -16,6 +16,7 @@ type
   private
     FQuestItemsGrid: TQuestItemsGrid;
   protected
+    function GetMarkerKind: TMarkerKind; override;
     function GetTitle(const Value: TDBMarker): string; override;
     procedure InternalSetInstance(const Value: TDBMarker); override;
   public
@@ -34,9 +35,13 @@ begin
 
   FQuestItemsGrid := nil;
 
-  MarkerKind := TMarkerKind.Quest;
   edKindName.Visible := False;
   laKindName.Visible := False;
+end;
+
+function TedQuestPart.GetMarkerKind: TMarkerKind;
+begin
+  Result := TMarkerKind.Quest;
 end;
 
 function TedQuestPart.GetTitle(const Value: TDBMarker): string;

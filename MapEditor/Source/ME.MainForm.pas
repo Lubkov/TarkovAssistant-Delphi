@@ -118,7 +118,7 @@ end;
 
 procedure TMainForm.OnQuestChanged(const QuestID: Variant);
 begin
-  FQuestPartGrid.Init(FMapFilter.MapID, QuestID);
+  FQuestPartGrid.Init(Null, QuestID);
 end;
 
 procedure TMainForm.MapChanged(const MapID: Variant);

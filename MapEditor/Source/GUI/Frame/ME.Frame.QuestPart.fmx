@@ -61,7 +61,7 @@ object frQuestPartGrid: TfrQuestPartGrid
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
       Size.Width = 188.000000000000000000
-      Size.Height = 15.000000000000000000
+      Size.Height = 15.200000762939450000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1095#1072#1089#1090#1077#1081' '#1082#1074#1077#1089#1090#1072'('#1084#1072#1088#1082#1077#1088#1099')'
@@ -78,8 +78,8 @@ object frQuestPartGrid: TfrQuestPartGrid
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 320.000000000000000000
-    Viewport.Height = 280.000000000000000000
+    Viewport.Width = 300.000000000000000000
+    Viewport.Height = 239.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1
@@ -363,6 +363,10 @@ object frQuestPartGrid: TfrQuestPartGrid
       FieldName = 'Top'
       Required = True
     end
+    object FMap: TWideStringField
+      FieldName = 'Map'
+      Size = 64
+    end
   end
   object BindSourceDB1: TBindSourceDB
     DataSet = F
@@ -386,6 +390,11 @@ object frQuestPartGrid: TfrQuestPartGrid
           Width = 50
         end
         item
+          MemberName = 'Map'
+          Header = #1050#1072#1088#1090#1072
+          Width = 150
+        end
+        item
           MemberName = 'Left'
           Header = #1050#1086#1086#1088#1076#1080#1085#1072#1090#1072' X'
           Width = 100
@@ -397,7 +406,9 @@ object frQuestPartGrid: TfrQuestPartGrid
         end
         item
           MemberName = 'Caption'
+          ReadOnly = True
           Header = #1054#1087#1080#1089#1072#1085#1080#1077
+          Width = 400
         end>
     end
   end
