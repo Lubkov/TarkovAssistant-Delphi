@@ -10,7 +10,7 @@ uses
   FMX.Edit, FMX.ListBox, FMX.EditBox, FMX.NumberBox, ME.Edit.Form.Presenter,
   FMX.Layouts, System.ImageList, FMX.ImgList, FMX.Platform, ME.DB.Marker,
   FMX.TabControl, ME.DB.Resource, ME.Grid.Resources, ME.Grid.Screenshots,
-  ME.MemGrid.Screenshots;
+  ME.MemGrid.Screenshots, ME.Filter.Map;
 
 type
   TedMarker = class(TEditForm, IEditDialog<TDBMarker>)
@@ -39,6 +39,7 @@ type
     edPositionX: TNumberBox;
     edPositionY: TNumberBox;
     tabMarkerImages: TTabItem;
+    MapLayout: TLayout;
     procedure edLeftClick(Sender: TObject);
     procedure buRightClick(Sender: TObject);
     procedure buTopClick(Sender: TObject);
@@ -47,6 +48,7 @@ type
   private
     FMarker: TDBMarker;
     FScreenshotsGrid: TScreenshotsGrid;
+    FMapEdit: TMapFilter;
 
     function GetMarkerCaption: string;
     procedure SetMarkerCaption(const Value: string);
@@ -88,6 +90,8 @@ const
 { TedMarker }
 
 constructor TedMarker.Create(AOwner: TComponent);
+var
+  i: Integer;
 begin
   inherited;
 
@@ -96,6 +100,10 @@ begin
   edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.ScavExtraction));
   edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.CoopExtraction));
   edKindName.Items.Add(TDBMarker.KindToStr(TMarkerKind.TransitExtraction));
+
+  FMapEdit := TMapFilter.Create(Self);
+  FMapEdit.Parent := MapLayout;
+  FMapEdit.Align := TAlignLayout.Client;
 
   laScreenShotName.Visible := False;
   FScreenshotsGrid := nil;
@@ -208,6 +216,8 @@ begin
   PositionY := FMarker.Top;
 
   FScreenshotsGrid.Init(FMarker);
+
+  FMapEdit.Init;
 
   InternalSetInstance(Value);
 end;

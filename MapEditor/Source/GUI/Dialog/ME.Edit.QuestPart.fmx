@@ -7,7 +7,6 @@ inherited edQuestPart: TedQuestPart
   end
   inherited MainContainer: TTabControl
     Size.Height = 382.000000000000000000
-    TabIndex = 2
     Sizes = (
       600s
       356s
@@ -20,7 +19,6 @@ inherited edQuestPart: TedQuestPart
       ExplicitSize.cy = 26.000000000000000000
     end
     inherited tabMarkerImages: TTabItem
-      IsSelected = False
       ExplicitSize.cx = 85.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
     end
@@ -29,7 +27,7 @@ inherited edQuestPart: TedQuestPart
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = True
+      IsSelected = False
       Size.Width = 77.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False

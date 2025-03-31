@@ -36,6 +36,7 @@ begin
 
   MarkerKind := TMarkerKind.Quest;
   edKindName.Visible := False;
+  laKindName.Visible := False;
 end;
 
 function TedQuestPart.GetTitle(const Value: TDBMarker): string;
