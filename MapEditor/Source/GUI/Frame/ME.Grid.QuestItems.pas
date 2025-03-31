@@ -153,7 +153,7 @@ begin
   QuestItem := TDBQuestItem.Create;
   try
     if not QuestItemService.GetAt(FID.Value, QuestItem) then
-      Exit;
+      Exit(False);
 
     Dialog := TedMessage.Create(Self);
     try

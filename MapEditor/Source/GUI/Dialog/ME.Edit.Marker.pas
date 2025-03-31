@@ -90,8 +90,6 @@ const
 { TedMarker }
 
 constructor TedMarker.Create(AOwner: TComponent);
-var
-  i: Integer;
 begin
   inherited;
 
