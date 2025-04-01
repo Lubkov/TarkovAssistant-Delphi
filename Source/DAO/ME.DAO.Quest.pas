@@ -54,7 +54,6 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-//    Query.SQL.Text := 'SELECT ID, MapID, Name, Trader FROM Quest WHERE MapID = :MapID ORDER BY Name';
     Query.SQL.Add('SELECT');
     Query.SQL.Add('    q.ID,');
     Query.SQL.Add('    q.MapID,');
