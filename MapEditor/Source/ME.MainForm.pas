@@ -112,7 +112,7 @@ begin
 
   FMapFilter.Init;
   FResourcesGrid.Init(nil);
-  FQuestGrid.Init(Null);
+  FQuestGrid.Init;
 //  FMapPanel.Init;
 end;
 

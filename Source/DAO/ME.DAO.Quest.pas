@@ -96,8 +96,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'INSERT INTO Quest (MapID, Name, Trader) VALUES (:MapID, :Name, :Trader)';
-    Query.ParamByName('MapID').Value := Quest.MapID;
+    Query.SQL.Text := 'INSERT INTO Quest (Name, Trader) VALUES (:Name, :Trader)';
     Query.ParamByName('Name').AsString := Quest.Name;
     Query.ParamByName('Trader').AsInteger := Ord(Quest.Trader);
     Query.Execute;
@@ -117,9 +116,8 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'UPDATE Quest SET MapID = :MapID, Name = :Name, Trader = :Trader WHERE ID = :ID';
+    Query.SQL.Text := 'UPDATE Quest SET Name = :Name, Trader = :Trader WHERE ID = :ID';
     Query.ParamByName('ID').Value := Quest.ID;
-    Query.ParamByName('MapID').Value := Quest.MapID;
     Query.ParamByName('Name').AsString := Quest.Name;
     Query.ParamByName('Trader').AsInteger := Ord(Quest.Trader);
     Query.Execute;

@@ -1,21 +1,12 @@
 ﻿[MainContainer]
 Coordinates=236,53,85,33
 
-[QuestLayout]
-Coordinates=149,53,77,33
-
-[Splitter1]
-Coordinates=84,53,55,33
-
-[tabQuests]
-Coordinates=10,53,64,33
-
 [tabLayer]
 Coordinates=218,10,57,33
 
 [tabExtractions]
 Coordinates=123,10,85,33
 
-[QuestPartsLayout]
-Coordinates=10,10,103,33
+[]
+Coordinates=10,53,64,33
 

@@ -40,7 +40,6 @@ type
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
-    FMapID: Variant;
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
 
@@ -50,7 +49,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const MapID: Variant);
+    procedure Init;
 
     property OnQuestChanged: TQuestChangedEvent read FOnQuestChanged write FOnQuestChanged;
   end;
@@ -81,27 +80,12 @@ begin
   inherited;
 end;
 
-procedure TfrQuest.Init(const MapID: Variant);
-var
-  Filter: string;
+procedure TfrQuest.Init;
 begin
-  FMapID := MapID;
-
-  if VarIsNull(MapID) then
-    Filter := ''
-  else
-    Filter := '(MapID = ' + VarToStr(MapID) + ')';
-
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
-  F.SQL.Text :=
-    ' SELECT ' + TDBQuest.FieldList +
-    ' FROM ' + TDBQuest.EntityName;
-
-  if Filter <> '' then
-    F.SQL.Add('WHERE ' + Filter);
-
-  F.SQL.Add(' ORDER BY Name');
+  F.SQL.Text := 'SELECT ' + TDBQuest.FieldList + ' FROM ' + TDBQuest.EntityName;
+  F.SQL.Add('ORDER BY Name');
   F.Open;
 end;
 
@@ -160,7 +144,6 @@ var
 begin
   Quest := TDBQuest.Create;
   try
-    Quest.MapID := FMapID;
     if not InternalQuestEdit(Quest) then
       Exit;
 
@@ -193,7 +176,6 @@ begin
   Quest := TDBQuest.Create;
   try
     Quest.ID := FID.Value;
-    Quest.MapID := FMapID;
     Quest.Name := FName.AsString;
 
     Dialog := TedMessage.Create(Self);
@@ -228,7 +210,7 @@ end;
 
 procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  acAddQuest.Enabled := not IsNullID(FMapID);
+  acAddQuest.Enabled := True;
   acEditQuest.Enabled := acAddQuest.Enabled and not IsNullID(FID.Value);
   acDeleteQuest.Enabled := acAddQuest.Enabled and not IsNullID(FID.Value);
 end;
