@@ -12,7 +12,6 @@ type
 
   TDBQuest = class(TDBEntity)
   private
-    FMapID: Variant;
     FName: string;
     FTrader: TTrader;
     FMarkers: TList<TDBMarker>;
@@ -28,7 +27,6 @@ type
 
     class function TraderToStr(Value: TTrader): string; static;
 
-    property MapID: Variant read FMapID write FMapID;
     property Name: string read FName write FName;
     property Trader: TTrader read FTrader write FTrader;
     property Markers: TList<TDBMarker> read FMarkers;
@@ -42,7 +40,6 @@ constructor TDBQuest.Create;
 begin
   inherited;
 
-  FMapID := Null;
   FName := '';
   FMarkers := TObjectList<TDBMarker>.Create;
 end;
@@ -62,7 +59,6 @@ begin
 
   Quest := TDBQuest(Source);
 
-  FMapID := Quest.MapID;
   FName := Quest.Name;
   FTrader := Quest.Trader;
 end;
@@ -71,7 +67,6 @@ procedure TDBQuest.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
-  FMapID := DataSet.FieldByName('MapID').Value;
   FName := DataSet.FieldByName('Name').AsString;
   FTrader := TTrader(DataSet.FieldByName('Trader').AsInteger);
 end;
@@ -83,7 +78,7 @@ end;
 
 class function TDBQuest.FieldList: string;
 begin
-  Result := 'ID, MapID, Name, Trader';
+  Result := 'ID, Name, Trader';
 end;
 
 class function TDBQuest.TraderToStr(Value: TTrader): string;

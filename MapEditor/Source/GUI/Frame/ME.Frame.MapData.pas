@@ -7,25 +7,17 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Edit, FMX.EditBox, FMX.NumberBox, FMX.Controls.Presentation,
   FMX.TabControl, FMX.Layouts,
-  ME.DB.Map, Map.Data.Types, ME.Frame.Marker, ME.Frame.Quest, ME.Frame.Layer, ME.Frame.QuestPart;
+  ME.DB.Map, Map.Data.Types, ME.Frame.Marker, ME.Frame.Layer;
 
 type
   TfrMapData = class(TFrame)
     MainContainer: TTabControl;
     tabLayer: TTabItem;
     tabExtractions: TTabItem;
-    tabQuests: TTabItem;
-    QuestPartsLayout: TLayout;
-    Splitter1: TSplitter;
-    QuestLayout: TLayout;
   private
     FMap: TDBMap;
     FLayerList: TfrLayerList;
     FMarkerGrid: TfrMarkerGrid;
-    FQuestList: TfrQuest;
-    FQuestPartGrid: TfrQuestPartGrid;
-
-    procedure OnQuestChanged(const QuestID: Variant);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -57,15 +49,6 @@ begin
   FMarkerGrid.Parent := tabExtractions;
   FMarkerGrid.Align := TAlignLayout.Client;
 
-  FQuestList := TfrQuest.Create(Self);
-  FQuestList.Parent := QuestLayout;
-  FQuestList.Align := TAlignLayout.Client;
-  FQuestList.OnQuestChanged := OnQuestChanged;
-
-  FQuestPartGrid := TfrQuestPartGrid.Create(Self);
-  FQuestPartGrid.Parent := QuestPartsLayout;
-  FQuestPartGrid.Align := TAlignLayout.Client;
-
   MainContainer.TabIndex := tabLayer.Index;
 end;
 
@@ -74,11 +57,6 @@ begin
   FMap.Free;
 
   inherited;
-end;
-
-procedure TfrMapData.OnQuestChanged(const QuestID: Variant);
-begin
-  FQuestPartGrid.Init(FMap.ID, QuestID);
 end;
 
 procedure TfrMapData.Init(const MapID: Variant);
@@ -95,7 +73,6 @@ begin
 
     FLayerList.Init(MapID);
     FMarkerGrid.Init(MapID);
-    FQuestList.Init(MapID);
   end
   else
     Clear;

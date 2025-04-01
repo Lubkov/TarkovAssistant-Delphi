@@ -61,7 +61,7 @@ object frQuest: TfrQuest
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
       Size.Width = 96.000000000000000000
-      Size.Height = 15.000000000000000000
+      Size.Height = 15.200000762939450000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1082#1074#1077#1089#1090#1086#1074
@@ -78,8 +78,8 @@ object frQuest: TfrQuest
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 500.000000000000000000
-    Viewport.Height = 288.000000000000000000
+    Viewport.Width = 496.000000000000000000
+    Viewport.Height = 263.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1
