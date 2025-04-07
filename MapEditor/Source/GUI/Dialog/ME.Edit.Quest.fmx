@@ -7,7 +7,7 @@ inherited edQuest: TedQuest
   end
   object MainLayout: TLayout [1]
     Align = Client
-    Size.Width = 344.000000000000000000
+    Size.Width = 345.000000000000000000
     Size.Height = 142.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
@@ -19,12 +19,12 @@ inherited edQuest: TedQuest
       Margins.Right = 20.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 20.000000000000000000
-      Size.Width = 304.000000000000000000
+      Size.Width = 305.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077':'
-      TabOrder = 5
+      TabOrder = 4
     end
     object edQuestName: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -35,36 +35,21 @@ inherited edQuest: TedQuest
       Margins.Left = 20.000000000000000000
       Margins.Top = 2.000000000000000000
       Margins.Right = 20.000000000000000000
-      Size.Width = 304.000000000000000000
+      Size.Width = 305.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
-    object laTraderName: TLabel
+    object TraderLayout: TLayout
       Align = Top
-      StyledSettings = [Size, Style, FontColor]
       Margins.Left = 20.000000000000000000
       Margins.Top = 20.000000000000000000
       Margins.Right = 20.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 81.000000000000000000
-      Size.Width = 304.000000000000000000
-      Size.Height = 17.000000000000000000
+      Size.Width = 305.000000000000000000
+      Size.Height = 48.000000000000000000
       Size.PlatformDefault = False
-      TextSettings.Font.Family = 'Tahoma'
-      Text = #1058#1086#1088#1075#1086#1074#1077#1094':'
-      TabOrder = 6
-    end
-    object edTraderName: TComboBox
-      Align = Top
-      Margins.Left = 20.000000000000000000
-      Margins.Top = 2.000000000000000000
-      Margins.Right = 20.000000000000000000
-      Position.X = 20.000000000000000000
-      Position.Y = 100.000000000000000000
-      Size.Width = 304.000000000000000000
-      Size.Height = 22.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
+      TabOrder = 5
     end
   end
   inherited ActionList1: TActionList
