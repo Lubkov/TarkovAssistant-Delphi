@@ -57,11 +57,15 @@ object frLayerList: TfrLayerList
       TextSettings.Trimming = None
     end
     object laTitle: TLabel
-      Align = Center
+      Align = Client
       AutoSize = True
       StyledSettings = [Size, Style, FontColor]
-      Size.Width = 192.000000000000000000
-      Size.Height = 15.200000762939450000
+      Margins.Left = 25.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Right = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 527.000000000000000000
+      Size.Height = 36.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1091#1088#1086#1074#1085#1077#1081' '#1082#1072#1088#1090#1099

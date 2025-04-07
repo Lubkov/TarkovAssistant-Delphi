@@ -1,7 +1,13 @@
 inherited QuestResourcesGrid: TQuestResourcesGrid
   inherited paTopPanel: TPanel
     inherited laTitle: TLabel
-      Size.Width = 170.000000000000000000
+      Align = Client
+      Margins.Left = 25.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Right = 2.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 285.000000000000000000
+      Size.Height = 36.000000000000000000
       Text = #1057#1087#1080#1089#1086#1082' '#1082#1074#1077#1089#1090#1086#1074#1099#1093' '#1087#1088#1077#1076#1084#1077#1090#1086#1074
     end
   end

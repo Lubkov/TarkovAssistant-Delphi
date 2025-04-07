@@ -9,7 +9,8 @@ uses
   FMX.ActnList, FMX.Grid, FMX.ScrollBox, FMX.Controls.Presentation,
   ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
-  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope;
+  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
+  FMX.Edit;
 
 type
   TfrQuest = class(TFrame)
@@ -32,6 +33,7 @@ type
     Grid: TStringGrid;
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     BindingsList1: TBindingsList;
+    edFilterText: TEdit;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);
@@ -39,6 +41,7 @@ type
     procedure FCalcFields(DataSet: TDataSet);
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
+    procedure edFilterTextChangeTracking(Sender: TObject);
   private
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
@@ -71,6 +74,7 @@ begin
   FQuestID := Null;
   Grid.RowCount := 0;
   FOnQuestChanged := nil;
+  F.FilterOptions := F.FilterOptions + [TFilterOption.foCaseInsensitive];
 end;
 
 destructor TfrQuest.Destroy;
@@ -206,6 +210,22 @@ procedure TfrQuest.GridCellDblClick(const Column: TColumn; const Row: Integer);
 begin
   if not IsNullID(FID.Value) then
     QuestEdit(FID.Value);
+end;
+
+procedure TfrQuest.edFilterTextChangeTracking(Sender: TObject);
+var
+  Filter: string;
+begin
+  if not F.Active then
+    Exit;
+
+  Filter := Trim(edFilterText.Text);
+  if Filter <> '' then
+    F.Filter := 'Name like ' + QuotedStr('%' + edFilterText.Text + '%')
+  else
+    F.Filter := '';
+
+  F.Filtered := F.Filter <> '';
 end;
 
 procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

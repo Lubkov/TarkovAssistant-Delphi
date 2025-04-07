@@ -98,6 +98,7 @@ begin
   FResourceID := Null;
   Grid.RowCount := 0;
   FSorted := False;
+  F.FilterOptions := F.FilterOptions + [TFilterOption.foCaseInsensitive];
 
   FPicturePanel := TfrPicture.Create(Self);
   FPicturePanel.Parent := paPicture;

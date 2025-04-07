@@ -18,9 +18,6 @@ type
     QuestItemsTab: TTabItem;
     TopLayout: TLayout;
     Panel1: TPanel;
-    buExpot: TButton;
-    buExportToDB: TButton;
-    Button1: TButton;
     buReconnect: TButton;
     QuestsTab: TTabItem;
     QuestLayout: TLayout;
@@ -28,13 +25,9 @@ type
     Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure buExpotClick(Sender: TObject);
     procedure MapChanged(const MapID: Variant);
-    procedure buExportToDBClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure buReconnectClick(Sender: TObject);
   private
-//    FMapPanel: TfrMap;
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
     FResourcesGrid: TQuestResourcesGrid;
@@ -59,20 +52,12 @@ uses
 {$R *.fmx}
 
 // id, icon, name, выходы чвк(кол-во), выходы дикого(кол-во), выходы совместные(кол-во), квесты (кол-во)
-// QuestResources
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   AppService.LoadParams;
-//  AppService.LoadDataFromJSON;
 
-  Self.Caption := '[Map Editor] JSON storage';
-//  Self.Caption := '[Maps Editor] Database = "' + AppService.Database + '"';
-
-//  FMapPanel := TfrMap.Create(Self);
-//  FMapPanel.Parent := Self;
-//  FMapPanel.Align := TAlignLayout.Client;
-////  FMapPanel.OnChange := OnMapChanged;
+  Self.Caption := '[Maps Editor] Database = "' + AppService.Options.DataPath + '"';
 
   FMapFilter := TMapFilter.Create(Self);
   FMapFilter.Parent := TopLayout;
@@ -113,7 +98,6 @@ begin
   FMapFilter.Init;
   FResourcesGrid.Init(nil);
   FQuestGrid.Init;
-//  FMapPanel.Init;
 end;
 
 procedure TMainForm.OnQuestChanged(const QuestID: Variant);
@@ -124,30 +108,6 @@ end;
 procedure TMainForm.MapChanged(const MapID: Variant);
 begin
   FMapData.Init(MapID);
-end;
-
-procedure TMainForm.buExpotClick(Sender: TObject);
-var
-  FileName: string;
-begin
-  FileName := System.IOUtils.TPath.Combine(AppService.Options.DataPath, 'data.json');
-//  TJSONDataExport.SaveToFile(FileName, DataService.Items);
-
-  ShowMessage('Done');
-end;
-
-procedure TMainForm.buExportToDBClick(Sender: TObject);
-begin
-//  TDBDataImport.Load(DataService.Items);
-
-  ShowMessage('Done');
-end;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-begin
-  ResourceService.ExportFromDB;
-
-  ShowMessage('Done');
 end;
 
 procedure TMainForm.buReconnectClick(Sender: TObject);
