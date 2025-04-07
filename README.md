@@ -1,2 +1,2 @@
-# EscapeFromTarkov
-Escape from Tarkov maps
+# TarkovAssistant
+Escape from Tarkov assistant
