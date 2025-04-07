@@ -74,7 +74,8 @@ uses
   App.Entity in '..\Source\Common\App.Entity.pas',
   ME.Profile in '..\Source\Entity\ME.Profile.pas',
   ME.QuestTracker in '..\Source\Entity\ME.QuestTracker.pas',
-  ME.Options in '..\Source\Entity\ME.Options.pas';
+  ME.Options in '..\Source\Entity\ME.Options.pas',
+  ME.Filter.Trader in 'Source\GUI\Filter\ME.Filter.Trader.pas' {TraderFilter: TFrame};
 
 {$R *.res}
 
