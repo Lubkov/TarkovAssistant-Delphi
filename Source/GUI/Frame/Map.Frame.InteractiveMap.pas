@@ -7,7 +7,7 @@ uses
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.Objects, FMX.Layouts, TM.Form.Wrapper, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, TM.Map.Wrapper, ME.MarkerFilter, Map.Data.Types,
-  Map.Frame.Marker, ME.DB.Map, ME.DB.Marker, ME.DB.Quest;
+  Map.Frame.Marker, ME.Trader, ME.DB.Map, ME.DB.Marker, ME.DB.Quest;
 
 type
   TInteractiveMap = class(TFrame)

@@ -10,7 +10,7 @@ uses
   ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
-  FMX.Edit;
+  FMX.Edit, ME.Trader;
 
 type
   TfrQuest = class(TFrame)
@@ -95,7 +95,7 @@ end;
 
 procedure TfrQuest.FCalcFields(DataSet: TDataSet);
 begin
-  FTraderName.AsString := TDBQuest.TraderToStr(TTrader(FTrader.AsInteger));
+  FTraderName.AsString := TraderToStr(TTrader(FTrader.AsInteger));
 end;
 
 procedure TfrQuest.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);

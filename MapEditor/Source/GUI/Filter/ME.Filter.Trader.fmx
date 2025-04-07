@@ -25,7 +25,7 @@ object TraderFilter: TTraderFilter
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1058#1086#1088#1075#1086#1074#1077#1094':'
-      TabOrder = 6
+      TabOrder = 5
     end
     object ToolLayout: TLayout
       Align = MostRight

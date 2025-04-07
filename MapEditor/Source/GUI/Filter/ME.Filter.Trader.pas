@@ -3,10 +3,10 @@ unit ME.Filter.Trader;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  FMX.ListBox, FMX.Controls.Presentation, ME.DB.Quest, FMX.Layouts,
-  System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList;
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.Actions, System.ImageList, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms,
+  FMX.Dialogs, FMX.StdCtrls, FMX.ListBox, FMX.Controls.Presentation, FMX.Layouts,
+  FMX.ImgList, FMX.ActnList, ME.DB.Quest, ME.Trader;
 
 type
   TTraderFilter = class(TFrame)
@@ -46,7 +46,7 @@ begin
 
   edTraderName.Clear;
   for Trader := TTrader.Prapor to TTrader.Lightkeeper do
-    edTraderName.Items.Add(TDBQuest.TraderToStr(Trader));
+    edTraderName.Items.Add(TraderToStr(Trader));
 end;
 
 function TTraderFilter.GetTraderName: TTrader;

@@ -58,7 +58,8 @@ uses
   TM.Frame.Options in 'Source\GUI\Frame\TM.Frame.Options.pas' {OptionsFrame: TFrame},
   App.Entity in 'Source\Common\App.Entity.pas',
   ME.Service.Profile in 'Source\Service\ME.Service.Profile.pas',
-  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas';
+  ME.Service.QuestTracker in 'Source\Service\ME.Service.QuestTracker.pas',
+  ME.Trader in 'Source\Entity\ME.Trader.pas';
 
 {$R *.res}
 
