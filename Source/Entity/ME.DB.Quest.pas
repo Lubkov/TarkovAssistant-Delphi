@@ -4,10 +4,9 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Variants, Generics.Collections,
-  Data.DB, App.Entity, ME.DB.Entity, ME.DB.Marker;
+  Data.DB, App.Entity, ME.DB.Entity, ME.DB.Marker, ME.Trader;
 
 type
-  TTrader = (None, Prapor, Therapist, Skier, Peacemaker, Mechanic, Ragman, Jaeger, Fence, Lightkeeper);
   TQuestChangedEvent = procedure(const QuestID: Variant) of object;
 
   TDBQuest = class(TDBEntity)
@@ -24,8 +23,6 @@ type
 
     class function EntityName: string; override;
     class function FieldList: string; override;
-
-    class function TraderToStr(Value: TTrader): string; static;
 
     property Name: string read FName write FName;
     property Trader: TTrader read FTrader write FTrader;
@@ -79,32 +76,6 @@ end;
 class function TDBQuest.FieldList: string;
 begin
   Result := 'ID, Name, Trader';
-end;
-
-class function TDBQuest.TraderToStr(Value: TTrader): string;
-begin
-  case Value of
-    TTrader.Prapor:
-      Result := 'Прапор';
-    TTrader.Therapist:
-      Result := 'Терапевт';
-    TTrader.Skier:
-      Result := 'Лыжник';
-    TTrader.Peacemaker:
-      Result := 'Миротворец';
-    TTrader.Mechanic:
-      Result := 'Механик';
-    TTrader.Ragman:
-      Result := 'Барахольщик';
-    TTrader.Jaeger:
-      Result := 'Егерь';
-    TTrader.Fence:
-      Result := 'Скупщик';
-    TTrader.Lightkeeper:
-      Result := 'Смотритель';
-  else
-    Result := '';
-  end;
 end;
 
 end.

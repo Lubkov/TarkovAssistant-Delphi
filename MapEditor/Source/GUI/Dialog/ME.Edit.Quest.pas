@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   System.Actions, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, FMX.ActnList, FMX.Controls.Presentation, FMX.Edit, FMX.ListBox,
-  FMX.Layouts, ME.Edit.Form, ME.Edit.Form.Presenter, ME.DB.Quest, ME.Filter.Trader;
+  FMX.Layouts, ME.Edit.Form, ME.Edit.Form.Presenter, ME.DB.Quest, ME.Trader,
+  ME.Filter.Trader;
 
 type
   TedQuest = class(TEditForm, IEditDialog<TDBQuest>)

@@ -69,7 +69,7 @@ object frQuest: TfrQuest
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1079#1072#1076#1072#1085#1080#1081' ('#1082#1074#1077#1089#1090#1086#1074')'
-      TabOrder = 3
+      TabOrder = 2
     end
     object edFilterText: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -98,8 +98,8 @@ object frQuest: TfrQuest
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 496.000000000000000000
-    Viewport.Height = 263.000000000000000000
+    Viewport.Width = 500.000000000000000000
+    Viewport.Height = 288.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1
