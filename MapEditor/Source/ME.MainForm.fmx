@@ -54,57 +54,6 @@ object MainForm: TMainForm
         Size.Height = 45.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
-        object buExpot: TButton
-          Align = Left
-          Enabled = False
-          Margins.Left = 10.000000000000000000
-          Margins.Top = 5.000000000000000000
-          Margins.Right = 5.000000000000000000
-          Margins.Bottom = 5.000000000000000000
-          Position.X = 105.000000000000000000
-          Position.Y = 5.000000000000000000
-          Size.Width = 80.000000000000000000
-          Size.Height = 35.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 4
-          Text = 'Expot'
-          TextSettings.Trimming = None
-          OnClick = buExpotClick
-        end
-        object buExportToDB: TButton
-          Align = Left
-          Enabled = False
-          Margins.Left = 10.000000000000000000
-          Margins.Top = 5.000000000000000000
-          Margins.Right = 5.000000000000000000
-          Margins.Bottom = 5.000000000000000000
-          Position.X = 200.000000000000000000
-          Position.Y = 5.000000000000000000
-          Size.Width = 80.000000000000000000
-          Size.Height = 35.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 2
-          Text = 'JSON to DB'
-          TextSettings.Trimming = None
-          OnClick = buExportToDBClick
-        end
-        object Button1: TButton
-          Align = Left
-          Enabled = False
-          Margins.Left = 10.000000000000000000
-          Margins.Top = 5.000000000000000000
-          Margins.Right = 5.000000000000000000
-          Margins.Bottom = 5.000000000000000000
-          Position.X = 295.000000000000000000
-          Position.Y = 5.000000000000000000
-          Size.Width = 110.000000000000000000
-          Size.Height = 35.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 1
-          Text = 'Export Resources'
-          TextSettings.Trimming = None
-          OnClick = Button1Click
-        end
         object buReconnect: TButton
           Align = Left
           Margins.Left = 10.000000000000000000
@@ -116,7 +65,7 @@ object MainForm: TMainForm
           Size.Width = 80.000000000000000000
           Size.Height = 35.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 3
+          TabOrder = 1
           Text = 'Reconnect'
           TextSettings.Trimming = None
           OnClick = buReconnectClick
@@ -140,15 +89,15 @@ object MainForm: TMainForm
       object QuestLayout: TLayout
         Align = Client
         Size.Width = 864.000000000000000000
-        Size.Height = 405.000000000000000000
+        Size.Height = 325.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 2
       end
       object QuestPartsLayout: TLayout
         Align = Bottom
-        Position.Y = 410.000000000000000000
+        Position.Y = 330.000000000000000000
         Size.Width = 864.000000000000000000
-        Size.Height = 140.000000000000000000
+        Size.Height = 220.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
@@ -156,7 +105,7 @@ object MainForm: TMainForm
         Align = Bottom
         Cursor = crVSplit
         MinSize = 5.000000000000000000
-        Position.Y = 405.000000000000000000
+        Position.Y = 325.000000000000000000
         ShowGrip = False
         Size.Width = 864.000000000000000000
         Size.Height = 5.000000000000000000

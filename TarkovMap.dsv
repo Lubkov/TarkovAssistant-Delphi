@@ -12007,7 +12007,6 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\Delphi\EscapeFromTarkov\Source\Entity\ME.Profile.pas
-
 [ClosedView_RDpcUHJvamVjdHNcRGVscGhpXEVzY2FwZUZyb21UYXJrb3ZcU291cmNlXEVudGl0eVxNRS5RdWVz
 dFRyYWNrZXIucGFz]
 Module=D:\Projects\Delphi\EscapeFromTarkov\Source\Entity\ME.QuestTracker.pas
@@ -12018,4 +12017,15 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\Delphi\EscapeFromTarkov\Source\Entity\ME.QuestTracker.pas
+
+[ClosedView_YzpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uSU9VdGlscy5wYXM=]
+Module=c:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.IOUtils.pas
+CursorX=1
+CursorY=1919
+TopLine=1898
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.IOUtils.pas
 

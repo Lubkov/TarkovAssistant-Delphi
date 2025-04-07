@@ -16,7 +16,7 @@ object frQuest: TfrQuest
       Margins.Left = 2.000000000000000000
       Margins.Top = 2.000000000000000000
       Margins.Bottom = 2.000000000000000000
-      Position.X = 2.000000000000000000
+      Position.X = 132.000000000000000000
       Position.Y = 2.000000000000000000
       Size.Width = 36.000000000000000000
       Size.Height = 36.000000000000000000
@@ -32,7 +32,7 @@ object frQuest: TfrQuest
       Margins.Left = 2.000000000000000000
       Margins.Top = 2.000000000000000000
       Margins.Bottom = 2.000000000000000000
-      Position.X = 40.000000000000000000
+      Position.X = 170.000000000000000000
       Position.Y = 2.000000000000000000
       Size.Width = 36.000000000000000000
       Size.Height = 36.000000000000000000
@@ -48,7 +48,7 @@ object frQuest: TfrQuest
       Margins.Left = 2.000000000000000000
       Margins.Top = 2.000000000000000000
       Margins.Bottom = 2.000000000000000000
-      Position.X = 78.000000000000000000
+      Position.X = 208.000000000000000000
       Position.Y = 2.000000000000000000
       Size.Width = 36.000000000000000000
       Size.Height = 36.000000000000000000
@@ -57,15 +57,35 @@ object frQuest: TfrQuest
       TextSettings.Trimming = None
     end
     object laTitle: TLabel
-      Align = Center
+      Align = Client
       AutoSize = True
-      StyledSettings = [Size, Style, FontColor]
-      Size.Width = 96.000000000000000000
-      Size.Height = 15.200000762939450000
+      StyledSettings = [Size, FontColor]
+      Margins.Left = 25.000000000000000000
+      Margins.Top = 2.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 2.000000000000000000
+      Size.Width = 221.000000000000000000
+      Size.Height = 36.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
-      Text = #1057#1087#1080#1089#1086#1082' '#1082#1074#1077#1089#1090#1086#1074
+      Text = #1057#1087#1080#1089#1086#1082' '#1079#1072#1076#1072#1085#1080#1081' ('#1082#1074#1077#1089#1090#1086#1074')'
       TabOrder = 3
+    end
+    object edFilterText: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Left
+      TabOrder = 0
+      AutoSelect = True
+      Position.X = 5.000000000000000000
+      Position.Y = 8.000000000000000000
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 8.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 8.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 24.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = edFilterTextChangeTracking
     end
   end
   object Grid: TStringGrid
