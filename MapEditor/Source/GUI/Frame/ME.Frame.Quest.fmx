@@ -4,6 +4,7 @@ object frQuest: TfrQuest
   Size.PlatformDefault = False
   object paTopPanel: TPanel
     Align = Top
+    Position.Y = 50.000000000000000000
     Size.Width = 500.000000000000000000
     Size.Height = 40.000000000000000000
     Size.PlatformDefault = False
@@ -69,7 +70,7 @@ object frQuest: TfrQuest
       Size.PlatformDefault = False
       TextSettings.Font.Family = 'Tahoma'
       Text = #1057#1087#1080#1089#1086#1082' '#1079#1072#1076#1072#1085#1080#1081' ('#1082#1074#1077#1089#1090#1086#1074')'
-      TabOrder = 2
+      TabOrder = 1
     end
     object edFilterText: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -93,13 +94,32 @@ object frQuest: TfrQuest
     CanFocus = True
     ClipChildren = True
     Size.Width = 500.000000000000000000
-    Size.Height = 288.000000000000000000
+    Size.Height = 238.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 500.000000000000000000
-    Viewport.Height = 288.000000000000000000
+    Viewport.Width = 496.000000000000000000
+    Viewport.Height = 213.000000000000000000
+  end
+  object FilterLayout: TLayout
+    Align = Top
+    Size.Width = 500.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 12
+    object TraderLayout: TLayout
+      Align = Left
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 224.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+    end
   end
   object ActionList1: TActionList
     Images = ImageList1

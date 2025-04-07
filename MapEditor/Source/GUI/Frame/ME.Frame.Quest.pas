@@ -10,7 +10,7 @@ uses
   ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
-  FMX.Edit, ME.Trader;
+  FMX.Edit, ME.Trader, FMX.Layouts, ME.Filter.Trader;
 
 type
   TfrQuest = class(TFrame)
@@ -34,6 +34,8 @@ type
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     BindingsList1: TBindingsList;
     edFilterText: TEdit;
+    FilterLayout: TLayout;
+    TraderLayout: TLayout;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);
@@ -45,6 +47,7 @@ type
   private
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
+    FTraderFilter: TTraderFilter;
 
     function InternalQuestEdit(const Quest: TDBQuest): Boolean;
     procedure QuestEdit(const Index: Integer);
@@ -75,6 +78,10 @@ begin
   Grid.RowCount := 0;
   FOnQuestChanged := nil;
   F.FilterOptions := F.FilterOptions + [TFilterOption.foCaseInsensitive];
+
+  FTraderFilter := TTraderFilter.Create(Self);
+  FTraderFilter.Parent := TraderLayout;
+  FTraderFilter.Align := TAlignLayout.Client;
 end;
 
 destructor TfrQuest.Destroy;
