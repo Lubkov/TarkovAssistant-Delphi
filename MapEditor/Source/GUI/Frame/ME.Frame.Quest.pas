@@ -83,6 +83,7 @@ begin
   FTraderFilter.Parent := TraderLayout;
   FTraderFilter.Align := TAlignLayout.Client;
   FTraderFilter.OnChange := OnApplyFilter;
+  FTraderFilter.Init;
 
   edFilterText.OnChangeTracking := OnApplyFilter;
 end;
@@ -131,11 +132,11 @@ begin
   else
     Filter := '';
 
-  if FTraderFilter.TraderName <> TTrader.None then begin
+  if FTraderFilter.KeyValue <> Null then begin
     if Filter <> '' then
       Filter := Filter + ' AND ';
 
-    Filter := Filter + '(Trader = ' + IntToStr(Ord(FTraderFilter.TraderName)) + ')';
+    Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
   end;
 
   F.Filter := Filter;

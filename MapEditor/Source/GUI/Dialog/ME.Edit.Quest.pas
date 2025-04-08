@@ -49,7 +49,8 @@ begin
   FTraderEdit := TTraderFilter.Create(Self);
   FTraderEdit.Parent := TraderLayout;
   FTraderEdit.Align := TAlignLayout.Client;
-  FTraderEdit.ClearActionVisible := False;
+  FTraderEdit.ClearFilter.Visible := False;
+  FTraderEdit.Init;
 end;
 
 destructor TedQuest.Destroy;
@@ -71,12 +72,12 @@ end;
 
 function TedQuest.GetTraderName: TTrader;
 begin
-  Result := FTraderEdit.TraderName;
+  Result := FTraderEdit.Trader;
 end;
 
 procedure TedQuest.SetTraderName(const Value: TTrader);
 begin
-  FTraderEdit.TraderName := Value;
+  FTraderEdit.Trader := Value;
 end;
 
 procedure TedQuest.SetInstance(const Value: TDBQuest);

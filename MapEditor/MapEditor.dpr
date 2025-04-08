@@ -75,9 +75,9 @@ uses
   ME.Profile in '..\Source\Entity\ME.Profile.pas',
   ME.QuestTracker in '..\Source\Entity\ME.QuestTracker.pas',
   ME.Options in '..\Source\Entity\ME.Options.pas',
-  ME.Filter.Trader in 'Source\GUI\Filter\ME.Filter.Trader.pas' {TraderFilter: TFrame},
   ME.Trader in '..\Source\Entity\ME.Trader.pas',
-  ME.Form.Filter in '..\Source\Common\ME.Form.Filter.pas' {FormFilter: TFrame};
+  ME.Form.Filter in '..\Source\Common\ME.Form.Filter.pas' {FormFilter: TFrame},
+  ME.Filter.Trader in 'Source\GUI\Filter\ME.Filter.Trader.pas' {TraderFilter: TFrame};
 
 {$R *.res}
 

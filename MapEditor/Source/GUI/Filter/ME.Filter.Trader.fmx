@@ -1,117 +1,31 @@
-object TraderFilter: TTraderFilter
-  Size.Width = 324.000000000000000000
-  Size.Height = 92.000000000000000000
-  Size.PlatformDefault = False
-  object MainLayout: TLayout
-    Align = Top
-    Size.Width = 324.000000000000000000
-    Size.Height = 48.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 4
+inherited TraderFilter: TTraderFilter
+  inherited MainLayout: TLayout
+    inherited ToolLayout: TLayout
+      TabOrder = 2
+    end
+    object laTraderName: TLabel
+      Align = Top
+      StyledSettings = [Size, Style, FontColor]
+      Size.Width = 253.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Tahoma'
+      Text = #1058#1086#1088#1075#1086#1074#1077#1094':'
+      TabOrder = 4
+    end
     object edTraderName: TComboBox
       Align = Top
       Margins.Top = 2.000000000000000000
       Position.Y = 19.000000000000000000
-      Size.Width = 286.000000000000000000
+      Size.Width = 253.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       OnChange = edTraderNameChange
     end
-    object laTraderName: TLabel
-      Align = Top
-      StyledSettings = [Size, Style, FontColor]
-      Size.Width = 286.000000000000000000
-      Size.Height = 17.000000000000000000
-      Size.PlatformDefault = False
-      TextSettings.Font.Family = 'Tahoma'
-      Text = #1058#1086#1088#1075#1086#1074#1077#1094':'
-      TabOrder = 5
-    end
-    object ToolLayout: TLayout
-      Align = MostRight
-      Position.X = 286.000000000000000000
-      Size.Width = 38.000000000000000000
-      Size.Height = 48.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 4
-      object ButtonLayout: TLayout
-        Align = Top
-        Margins.Top = 12.000000000000000000
-        Position.Y = 12.000000000000000000
-        Size.Width = 38.000000000000000000
-        Size.Height = 34.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 0
-        object edEditMap: TSpeedButton
-          Action = acClearFilter
-          Align = Left
-          Images = ImageList1
-          ImageIndex = 0
-          Margins.Left = 4.000000000000000000
-          Margins.Top = 2.000000000000000000
-          Margins.Bottom = 2.000000000000000000
-          Position.X = 4.000000000000000000
-          Position.Y = 2.000000000000000000
-          Size.Width = 30.000000000000000000
-          Size.Height = 30.000000000000000000
-          Size.PlatformDefault = False
-          StyleLookup = 'actiontoolbutton'
-          TextSettings.Trimming = None
-        end
-      end
-    end
   end
-  object ImageList1: TImageList
-    Source = <
-      item
-        MultiResBitmap.Height = 24
-        MultiResBitmap.Width = 24
-        MultiResBitmap.LoadSize = 0
-        MultiResBitmap = <
-          item
-            Width = 24
-            Height = 24
-            PNG = {
-              89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
-              F80000000473424954080808087C086488000001A2494441544889A594B16E13
-              411086BF7FBB28E7346978913B51219473938E07408286C60A44A2A24A7C9152
-              D0241158205754F45454B934549C5F03940738236429BAA120B68CEDDDDB3353
-              EECC7CDFAE767704501FA48F24BD3748849D24E5E4335BC4344F9F1A2A047503
-              2FF7CAEA9BEAFEC3C7B2E62BB0735F67861DF5CAC9872EF03A4F07422340F74B
-              BFCDD9A19335E32538808446759E0EFE030EB0A3466307EC6FE8899678E0F3D8
-              7788734F6FABA4050EA673975C5797268AA0E4203B5A4DFCEAA72F8270789BDC
-              7CBF5A24EB7E369471EA2936335EF56EAAD11C6EA671105E566F582D88913867
-              B358F89AA04D2230F3F46D827B0B5B4EE28B357868275D251BE141410789170E
-              E0429D0EFB09982F6F80193F420CEF09229EE2C2B3FC84A3041DE0AD9235C016
-              F0A0E49F3B88F9A1C1B122DEAD8E9505A8CBF7EF3256D4153E8F5889A679F60C
-              F8E4839B287AD7D57053AECED342E8C427413CD734CF6E81075DE191925B07CC
-              B68503F4CAC9A961679EF4CC493A06EEB681B748EED4B8E3BF979C674F0C3E02
-              BBC03029AB8B58F8724CF3ECB5A030A80583DDB2FAF2076BD6FAD17391C68700
-              00000049454E44AE426082}
-            FileName = 'D:\Projects\Delphi\TarkovAssistant\MapEditor\Ico\Cancel_24.png'
-          end>
-        Name = 'Cancel_24'
-      end>
-    Destination = <
-      item
-        Layers = <
-          item
-            Name = 'Cancel_24'
-            SourceRect.Right = 24.000000000000000000
-            SourceRect.Bottom = 24.000000000000000000
-          end>
-      end>
-    Left = 112
-    Top = 8
-  end
-  object ActionList1: TActionList
-    Images = ImageList1
-    Left = 184
-    Top = 8
-    object acClearFilter: TAction
-      ImageIndex = 0
-      OnExecute = acClearFilterExecute
+  inherited ActionList1: TActionList
+    inherited acClearFilter: TAction
       ImageIndex = 0
     end
   end

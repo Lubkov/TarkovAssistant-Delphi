@@ -1,5 +1,103 @@
 object FormFilter: TFormFilter
-  Size.Width = 320.000000000000000000
-  Size.Height = 240.000000000000000000
+  Size.Width = 291.000000000000000000
+  Size.Height = 52.000000000000000000
   Size.PlatformDefault = False
+  object MainLayout: TLayout
+    Align = Top
+    Size.Width = 291.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object ToolLayout: TLayout
+      Align = MostRight
+      Position.X = 253.000000000000000000
+      Size.Width = 38.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object ButtonLayout: TLayout
+        Align = Top
+        Margins.Top = 12.000000000000000000
+        Position.Y = 12.000000000000000000
+        Size.Width = 38.000000000000000000
+        Size.Height = 34.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object edClearFilter: TSpeedButton
+          Action = acClearFilter
+          Align = Left
+          Images = ImageList1
+          ImageIndex = 0
+          Margins.Left = 4.000000000000000000
+          Margins.Top = 2.000000000000000000
+          Margins.Bottom = 2.000000000000000000
+          Position.X = 4.000000000000000000
+          Position.Y = 2.000000000000000000
+          Size.Width = 30.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'actiontoolbutton'
+          TextSettings.Trimming = None
+        end
+      end
+    end
+  end
+  object ImageList1: TImageList
+    Source = <
+      item
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Scale = 1.500000000000000000
+            Width = 24
+            Height = 24
+            PNG = {
+              89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
+              F80000000473424954080808087C08648800000280494441544889D595C14F13
+              4114877FBFD9F550299068620C562B311242BC10A4182558B7B122A8FFAD802D
+              6D8936C4B510C010E2D5D893DA522AB06A3AF33CD496B63B2D5C79A7DD9979DF
+              376F266F17B8ECC1D6C3F764321A51276F49CE03F2C591C65224BFF3F52290C0
+              9B8E6BBA2B002745F02130C7AF6E6C1C1C03806A2D8AB8C11AC985E618A71A74
+              8BB57462FC3C782D9D186FD02D029C02A0483C8DB8D1D5D67C5B409127DDA531
+              E66A29D65389897EF07A2A31E16A29128C75E50AE643022894C3088E2948C126
+              A9A712130A520038164A33FC1616182E0BF1D32E41EEE8F9DCFDD648E04DC71D
+              226B851355887973F6DA1127E9B91931F20E82EBBD792228BB70E7CD953F7FD1
+              509B02DEB5C00F95522FAF663EFA5601001CA51FCD39DAAC00B8160208CA5462
+              4478275C296A867C3DB2EE17BB9D963849CDCE0AB9DA5B0901882D81A81923CB
+              23F9D26678AA4FFC4A3F7C00A3366839AE1EC221615243EB5B3BB669651B0480
+              E1CCD63E840BF68B6FC3ABA078FDE000E00EDE1C2A849C4A9F42C52070E0FE18
+              C4E85BC1697AF636693EF5B9D0E606885B1ADA1FD4F15641904E8C8B707310BC
+              53E26A29D69333931712FCF666EE698DF762100BAD260E85A8583463CA710A36
+              499720F0A6E35A3979C00AAF82E20DB8F89BCA71B29D1DDF2508BCC771437743
+              04E1636976E852345BDA1DCEF9074A7111D64A10535AF241C79DB4059A8D8CB5
+              FD81AAEE69FFA18CBFAD955E06500DED85886983B5900040F8B34C5408591CED
+              80B76234B3ED6BA3976C12C819EBEC7F40EE76AD212AA24C7228572A59AA6A4A
+              0ADB3EC06702E93A2E0ADA8DD71618E5BC20B0F7FFB50C6592C399ADFD7EF056
+              4473FE67427900CA044060CFB8EEE279799727FE019513FF60CC0AD985000000
+              0049454E44AE426082}
+            FileName = 'D:\Projects\Delphi\TarkovAssistant\MapEditor\Ico\Cancel_24.png'
+          end>
+        Name = 'Cancel_24'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'Cancel_24'
+          end>
+      end>
+    Left = 112
+    Top = 8
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    Left = 184
+    Top = 8
+    object acClearFilter: TAction
+      Text = 'acClearFilter'
+      ImageIndex = 0
+      OnExecute = acClearFilterExecute
+      ImageIndex = 0
+    end
+  end
 end
