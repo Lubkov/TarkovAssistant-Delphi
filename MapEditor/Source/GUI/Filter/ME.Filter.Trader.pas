@@ -20,16 +20,21 @@ type
     ActionList1: TActionList;
     acClearFilter: TAction;
     procedure acClearFilterExecute(Sender: TObject);
+    procedure edTraderNameChange(Sender: TObject);
   private
+    FOnChange: TNotifyEvent;
+
     function GetTraderName: TTrader;
     procedure SetTraderName(const Value: TTrader);
     function GetClearActionVisible: Boolean;
     procedure SetClearActionVisible(const Value: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
 
     property TraderName: TTrader read GetTraderName write SetTraderName;
     property ClearActionVisible: Boolean read GetClearActionVisible write SetClearActionVisible;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
 implementation
@@ -44,9 +49,18 @@ var
 begin
   inherited;
 
+  FOnChange := nil;
+
   edTraderName.Clear;
   for Trader := TTrader.Prapor to TTrader.Lightkeeper do
     edTraderName.Items.Add(TraderToStr(Trader));
+end;
+
+destructor TTraderFilter.Destroy;
+begin
+  FOnChange := nil;
+
+  inherited;
 end;
 
 function TTraderFilter.GetTraderName: TTrader;
@@ -65,6 +79,12 @@ end;
 function TTraderFilter.GetClearActionVisible: Boolean;
 begin
   Result := acClearFilter.Visible;
+end;
+
+procedure TTraderFilter.edTraderNameChange(Sender: TObject);
+begin
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 procedure TTraderFilter.SetClearActionVisible(const Value: Boolean);
