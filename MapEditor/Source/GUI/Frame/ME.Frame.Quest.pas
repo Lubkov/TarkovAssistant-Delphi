@@ -43,12 +43,12 @@ type
     procedure FCalcFields(DataSet: TDataSet);
     procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
-    procedure edFilterTextChangeTracking(Sender: TObject);
   private
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
     FTraderFilter: TTraderFilter;
 
+    procedure OnApplyFilter(Sender: TObject);
     function InternalQuestEdit(const Quest: TDBQuest): Boolean;
     procedure QuestEdit(const Index: Integer);
   public
@@ -82,6 +82,9 @@ begin
   FTraderFilter := TTraderFilter.Create(Self);
   FTraderFilter.Parent := TraderLayout;
   FTraderFilter.Align := TAlignLayout.Client;
+  FTraderFilter.OnChange := OnApplyFilter;
+
+  edFilterText.OnChangeTracking := OnApplyFilter;
 end;
 
 destructor TfrQuest.Destroy;
@@ -113,6 +116,30 @@ begin
   FQuestID := FID.Value;
   if Assigned(FOnQuestChanged) then
     FOnQuestChanged(FID.Value);
+end;
+
+procedure TfrQuest.OnApplyFilter(Sender: TObject);
+var
+  Filter: string;
+begin
+  if not F.Active then
+    Exit;
+
+  Filter := Trim(edFilterText.Text);
+  if Filter <> '' then
+    Filter := '(Name like ' + QuotedStr('%' + Filter + '%') + ')'
+  else
+    Filter := '';
+
+  if FTraderFilter.TraderName <> TTrader.None then begin
+    if Filter <> '' then
+      Filter := Filter + ' AND ';
+
+    Filter := Filter + '(Trader = ' + IntToStr(Ord(FTraderFilter.TraderName)) + ')';
+  end;
+
+  F.Filter := Filter;
+  F.Filtered := F.Filter <> '';
 end;
 
 function TfrQuest.InternalQuestEdit(const Quest: TDBQuest): Boolean;
@@ -217,22 +244,6 @@ procedure TfrQuest.GridCellDblClick(const Column: TColumn; const Row: Integer);
 begin
   if not IsNullID(FID.Value) then
     QuestEdit(FID.Value);
-end;
-
-procedure TfrQuest.edFilterTextChangeTracking(Sender: TObject);
-var
-  Filter: string;
-begin
-  if not F.Active then
-    Exit;
-
-  Filter := Trim(edFilterText.Text);
-  if Filter <> '' then
-    F.Filter := 'Name like ' + QuotedStr('%' + edFilterText.Text + '%')
-  else
-    F.Filter := '';
-
-  F.Filtered := F.Filter <> '';
 end;
 
 procedure TfrQuest.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

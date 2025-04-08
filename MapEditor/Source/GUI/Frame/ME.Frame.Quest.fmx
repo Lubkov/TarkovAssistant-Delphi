@@ -86,7 +86,6 @@ object frQuest: TfrQuest
       Size.Width = 120.000000000000000000
       Size.Height = 24.000000000000000000
       Size.PlatformDefault = False
-      OnChangeTracking = edFilterTextChangeTracking
     end
   end
   object Grid: TStringGrid

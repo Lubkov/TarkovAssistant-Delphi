@@ -1,6 +1,6 @@
 object TraderFilter: TTraderFilter
   Size.Width = 324.000000000000000000
-  Size.Height = 91.000000000000000000
+  Size.Height = 92.000000000000000000
   Size.PlatformDefault = False
   object MainLayout: TLayout
     Align = Top
@@ -16,6 +16,7 @@ object TraderFilter: TTraderFilter
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
+      OnChange = edTraderNameChange
     end
     object laTraderName: TLabel
       Align = Top
