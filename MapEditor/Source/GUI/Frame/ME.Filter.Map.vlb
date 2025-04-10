@@ -29,7 +29,7 @@ Coordinates=273,10,66,51
 Coordinates=162,239,68,33
 
 [edMapName]
-Coordinates=590,60,84,123
+Coordinates=620,90,84,123
 Visible=True
 ExplicitSubNodes=Synch
 
@@ -50,7 +50,7 @@ Coordinates=391,166,58,33
 Coordinates=194,87,82,33
 
 [BindSourceDB1]
-Coordinates=380,30,92,105
+Coordinates=340,80,92,105
 
 [BindingsList1]
 Coordinates=0,0,82,33

@@ -6,20 +6,17 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   ME.Form.Filter, System.Actions, FMX.ActnList, System.ImageList, FMX.ImgList,
-  FMX.Controls.Presentation, FMX.Layouts, FMX.ListBox, ME.Trader;
+  FMX.Controls.Presentation, FMX.Layouts, FMX.ListBox,
+  ME.List.Filter, ME.Trader;
 
 type
-  TTraderFilter = class(TFormFilter)
-    laTraderName: TLabel;
-    edTraderName: TComboBox;
-
-    procedure edTraderNameChange(Sender: TObject);
+  TTraderFilter = class(TListFilter)
   private
     function GetTrader: TTrader;
     procedure SetTrader(const Value: TTrader);
   protected
-    function GetKeyValue: Variant; override;
-    procedure SetKeyValue(const Value: Variant); override;
+    function GetDisplayValue: Variant; override;
+    procedure SetDisplayValue(const Value: Variant); override;
   public
     procedure Init; override;
 
@@ -31,11 +28,6 @@ implementation
 {$R *.fmx}
 
 { TTraderFilter }
-
-procedure TTraderFilter.edTraderNameChange(Sender: TObject);
-begin
-  DoChange;
-end;
 
 function TTraderFilter.GetTrader: TTrader;
 begin
@@ -50,20 +42,14 @@ begin
   KeyValue := Ord(Value) - 1;
 end;
 
-function TTraderFilter.GetKeyValue: Variant;
+function TTraderFilter.GetDisplayValue: Variant;
 begin
-  if edTraderName.ItemIndex >= 0 then
-    Result := edTraderName.ItemIndex + 1
-  else
-    Result := Null;
+  Result := edFilterValues.ItemIndex + 1;
 end;
 
-procedure TTraderFilter.SetKeyValue(const Value: Variant);
+procedure TTraderFilter.SetDisplayValue(const Value: Variant);
 begin
-  if VarIsEmpty(Value) or VarIsNull(Value) then
-    edTraderName.ItemIndex := -1
-  else
-    edTraderName.ItemIndex := Ord(Integer(Value)) - 1;
+  edFilterValues.ItemIndex := Value - 1;
 end;
 
 procedure TTraderFilter.Init;
@@ -72,9 +58,9 @@ var
 begin
   inherited;
 
-  edTraderName.Clear;
+  edFilterValues.Clear;
   for Trader := TTrader.Prapor to TTrader.Lightkeeper do
-    edTraderName.Items.Add(TraderToStr(Trader));
+    edFilterValues.Items.Add(TraderToStr(Trader));
 end;
 
 end.
