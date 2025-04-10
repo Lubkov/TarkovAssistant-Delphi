@@ -10,7 +10,7 @@ uses
   ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
-  FMX.Edit, ME.Trader, FMX.Layouts, ME.Filter.Trader;
+  FMX.Edit, ME.Trader, FMX.Layouts, ME.Filter.Trader, ME.Filter.MapTmp;
 
 type
   TfrQuest = class(TFrame)
@@ -36,6 +36,7 @@ type
     edFilterText: TEdit;
     FilterLayout: TLayout;
     TraderLayout: TLayout;
+    MapLayout: TLayout;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);
@@ -47,6 +48,7 @@ type
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
     FTraderFilter: TTraderFilter;
+    FMapFilter: TMapFilterTmp;
 
     procedure OnApplyFilter(Sender: TObject);
     function InternalQuestEdit(const Quest: TDBQuest): Boolean;
@@ -85,6 +87,12 @@ begin
   FTraderFilter.OnChange := OnApplyFilter;
   FTraderFilter.Init;
 
+  FMapFilter := TMapFilterTmp.Create(Self);
+  FMapFilter.Parent := MapLayout;
+  FMapFilter.Align := TAlignLayout.Client;
+  FMapFilter.OnChange := OnApplyFilter;
+  FMapFilter.EditItem.Visible := False;
+
   edFilterText.OnChangeTracking := OnApplyFilter;
 end;
 
@@ -102,6 +110,10 @@ begin
   F.SQL.Text := 'SELECT ' + TDBQuest.FieldList + ' FROM ' + TDBQuest.EntityName;
   F.SQL.Add('ORDER BY Name');
   F.Open;
+
+  FMapFilter.Init;
+  FMapFilter.KeyValue := Null;
+  FMapFilter.OnChange := OnApplyFilter;
 end;
 
 procedure TfrQuest.FCalcFields(DataSet: TDataSet);
@@ -123,24 +135,51 @@ procedure TfrQuest.OnApplyFilter(Sender: TObject);
 var
   Filter: string;
 begin
-  if not F.Active then
-    Exit;
+//  if not F.Active then
+//    Exit;
+//
+//  Filter := Trim(edFilterText.Text);
+//  if Filter <> '' then
+//    Filter := '(Name like ' + QuotedStr('%' + Filter + '%') + ')'
+//  else
+//    Filter := '';
+//
+//  if FMapFilter.KeyValue <> Null then begin
+//    if Filter <> '' then
+//      Filter := Filter + ' AND ';
+//
+//   // Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
+//  end;
+//
+//  if FTraderFilter.KeyValue <> Null then begin
+//    if Filter <> '' then
+//      Filter := Filter + ' AND ';
+//
+//    Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
+//  end;
+//
+//  F.Filter := Filter;
+//  F.Filtered := F.Filter <> '';
 
-  Filter := Trim(edFilterText.Text);
-  if Filter <> '' then
-    Filter := '(Name like ' + QuotedStr('%' + Filter + '%') + ')'
-  else
-    Filter := '';
+  F.DisableControls;
+  try
+    F.Close;
+    F.SQL.Text :=
+      ' SELECT ' +
+      '       q.ID as ID, ' +
+      '       q.Name as Name, ' +
+      '       q.Trader as Trader ' +
+      ' FROM Quest q ';
 
-  if FTraderFilter.KeyValue <> Null then begin
-    if Filter <> '' then
-      Filter := Filter + ' AND ';
+    if FMapFilter.KeyValue <> Null then
+      F.SQL.Add('INNER JOIN Marker m ON (m.QuestID = q.ID) AND (q.MapID = ' + VarToStr(FMapFilter.KeyValue) + ')');
 
-    Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
+
+    F.SQL.Add('ORDER BY Name');
+    F.Open;
+  finally
+    F.EnableControls;
   end;
-
-  F.Filter := Filter;
-  F.Filtered := F.Filter <> '';
 end;
 
 function TfrQuest.InternalQuestEdit(const Quest: TDBQuest): Boolean;

@@ -1,0 +1,30 @@
+inherited ListFilter: TListFilter
+  Size.Width = 330.000000000000000000
+  inherited MainLayout: TLayout
+    Size.Width = 330.000000000000000000
+    inherited ToolLayout: TLayout
+      Position.X = 190.000000000000000000
+      TabOrder = 2
+    end
+    object edFilterValues: TComboBox
+      Align = Top
+      Margins.Top = 2.000000000000000000
+      Position.Y = 19.000000000000000000
+      Size.Width = 190.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      OnChange = edFilterValuesChange
+    end
+    object laFilterName: TLabel
+      Align = Top
+      StyledSettings = [Size, Style, FontColor]
+      Size.Width = 190.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Tahoma'
+      Text = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1092#1080#1083#1100#1090#1088#1072':'
+      TabOrder = 4
+    end
+  end
+end

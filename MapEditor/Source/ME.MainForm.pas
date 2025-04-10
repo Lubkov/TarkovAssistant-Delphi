@@ -9,7 +9,7 @@ uses
   System.ImageList, FMX.ImgList, FMX.Objects, FMX.Layouts,
   Map.Data.Types, ME.Filter.Map, ME.Frame.MapData, FMX.TabControl,
   ME.Grid.Resources, ME.DB.Map, ME.Grid.QuestResources, ME.Frame.Quest,
-  ME.Frame.QuestPart;
+  ME.Frame.QuestPart, ME.Filter.MapTmp;
 
 type
   TMainForm = class(TForm)
@@ -23,16 +23,22 @@ type
     QuestLayout: TLayout;
     QuestPartsLayout: TLayout;
     Splitter1: TSplitter;
+    Layout1: TLayout;
+    Button1: TButton;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MapChanged(const MapID: Variant);
     procedure buReconnectClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     FMapFilter: TMapFilter;
     FMapData: TfrMapData;
     FResourcesGrid: TQuestResourcesGrid;
     FQuestGrid: TfrQuest;
     FQuestPartGrid: TfrQuestPartGrid;
+    FMapFilterTmp: TMapFilterTmp;
 
     procedure ApplicationInit;
     procedure OnQuestChanged(const QuestID: Variant);
@@ -84,6 +90,12 @@ begin
   FQuestPartGrid.Align := TAlignLayout.Client;
 
   MainContainer.ActiveTab := GeneralTab;
+
+  // Tmp
+  FMapFilterTmp := TMapFilterTmp.Create(Self);
+  FMapFilterTmp.Parent := Layout1;
+  FMapFilterTmp.Position.X := 10;
+  FMapFilterTmp.Position.Y := 5;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -94,6 +106,9 @@ end;
 procedure TMainForm.ApplicationInit;
 begin
   AppService.ConnectToDB;
+
+  // Tmp
+  FMapFilterTmp.Init;
 
   FMapFilter.Init;
   FResourcesGrid.Init(nil);
@@ -117,6 +132,19 @@ begin
   MapID := FMapFilter.MapID;
   ApplicationInit;
   FMapFilter.MapID := MapID;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+begin
+  if FMapFilterTmp.KeyValue = Null then
+    Button1.Text := 'KeyValue = Null'
+  else
+    Button1.Text := 'KeyValue = ' + VarToStr(FMapFilterTmp.KeyValue);
+end;
+
+procedure TMainForm.Button2Click(Sender: TObject);
+begin
+  FMapFilterTmp.KeyValue := 5;
 end;
 
 end.

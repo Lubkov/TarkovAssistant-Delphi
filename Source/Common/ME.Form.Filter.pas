@@ -13,32 +13,58 @@ type
     ImageList1: TImageList;
     MainLayout: TLayout;
     ToolLayout: TLayout;
-    ButtonLayout: TLayout;
     edClearFilter: TSpeedButton;
     ActionList1: TActionList;
-    acClearFilter: TAction;
+    edEditItem: TSpeedButton;
+    edAddItem: TSpeedButton;
+    edDeleteItem: TSpeedButton;
+    Action1: TAction;
+
     procedure acClearFilterExecute(Sender: TObject);
   private
+    FKeyValue: Variant;
     FOnChange: TNotifyEvent;
+    FAddItem: TAction;
+    FEditItem: TAction;
+    FDeleteItem: TAction;
     FClearFilter: TAction;
-
-    procedure ClearFilterUpdate(Sender: TObject);
   protected
-    function GetKeyValue: Variant; virtual; abstract;
-    procedure SetKeyValue(const Value: Variant); virtual; abstract;
+    FIsGUIChanged: Boolean;
+
+    function GetKeyValue: Variant; virtual;
+    procedure SetKeyValue(const Value: Variant); virtual;
+    function GetDisplayValue: Variant; virtual; abstract;
+    procedure SetDisplayValue(const Value: Variant); virtual; abstract;
     procedure DoChange;
+    procedure UpdateButton(const Button: TSpeedButton; var Offset: Single);
+    procedure UpdateActions(Sender: TObject);
+    procedure Locate(const Value: Variant); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init; virtual; abstract;
+    procedure Init; virtual;
 
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     property KeyValue: Variant read GetKeyValue write SetKeyValue;
+    property DisplayValue: Variant read GetDisplayValue write SetDisplayValue;
+    property AddItem: TAction read FAddItem;
+    property EditItem: TAction read FEditItem;
+    property DeleteItem: TAction read FDeleteItem;
     property ClearFilter: TAction read FClearFilter;
   end;
 
 implementation
+
+const
+  ClearFilterImageIndex = 0;
+  AddItemImageIndex = 1;
+  EditItemImageIndex = 2;
+  DelItemImageIndex = 3;
+
+  ButtonPositionTop = 14;
+  ButtonMarginLeft = 4;
+  ButtonWidth = 30;
 
 {$R *.fmx}
 
@@ -48,16 +74,46 @@ constructor TFormFilter.Create(AOwner: TComponent);
 begin
   inherited;
 
+  FKeyValue := Null;
   FOnChange := nil;
+  FIsGUIChanged := False;
 
   FClearFilter := TAction.Create(Self);
   FClearFilter.Caption := '';
-  FClearFilter.ImageIndex := 0;
+  FClearFilter.ImageIndex := ClearFilterImageIndex;
   FClearFilter.OnExecute := acClearFilterExecute;
   FClearFilter.ActionList := ActionList1;
-  FClearFilter.OnUpdate := ClearFilterUpdate;
+  FClearFilter.OnUpdate := UpdateActions;
+  FClearFilter.Visible := True;
 
-  edClearFilter.Action := FClearFilter;
+  FAddItem := TAction.Create(Self);
+  FAddItem.Caption := '';
+  FAddItem.ImageIndex := AddItemImageIndex;
+  FAddItem.OnExecute := nil;
+  FAddItem.ActionList := ActionList1;
+  FAddItem.OnUpdate := UpdateActions;
+  FAddItem.Visible := False;
+
+  FEditItem := TAction.Create(Self);
+  FEditItem.Caption := '';
+  FEditItem.ImageIndex := EditItemImageIndex;
+  FEditItem.OnExecute := nil;
+  FEditItem.ActionList := ActionList1;
+  FEditItem.OnUpdate := UpdateActions;
+  FEditItem.Visible := False;
+
+  FDeleteItem := TAction.Create(Self);
+  FDeleteItem.Caption := '';
+  FDeleteItem.ImageIndex := DelItemImageIndex;
+  FDeleteItem.OnExecute := nil;
+  FDeleteItem.ActionList := ActionList1;
+  FDeleteItem.OnUpdate := UpdateActions;
+  FDeleteItem.Visible := False;
+
+  edAddItem.Action := AddItem;
+  edEditItem.Action := EditItem;
+  edDeleteItem.Action := DeleteItem;
+  edClearFilter.Action := ClearFilter;
 end;
 
 destructor TFormFilter.Destroy;
@@ -67,10 +123,62 @@ begin
   inherited;
 end;
 
+function TFormFilter.GetKeyValue: Variant;
+begin
+  Result := FKeyValue;
+end;
+
+procedure TFormFilter.SetKeyValue(const Value: Variant);
+begin
+  try
+    if FKeyValue <> Value then begin
+      FKeyValue := Value;
+
+      if not FIsGUIChanged then
+        Locate(Value);
+
+      DoChange;
+    end;
+  finally
+    FIsGUIChanged := False;
+  end;
+end;
+
 procedure TFormFilter.DoChange;
 begin
   if Assigned(FOnChange) then
     FOnChange(Self);
+end;
+
+procedure TFormFilter.UpdateButton(const Button: TSpeedButton; var Offset: Single);
+begin
+  if not Button.Visible then
+    Exit;
+
+  Button.Position.X := Offset;
+  Button.Position.Y := ButtonPositionTop;
+  Offset := Offset + Button.Width + ButtonMarginLeft;
+end;
+
+procedure TFormFilter.UpdateActions(Sender: TObject);
+var
+  Offset: Single;
+begin
+  ToolLayout.Visible := FAddItem.Visible or FEditItem.Visible or FDeleteItem.Visible or ClearFilter.Visible;
+
+  Offset := ButtonMarginLeft;
+
+  UpdateButton(edAddItem, Offset);
+  UpdateButton(edEditItem, Offset);
+  UpdateButton(edDeleteItem, Offset);
+  UpdateButton(edClearFilter, Offset);
+
+  ToolLayout.Width := Offset;
+end;
+
+procedure TFormFilter.Locate(const Value: Variant);
+begin
+
 end;
 
 procedure TFormFilter.acClearFilterExecute(Sender: TObject);
@@ -78,9 +186,9 @@ begin
   KeyValue := Null;
 end;
 
-procedure TFormFilter.ClearFilterUpdate(Sender: TObject);
+procedure TFormFilter.Init;
 begin
-  ToolLayout.Visible := TAction(Sender).Visible;
+  UpdateActions(Self);
 end;
 
 end.
