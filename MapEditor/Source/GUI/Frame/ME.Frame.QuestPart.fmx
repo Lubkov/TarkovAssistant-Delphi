@@ -82,8 +82,8 @@ object frQuestPartGrid: TfrQuestPartGrid
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 447.000000000000000000
-    Viewport.Height = 255.000000000000000000
+    Viewport.Width = 451.000000000000000000
+    Viewport.Height = 280.000000000000000000
   end
   object ActionList1: TActionList
     Images = ImageList1

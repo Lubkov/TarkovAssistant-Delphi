@@ -19,26 +19,13 @@ Coordinates=227,56,70,33
 [ToolLayout]
 Coordinates=125,182,69,33
 
-[F]
-Visible=False
-Coordinates=40,151,40,33
-
-[BindSourceDB1]
-Coordinates=200,10,92,105
-Visible=True
-
-[BindingsList1]
-Coordinates=355,1,82,33
-
 [laTraderName]
 Coordinates=323,10,83,51
 
 [edMapName]
 Coordinates=10,10,84,123
 
-[FCaption]
-Coordinates=355,56,58,33
-
-[FID]
-Coordinates=355,111,40,33
+[]
+Coordinates=355,1,82,33
+Visible=True
 

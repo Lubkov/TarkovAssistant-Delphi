@@ -19,8 +19,6 @@ type
     edAddItem: TSpeedButton;
     edDeleteItem: TSpeedButton;
     Action1: TAction;
-
-    procedure acClearFilterExecute(Sender: TObject);
   private
     FKeyValue: Variant;
     FOnChange: TNotifyEvent;
@@ -29,16 +27,14 @@ type
     FDeleteItem: TAction;
     FClearFilter: TAction;
   protected
-    FIsGUIChanged: Boolean;
-
     function GetKeyValue: Variant; virtual;
     procedure SetKeyValue(const Value: Variant); virtual;
-    function GetDisplayValue: Variant; virtual; abstract;
-    procedure SetDisplayValue(const Value: Variant); virtual; abstract;
+    function GetDisplayValue: string; virtual;
+    procedure SetDisplayValue(const Value: string); virtual;
     procedure DoChange;
     procedure UpdateButton(const Button: TSpeedButton; var Offset: Single);
     procedure UpdateActions(Sender: TObject);
-    procedure Locate(const Value: Variant); virtual;
+    procedure ClearFilterExecute(Sender: TObject); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -47,7 +43,7 @@ type
 
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     property KeyValue: Variant read GetKeyValue write SetKeyValue;
-    property DisplayValue: Variant read GetDisplayValue write SetDisplayValue;
+    property DisplayValue: string read GetDisplayValue write SetDisplayValue;
     property AddItem: TAction read FAddItem;
     property EditItem: TAction read FEditItem;
     property DeleteItem: TAction read FDeleteItem;
@@ -76,12 +72,11 @@ begin
 
   FKeyValue := Null;
   FOnChange := nil;
-  FIsGUIChanged := False;
 
   FClearFilter := TAction.Create(Self);
   FClearFilter.Caption := '';
   FClearFilter.ImageIndex := ClearFilterImageIndex;
-  FClearFilter.OnExecute := acClearFilterExecute;
+  FClearFilter.OnExecute := ClearFilterExecute;
   FClearFilter.ActionList := ActionList1;
   FClearFilter.OnUpdate := UpdateActions;
   FClearFilter.Visible := True;
@@ -130,18 +125,21 @@ end;
 
 procedure TFormFilter.SetKeyValue(const Value: Variant);
 begin
-  try
-    if FKeyValue <> Value then begin
-      FKeyValue := Value;
+  if FKeyValue <> Value then begin
+    FKeyValue := Value;
 
-      if not FIsGUIChanged then
-        Locate(Value);
-
-      DoChange;
-    end;
-  finally
-    FIsGUIChanged := False;
+    DoChange;
   end;
+end;
+
+function TFormFilter.GetDisplayValue: string;
+begin
+  Result := '';
+end;
+
+procedure TFormFilter.SetDisplayValue(const Value: string);
+begin
+
 end;
 
 procedure TFormFilter.DoChange;
@@ -176,12 +174,7 @@ begin
   ToolLayout.Width := Offset;
 end;
 
-procedure TFormFilter.Locate(const Value: Variant);
-begin
-
-end;
-
-procedure TFormFilter.acClearFilterExecute(Sender: TObject);
+procedure TFormFilter.ClearFilterExecute(Sender: TObject);
 begin
   KeyValue := Null;
 end;
