@@ -174,6 +174,12 @@ begin
     if FMapFilter.KeyValue <> Null then
       F.SQL.Add('INNER JOIN Marker m ON (m.QuestID = q.ID) AND (q.MapID = ' + VarToStr(FMapFilter.KeyValue) + ')');
 
+    if FTraderFilter.KeyValue <> Null then
+      if FMapFilter.KeyValue <> Null then
+        F.SQL.Add('AND (q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')')
+      else
+        F.SQL.Add('WHERE (q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')');
+
 
     F.SQL.Add('ORDER BY Name');
     F.Open;

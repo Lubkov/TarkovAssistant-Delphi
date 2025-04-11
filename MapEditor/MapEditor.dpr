@@ -79,7 +79,8 @@ uses
   ME.Form.Filter in '..\Source\Common\ME.Form.Filter.pas' {FormFilter: TFrame},
   ME.Filter.Trader in 'Source\GUI\Filter\ME.Filter.Trader.pas' {TraderFilter: TFrame},
   ME.Filter.MapTmp in 'Source\GUI\Filter\ME.Filter.MapTmp.pas' {MapFilterTmp: TFrame},
-  ME.List.Filter in '..\Source\Common\ME.List.Filter.pas' {ListFilter: TFrame};
+  ME.List.Filter in '..\Source\Common\ME.List.Filter.pas' {ListFilter: TFrame},
+  ME.DBList.Filter in '..\Source\Common\ME.DBList.Filter.pas' {DBListFilter: TFrame};
 
 {$R *.res}
 

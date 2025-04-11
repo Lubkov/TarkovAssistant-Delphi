@@ -9,26 +9,18 @@ uses
   FMX.Controls.Presentation, FMX.Layouts, FMX.ListBox, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, Data.Bind.DBScope, Data.DB, MemDS, DBAccess, Uni,
-  ME.List.Filter, ME.DB.Map;
+  ME.List.Filter, ME.DBList.Filter, ME.DB.Map;
 
 type
-  TMapFilterTmp = class(TListFilter)
-    F: TUniQuery;
-    FID: TIntegerField;
-    FCaption: TWideStringField;
-    BindSourceDB1: TBindSourceDB;
-    BindingsList1: TBindingsList;
-    LinkListControlToField1: TLinkListControlToField;
-    procedure BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
+  TMapFilterTmp = class(TDBListFilter)
   private
     procedure OnEditItem(Sender: TObject);
   protected
-//    procedure SetKeyValue(const Value: Variant); override;
-    procedure SetDisplayValue(const Value: Variant); override;
+    function GetCommandText: string; override;
+    function GetKeyField: string; override;
+    function GetCaptionField: string; override;
   public
     constructor Create(AOwner: TComponent); override;
-
-    procedure Init; override;
   end;
 
 implementation
@@ -44,48 +36,37 @@ constructor TMapFilterTmp.Create(AOwner: TComponent);
 begin
   inherited;
 
-  edFilterValues.OnChange := nil;
-
   EditItem.OnExecute := OnEditItem;
   EditItem.Visible := True;
 end;
-
-procedure TMapFilterTmp.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);
-begin
-  FIsGUIChanged := True;
-  KeyValue := FID.Value;
-end;
-
-//procedure TMapFilterTmp.SetKeyValue(const Value: Variant);
-//begin
-//  if KeyValue = Value then
-//    Exit;
-//
-//  if F.Active or VarIsEmpty(Value) or VarIsNull(Value) then
-//    edFilterValues.ItemIndex := -1
-//  else
-//    F.Locate('ID', Value, []);
-//
-//  inherited;
-//end;
 
 procedure TMapFilterTmp.OnEditItem(Sender: TObject);
 var
   Presenter: TEditMapPresenter;
   Dialog: TedMap;
+  Item: TFilterItem;
   Map: TDBMap;
 begin
+  if Index = -1 then
+    Exit;
+
+  Item := Items[Index];
+
   Dialog := TedMap.Create(Self);
   try
     Map := TDBMap.Create;
     try
-      if not MapService.GetAt(FID.Value, Map) then
+      if not MapService.GetAt(Item.Key, Map) then
         Exit;
 
       Presenter := TEditMapPresenter.Create(Dialog, Map);
       try
-        if Presenter.Edit then
-          F.RefreshRecord;
+        if Presenter.Edit then begin
+          Item.Key := Map.ID;
+          Item.Caption := Map.Caption;
+
+          LookupReload;
+        end;
       finally
         Presenter.Free;
       end;
@@ -97,19 +78,19 @@ begin
   end;
 end;
 
-procedure TMapFilterTmp.SetDisplayValue(const Value: Variant);
+function TMapFilterTmp.GetCommandText: string;
 begin
-  F.Locate('ID', Value, []);
+  Result := 'SELECT ID, Caption FROM Map';
 end;
 
-procedure TMapFilterTmp.Init;
+function TMapFilterTmp.GetKeyField: string;
 begin
-  inherited;
+  Result := 'ID';
+end;
 
-  F.Close;
-  F.Connection := AppService.DBConnection.Connection;
-  F.SQL.Text := 'SELECT ID, Caption FROM Map';
-  F.Open;
+function TMapFilterTmp.GetCaptionField: string;
+begin
+  Result := 'Caption';
 end;
 
 end.

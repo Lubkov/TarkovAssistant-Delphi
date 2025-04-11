@@ -15,8 +15,6 @@ type
     function GetTrader: TTrader;
     procedure SetTrader(const Value: TTrader);
   protected
-    function GetDisplayValue: Variant; override;
-    procedure SetDisplayValue(const Value: Variant); override;
   public
     procedure Init; override;
 
@@ -34,22 +32,12 @@ begin
   if KeyValue = Null then
     Result := TTrader.None
   else
-    Result := TTrader(KeyValue + 1);
+    Result := TTrader(KeyValue);
 end;
 
 procedure TTraderFilter.SetTrader(const Value: TTrader);
 begin
-  KeyValue := Ord(Value) - 1;
-end;
-
-function TTraderFilter.GetDisplayValue: Variant;
-begin
-  Result := edFilterValues.ItemIndex + 1;
-end;
-
-procedure TTraderFilter.SetDisplayValue(const Value: Variant);
-begin
-  edFilterValues.ItemIndex := Value - 1;
+  KeyValue := Ord(Value);
 end;
 
 procedure TTraderFilter.Init;
@@ -58,9 +46,8 @@ var
 begin
   inherited;
 
-  edFilterValues.Clear;
   for Trader := TTrader.Prapor to TTrader.Lightkeeper do
-    edFilterValues.Items.Add(TraderToStr(Trader));
+    AddItem(Ord(Trader), TraderToStr(Trader));
 end;
 
 end.

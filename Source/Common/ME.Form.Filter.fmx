@@ -43,7 +43,6 @@ object FormFilter: TFormFilter
         StyleLookup = 'actiontoolbutton'
         Text = 'acClearFilter'
         TextSettings.Trimming = None
-        OnClick = acClearFilterExecute
       end
       object edDeleteItem: TSpeedButton
         Images = ImageList1
