@@ -128,38 +128,15 @@ begin
 
   FQuestID := FID.Value;
   if Assigned(FOnQuestChanged) then
-    FOnQuestChanged(FID.Value);
+    FOnQuestChanged(FID.Value, FMapFilter.KeyValue);
 end;
 
 procedure TfrQuest.OnApplyFilter(Sender: TObject);
 var
   Filter: string;
+  Key: Variant;
 begin
-//  if not F.Active then
-//    Exit;
-//
-//  Filter := Trim(edFilterText.Text);
-//  if Filter <> '' then
-//    Filter := '(Name like ' + QuotedStr('%' + Filter + '%') + ')'
-//  else
-//    Filter := '';
-//
-//  if FMapFilter.KeyValue <> Null then begin
-//    if Filter <> '' then
-//      Filter := Filter + ' AND ';
-//
-//   // Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
-//  end;
-//
-//  if FTraderFilter.KeyValue <> Null then begin
-//    if Filter <> '' then
-//      Filter := Filter + ' AND ';
-//
-//    Filter := Filter + '(Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
-//  end;
-//
-//  F.Filter := Filter;
-//  F.Filtered := F.Filter <> '';
+  Key := FID.Value;
 
   F.DisableControls;
   try
@@ -171,21 +148,41 @@ begin
       '       q.Trader as Trader ' +
       ' FROM Quest q ';
 
-    if FMapFilter.KeyValue <> Null then
-      F.SQL.Add('INNER JOIN Marker m ON (m.QuestID = q.ID) AND (q.MapID = ' + VarToStr(FMapFilter.KeyValue) + ')');
+    Filter := Trim(edFilterText.Text);
+    if Filter <> '' then
+      Filter := '(q.Name like ' + QuotedStr('%' + Filter + '%') + ')'
+    else
+      Filter := '';
 
-    if FTraderFilter.KeyValue <> Null then
-      if FMapFilter.KeyValue <> Null then
-        F.SQL.Add('AND (q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')')
-      else
-        F.SQL.Add('WHERE (q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')');
+    if FTraderFilter.KeyValue <> Null then begin
+      if Filter <> '' then
+        Filter := Filter + ' AND ';
 
+      Filter := Filter + '(q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
+    end;
 
-    F.SQL.Add('ORDER BY Name');
+    if FMapFilter.KeyValue <> Null then begin
+      F.SQL.Add('INNER JOIN Marker m ON (m.QuestID = q.ID) AND (m.MapID = ' + VarToStr(FMapFilter.KeyValue) + ')');
+
+      if Filter <> '' then
+        F.SQL.Add(' AND ' + Filter);
+    end
+    else
+      if Filter <> '' then
+        F.SQL.Add(' WHERE ' + Filter);
+
+    F.SQL.Add('GROUP BY q.ID, q.Name, q.Trader');
+    F.SQL.Add('ORDER BY q.Name');
     F.Open;
   finally
     F.EnableControls;
   end;
+
+  if not IsNullID(Key) then
+    F.Locate('ID', Key, []);
+
+  if Assigned(FOnQuestChanged) then
+    FOnQuestChanged(FID.Value, FMapFilter.KeyValue);
 end;
 
 function TfrQuest.InternalQuestEdit(const Quest: TDBQuest): Boolean;

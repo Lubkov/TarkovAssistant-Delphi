@@ -7,7 +7,7 @@ uses
   Data.DB, App.Entity, ME.DB.Entity, ME.DB.Marker, ME.Trader;
 
 type
-  TQuestChangedEvent = procedure(const QuestID: Variant) of object;
+  TQuestChangedEvent = procedure(const QuestID, MapID: Variant) of object;
 
   TDBQuest = class(TDBEntity)
   private
