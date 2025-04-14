@@ -1,5 +1,5 @@
 unit ME.Frame.Quest;
-
+//
 interface
 
 uses
@@ -148,18 +148,9 @@ begin
       '       q.Trader as Trader ' +
       ' FROM Quest q ';
 
-    Filter := Trim(edFilterText.Text);
-    if Filter <> '' then
-      Filter := '(q.Name like ' + QuotedStr('%' + Filter + '%') + ')'
-    else
-      Filter := '';
-
-    if FTraderFilter.KeyValue <> Null then begin
-      if Filter <> '' then
-        Filter := Filter + ' AND ';
-
-      Filter := Filter + '(q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
-    end;
+    Filter := '';
+    if FTraderFilter.KeyValue <> Null then
+      Filter := '(q.Trader = ' + VarToStr(FTraderFilter.KeyValue) + ')';
 
     if FMapFilter.KeyValue <> Null then begin
       F.SQL.Add('INNER JOIN Marker m ON (m.QuestID = q.ID) AND (m.MapID = ' + VarToStr(FMapFilter.KeyValue) + ')');
@@ -174,6 +165,14 @@ begin
     F.SQL.Add('GROUP BY q.ID, q.Name, q.Trader');
     F.SQL.Add('ORDER BY q.Name');
     F.Open;
+
+    // workaround - case sensitivity of the LIKE operator
+    Filter := Trim(edFilterText.Text);
+    if Filter <> '' then
+      Filter := '(Name like ' + QuotedStr('%' + Filter + '%') + ')';
+
+    F.Filter := Filter;
+    F.Filtered := F.Filter <> '';
   finally
     F.EnableControls;
   end;
