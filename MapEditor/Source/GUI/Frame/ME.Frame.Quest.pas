@@ -10,7 +10,7 @@ uses
   ME.DB.Quest, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope,
-  FMX.Edit, ME.Trader, FMX.Layouts, ME.Filter.Trader, ME.Filter.MapTmp;
+  FMX.Edit, ME.Trader, FMX.Layouts, ME.Filter.Trader, ME.Filter.Map;
 
 type
   TfrQuest = class(TFrame)
@@ -48,7 +48,7 @@ type
     FQuestID: Variant;
     FOnQuestChanged: TQuestChangedEvent;
     FTraderFilter: TTraderFilter;
-    FMapFilter: TMapFilterTmp;
+    FMapFilter: TMapFilter;
 
     procedure OnApplyFilter(Sender: TObject);
     function InternalQuestEdit(const Quest: TDBQuest): Boolean;
@@ -87,7 +87,7 @@ begin
   FTraderFilter.OnChange := OnApplyFilter;
   FTraderFilter.Init;
 
-  FMapFilter := TMapFilterTmp.Create(Self);
+  FMapFilter := TMapFilter.Create(Self);
   FMapFilter.Parent := MapLayout;
   FMapFilter.Align := TAlignLayout.Client;
   FMapFilter.OnChange := OnApplyFilter;

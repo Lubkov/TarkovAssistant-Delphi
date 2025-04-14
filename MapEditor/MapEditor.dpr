@@ -46,7 +46,6 @@ uses
   Map.Data.Classes in '..\Source\Data\Map.Data.Classes.pas',
   Map.Data.Service in '..\Source\Data\Map.Data.Service.pas',
   Map.Data.Types in '..\Source\Data\Map.Data.Types.pas',
-  ME.Filter.Map in 'Source\GUI\Frame\ME.Filter.Map.pas' {MapFilter: TFrame},
   ME.Frame.MapData in 'Source\GUI\Frame\ME.Frame.MapData.pas' {frMapData: TFrame},
   ME.Presenter.QuestItem in 'Source\GUI\ME.Presenter.QuestItem.pas',
   ME.DB.Resource in '..\Source\Entity\ME.DB.Resource.pas',
@@ -78,7 +77,7 @@ uses
   ME.Trader in '..\Source\Entity\ME.Trader.pas',
   ME.Form.Filter in '..\Source\Common\ME.Form.Filter.pas' {FormFilter: TFrame},
   ME.Filter.Trader in 'Source\GUI\Filter\ME.Filter.Trader.pas' {TraderFilter: TFrame},
-  ME.Filter.MapTmp in 'Source\GUI\Filter\ME.Filter.MapTmp.pas' {MapFilterTmp: TFrame},
+  ME.Filter.Map in 'Source\GUI\Filter\ME.Filter.Map.pas' {MapFilter: TFrame},
   ME.List.Filter in '..\Source\Common\ME.List.Filter.pas' {ListFilter: TFrame},
   ME.DBList.Filter in '..\Source\Common\ME.DBList.Filter.pas' {DBListFilter: TFrame};
 

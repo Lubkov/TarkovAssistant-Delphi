@@ -1,4 +1,4 @@
-unit ME.Filter.MapTmp;
+unit ME.Filter.Map;
 
 interface
 
@@ -12,7 +12,7 @@ uses
   ME.List.Filter, ME.DBList.Filter, ME.DB.Map;
 
 type
-  TMapFilterTmp = class(TDBListFilter)
+  TMapFilter = class(TDBListFilter)
   private
     procedure OnEditItem(Sender: TObject);
   protected
@@ -32,15 +32,16 @@ uses
 
 { TMapFilterTmp }
 
-constructor TMapFilterTmp.Create(AOwner: TComponent);
+constructor TMapFilter.Create(AOwner: TComponent);
 begin
   inherited;
 
+  laFilterName.Text := 'Карта:';
   EditItem.OnExecute := OnEditItem;
   EditItem.Visible := True;
 end;
 
-procedure TMapFilterTmp.OnEditItem(Sender: TObject);
+procedure TMapFilter.OnEditItem(Sender: TObject);
 var
   Presenter: TEditMapPresenter;
   Dialog: TedMap;
@@ -78,17 +79,17 @@ begin
   end;
 end;
 
-function TMapFilterTmp.GetCommandText: string;
+function TMapFilter.GetCommandText: string;
 begin
   Result := 'SELECT ID, Caption FROM Map';
 end;
 
-function TMapFilterTmp.GetKeyField: string;
+function TMapFilter.GetKeyField: string;
 begin
   Result := 'ID';
 end;
 
-function TMapFilterTmp.GetCaptionField: string;
+function TMapFilter.GetCaptionField: string;
 begin
   Result := 'Caption';
 end;
