@@ -90,8 +90,6 @@ const
 { TedMarker }
 
 constructor TedMarker.Create(AOwner: TComponent);
-var
-  Title: TTitleSettings;
 begin
   inherited;
 
@@ -104,10 +102,8 @@ begin
   FMapEdit := TMapFilter.Create(Self);
   FMapEdit.Parent := MapLayout;
   FMapEdit.Align := TAlignLayout.Client;
-  Title.Caption := 'Карта:';
-  Title.FontSize := 12;
-  FMapEdit.Title := Title;
-  FMapEdit.ReadOnly := True;
+  FMapEdit.ClearFilter.Visible := False;
+  FMapEdit.EditItem.Visible := False;
 
   laScreenShotName.Visible := False;
   FScreenshotsGrid := nil;
@@ -222,7 +218,7 @@ begin
   FScreenshotsGrid.Init(FMarker);
 
   FMapEdit.Init;
-  FMapEdit.MapID := FMarker.MapID;
+  FMapEdit.KeyValue := FMarker.MapID;
 
   InternalSetInstance(Value);
 end;
@@ -231,7 +227,7 @@ procedure TedMarker.PostValues(const Value: TDBMarker);
 begin
   FMarker.Caption := MarkerCaption;
   Value.Kind := MarkerKind;
-  Value.MapID := FMapEdit.MapID;
+  Value.MapID := FMapEdit.KeyValue;
   Value.Left := PositionX;
   Value.Top := PositionY;
 end;

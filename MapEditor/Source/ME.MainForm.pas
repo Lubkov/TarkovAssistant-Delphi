@@ -25,7 +25,7 @@ type
     Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure MapChanged(const MapID: Variant);
+    procedure OnMapChanged(Sender: TObject);
     procedure buReconnectClick(Sender: TObject);
   private
     FMapFilter: TMapFilter;
@@ -62,8 +62,11 @@ begin
   FMapFilter := TMapFilter.Create(Self);
   FMapFilter.Parent := TopLayout;
   FMapFilter.Position.X := 20;
-  FMapFilter.Position.Y := 0;
-  FMapFilter.OnMapChanged := MapChanged;
+  FMapFilter.Position.Y := 10;
+  FMapFilter.Width := 250;
+  FMapFilter.OnChange := OnMapChanged;
+  FMapFilter.ClearFilter.Visible := False;
+  FMapFilter.EditItem.Visible := True;
 
   FMapData := TfrMapData.Create(Self);
   FMapData.Parent := GeneralTab;
@@ -98,6 +101,9 @@ begin
   FMapFilter.Init;
   FResourcesGrid.Init(nil);
   FQuestGrid.Init;
+
+  if FMapFilter.Count > 0 then
+    FMapFilter.Index := 0;
 end;
 
 procedure TMainForm.OnQuestChanged(const QuestID, MapID: Variant);
@@ -105,18 +111,18 @@ begin
   FQuestPartGrid.Init(MapID, QuestID);
 end;
 
-procedure TMainForm.MapChanged(const MapID: Variant);
+procedure TMainForm.OnMapChanged(Sender: TObject);
 begin
-  FMapData.Init(MapID);
+  FMapData.Init(FMapFilter.KeyValue);
 end;
 
 procedure TMainForm.buReconnectClick(Sender: TObject);
 var
   MapID: Variant;
 begin
-  MapID := FMapFilter.MapID;
+  MapID := FMapFilter.KeyValue;
   ApplicationInit;
-  FMapFilter.MapID := MapID;
+  FMapFilter.KeyValue := MapID;
 end;
 
 end.

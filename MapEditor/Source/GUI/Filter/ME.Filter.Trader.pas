@@ -16,6 +16,8 @@ type
     procedure SetTrader(const Value: TTrader);
   protected
   public
+    constructor Create(AOwner: TComponent); override;
+
     procedure Init; override;
 
     property Trader: TTrader read GetTrader write SetTrader;
@@ -26,6 +28,13 @@ implementation
 {$R *.fmx}
 
 { TTraderFilter }
+
+constructor TTraderFilter.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  laFilterName.Text := 'Торговец:';
+end;
 
 function TTraderFilter.GetTrader: TTrader;
 begin

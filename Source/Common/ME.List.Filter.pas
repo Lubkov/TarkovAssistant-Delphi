@@ -29,6 +29,7 @@ type
   private
     FItems: TList<TFilterItem>;
 
+    function GetCount: Integer;
     function GetIndex: Integer;
     procedure SetIndex(const Value: Integer);
   protected
@@ -45,6 +46,7 @@ type
     procedure Init; override;
     procedure LookupReload;
 
+    property Count: Integer read GetCount;
     property Index: Integer read GetIndex write SetIndex;
     property Items: TList<TFilterItem> read FItems;
   end;
@@ -85,6 +87,11 @@ begin
   FItems.Free;
 
   inherited;
+end;
+
+function TListFilter.GetCount: Integer;
+begin
+  Result := edFilterValues.Count;
 end;
 
 function TListFilter.GetIndex: Integer;

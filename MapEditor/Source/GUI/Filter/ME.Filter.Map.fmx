@@ -1,4 +1,4 @@
-inherited MapFilterTmp: TMapFilterTmp
+inherited MapFilter: TMapFilter
   Size.Width = 335.000000000000000000
   inherited MainLayout: TLayout
     Size.Width = 335.000000000000000000
