@@ -34,7 +34,7 @@ begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ID, MapID, Name, Trader FROM Quest WHERE ID = :ID';
+    Query.SQL.Text := 'SELECT ID, Name, Trader FROM Quest WHERE ID = :ID';
     Query.ParamByName('ID').Value := ID;
     Query.Open;
 
@@ -56,14 +56,14 @@ begin
     Query.Connection := Connection;
     Query.SQL.Add('SELECT');
     Query.SQL.Add('    q.ID,');
-    Query.SQL.Add('    q.MapID,');
+    Query.SQL.Add('    m.MapID,');
     Query.SQL.Add('    q.Name,');
     Query.SQL.Add('    q.Trader');
     Query.SQL.Add('FROM Quest q');
     Query.SQL.Add('  INNER JOIN Marker m ON (m.QuestID = q.ID) AND (m.MapID = :MapID)');
     Query.SQL.Add('GROUP BY');
     Query.SQL.Add('    q.ID,');
-    Query.SQL.Add('    q.MapID,');
+    Query.SQL.Add('    m.MapID,');
     Query.SQL.Add('    q.Name,');
     Query.SQL.Add('    q.Trader');
     Query.SQL.Add('ORDER BY');
