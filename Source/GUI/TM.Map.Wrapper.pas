@@ -153,11 +153,26 @@ begin
 end;
 
 function TMapWrapper.GetScreenshotName: string;
+type
+  TFileInfo = record
+    FileName: string;
+    CreationDate: TDateTime;
+  end;
 var
+  FileInfo: TFileInfo;
   FileName: string;
+  dt: TDateTime;
 begin
-  for FileName in TDirectory.GetFiles(FDirectory, '*.png', TSearchOption.soTopDirectoryOnly) do
-    Exit(FileName);
+  FileInfo.CreationDate := 0;
+  for FileName in TDirectory.GetFiles(FDirectory, '*.png', TSearchOption.soTopDirectoryOnly) do begin
+    dt := TFile.GetCreationTime(FileName);
+    if dt > FileInfo.CreationDate then begin
+      FileInfo.FileName := FileName;
+      FileInfo.CreationDate := dt;
+    end;
+  end;
+
+  Result := FileInfo.FileName;
 end;
 
 procedure TMapWrapper.DeleteAllScreenshots;
@@ -165,7 +180,10 @@ var
   FileName: string;
 begin
   for FileName in TDirectory.GetFiles(FDirectory, '*.png', TSearchOption.soTopDirectoryOnly) do
-    TFile.Delete(FileName);
+    try
+      TFile.Delete(FileName);
+    except
+    end;
 end;
 
 procedure TMapWrapper.LoadMap(const Value: TDBMap);
