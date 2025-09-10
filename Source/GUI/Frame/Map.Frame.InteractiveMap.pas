@@ -215,7 +215,7 @@ var
   Item: TImage;
 //  Offset: Double;
   p: TPoint;
-  ImageIdex: Integer;
+  ImageIndex: Integer;
 begin
   p := NormalizePosition(Marker.Left, Marker.Top);
   p.Top := p.Top - MarkerHeight div 2;
@@ -229,11 +229,11 @@ begin
     Item.Position.X := p.Left;
     Item.Position.Y := p.Top;
 
-    ImageIdex := Ord(Marker.Kind);
+    ImageIndex := Ord(Marker.Kind);
     if (Marker.Kind = TMarkerKind.Quest) and AppService.Profile.IsQuestPartFinished(Marker.ID) then
-      ImageIdex := TransitExtractionImageIdx;
+      ImageIndex := TransitExtractionImageIdx;
 
-    Item.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIdex));
+    Item.Bitmap.Assign(MapTagImages.Bitmap(TSizeF.Create(32, 32), ImageIndex));
     Item.Hint := Title;
     Item.ShowHint := Trim(Title) <> '';
     Item.OnClick := OnMarkerClick;
