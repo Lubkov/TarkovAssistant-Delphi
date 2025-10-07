@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   System.Actions, FMX.ActnList, FMX.Controls.Presentation, System.ImageList,
   FMX.ImgList, FMX.Objects, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
-  Data.DB, MemDS, DBAccess, Uni, ME.DB.Layer, Data.Bind.Components,
+  Data.DB, MemDS, DBAccess, Uni, ME.DB.Layer, ME.DB.Map, Data.Bind.Components,
   Data.Bind.DBScope, Fmx.Bind.Grid, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Grid, ME.Grid.Helper;
 
@@ -49,7 +49,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const MapID: Variant);
+    procedure Init(const Map: TDBMap);
   end;
 
 implementation
@@ -119,9 +119,18 @@ begin
   end;
 end;
 
-procedure TfrLayerList.Init(const MapID: Variant);
+procedure TfrLayerList.Init(const Map: TDBMap);
+const
+  TitleFmt = 'Уровни карты "%s"';
 begin
-  FMapID := MapID;
+  if Map <> nil then begin
+    FMapID := Map.ID;
+    laTitle.Text := Format(TitleFmt, [map.Caption]);
+  end
+  else begin
+    FMapID := Null;
+    laTitle.Text := '';
+  end;
 
   FGridHelper.Binding(BindSourceDB1);
 
@@ -131,7 +140,7 @@ begin
     ' SELECT ' + TDBLayer.FieldList +
     ' FROM ' + TDBLayer.EntityName +
     ' WHERE MapID = :MapID';
-  F.ParamByName('MapID').Value := MapID;
+  F.ParamByName('MapID').Value := FMapID;
   F.Open;
 
   FGridHelper.InitColumns;

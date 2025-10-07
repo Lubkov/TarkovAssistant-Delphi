@@ -71,8 +71,8 @@ begin
   if not IsNullID(MapID) then begin
     MapService.GetAt(MapID, FMap);
 
-    FLayerList.Init(MapID);
-    FMarkerGrid.Init(MapID);
+    FLayerList.Init(FMap);
+    FMarkerGrid.Init(FMap);
   end
   else
     Clear;

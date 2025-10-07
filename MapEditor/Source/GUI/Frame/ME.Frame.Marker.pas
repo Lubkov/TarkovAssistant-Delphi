@@ -6,8 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
-  FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
-  FMX.ScrollBox, ME.DB.Marker, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
+  FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
+  ME.DB.Map, ME.DB.Marker, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, ME.Grid.Helper;
 
@@ -50,7 +50,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Init(const MapID: Variant);
+    procedure Init(const Map: TDBMap);
   end;
 
 implementation
@@ -150,11 +150,20 @@ begin
   end;
 end;
 
-procedure TfrMarkerGrid.Init(const MapID: Variant);
+procedure TfrMarkerGrid.Init(const Map: TDBMap);
+const
+  TitleFmt = 'Выходы с карты "%s"';
 var
   i: Integer;
 begin
-  FMapID := MapID;
+  if Map <> nil then begin
+    FMapID := Map.ID;
+    laTitle.Text := Format(TitleFmt, [map.Caption]);
+  end
+  else begin
+    FMapID := Null;
+    laTitle.Text := '';
+  end;
 
   FGridHelper.Binding(BindSourceDB1);
 
@@ -169,7 +178,7 @@ begin
                              IntToStr(TDBMarker.KindToInt(TMarkerKind.CoopExtraction)) + ', ' +
                              IntToStr(TDBMarker.KindToInt(TMarkerKind.TransitExtraction)) + '))' +
     ' ORDER BY Kind, Description';
-  F.ParamByName('MapID').Value := MapID;
+  F.ParamByName('MapID').Value := FMapID;
   F.Open;
 
   FGridHelper.InitColumns;
