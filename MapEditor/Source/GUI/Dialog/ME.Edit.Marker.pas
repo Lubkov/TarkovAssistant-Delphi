@@ -14,7 +14,7 @@ uses
 
 type
   TedMarker = class(TEditForm, IEditDialog<TDBMarker>)
-    edMarkerCaption: TEdit;
+    edMarkerDescription: TEdit;
     laMarkerName: TLabel;
     ImageList24: TImageList;
     laScreenShotName: TLabel;
@@ -50,8 +50,8 @@ type
     FScreenshotsGrid: TScreenshotsGrid;
     FMapEdit: TMapFilter;
 
-    function GetMarkerCaption: string;
-    procedure SetMarkerCaption(const Value: string);
+    function GetMarkerDescription: string;
+    procedure SetMarkerDescription(const Value: string);
     function GetPositionX: Integer;
     procedure SetPositionX(const Value: Integer);
     function GetPositionY: Integer;
@@ -70,7 +70,7 @@ type
     procedure PostValues(const Value: TDBMarker);
 
     property Marker: TDBMarker read FMarker;
-    property MarkerCaption: string read GetMarkerCaption write SetMarkerCaption;
+    property MarkerDescription: string read GetMarkerDescription write SetMarkerDescription;
     property MarkerKind: TMarkerKind read GetMarkerKind write SetMarkerKind;
     property PositionX: Integer read GetPositionX write SetPositionX;
     property PositionY: Integer read GetPositionY write SetPositionY;
@@ -116,14 +116,14 @@ begin
   inherited;
 end;
 
-function TedMarker.GetMarkerCaption: string;
+function TedMarker.GetMarkerDescription: string;
 begin
-  Result := edMarkerCaption.Text;
+  Result := edMarkerDescription.Text;
 end;
 
-procedure TedMarker.SetMarkerCaption(const Value: string);
+procedure TedMarker.SetMarkerDescription(const Value: string);
 begin
-  edMarkerCaption.Text := Value;
+  edMarkerDescription.Text := Value;
 end;
 
 function TedMarker.GetPositionX: Integer;
@@ -210,7 +210,7 @@ begin
   FScreenshotsGrid.Align := TAlignLayout.Client;
 
   Caption := GetTitle(Value);
-  MarkerCaption := FMarker.Caption;
+  MarkerDescription := FMarker.Description;
   MarkerKind := FMarker.Kind;
   PositionX := FMarker.Left;
   PositionY := FMarker.Top;
@@ -225,7 +225,7 @@ end;
 
 procedure TedMarker.PostValues(const Value: TDBMarker);
 begin
-  FMarker.Caption := MarkerCaption;
+  FMarker.Description := MarkerDescription;
   Value.Kind := MarkerKind;
   Value.MapID := FMapEdit.KeyValue;
   Value.Left := PositionX;

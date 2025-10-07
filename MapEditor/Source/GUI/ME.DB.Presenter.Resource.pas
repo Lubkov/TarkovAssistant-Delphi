@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, System.IOUtils, FMX.Controls,
-  ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
+  ME.Dialog.Presenter, ME.Edit.Form.Presenter, ME.Del.Form.Presenter,
   ME.DB.Resource;
 
 type
@@ -12,10 +12,14 @@ type
 
   TEditResourcePresenter = class(TEditFormPresenter<TDBResource>)
   private
+    FMarkerID: Variant;
   protected
     procedure InternalSave; override;
     procedure Cancel; override;
   public
+    constructor Create(Dialog: IEditDialog<TDBResource>; Instance: TDBResource); override;
+
+    property MarkerID: Variant read FMarkerID write FMarkerID;
   end;
 
   TDelResourcePresenterClass = class of TDelResourcePresenter;
@@ -32,6 +36,13 @@ uses
   ME.DB.Utils, ME.Service.Resource;
 
 { TEditResourcePresenter }
+
+constructor TEditResourcePresenter.Create(Dialog: IEditDialog<TDBResource>; Instance: TDBResource);
+begin
+  inherited;
+
+  FMarkerID := Null;
+end;
 
 procedure TEditResourcePresenter.InternalSave;
 begin

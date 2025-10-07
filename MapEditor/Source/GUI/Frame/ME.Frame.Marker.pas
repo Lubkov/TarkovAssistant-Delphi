@@ -8,8 +8,8 @@ uses
   FMX.StdCtrls, System.ImageList, FMX.ImgList, System.Actions, FMX.ActnList,
   FMX.Controls.Presentation, System.Rtti, FMX.Grid.Style, FMX.Grid,
   FMX.ScrollBox, ME.DB.Marker, Data.DB, MemDS, DBAccess, Uni, Fmx.Bind.Grid,
-  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
-  Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope;
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
+  Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, ME.Grid.Helper;
 
 type
   TfrMarkerGrid = class(TFrame)
@@ -25,15 +25,14 @@ type
     ImageList1: TImageList;
     F: TUniQuery;
     FID: TIntegerField;
-    FCaption: TWideStringField;
     FKind: TIntegerField;
     FLeft: TIntegerField;
     FTop: TIntegerField;
-    FKindName: TWideStringField;
     BindSourceDB1: TBindSourceDB;
     Grid: TStringGrid;
-    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
-    BindingsList1: TBindingsList;
+    FDescription: TWideMemoField;
+    FKindName: TWideStringField;
+
     procedure acAddExtractionExecute(Sender: TObject);
     procedure acEditExtractionExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -42,9 +41,11 @@ type
     procedure GridCellDblClick(const Column: TColumn; const Row: Integer);
   private
     FMapID: Variant;
+    FGridHelper: TGridHelper;
 
     function InternalExtractionEdit(const Marker: TDBMarker): Boolean;
     procedure ExtractionEdit(const Index: Integer);
+    procedure InitColumns;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -65,18 +66,97 @@ begin
   inherited;
 
   FMapID := Null;
-//  Grid.RowCount := 0;
+
+  FGridHelper := TGridHelper.Create(Grid);
+  InitColumns;
 end;
 
 destructor TfrMarkerGrid.Destroy;
 begin
+  FGridHelper.Free;
 
   inherited;
 end;
 
+procedure TfrMarkerGrid.InitColumns;
+var
+  Column: TGridColumn;
+begin
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'ID';
+    Column.FieldName := 'ID';
+    Column.Alignment := TAlignment.taRightJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 60;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Description';
+    Column.FieldName := 'Description';
+    Column.Alignment := TAlignment.taLeftJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.AutoWidth := True;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Kind';
+    Column.FieldName := 'Kind';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Visible := False;
+    Column.Width := 80;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Left';
+    Column.FieldName := 'Left';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 80;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Top';
+    Column.FieldName := 'Top';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 80;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'KindName';
+    Column.FieldName := 'KindName';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 120;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+end;
+
 procedure TfrMarkerGrid.Init(const MapID: Variant);
+var
+  i: Integer;
 begin
   FMapID := MapID;
+
+  FGridHelper.Binding(BindSourceDB1);
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
@@ -84,18 +164,20 @@ begin
     ' SELECT ' + TDBMarker.FieldList +
     ' FROM ' + TDBMarker.EntityName +
     ' WHERE (MapID = :MapID)' +
-    '      AND (Kind in (' + IntToStr(Ord(TMarkerKind.PMCExtraction)) + ', ' +
-                             IntToStr(Ord(TMarkerKind.ScavExtraction)) + ', ' +
-                             IntToStr(Ord(TMarkerKind.CoopExtraction)) + ', ' +
-                             IntToStr(Ord(TMarkerKind.TransitExtraction)) + '))' +
-    ' ORDER BY Kind, Caption';
+    '      AND (Kind in (' + IntToStr(TDBMarker.KindToInt(TMarkerKind.PMCExtraction)) + ', ' +
+                             IntToStr(TDBMarker.KindToInt(TMarkerKind.ScavExtraction)) + ', ' +
+                             IntToStr(TDBMarker.KindToInt(TMarkerKind.CoopExtraction)) + ', ' +
+                             IntToStr(TDBMarker.KindToInt(TMarkerKind.TransitExtraction)) + '))' +
+    ' ORDER BY Kind, Description';
   F.ParamByName('MapID').Value := MapID;
   F.Open;
+
+  FGridHelper.InitColumns;
 end;
 
 procedure TfrMarkerGrid.FCalcFields(DataSet: TDataSet);
 begin
-  FKindName.AsString := TDBMarker.KindToStr(TMarkerKind(FKind.AsInteger));
+  FKindName.AsString := TDBMarker.KindToStr(TDBMarker.IntToKind(FKind.AsInteger));
 end;
 
 procedure TfrMarkerGrid.GridCellDblClick(const Column: TColumn; const Row: Integer);
@@ -160,9 +242,8 @@ begin
       F.EnableControls;
     end;
   finally
-//    if not Res then
+  //  if not Res then
 //      MarkerService.Remove(Marker.ID);
-
     Marker.Free;
   end;
 end;
@@ -185,8 +266,8 @@ begin
   try
     Marker.ID := FID.Value;
     Marker.MapID := FMapID;
-    Marker.Caption := FCaption.AsString;
-    Marker.Kind := TMarkerKind(FKind.AsInteger);
+    Marker.Description := FDescription.AsString;
+    Marker.Kind := TDBMarker.IntToKind(FKind.AsInteger);
 
     Dialog := TedMessage.Create(Self);
     try

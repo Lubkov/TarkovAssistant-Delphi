@@ -89,7 +89,7 @@ procedure TDBResourcesGrid.Init;
 begin
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
-  F.SQL.Text := Format('SELECT ID, Kind, Description FROM Resource WHERE Kind = %d', [Ord(TResourceKind.QuestItem)]);
+  F.SQL.Text := Format('SELECT ID, Kind, Description FROM Resource WHERE Kind = %d', [ResourceKindToInt(TResourceKind.QuestItem)]);
   F.Open;
 end;
 

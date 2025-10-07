@@ -62,14 +62,16 @@ begin
       ' WHERE (r.Kind = :Kind) '
   else
     Result :=
-      ' SELECT qi.ID as ID, ' +
-      '        qi.MarkerID as MarkerID, ' +
+      ' SELECT ' +
+      '        r.ID as ID, ' +
+      '        p.MarkerID as MarkerID, ' +
+      '        p.Amount as Amount, ' +
       '        r.ID as ResourceID, ' +
       '        r.Kind as Kind, ' +
       '        r.Description as Description ' +
       ' FROM Resource r ' +
-      '   INNER JOIN QuestItem qi ON (qi.ResourceID = r.ID) ' +
-      '       AND (qi.MarkerID = :MarkerID) ' +
+      '   INNER JOIN Picture p ON (p.ResourceID = r.ID) ' +
+      '       AND (p.MarkerID = :MarkerID) ' +
       '       AND (r.Kind = :Kind) ';
 
   if Sorted then
@@ -101,14 +103,17 @@ begin
     Result := ''
   else
     Result :=
-      ' SELECT qi.ID as ID, ' +
-      '        qi.MarkerID as MarkerID, ' +
+      ' SELECT ' +
+      '        r.ID as ID, ' +
+      '        p.MarkerID as MarkerID, ' +
+      '        p.Amount as Amount, ' +
       '        r.ID as ResourceID, ' +
       '        r.Kind as Kind, ' +
       '        r.Description as Description ' +
       ' FROM Resource r ' +
-      '    INNER JOIN QuestItem qi ON (qi.ResourceID = r.ID) ' +
-      '        AND (qi.ID = :ID) ';
+      '    INNER JOIN Picture p ON (p.ResourceID = r.ID) ' +
+      '       AND (p.ResourceID = :ID) ' +
+      '       AND (p.MarkerID = :MarkerID)';
 end;
 
 function TQuestItemsGrid.GetResourceID: Variant;
@@ -152,7 +157,7 @@ var
 begin
   QuestItem := TDBQuestItem.Create;
   try
-    if not QuestItemService.GetAt(FID.Value, QuestItem) then
+    if not QuestItemService.GetAt(FResourceID.Value, FMarkerID.Value, QuestItem) then
       Exit(False);
 
     Dialog := TedMessage.Create(Self);
@@ -207,11 +212,18 @@ var
 begin
   QuestItem := TDBQuestItem.Create;
   try
-    if not QuestItemService.GetAt(FID.Value, QuestItem) then
+    if not QuestItemService.GetAt(FResourceID.Value, FMarkerID.Value, QuestItem) then
       Exit;
 
-    if InternalEditRecord(QuestItem) then
-      F.RefreshRecord;
+    if InternalEditRecord(QuestItem) then begin
+      F.DisableControls;
+      try
+        F.Refresh;
+        SetPosition(QuestItem.ResourceID);
+      finally
+        F.EnableControls;
+      end;
+    end;
   finally
     QuestItem.Free;
   end;

@@ -29,11 +29,8 @@ Coordinates=10,232,109,58
 Coordinates=301,111,108,36
 
 [F]
-Coordinates=10,10,40,36
+Coordinates=60,20,40,36
 Visible=True
-
-[FCaption]
-Coordinates=71,188,67,36
 
 [acDeleteExtraction]
 Coordinates=301,166,123,36
@@ -47,17 +44,11 @@ Coordinates=127,305,48,36
 [paTopPanel]
 Coordinates=129,232,84,36
 
-[FKindName]
-Coordinates=301,276,82,36
-
 []
-Coordinates=301,1,69,36
+Coordinates=209,87,91,36
 
 [BindSourceDB1]
-Coordinates=84,10,106,234
-
-[BindingsList1]
-Coordinates=209,87,91,36
+Coordinates=10,10,40,36
 
 [Grid]
 Coordinates=140,164,164,58

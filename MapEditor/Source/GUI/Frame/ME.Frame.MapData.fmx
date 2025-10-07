@@ -7,7 +7,7 @@ object frMapData: TfrMapData
     Size.Width = 652.000000000000000000
     Size.Height = 384.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 6
     TabPosition = PlatformDefault
     Sizes = (
@@ -20,7 +20,7 @@ object frMapData: TfrMapData
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = False
+      IsSelected = True
       Size.Width = 52.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False

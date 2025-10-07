@@ -30,7 +30,7 @@ const
     '     t.ID as ID, ' +
     '     t.MapID as MapID, ' +
     '     t.QuestID as QuestID, ' +
-    '     t.Caption as Caption, ' +
+    '     t.Description as Description, ' +
     '     t.Kind as Kind, ' +
     '     t.Left as Left, ' +
     '     t.Top as Top ' +
@@ -147,12 +147,12 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' INSERT INTO Marker (MapID, QuestID, Caption, Kind, Left, Top) ' +
-      ' VALUES (:MapID, :QuestID, :Caption, :Kind, :Left, :Top) ';
+      ' INSERT INTO Marker (MapID, QuestID, Description, Kind, Left, Top) ' +
+      ' VALUES (:MapID, :QuestID, :Description, :Kind, :Left, :Top) ';
     Query.ParamByName('MapID').Value := Marker.MapID;
     Query.ParamByName('QuestID').Value := Marker.QuestID;
-    Query.ParamByName('Caption').AsString := Marker.Caption;
-    Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
+    Query.ParamByName('Description').AsString := Marker.Description;
+    Query.ParamByName('Kind').AsInteger := TDBMarker.KindToInt(Marker.Kind);
     Query.ParamByName('Left').AsInteger := Marker.Left;
     Query.ParamByName('Top').AsInteger := Marker.Top;
     Query.Execute;
@@ -177,7 +177,7 @@ begin
       ' SET ' +
       '   MapID = :MapID, ' +
       '   QuestID = :QuestID, ' +
-      '   Caption = :Caption, ' +
+      '   Description = :Description, ' +
       '   Kind = :Kind, ' +
       '   Left = :Left, ' +
       '   Top = :Top ' +
@@ -185,8 +185,8 @@ begin
     Query.ParamByName('ID').Value := Marker.ID;
     Query.ParamByName('MapID').Value := Marker.MapID;
     Query.ParamByName('QuestID').Value := Marker.QuestID;
-    Query.ParamByName('Caption').AsString := Marker.Caption;
-    Query.ParamByName('Kind').AsInteger := Ord(Marker.Kind);
+    Query.ParamByName('Description').AsString := Marker.Description;
+    Query.ParamByName('Kind').AsInteger := TDBMarker.KindToInt(Marker.Kind);
     Query.ParamByName('Left').AsInteger := Marker.Left;
     Query.ParamByName('Top').AsInteger := Marker.Top;
     Query.Execute;

@@ -183,7 +183,7 @@ begin
 
     Marker := TDBMarker.Create;
     try
-      Marker.Caption := Item.GetValue<string>('name');
+      Marker.Description := Item.GetValue<string>('name');
       Marker.Kind := TRttiEnumerationType.GetValue<TMarkerKind>(Item.GetValue<string>('kind'));
       Marker.Left := Item.GetValue<Integer>('left');
       Marker.Top := Item.GetValue<Integer>('top');

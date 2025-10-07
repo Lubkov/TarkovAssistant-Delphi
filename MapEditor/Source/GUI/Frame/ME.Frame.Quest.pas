@@ -26,9 +26,7 @@ type
     ImageList1: TImageList;
     F: TUniQuery;
     FID: TIntegerField;
-    FName: TWideStringField;
     FTrader: TIntegerField;
-    FTraderName: TWideStringField;
     BindSourceDB1: TBindSourceDB;
     Grid: TStringGrid;
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
@@ -37,6 +35,8 @@ type
     FilterLayout: TLayout;
     TraderLayout: TLayout;
     MapLayout: TLayout;
+    FName: TWideMemoField;
+    FTraderName: TWideStringField;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddQuestExecute(Sender: TObject);
     procedure acEditQuestExecute(Sender: TObject);

@@ -32,20 +32,14 @@ Coordinates=202,160,74,33
 Coordinates=60,20,40,33
 Visible=True
 
-[FTraderName]
-Coordinates=113,160,80,33
-
 [FTrader]
 Coordinates=14,70,52,33
-
-[FName]
-Coordinates=0,109,48,33
 
 [FID]
 Coordinates=265,231,40,33
 
 []
-Coordinates=24,160,82,33
+Coordinates=113,160,80,33
 
 [BindSourceDB1]
 Coordinates=10,10,92,141

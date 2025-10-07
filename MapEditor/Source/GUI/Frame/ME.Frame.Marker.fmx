@@ -354,11 +354,9 @@ object frMarkerGrid: TfrMarkerGrid
     object FID: TIntegerField
       FieldName = 'ID'
     end
-    object FCaption: TWideStringField
-      FieldName = 'Caption'
-      Required = True
-      FixedChar = True
-      Size = 64
+    object FDescription: TWideMemoField
+      FieldName = 'Description'
+      BlobType = ftWideMemo
     end
     object FKind: TIntegerField
       FieldName = 'Kind'
@@ -375,7 +373,6 @@ object frMarkerGrid: TfrMarkerGrid
     object FKindName: TWideStringField
       FieldKind = fkCalculated
       FieldName = 'KindName'
-      Size = 64
       Calculated = True
     end
   end
@@ -384,43 +381,5 @@ object frMarkerGrid: TfrMarkerGrid
     ScopeMappings = <>
     Left = 264
     Top = 240
-  end
-  object BindingsList1: TBindingsList
-    Methods = <>
-    OutputConverters = <>
-    Left = 172
-    Top = 237
-    object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
-      Category = 'Quick Bindings'
-      DataSource = BindSourceDB1
-      GridControl = Grid
-      Columns = <
-        item
-          MemberName = 'ID'
-          Header = '#'
-          ColumnStyle = 'IntegerColumn'
-        end
-        item
-          MemberName = 'Caption'
-          Width = 140
-          ColumnStyle = 'StringColumn'
-        end
-        item
-          MemberName = 'KindName'
-          Header = 'Kind'
-          Width = 140
-          ColumnStyle = 'StringColumn'
-          Alignment = taCenter
-        end
-        item
-          MemberName = 'Left'
-          Width = 70
-        end
-        item
-          MemberName = 'Top'
-          Width = 70
-          ColumnStyle = 'IntegerColumn'
-        end>
-    end
   end
 end

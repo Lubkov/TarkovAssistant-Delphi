@@ -24,14 +24,16 @@ type
 implementation
 
 uses
-  ME.DB.Utils, ME.Service.Resource;
+  ME.DB.Utils, ME.Service.Resource, ME.Service.QuestItem;
 
 { TEditScreenshotPresenter }
 
 procedure TEditScreenshotPresenter.InternalSave;
 begin
-  if not IsNullID(Instance.MarkerID) then
+  if not IsNullID(MarkerID) then begin
     ResourceService.Save(Instance);
+    QuestItemService.Save(Instance.ID, MarkerID);
+  end;
 end;
 
 { TDelScreenshotPresenter }
@@ -43,7 +45,7 @@ end;
 
 procedure TDelScreenshotPresenter.InternalDelete;
 begin
-  if not IsNullID(Instance.MarkerID) then
+//  if not IsNullID(Instance.MarkerID) then
     ResourceService.Remove(Instance);
 end;
 

@@ -98,8 +98,8 @@ object frQuest: TfrQuest
     TabOrder = 6
     Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 500.000000000000000000
-    Viewport.Height = 238.000000000000000000
+    Viewport.Width = 496.000000000000000000
+    Viewport.Height = 213.000000000000000000
   end
   object FilterLayout: TLayout
     Align = Top
@@ -401,11 +401,9 @@ object frQuest: TfrQuest
     object FID: TIntegerField
       FieldName = 'ID'
     end
-    object FName: TWideStringField
+    object FName: TWideMemoField
       FieldName = 'Name'
-      Required = True
-      FixedChar = True
-      Size = 64
+      BlobType = ftWideMemo
     end
     object FTrader: TIntegerField
       FieldName = 'Trader'
@@ -414,7 +412,6 @@ object frQuest: TfrQuest
     object FTraderName: TWideStringField
       FieldKind = fkCalculated
       FieldName = 'TraderName'
-      Size = 64
       Calculated = True
     end
   end

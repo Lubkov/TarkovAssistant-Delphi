@@ -10,6 +10,7 @@ type
   private
     FResourceID: Variant;
     FMarkerID: Variant;
+    FAmount: Integer;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -22,6 +23,7 @@ type
 
     property ResourceID: Variant read FResourceID write FResourceID;
     property MarkerID: Variant read FMarkerID write FMarkerID;
+    property Amount: Integer read FAmount write FAmount;
   end;
 
 implementation
@@ -34,6 +36,7 @@ begin
 
   FResourceID := Null;
   FMarkerID := Null;
+  FAmount := 1;
 end;
 
 destructor TDBQuestItem.Destroy;
@@ -52,24 +55,24 @@ begin
 
   FResourceID := QuestItem.ResourceID;
   FMarkerID := QuestItem.MarkerID;
+  FAmount := QuestItem.Amount;
 end;
 
 procedure TDBQuestItem.Assign(const DataSet: TDataSet);
 begin
-  inherited;
-
   FResourceID := DataSet.FieldByName('ResourceID').Value;
   FMarkerID := DataSet.FieldByName('MarkerID').Value;
+  FAmount := DataSet.FieldByName('Amount').AsInteger;
 end;
 
 class function TDBQuestItem.EntityName: string;
 begin
-  Result := 'QuestItem';
+  Result := 'Picture';
 end;
 
 class function TDBQuestItem.FieldList: string;
 begin
-  Result := 'ID, ResourceID, MarkerID';
+  Result := 'ResourceID, MarkerID, Amount';
 end;
 
 end.

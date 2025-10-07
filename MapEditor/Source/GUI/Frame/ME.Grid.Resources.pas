@@ -10,7 +10,7 @@ uses
   MemDS, DBAccess, Uni, Fmx.Bind.Grid, System.Bindings.Outputs, FMX.ExtCtrls,
   Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
   Data.Bind.Grid, Data.Bind.DBScope, ME.DB.Resource, ME.DB.Marker,
-  ME.Frame.Picture, ME.DB.Presenter.Resource, FMX.Edit;
+  ME.Frame.Picture, ME.DB.Presenter.Resource, FMX.Edit, ME.Grid.Helper;
 
 type
   TResourcesDBGrid = class(TFrame)
@@ -27,13 +27,12 @@ type
     F: TUniQuery;
     FID: TIntegerField;
     FKind: TIntegerField;
+    FDescription: TWideMemoField;
     BindSourceDB1: TBindSourceDB;
     Grid: TStringGrid;
-    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
-    GridBindings: TBindingsList;
-    FDescription: TWideStringField;
     paPicture: TPanel;
     edFilterText: TEdit;
+
     procedure acEditResourceExecute(Sender: TObject);
     procedure acAddResourceExecute(Sender: TObject);
     procedure acDeleteResourceExecute(Sender: TObject);
@@ -46,6 +45,7 @@ type
     FResourceID: Variant;
     FPicturePanel: TfrPicture;
     FSorted: Boolean;
+    FGridHelper: TGridHelper;
 
     function GetMarkerID: Variant;
     function GetShowFilter: Boolean;
@@ -57,8 +57,9 @@ type
     function GetResourceID: Variant; virtual; abstract;
     function GetEditPresenterClass: TEditResourcePresenterClass; virtual; abstract;
     function GetDelPresenterClass: TDelResourcePresenterClass; virtual; abstract;
+    procedure InitColumns;
 //    function InternalResourceAdd(const Resource: TDBResource): Boolean;
-  protected
+
     property PicturePanel: TfrPicture read FPicturePanel;
     property EditPresenterClass: TEditResourcePresenterClass read GetEditPresenterClass;
     property DelPresenterClass: TDelResourcePresenterClass read GetDelPresenterClass;
@@ -106,35 +107,17 @@ begin
   FPicturePanel.Readonly := True;
   edFilterText.Visible := False;
   edFilterText.Position.X := 0;
+
+  FGridHelper := TGridHelper.Create(Grid);
+  InitColumns;
 end;
 
 destructor TResourcesDBGrid.Destroy;
 begin
+  FGridHelper.Free;
 
   inherited;
 end;
-
-//function TResourcesDBGrid.GetCommandSQLText: string;
-//begin
-//  Result :=
-//    ' SELECT r.ID as ID, ' +
-//    '        r.Kind as Kind, ' +
-//    '        r.Description as Description ' +
-//    ' FROM Resource r ';
-//
-////  Result := 'SELECT r.ID as ID, r.Kind as Kind, r.Description as Description FROM Resource r ';
-////  if FMarker = nil then
-////    Result := Result + ' WHERE (1 = 1)'
-////  else
-////    case ResourceKind of
-////      TResourceKind.Screenshot:
-////        Result := Result + ' WHERE (r.MarkerID = :MarkerID)';
-////      TResourceKind.QuestItem:
-////        Result := Result +
-////          ' INNER JOIN QuestItem qi ON (qi.ResourceID = r.ID) AND (qi.MarkerID = :MarkerID)';
-////    end;
-////  Result := Result + ' AND (r.Kind = :Kind)';
-//end;
 
 function TResourcesDBGrid.GetMarkerID: Variant;
 begin
@@ -154,20 +137,62 @@ begin
   edFilterText.Visible := Value;
 end;
 
+procedure TResourcesDBGrid.InitColumns;
+var
+  Column: TGridColumn;
+begin
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'ID';
+    Column.FieldName := 'ID';
+    Column.Alignment := TAlignment.taRightJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 60;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Description';
+    Column.FieldName := 'Description';
+    Column.Alignment := TAlignment.taLeftJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.AutoWidth := True;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Kind';
+    Column.FieldName := 'Kind';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 80;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+end;
+
 procedure TResourcesDBGrid.Init(const Marker: TDBMarker);
 begin
   FMarker := Marker;
+
+  FGridHelper.Binding(BindSourceDB1);
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
   F.CachedUpdates := (FMarker <> nil) and FMarker.IsNewInstance;
   F.SQL.Text := GetCommandSQLText;
   F.SQLRefresh.Text := GetRefreshSQLText;
-  F.ParamByName('Kind').AsInteger := Ord(ResourceKind);
+  F.ParamByName('Kind').AsInteger := TDBResource.KindToInt(ResourceKind);
   if F.FindParam('MarkerID') <> nil then
     F.ParamByName('MarkerID').Value := FMarker.ID;
 
   F.Open;
+
+  FGridHelper.InitColumns;
 end;
 
 procedure TResourcesDBGrid.acAddResourceExecute(Sender: TObject);

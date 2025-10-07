@@ -57,7 +57,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   AppService.LoadParams;
 
-  Self.Caption := '[Maps Editor] Database = "' + AppService.Options.DataPath + '"';
+  Self.Caption := '[Maps Editor] Database = "' + AppService.DBConnection.Database + '"';
 
   FMapFilter := TMapFilter.Create(Self);
   FMapFilter.Parent := TopLayout;

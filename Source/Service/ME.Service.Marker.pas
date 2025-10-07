@@ -66,9 +66,18 @@ begin
   inherited;
 
   for Resource in Marker.Images do begin
-    Resource.MarkerID := Marker.ID;
     ResourceService.Save(Resource);
     ResourceService.SavePicture(Resource);
+
+    QuestItem := TDBQuestItem.Create;
+    try
+      QuestItem.MarkerID := Marker.ID;
+      QuestItem.ResourceID := Resource.ID;
+
+      QuestItemService.Save(QuestItem);
+    finally
+      QuestItem.Free;
+    end;
   end;
 
   for Resource in Marker.Items do begin
@@ -136,7 +145,7 @@ var
   Resource: TDBResource;
 begin
   for Resource in Items do
-    ResourceService.DeletePicture(Resource);
+    ResourceService.Remove(Resource.ID, Resource.Kind);
 end;
 
 end.

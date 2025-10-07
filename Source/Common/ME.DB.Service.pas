@@ -20,11 +20,11 @@ type
     constructor Create(const Connection: TCustomConnection);
     destructor Destroy; override;
 
-    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; virtual;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; overload; virtual;
     procedure GetAll(const Items: TList<TDBEntity>); virtual;
     procedure Insert(const Entity: TDBEntity); virtual;
     procedure Update(const Entity: TDBEntity); virtual;
-    procedure Save(const Entity: TDBEntity); virtual;
+    procedure Save(const Entity: TDBEntity); overload; virtual;
     procedure Remove(const ID: Variant); overload; virtual;
     procedure Remove(const Entity: TDBEntity); overload; virtual;
     procedure RemoveAll; virtual;

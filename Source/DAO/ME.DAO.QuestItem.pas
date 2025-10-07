@@ -12,9 +12,11 @@ type
   protected
     function EntityClass: TDBEntityClass; override;
   public
-    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
+    function GetAt(ResourceID, MarkerID: Integer; const Entity: TDBEntity): Boolean; overload;
     procedure Insert(const Entity: TDBEntity); override;
     procedure Update(const Entity: TDBEntity); override;
+    procedure Remove(const ResourceID, MarkerID: Variant); overload;
+    procedure Save(const ResourceID, MarkerID: Variant; Amount: Integer);
   end;
 
 implementation
@@ -26,15 +28,19 @@ begin
   Result := TDBQuestItem;
 end;
 
-function TQuestItemDAO.GetAt(ID: Integer; const Entity: TDBEntity): Boolean;
+function TQuestItemDAO.GetAt(ResourceID, MarkerID: Integer; const Entity: TDBEntity): Boolean;
 var
   Query: TUniQuery;
 begin
   Query := TUniQuery.Create(nil);
   try
     Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + TDBQuestItem.FieldList + ' FROM ' + TDBQuestItem.EntityName + ' WHERE ID = :ID';
-    Query.ParamByName('ID').Value := ID;
+    Query.SQL.Text :=
+      ' SELECT ' + TDBQuestItem.FieldList +
+      ' FROM ' + TDBQuestItem.EntityName +
+      ' WHERE (ResourceID = :ResourceID) AND (MarkerID = :MarkerID)';
+    Query.ParamByName('ResourceID').Value := ResourceID;
+    Query.ParamByName('MarkerID').Value := MarkerID;
     Query.Open;
 
     Result := not Query.Eof;
@@ -57,13 +63,13 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text :=
       ' INSERT INTO ' + TDBQuestItem.EntityName +
-      '   (ResourceID, MarkerID) ' +
+      '   (ResourceID, MarkerID, Amount) ' +
       ' VALUES ' +
-      '   (:ResourceID, :MarkerID) ';
+      '   (:ResourceID, :MarkerID, :Amount) ';
     Query.ParamByName('ResourceID').Value := QuestItem.ResourceID;
     Query.ParamByName('MarkerID').Value := QuestItem.MarkerID;
+    Query.ParamByName('Amount').Value := QuestItem.Amount;
     Query.Execute;
-    QuestItem.ID := Query.LastInsertId;
   finally
     Query.Free;
   end;
@@ -82,12 +88,52 @@ begin
     Query.SQL.Text :=
       ' UPDATE ' + TDBQuestItem.EntityName +
       ' SET ' +
-      '    ResourceID = :ResourceID, ' +
-      '    MarkerID = :MarkerID ' +
-      'WHERE ID = :ID';
-    Query.ParamByName('ID').Value := QuestItem.ID;
+      '    Amount = :Amount ' +
+      ' WHERE (ResourceID = :ResourceID) AND (MarkerID = :MarkerID)';
     Query.ParamByName('ResourceID').Value := QuestItem.ResourceID;
     Query.ParamByName('MarkerID').Value := QuestItem.MarkerID;
+    Query.ParamByName('Amount').Value := QuestItem.Amount;
+    Query.Execute;
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TQuestItemDAO.Remove(const ResourceID, MarkerID: Variant);
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text :=
+      ' DELETE FROM ' + EntityClass.EntityName +
+      ' WHERE (ResourceID = :ResourceID) AND (MarkerID = :MarkerID)';
+    Query.ParamByName('ResourceID').Value := ResourceID;
+    Query.ParamByName('MarkerID').Value := MarkerID;
+    Query.Execute;
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TQuestItemDAO.Save(const ResourceID, MarkerID: Variant; Amount: Integer);
+var
+  Query: TUniQuery;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := Connection;
+    Query.SQL.Text :=
+      ' INSERT INTO ' + TDBQuestItem.EntityName +
+      '     (ResourceID, MarkerID, Amount) ' +
+      ' VALUES (:ResourceID, :MarkerID, :Amount) ' +
+      ' ON CONFLICT(ResourceID, MarkerID) ' +
+      ' DO UPDATE SET ' +
+      '   Amount = excluded.Amount;';
+    Query.ParamByName('ResourceID').Value := ResourceID;
+    Query.ParamByName('MarkerID').Value := MarkerID;
+    Query.ParamByName('Amount').Value := Amount;
     Query.Execute;
   finally
     Query.Free;

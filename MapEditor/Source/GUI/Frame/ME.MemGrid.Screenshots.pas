@@ -9,7 +9,7 @@ uses
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Fmx.Bind.Grid, Fmx.Bind.Editors, FMX.ActnList,
   FMX.ImgList, FMX.ExtCtrls, FMX.ScrollBox, FMX.Grid, FMX.Controls.Presentation,
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, Data.DB, MemDS, DBAccess,
-  Uni, ME.Grid.Resources, ME.DB.Resource, ME.Grid.Screenshots;
+  Uni, ME.Grid.Resources, ME.DB.Resource, ME.Grid.Screenshots, FMX.Edit;
 
 type
   TScreenshotsMemGrid = class(TScreenshotsGrid)
@@ -55,8 +55,6 @@ begin
     if not Stored then
       Exit;
 
-    Resource.MarkerID := Marker.ID;
-
     case ResourceKind of
       TResourceKind.Screenshot:
         Marker.Images.Add(Resource);
@@ -68,7 +66,7 @@ begin
     try
       F.Append;
   //      FID.Value := Resource.ID;
-      FKind.AsInteger := Ord(Resource.Kind);
+      FKind.AsInteger := TDBResource.KindToInt(Resource.Kind);
       FDescription.AsString := Resource.Description;
       F.Post;
     finally
@@ -98,7 +96,7 @@ begin
     try
       F.Edit;
   //      FID.Value := Resource.ID;
-      FKind.AsInteger := Ord(Resource.Kind);
+      FKind.AsInteger := TDBResource.KindToInt(Resource.Kind);
       FDescription.AsString := Resource.Description;
       F.Post;
     finally

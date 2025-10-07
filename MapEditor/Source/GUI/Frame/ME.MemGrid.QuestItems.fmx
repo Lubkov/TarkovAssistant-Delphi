@@ -1,7 +1,7 @@
 inherited QuestItemsMemGrid: TQuestItemsMemGrid
   inherited Grid: TStringGrid
-    Viewport.Width = 396.000000000000000000
-    Viewport.Height = 320.000000000000000000
+    Viewport.Width = 404.000000000000000000
+    Viewport.Height = 324.000000000000000000
   end
   inherited ActionList1: TActionList
     inherited acAddResource: TAction

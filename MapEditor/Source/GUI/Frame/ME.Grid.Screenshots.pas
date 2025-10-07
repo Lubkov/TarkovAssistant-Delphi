@@ -52,14 +52,24 @@ begin
 //  Result := inherited GetCommandSQLText;
 
   Result :=
-    ' SELECT r.ID as ID, ' +
-    '        r.Kind as Kind, ' +
-    '        r.Description as Description ' +
-    ' FROM Resource r ' +
-    ' WHERE (r.Kind = :Kind) ';
+    ' SELECT ' +
+    '     r.ID as ID, ' +
+    '     r.Kind as Kind, ' +
+    '     r.Description as Description ' +
+    ' FROM Resource r ';
+//    ' WHERE (r.Kind = :Kind) ';
+
+//  if Marker <> nil then
+//    Result := Result + ' AND (r.MarkerID = :MarkerID)';
 
   if Marker <> nil then
-    Result := Result + ' AND (r.MarkerID = :MarkerID)';
+    Result := Result +
+      ' INNER JOIN Picture p ON (p.ResourceID = r.ID) AND (p.MarkerID = :MarkerID) AND '
+  else
+    Result := Result + ' WHERE ';
+
+  Result := Result + ' (r.Kind = :Kind) ';
+
 
   if Sorted then
     Result := Result + ' ORDER BY r.Description ';
@@ -94,6 +104,11 @@ begin
   try
     Presenter := EditPresenterClass.Create(Dialog, Resource);
     try
+      if Marker <> nil then
+        Presenter.MarkerID := Marker.ID
+      else
+        Presenter.MarkerID := Null;
+
       Result := Presenter.Edit;
     finally
       Presenter.Free;
@@ -112,7 +127,6 @@ begin
   Resource := TDBResource.Create;
   try
     Resource.ID := FID.Value;
-    Resource.MarkerID := MarkerID;
     Resource.Kind := ResourceKind;
     Resource.Description := FDescription.AsString;
 
@@ -146,7 +160,6 @@ var
 begin
   Resource := TDBResource.Create;
   try
-    Resource.MarkerID := MarkerID;
     Resource.Kind := ResourceKind;
     if not InternalEditRecord(Resource) then
       Exit;

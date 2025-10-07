@@ -41,7 +41,6 @@ begin
 
   if IsNewInstance then
     for Resource in Instance.Images do begin
-      Resource.MarkerID := Instance.ID;
       ResourceService.Save(Resource);
     end;
 end;

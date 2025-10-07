@@ -12,12 +12,14 @@ type
   private
     function GetPictureFileName(const ID: Variant; const Kind: TResourceKind): string; overload;
     function GetPictureFileName(const Source: TDBResource): string; overload;
+    function GetResourceDAO: TResourceDAO;
   protected
     function GetDAOClass: TDAOClass; override;
   public
     procedure Insert(const Entity: TDBEntity); override;
     procedure Update(const Entity: TDBEntity); override;
-    procedure Remove(const ID: Variant); override;
+    procedure Remove(const ID: Variant); overload; override;
+    procedure Remove(const ID: Variant; Kind: TResourceKind); overload;
 
     procedure LoadPicture(const ID: Variant; const Kind: TResourceKind; const Dest: TBitmap); overload;
     procedure LoadPicture(const Source: TDBResource; const Dest: TBitmap); overload;
@@ -30,6 +32,8 @@ type
     procedure LoadMarkerQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
 
     procedure ExportFromDB;
+
+    property ResourceDAO: TResourceDAO read GetResourceDAO;
   end;
 
 var
@@ -38,7 +42,7 @@ var
 implementation
 
 uses
-  App.Service;
+  App.Service, ME.Service.QuestItem;
 
 { TResourceService }
 
@@ -60,6 +64,11 @@ end;
 function TResourceService.GetPictureFileName(const Source: TDBResource): string;
 begin
   Result := GetPictureFileName(Source.ID, Source.Kind);
+end;
+
+function TResourceService.GetResourceDAO: TResourceDAO;
+begin
+  Result := TResourceDAO(DAO);
 end;
 
 function TResourceService.GetDAOClass: TDAOClass;
@@ -96,6 +105,13 @@ begin
 
   DeletePicture(ID, TResourceKind.Screenshot);
   DeletePicture(ID, TResourceKind.QuestItem);
+end;
+
+procedure TResourceService.Remove(const ID: Variant; Kind: TResourceKind);
+begin
+  inherited Remove(ID);
+
+  DeletePicture(ID, Kind);
 end;
 
 procedure TResourceService.LoadPicture(const ID: Variant; const Kind: TResourceKind; const Dest: TBitmap);
@@ -154,7 +170,7 @@ var
 begin
   Items := TObjectList<TDBEntity>.Create;
   try
-    TResourceDAO(DAO).GetAll(Items);
+    ResourceDAO.GetAll(Items);
 
      for i := 0 to Items.Count - 1 do begin
        Resource := TDBResource(Items[i]);
@@ -167,12 +183,12 @@ end;
 
 procedure TResourceService.LoadMarkerPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
 begin
-  TResourceDAO(DAO).GetPictures(MarkerID, Items);
+  ResourceDAO.GetResources(MarkerID, TResourceKind.Screenshot, Items);
 end;
 
 procedure TResourceService.LoadMarkerQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
 begin
-  TResourceDAO(DAO).GetQuestItems(MarkerID, Items);
+  ResourceDAO.GetResources(MarkerID, TResourceKind.QuestItem, Items);
 end;
 
 end.

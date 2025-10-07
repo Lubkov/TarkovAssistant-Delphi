@@ -11,7 +11,6 @@ type
 
   TDBResource = class(TDBEntity)
   private
-    FMarkerID: Variant;
     FKind: TResourceKind;
     FDescription: string;
     FPicture: TBitmap;
@@ -27,7 +26,9 @@ type
     class function EntityName: string; override;
     class function FieldList: string; override;
 
-    property MarkerID: Variant read FMarkerID write FMarkerID;
+    class function KindToInt(const Value: TResourceKind): Integer;
+    class function IntToKind(const Value: Integer): TResourceKind;
+
     property Kind: TResourceKind read FKind write FKind;
     property Description: string read FDescription write FDescription;
     property Picture: TBitmap read FPicture write SetPicture;
@@ -41,7 +42,6 @@ constructor TDBResource.Create;
 begin
   inherited;
 
-  MarkerID := Null;
   Kind := TResourceKind.Screenshot;
   FDescription := '';
   FPicture := TBitmap.Create;
@@ -67,7 +67,6 @@ begin
 
   Resource := TDBResource(Source);
 
-  MarkerID := Resource.MarkerID;
   Kind := Resource.Kind;
   Description := Resource.Description;
   Picture := Resource.Picture;
@@ -77,8 +76,7 @@ procedure TDBResource.Assign(const DataSet: TDataSet);
 begin
   inherited;
 
-  MarkerID := DataSet.FieldByName('MarkerID').Value;
-  Kind := TResourceKind(DataSet.FieldByName('Kind').AsInteger);
+  Kind := TDBResource.IntToKind(DataSet.FieldByName('Kind').AsInteger);
   Description := DataSet.FieldByName('Description').AsString;
 
 //  if DataSet.FindField('Picture') <> nil then
@@ -92,7 +90,17 @@ end;
 
 class function TDBResource.FieldList: string;
 begin
-  Result := 'ID, MarkerID, Kind, Description'; //, Picture';
+  Result := 'ID, Kind, Description'; //, Picture';
+end;
+
+class function TDBResource.KindToInt(const Value: TResourceKind): Integer;
+begin
+  Result := Ord(Value) + 1;
+end;
+
+class function TDBResource.IntToKind(const Value: Integer): TResourceKind;
+begin
+  Result := TResourceKind(Value - 1);
 end;
 
 end.

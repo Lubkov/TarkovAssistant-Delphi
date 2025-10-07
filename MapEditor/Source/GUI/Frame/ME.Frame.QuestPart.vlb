@@ -28,9 +28,6 @@ Coordinates=285,10,91,58
 [paTopPanel]
 Coordinates=400,204,84,36
 
-[FCaption]
-Coordinates=345,209,67,36
-
 [FTop]
 Coordinates=296,230,44,36
 
@@ -45,7 +42,7 @@ Visible=True
 Coordinates=49,230,40,36
 
 []
-Coordinates=91,204,40,33
+Coordinates=205,135,47,36
 
 [BindSourceDB1]
 Coordinates=10,10,106,168
@@ -56,7 +53,4 @@ Coordinates=172,80,91,36
 [Grid]
 Coordinates=196,21,63,146
 Visible=True
-
-[FMap]
-Coordinates=205,135,47,36
 

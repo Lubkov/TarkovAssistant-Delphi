@@ -81,7 +81,7 @@ end;
 
 function TMapFilter.GetCommandText: string;
 begin
-  Result := 'SELECT ID, Caption FROM Map';
+  Result := 'SELECT ID, Name FROM Map';
 end;
 
 function TMapFilter.GetKeyField: string;
@@ -91,7 +91,7 @@ end;
 
 function TMapFilter.GetCaptionField: string;
 begin
-  Result := 'Caption';
+  Result := 'Name';
 end;
 
 end.

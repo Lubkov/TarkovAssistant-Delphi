@@ -146,7 +146,6 @@
         </DelphiCompile>
         <DCCReference Include="Source\ME.MainForm.pas">
             <Form>MainForm</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Source\Common\ME.DB.DAO.pas"/>
         <DCCReference Include="..\Source\Common\ME.DB.Entity.pas"/>
@@ -164,7 +163,6 @@
         <DCCReference Include="Source\GUI\ME.Presenter.Map.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.Layer.pas">
             <Form>frLayerList</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.Layer.pas"/>
@@ -186,12 +184,10 @@
         <DCCReference Include="..\Source\Service\ME.Service.Marker.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.Marker.pas">
             <Form>frMarkerGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Dialog\ME.Edit.Marker.pas">
             <Form>edMarker</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.Marker.pas"/>
         <DCCReference Include="..\Source\Entity\ME.DB.Quest.pas"/>
@@ -199,21 +195,17 @@
         <DCCReference Include="..\Source\Service\ME.Service.Quest.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.Quest.pas">
             <Form>frQuest</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Dialog\ME.Edit.Quest.pas">
             <Form>edQuest</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.Quest.pas"/>
         <DCCReference Include="Source\GUI\Dialog\ME.Edit.QuestPart.pas">
             <Form>edQuestPart</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.QuestPart.pas">
             <Form>frQuestPartGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.QuestPart.pas"/>
@@ -226,7 +218,6 @@
         <DCCReference Include="..\Source\Data\Map.Data.Types.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Frame.MapData.pas">
             <Form>frMapData</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.QuestItem.pas"/>
@@ -235,12 +226,10 @@
         <DCCReference Include="..\Source\Service\ME.Service.Resource.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Grid.Resources.pas">
             <Form>ResourcesDBGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Dialog\ME.DB.Edit.Resource.pas">
             <Form>edDBResource</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.DB.Presenter.Resource.pas"/>
         <DCCReference Include="..\Source\Entity\ME.DB.QuestItem.pas"/>
@@ -248,7 +237,6 @@
         <DCCReference Include="..\Source\Service\ME.Service.QuestItem.pas"/>
         <DCCReference Include="Source\GUI\Frame\ME.Grid.Screenshots.pas">
             <Form>ScreenshotsGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Frame\ME.MemGrid.Screenshots.pas">
@@ -256,21 +244,17 @@
         </DCCReference>
         <DCCReference Include="Source\GUI\Frame\ME.Grid.QuestItems.pas">
             <Form>QuestItemsGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Frame\ME.MemGrid.QuestItems.pas">
             <Form>QuestItemsMemGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Dialog\ME.Edit.QuestItem.pas">
             <Form>edQuestItem</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Source\GUI\Frame\ME.Grid.QuestResources.pas">
             <Form>QuestResourcesGrid</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\ME.Presenter.Screenshot.pas"/>
@@ -278,17 +262,14 @@
         <DCCReference Include="..\Source\Service\ME.Service.QuestTracker.pas"/>
         <DCCReference Include="..\Source\GUI\Frame\ME.Filter.Profile.pas">
             <Form>ProfileFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\Source\GUI\Presenter\ME.Presenter.Profile.pas"/>
         <DCCReference Include="..\Source\GUI\Edit\ME.Edit.Profile.pas">
             <Form>edProfile</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\Source\Common\ME.Dialog.Message.pas">
             <Form>edMessage</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\Source\Common\App.Entity.pas"/>
         <DCCReference Include="..\Source\Entity\ME.Profile.pas"/>
@@ -297,29 +278,25 @@
         <DCCReference Include="..\Source\Entity\ME.Trader.pas"/>
         <DCCReference Include="..\Source\Common\ME.Form.Filter.pas">
             <Form>FormFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Filter\ME.Filter.Trader.pas">
             <Form>TraderFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\GUI\Filter\ME.Filter.Map.pas">
             <Form>MapFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\Source\Common\ME.List.Filter.pas">
             <Form>ListFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\Source\Common\ME.DBList.Filter.pas">
             <Form>DBListFilter</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="Source\GUI\ME.Grid.Helper.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -341,8 +318,6 @@
                     <Source Name="MainSource">MapEditor.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k290.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp290.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>

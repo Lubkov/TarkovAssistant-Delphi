@@ -9,7 +9,7 @@ uses
   FMX.ImgList, FMX.Objects, System.Rtti, FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
   Data.DB, MemDS, DBAccess, Uni, ME.DB.Layer, Data.Bind.Components,
   Data.Bind.DBScope, Fmx.Bind.Grid, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Grid;
+  Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Grid, ME.Grid.Helper;
 
 type
   TfrLayerList = class(TFrame)
@@ -28,11 +28,9 @@ type
     F: TUniQuery;
     FID: TIntegerField;
     FLevel: TIntegerField;
-    FName: TWideStringField;
     BindSourceDB1: TBindSourceDB;
     Grid: TStringGrid;
-    LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
-    BindingsList1: TBindingsList;
+    FName: TWideMemoField;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddLayerExecute(Sender: TObject);
     procedure acEditLayerExecute(Sender: TObject);
@@ -41,7 +39,9 @@ type
   private
     FMapID: Variant;
     FLayerID: Variant;
+    FGridHelper: TGridHelper;
 
+    procedure InitColumns;
     procedure LoadPicture;
     function InternalLayerEdit(const Layer: TDBLayer): Boolean;
     procedure LayerEdit(const LayerID: Variant);
@@ -69,17 +69,61 @@ begin
   FMapID := Null;
   FLayerID := Null;
   Grid.RowCount := 0;
+
+  FGridHelper := TGridHelper.Create(Grid);
+  InitColumns;
 end;
 
 destructor TfrLayerList.Destroy;
 begin
+  FGridHelper.Free;
 
   inherited;
+end;
+
+procedure TfrLayerList.InitColumns;
+var
+  Column: TGridColumn;
+begin
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'ID';
+    Column.FieldName := 'ID';
+    Column.Alignment := TAlignment.taRightJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 60;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Level';
+    Column.FieldName := 'Level';
+    Column.Alignment := TAlignment.taCenter;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.Width := 80;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
+
+  Column := TGridColumn.Create;
+  try
+    Column.Caption := 'Name';
+    Column.FieldName := 'Name';
+    Column.Alignment := TAlignment.taLeftJustify;
+    Column.HeaderAlignment := TAlignment.taCenter;
+    Column.AutoWidth := True;
+  finally
+    FGridHelper.AddColumn(Column);
+  end;
 end;
 
 procedure TfrLayerList.Init(const MapID: Variant);
 begin
   FMapID := MapID;
+
+  FGridHelper.Binding(BindSourceDB1);
 
   F.Close;
   F.Connection := AppService.DBConnection.Connection;
@@ -89,6 +133,8 @@ begin
     ' WHERE MapID = :MapID';
   F.ParamByName('MapID').Value := MapID;
   F.Open;
+
+  FGridHelper.InitColumns;
 end;
 
 procedure TfrLayerList.BindSourceDB1SubDataSourceDataChange(Sender: TObject; Field: TField);

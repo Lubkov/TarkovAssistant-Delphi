@@ -27,7 +27,7 @@ const
   SqlSelectCommandText =
     ' SELECT ' +
     '     m.ID as ID, ' +
-    '     m.Caption as Caption, ' +
+    '     m.Name as Caption, ' +
     '     m.Left as Left, ' +
     '     m.Top as Top, ' +
     '     m.Right as Right, ' +
@@ -101,9 +101,9 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text :=
       ' INSERT INTO ' + TDBMap.EntityName +
-      '   (Caption, Left, Top, Right, Bottom, Picture) ' +
-      ' VALUES (:Caption, :Left, :Top, :Right, :Bottom, :Picture) ';
-    Query.ParamByName('Caption').AsString := Map.Caption;
+      '   (Name, Left, Top, Right, Bottom, Picture) ' +
+      ' VALUES (:Name, :Left, :Top, :Right, :Bottom, :Picture) ';
+    Query.ParamByName('Name').AsString := Map.Caption;
     Query.ParamByName('Left').AsInteger := Map.Left;
     Query.ParamByName('Top').AsInteger := Map.Top;
     Query.ParamByName('Right').AsInteger := Map.Right;
@@ -131,7 +131,7 @@ begin
     Query.SQL.Text :=
       ' UPDATE ' + TDBMap.EntityName +
       ' SET ' +
-      '   Caption = :Caption, ' +
+      '   Name = :Name, ' +
       '   Left = :Left, ' +
       '   Top = :Top, ' +
       '   Right = :Right, ' +
@@ -139,7 +139,7 @@ begin
       '   Picture = :Picture ' +
       ' WHERE ID = :ID ';
     Query.ParamByName('ID').Value := Map.ID;
-    Query.ParamByName('Caption').AsString := Map.Caption;
+    Query.ParamByName('Name').AsString := Map.Caption;
     Query.ParamByName('Left').AsInteger := Map.Left;
     Query.ParamByName('Top').AsInteger := Map.Top;
     Query.ParamByName('Right').AsInteger := Map.Right;

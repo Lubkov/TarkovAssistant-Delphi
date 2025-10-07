@@ -98,8 +98,8 @@ object ResourcesDBGrid: TResourcesDBGrid
     TabOrder = 6
     Options = [ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
     OnCellDblClick = GridCellDblClick
-    Viewport.Width = 392.000000000000000000
-    Viewport.Height = 295.000000000000000000
+    Viewport.Width = 396.000000000000000000
+    Viewport.Height = 320.000000000000000000
   end
   object paPicture: TPanel
     Align = Left
@@ -379,9 +379,9 @@ object ResourcesDBGrid: TResourcesDBGrid
     object FKind: TIntegerField
       FieldName = 'Kind'
     end
-    object FDescription: TWideStringField
+    object FDescription: TWideMemoField
       FieldName = 'Description'
-      Size = 512
+      BlobType = ftWideMemo
     end
   end
   object BindSourceDB1: TBindSourceDB
@@ -390,17 +390,5 @@ object ResourcesDBGrid: TResourcesDBGrid
     ScopeMappings = <>
     Left = 328
     Top = 176
-  end
-  object GridBindings: TBindingsList
-    Methods = <>
-    OutputConverters = <>
-    Left = 332
-    Top = 237
-    object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
-      Category = 'Quick Bindings'
-      DataSource = BindSourceDB1
-      GridControl = Grid
-      Columns = <>
-    end
   end
 end

@@ -9,7 +9,7 @@ uses
   Fmx.Bind.DBEngExt, Fmx.Bind.Grid, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, Data.Bind.Grid, Data.Bind.DBScope, MemDS, DBAccess, Uni,
   System.Actions, FMX.ActnList, System.ImageList, FMX.ImgList, FMX.ScrollBox,
-  FMX.Grid, FMX.Controls.Presentation, ME.DB.Resource, ME.DB.QuestItem;
+  FMX.Grid, FMX.Controls.Presentation, ME.DB.Resource, ME.DB.QuestItem, FMX.Edit;
 
 type
   TQuestItemsMemGrid = class(TQuestItemsGrid)

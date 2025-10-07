@@ -21,11 +21,11 @@ type
     constructor Create(const Connection: TCustomConnection);
 
     function GetNewInstance: TDBEntity; virtual; //CreateInstance
-    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; virtual;
+    function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; overload; virtual;
     procedure GetAll(const Items: TList<TDBEntity>); virtual; abstract;
     procedure Insert(const Entity: TDBEntity); virtual; abstract;
     procedure Update(const Entity: TDBEntity); virtual; abstract;
-    procedure Remove(const ID: Variant);
+    procedure Remove(const ID: Variant); overload;
     procedure TruncateTable;
     function RecordCount: Int64;
 

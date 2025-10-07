@@ -39,7 +39,7 @@ Coordinates=0,0,82,33
 Visible=True
 
 [F]
-Coordinates=100,20,40,33
+Coordinates=150,30,40,33
 Visible=True
 
 [FLevel]
@@ -48,14 +48,8 @@ Coordinates=59,53,46,33
 [FID]
 Coordinates=148,80,40,33
 
-[FName]
-Coordinates=129,124,48,33
-
 [BindSourceDB1]
-Coordinates=150,20,92,123
-
-[BindingsList1]
-Coordinates=0,0,82,33
+Coordinates=100,20,40,33
 
 [Grid]
 Coordinates=21,70,143,51

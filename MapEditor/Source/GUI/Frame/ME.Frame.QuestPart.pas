@@ -25,14 +25,14 @@ type
     ImageList1: TImageList;
     F: TUniQuery;
     FID: TIntegerField;
-    FCaption: TWideStringField;
     FLeft: TIntegerField;
     FTop: TIntegerField;
     BindSourceDB1: TBindSourceDB;
     Grid: TStringGrid;
     LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource;
     BindingsList1: TBindingsList;
-    FMap: TWideStringField;
+    FMap: TWideMemoField;
+    FDescription: TWideMemoField;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure acAddMarkerExecute(Sender: TObject);
     procedure acEditMarkerExecute(Sender: TObject);
@@ -100,11 +100,11 @@ begin
     '       m.ID as ID, ' +
     '       m."MapID" as MapID, ' +
     '       m."QuestID" as QuestID, ' +
-    '       m."Caption" as Caption, ' +
+    '       m."Description" as Description, ' +
     '       m."Kind" as Kind, ' +
     '       m."Left" as Left, ' +
     '       m."Top" as Top, ' +
-    '       Map.Caption as Map ' +
+    '       Map.Name as Map ' +
     ' FROM Marker m ' +
     '     INNER JOIN Map ON Map.ID = m.MapID';
 
@@ -192,7 +192,7 @@ begin
   try
     Marker.ID := FID.Value;
     Marker.MapID := FMapID;
-    Marker.Caption := FCaption.AsString;
+    Marker.Description := FDescription.AsString;
 
     Dialog := TedMessage.Create(Self);
     try

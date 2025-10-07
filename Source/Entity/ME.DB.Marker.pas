@@ -14,7 +14,7 @@ type
   private
     FMapID: Variant;
     FQuestID: Variant;
-    FCaption: string;
+    FDescription: string;
     FKind: TMarkerKind;
     FLeft: Integer;
     FTop: Integer;
@@ -30,10 +30,12 @@ type
     class function EntityName: string; override;
     class function FieldList: string; override;
     class function KindToStr(Value: TMarkerKind): string;
+    class function KindToInt(const Value: TMarkerKind): Integer;
+    class function IntToKind(const Value: Integer): TMarkerKind;
 
     property MapID: Variant read FMapID write FMapID;
     property QuestID: Variant read FQuestID write FQuestID;
-    property Caption: string read FCaption write FCaption;
+    property Description: string read FDescription write FDescription;
     property Kind: TMarkerKind read FKind write FKind;
     property Left: Integer read FLeft write FLeft;
     property Top: Integer read FTop write FTop;
@@ -51,7 +53,7 @@ begin
 
   FMapID := Null;
   FQuestID := Null;
-  FCaption := '';
+  FDescription := '';
   FKind := TMarkerKind.PMCExtraction;
   FLeft := 0;
   FTop := 0;
@@ -77,7 +79,7 @@ begin
 
   MapID := Marker.MapID;
   QuestID := Marker.QuestID;
-  Caption := Marker.Caption;
+  Description := Marker.Description;
   Kind := Marker.Kind;
   Left := Marker.Left;
   Top := Marker.Top;
@@ -89,8 +91,8 @@ begin
 
   MapID := DataSet.FieldByName('MapID').Value;
   QuestID := DataSet.FieldByName('QuestID').Value;
-  Caption := DataSet.FieldByName('Caption').AsString;
-  Kind := TMarkerKind(DataSet.FieldByName('Kind').AsInteger);
+  Description := DataSet.FieldByName('Description').AsString;
+  Kind := IntToKind(DataSet.FieldByName('Kind').AsInteger);
   Left := DataSet.FieldByName('Left').AsInteger;
   Top := DataSet.FieldByName('Top').AsInteger;
 end;
@@ -102,7 +104,7 @@ end;
 
 class function TDBMarker.FieldList: string;
 begin
-  Result := 'ID, "MapID", "QuestID", "Caption", "Kind", "Left", "Top"';
+  Result := 'ID, "MapID", "QuestID", "Description", "Kind", "Left", "Top"';
 end;
 
 class function TDBMarker.KindToStr(Value: TMarkerKind): string;
@@ -119,6 +121,16 @@ begin
   else
     Result := '';
   end;
+end;
+
+class function TDBMarker.KindToInt(const Value: TMarkerKind): Integer;
+begin
+  Result := Ord(Value) + 1;
+end;
+
+class function TDBMarker.IntToKind(const Value: Integer): TMarkerKind;
+begin
+  Result := TMarkerKind(Value - 1);
 end;
 
 end.

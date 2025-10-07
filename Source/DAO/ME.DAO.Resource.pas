@@ -14,8 +14,9 @@ type
   public
     function GetAt(ID: Integer; const Entity: TDBEntity): Boolean; override;
     procedure GetAll(const Items: TList<TDBEntity>); override;
-    procedure GetPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
-    procedure GetQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
+    procedure GetResources(const MarkerID: Variant; Kind: TResourceKind; Items: TList<TDBResource>);
+//    procedure GetPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
+//    procedure GetQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
     procedure Insert(const Entity: TDBEntity); override;
     procedure Update(const Entity: TDBEntity); override;
 
@@ -77,34 +78,7 @@ begin
   end;
 end;
 
-procedure TResourceDAO.GetPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
-var
-  Query: TUniQuery;
-  Resource: TDBResource;
-begin
-  Query := TUniQuery.Create(nil);
-  try
-    Query.Connection := Connection;
-    Query.SQL.Text := 'SELECT ' + TDBResource.FieldList + ' FROM ' + TDBResource.EntityName + ' WHERE MarkerID = :MarkerID';
-    Query.ParamByName('MarkerID').Value := MarkerID;
-    Query.Open;
-
-    while not Query.Eof do begin
-      Resource := TDBResource.Create;
-      try
-        Resource.Assign(Query);
-      finally
-        Items.Add(Resource);
-      end;
-
-      Query.Next;
-    end;
-  finally
-    Query.Free;
-  end;
-end;
-
-procedure TResourceDAO.GetQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
+procedure TResourceDAO.GetResources(const MarkerID: Variant; Kind: TResourceKind; Items: TList<TDBResource>);
 var
   Query: TUniQuery;
   Resource: TDBResource;
@@ -113,17 +87,13 @@ begin
   try
     Query.Connection := Connection;
     Query.SQL.Text :=
-      ' SELECT ' +
-      '   r.ID, ' +
-      '   r.MarkerID, ' +
-      '   r.Kind, ' +
-      '   r.Description ' +
-      ' FROM Resource r ' +
-      '   INNER JOIN QuestItem qi ON (qi.ResourceID = r.ID) ' +
-      '       AND (qi.MarkerID = :MarkerID) ' +
+      ' SELECT ' + TDBResource.FieldList +
+      ' FROM ' + TDBResource.EntityName + ' r ' +
+      '   INNER JOIN Picture p ON (p.ResourceID = r.ID) ' +
+      '       AND (p.MarkerID = :MarkerID) ' +
       '       AND (r.Kind = :Kind) ';
     Query.ParamByName('MarkerID').Value := MarkerID;
-    Query.ParamByName('Kind').Value := Ord(TResourceKind.QuestItem);
+    Query.ParamByName('Kind').Value := TDBResource.KindToInt(Kind);
     Query.Open;
 
     while not Query.Eof do begin
@@ -140,6 +110,50 @@ begin
     Query.Free;
   end;
 end;
+
+//procedure TResourceDAO.GetPictures(const MarkerID: Variant; const Items: TList<TDBResource>);
+//begin
+//  GetResources(MarkerID, TResourceKind.Screenshot, Items);
+//end;
+
+//procedure TResourceDAO.GetQuestItems(const MarkerID: Variant; const Items: TList<TDBResource>);
+//var
+//  Query: TUniQuery;
+//  Resource: TDBResource;
+//begin
+//  GetResources(MarkerID, TResourceKind.QuestItem, Items);
+//
+//  Query := TUniQuery.Create(nil);
+//  try
+//    Query.Connection := Connection;
+//    Query.SQL.Text :=
+//      ' SELECT ' +
+//      '   r.ID, ' +
+//      '   r.MarkerID, ' +
+//      '   r.Kind, ' +
+//      '   r.Description ' +
+//      ' FROM Resource r ' +
+//      '   INNER JOIN Picture p ON (p.ResourceID = r.ID) ' +
+//      '       AND (p.MarkerID = :MarkerID) ' +
+//      '       AND (p.Kind = :Kind) ';
+//    Query.ParamByName('MarkerID').Value := MarkerID;
+//    Query.ParamByName('Kind').Value := TDBResource.KindToInt(TResourceKind.QuestItem);
+//    Query.Open;
+//
+//    while not Query.Eof do begin
+//      Resource := TDBResource.Create;
+//      try
+//        Resource.Assign(Query);
+//      finally
+//        Items.Add(Resource);
+//      end;
+//
+//      Query.Next;
+//    end;
+//  finally
+//    Query.Free;
+//  end;
+//end;
 
 procedure TResourceDAO.Insert(const Entity: TDBEntity);
 var
@@ -153,12 +167,11 @@ begin
     Query.Connection := Connection;
     Query.SQL.Text :=
       ' INSERT INTO ' + TDBResource.EntityName +
-      '   (MarkerID, Kind, Description) ' +
+      '   (Kind, Description) ' +
       ' VALUES ' +
-      '   (:MarkerID, :Kind, :Description)';
+      '   (:Kind, :Description)';
 
-    Query.ParamByName('MarkerID').Value := Resource.MarkerID;
-    Query.ParamByName('Kind').AsInteger := Ord(Resource.Kind);
+    Query.ParamByName('Kind').AsInteger := TDBResource.KindToInt(Resource.Kind);
     Query.ParamByName('Description').AsString := Resource.Description;
 //    TDBEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
     Query.Execute;
@@ -181,14 +194,12 @@ begin
     Query.SQL.Text :=
       ' UPDATE ' + TDBResource.EntityName +
       ' SET ' +
-      '    MarkerID = :MarkerID, ' +
       '    Kind = :Kind, ' +
       '    Description = :Description ' +
 //      '    Picture = :Picture ' +
       ' WHERE ID = :ID';
     Query.ParamByName('ID').Value := Resource.ID;
-    Query.ParamByName('MarkerID').Value := Resource.MarkerID;
-    Query.ParamByName('Kind').AsInteger := Ord(Resource.Kind);
+    Query.ParamByName('Kind').AsInteger := TDBResource.KindToInt(Resource.Kind);
     Query.ParamByName('Description').AsString := Resource.Description;
 //    TDBEntity.AssignPictureTo(Resource.Picture, Query.ParamByName('Picture'));
     Query.Execute;
